@@ -30,6 +30,8 @@
     <folder name="System Files">
       <file name="$(StudioDir)/source/thumb_crt0.s" expand="no" />
       <file name="$(DeviceStartFile)" expand="no" />
+      <file name="$(DeviceHeaderFile)" expand="no" />
+      <file name="$(DeviceSystemHeaderFile)" expand="no" />
     </folder>
   </project>
   <project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT Externally Built Executable" description="An externally built executable for iMXRT processor." type="Externally Built Executable" template_name="iMXRT_EXT_EXE">
