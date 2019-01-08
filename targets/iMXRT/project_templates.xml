@@ -9,7 +9,7 @@
     <property name="arm_core_type" value="Cortex-M7" />
     <property name="arm_fpu_abi" value="Hard" />
     <property name="arm_fpu_type" value="FPv5-D16" />
-    <property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;FLASH;0x60000000;0x00040000" />
+    <property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000" />
     <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
     <property name="target_reset_script" value="Reset()" />
     <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
@@ -40,7 +40,7 @@
     <property name="arm_core_type" value="Cortex-M7" />
     <property name="arm_fpu_abi" value="Hard" />
     <property name="arm_fpu_type" value="FPv5-D16" />
-    <property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;FLASH;0x60000000;0x00040000" />
+    <property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000" />
     <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
     <property name="target_reset_script" value="Reset()" />
     <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />

@@ -51,21 +51,8 @@ function Reset()
 
 
 function GetPartName()
-{  
-  var DEVICE_ID0 = TargetInterface.peekWord(0x40000FF8);
+{    
   var PART = "";
-  switch (DEVICE_ID0)
-    {
-      case 0x01F54005:
-        PART = "LPC54005";
-        break;
-      case 0x01F54016:
-        PART = "LPC54016";
-        break;
-      case 0x01F54018:
-        PART = "LPC54018";
-        break;
-    }
   return PART;
 }
 

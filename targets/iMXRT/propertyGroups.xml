@@ -61,6 +61,36 @@
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
       <cdefine name="CPU_MIMXRT1052DVL6B"/>
     </groupEntry>
+    <groupEntry name="MIMXRT1062CVJ5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1062CVJ5A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1062CVL5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1062CVL5A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1062DVJ6A" aka="MIMXRT1062xxx6A" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1062DVJ6A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1062DVL6A" aka="MIMXRT1062xxx6A" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1062DVL6A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1064CVL5A" aka="MIMXRT1064xxx5A" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT1064_QSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>      
+      <cdefine name="CPU_MIMXRT1064CVL5A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1064DVL6A" aka="MIMXRT1064xxx6A" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT1064_QSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>      
+      <cdefine name="CPU_MIMXRT1064DVJ6A"/>
+    </groupEntry>
   </group>
   <group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="TCM" >
     <groupEntry name="TCM">      
@@ -88,6 +118,16 @@
     <groupEntry name="FlexSPI (QuadSPI)">      
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
       <property name="linker_section_placement_macros" value="" />
+      <property name="arm_target_loader_applicable_loaders" value="Flash" />
+      <property name="arm_target_loader_default_loader" value="Flash" />
+      <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(QSPI)_Loader.elf" configuration="Flash" />
+      <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
+      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
+      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
+    </groupEntry>
+    <groupEntry name="FlexSPI2 (QuadSPI)">      
+      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
+      <property name="linker_section_placement_macros" value="FLASH_NAME=FlexSPI2" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
       <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(QSPI)_Loader.elf" configuration="Flash" />
