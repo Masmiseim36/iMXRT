@@ -2,98 +2,128 @@
 <propertyGroups>
   <group short="Target Processor" group="Build Options" long="Select a set of target options" name="Target" default="MIMXRT1052DVL6B" >  
     <groupEntry name="MIMXRT1021CAG4A" aka="MIMXRT1021xxx4A" family="iMXRT1020">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;QSPI=MIMXRT1021_QuadSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/MIMXRT1021.h;QSPI=MIMXRT1021_QuadSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml"/>      
       <cdefine name="CPU_MIMXRT1021CAG4A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1021CAF4A" aka="MIMXRT1021xxx4A" family="iMXRT1020">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;QSPI=MIMXRT1021_QuadSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/MIMXRT1021.h;QSPI=MIMXRT1021_QuadSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml"/>      
       <cdefine name="CPU_MIMXRT1021CAF4A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1021DAG5A" aka="MIMXRT1021xxx5A" family="iMXRT1020">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;QSPI=MIMXRT1021_QuadSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/MIMXRT1021.h;QSPI=MIMXRT1021_QuadSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml"/>
-      <cdefine name="CPU_MIMXRT1021CAG5A"/>
+      <cdefine name="CPU_MIMXRT1021DAG5A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1021DAF5A" aka="MIMXRT1021xxx5A" family="iMXRT1020">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;QSPI=MIMXRT1021_QuadSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/MIMXRT1021.h;QSPI=MIMXRT1021_QuadSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml"/>
-      <cdefine name="CPU_MIMXRT1021CAF5A"/>
+      <cdefine name="CPU_MIMXRT1021DAF5A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1051CVL5A" aka="MIMXRT1051xxx5A" family="iMXRT1050">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/MIMXRT1051.h;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
       <cdefine name="CPU_MIMXRT1051CVL5A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1051CVL5B" aka="MIMXRT1051xxx5B" family="iMXRT1050">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/MIMXRT1051.h;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
       <cdefine name="CPU_MIMXRT1051CVL5B"/>
     </groupEntry>
+    <groupEntry name="MIMXRT1051CVJ5B" aka="MIMXRT1051xxx5B" family="iMXRT1050">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/MIMXRT1051.h;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1051CVJ5B"/>
+    </groupEntry>	
     <groupEntry name="MIMXRT1051DVL6A" aka="MIMXRT1051xxx6A" family="iMXRT1050">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/MIMXRT1051.h;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
       <cdefine name="CPU_MIMXRT1051DVL6A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1051DVL6B" aka="MIMXRT1051xxx6B" family="iMXRT1050">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/MIMXRT1051.h;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
       <cdefine name="CPU_MIMXRT1051DVL6B"/>
     </groupEntry>
     <groupEntry name="MIMXRT1052CVL5A" aka="MIMXRT1052xxx5A" family="iMXRT1050">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/MIMXRT1052.h;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
       <cdefine name="CPU_MIMXRT1052CVL5A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1052CVL5B" aka="MIMXRT1052xxx5B" family="iMXRT1050">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/MIMXRT1052.h;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
       <cdefine name="CPU_MIMXRT1052CVL5B"/>
     </groupEntry>
+    <groupEntry name="MIMXRT1052CVJ5B" aka="MIMXRT1052xxx5B" family="iMXRT1050">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/MIMXRT1052.h;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1052CVJ5B"/>
+    </groupEntry>	
     <groupEntry name="MIMXRT1052DVL6A" aka="MIMXRT1052xxx6A" family="iMXRT1050">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/MIMXRT1052.h;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
       <cdefine name="CPU_MIMXRT1052DVL6A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1052DVL6B" aka="MIMXRT1052xxx6B" family="iMXRT1050">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/MIMXRT1052.h;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
       <cdefine name="CPU_MIMXRT1052DVL6B"/>
     </groupEntry>
+    <groupEntry name="MIMXRT1052DVJ6B" aka="MIMXRT1052xxx6B" family="iMXRT1050">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/MIMXRT1052.h;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1052DVJ6B"/>
+    </groupEntry>	
+    <groupEntry name="MIMXRT1061CVL5A" aka="MIMXRT1061xxx5A" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1061.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/MIMXRT1061.h;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1061_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1061CVL5A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1061CVJ5A" aka="MIMXRT1061xxx5A" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1061.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/MIMXRT1061.h;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1061_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1061CVJ5A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1061DVL6A" aka="MIMXRT1061xxx6A" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1061.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/MIMXRT1061.h;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1061_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1061DVL6A"/>
+    </groupEntry>
     <groupEntry name="MIMXRT1062CVJ5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/MIMXRT1062.h;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>
       <cdefine name="CPU_MIMXRT1062CVJ5A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1062CVL5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;#DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/MIMXRT1062.h;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>
       <cdefine name="CPU_MIMXRT1062CVL5A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1062DVJ6A" aka="MIMXRT1062xxx6A" family="iMXRT1060">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/MIMXRT1062.h;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>
       <cdefine name="CPU_MIMXRT1062DVJ6A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1062DVL6A" aka="MIMXRT1062xxx6A" family="iMXRT1060">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/MIMXRT1062.h;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>
       <cdefine name="CPU_MIMXRT1062DVL6A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1064CVL5A" aka="MIMXRT1064xxx5A" family="iMXRT1060">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT1064_QSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/MIMXRT1064.h;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT1064_QSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>      
       <cdefine name="CPU_MIMXRT1064CVL5A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1064DVL6A" aka="MIMXRT1064xxx6A" family="iMXRT1060">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT1064_QSPI_4KB_SEC" />
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c;DeviceSystemHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.h;DeviceHeaderFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/MIMXRT1064.h;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT1064_QSPI_4KB_SEC" />
       <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>      
-      <cdefine name="CPU_MIMXRT1064DVJ6A"/>
+      <cdefine name="CPU_MIMXRT1064DVL6A"/>
     </groupEntry>
   </group>
   <group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="TCM" >
-    <groupEntry name="TCM">      
+    <groupEntry name="TCM">
       <property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/tcm_placement.xml" />
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value=""/>
@@ -105,7 +135,7 @@
       <property name="arm_target_loader_applicable_loaders" value=""/>
       <property name="arm_target_loader_default_loader" value=""/>
     </groupEntry>
-    <groupEntry name="FlexSPI (HYPER)">      
+    <groupEntry name="FlexSPI (HYPER)">
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
@@ -114,8 +144,22 @@
       <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
+      <cdefine name="XIP_BOOT_HYPERFLASH" value="1"/>
+	  <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
-    <groupEntry name="FlexSPI (QuadSPI)">      
+    <groupEntry name="FlexSPI (EcoXiP)">
+      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
+      <property name="linker_section_placement_macros" value="" />
+      <property name="arm_target_loader_applicable_loaders" value="Flash" />
+      <property name="arm_target_loader_default_loader" value="Flash" />
+      <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(ECOXIP)_Loader.elf" configuration="Flash" />
+      <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
+      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
+      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
+      <cdefine name="XIP_BOOT_ECOXIP" value="1"/>
+	  <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+    </groupEntry>
+    <groupEntry name="FlexSPI (QuadSPI)">
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
@@ -124,8 +168,10 @@
       <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
+	  <cdefine name="XIP_BOOT_QSPI" value="1"/>
+	  <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
-    <groupEntry name="FlexSPI2 (QuadSPI)">      
+    <groupEntry name="FlexSPI2 (QuadSPI)">
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
       <property name="linker_section_placement_macros" value="FLASH_NAME=FlexSPI2" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
@@ -134,6 +180,8 @@
       <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
+	  <cdefine name="XIP_BOOT_QSPI" value="1"/>
+	  <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
   </group>
 </propertyGroups>

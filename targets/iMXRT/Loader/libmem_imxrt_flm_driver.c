@@ -25,7 +25,7 @@ static const libmem_geometry_t geometry[] =
   { 0, 0 } 
 };
 
-#elif defined(FLM_ALGORITHM_MIMXRT105x_HYPER_256KB_SEC)
+#elif defined(FLM_ALGORITHM_MIMXRT105x_HYPER_256KB_SEC) || defined(FLM_ALGORITHM_MIMXRT106x_HYPER_256KB_SEC)
 
 // MIMXRT105x 64mB Hyper Flash
 
@@ -39,7 +39,7 @@ static const libmem_geometry_t geometry[] =
   { 0, 0 } 
 };
 
-#elif defined(FLM_ALGORITHM_MIMXRT105x_QuadSPI_4KB_SEC)
+#elif defined(FLM_ALGORITHM_MIMXRT105x_QuadSPI_4KB_SEC) || defined(FLM_ALGORITHM_MIMXRT105x_EcoXiP_4KB_SEC)
 
 // MIMXRT105x 8mB QuadSPI NOR Flash
 
@@ -53,7 +53,7 @@ static const libmem_geometry_t geometry[] =
   { 0, 0 } 
 };
 
-#elif defined(FLM_ALGORITHM_MIMXRT106x_QSPI_4KB_SEC)
+#elif defined(FLM_ALGORITHM_MIMXRT106x_QSPI_4KB_SEC) || defined(FLM_ALGORITHM_MIMXRT106x_EcoXiP_4KB_SEC)
 
 // MIMXRT106x 8mB QuadSPI NOR Flash
 
