@@ -1,0 +1,7 @@
+<!DOCTYPE Board_Memory_Definition_File>
+<Root name="iMXRT" >
+  <MemorySegment name="FlexSPI" start="0x60000000" size="$(FlexSPISIZE:0x04000000)" access="ReadOnly"/>
+  <MemorySegment name="OCRAM" start="0x20200000" size="$(OCRAMSIZE:0x00040000)"/>
+  <MemorySegment name="DTCM" start="0x20000000" size="$(DTCMSIZE:0x00020000)"/>
+  <MemorySegment name="ITCM" start="0x00000000" size="$(ITCMSIZE:0x00020000)"/>
+</Root>

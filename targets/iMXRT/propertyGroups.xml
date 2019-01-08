@@ -1,0 +1,99 @@
+<!DOCTYPE CrossStudio_Group_Values>
+<propertyGroups>
+  <group short="Target Processor" group="Build Options" long="Select a set of target options" name="Target" default="MIMXRT1052DVL6B" >  
+    <groupEntry name="MIMXRT1021CAG4A" aka="MIMXRT1021xxx4A" family="iMXRT1020">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;QSPI=MIMXRT1021_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml"/>      
+      <cdefine name="CPU_MIMXRT1021CAG4A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1021CAF4A" aka="MIMXRT1021xxx4A" family="iMXRT1020">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;QSPI=MIMXRT1021_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml"/>      
+      <cdefine name="CPU_MIMXRT1021CAF4A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1021DAG5A" aka="MIMXRT1021xxx5A" family="iMXRT1020">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;QSPI=MIMXRT1021_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1021CAG5A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1021DAF5A" aka="MIMXRT1021xxx5A" family="iMXRT1020">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;QSPI=MIMXRT1021_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1021CAF5A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1051CVL5A" aka="MIMXRT1051xxx5A" family="iMXRT1050">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1051CVL5A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1051CVL5B" aka="MIMXRT1051xxx5B" family="iMXRT1050">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1051CVL5B"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1051DVL6A" aka="MIMXRT1051xxx6A" family="iMXRT1050">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1051DVL6A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1051DVL6B" aka="MIMXRT1051xxx6B" family="iMXRT1050">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1051DVL6B"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1052CVL5A" aka="MIMXRT1052xxx5A" family="iMXRT1050">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1052CVL5A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1052CVL5B" aka="MIMXRT1052xxx5B" family="iMXRT1050">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1052CVL5B"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1052DVL6A" aka="MIMXRT1052xxx6A" family="iMXRT1050">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1052DVL6A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1052DVL6B" aka="MIMXRT1052xxx6B" family="iMXRT1050">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
+      <cdefine name="CPU_MIMXRT1052DVL6B"/>
+    </groupEntry>
+  </group>
+  <group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="TCM" >
+    <groupEntry name="TCM">      
+      <property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/tcm_placement.xml" />
+      <property name="linker_section_placement_macros" value="" />
+      <property name="arm_target_loader_applicable_loaders" value=""/>
+      <property name="arm_target_loader_default_loader" value=""/>
+    </groupEntry>
+    <groupEntry name="RAM">
+      <property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/ram_placement.xml" />
+      <property name="linker_section_placement_macros" value="RAM_NAME=OCRAM" />
+      <property name="arm_target_loader_applicable_loaders" value=""/>
+      <property name="arm_target_loader_default_loader" value=""/>
+    </groupEntry>
+    <groupEntry name="FlexSPI (HYPER)">      
+      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
+      <property name="linker_section_placement_macros" value="" />
+      <property name="arm_target_loader_applicable_loaders" value="Flash" />
+      <property name="arm_target_loader_default_loader" value="Flash" />
+      <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/FLM/$(HYPER).FLM" configuration="Flash" />
+      <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
+      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
+      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
+    </groupEntry>
+    <groupEntry name="FlexSPI (QuadSPI)">      
+      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
+      <property name="linker_section_placement_macros" value="" />
+      <property name="arm_target_loader_applicable_loaders" value="Flash" />
+      <property name="arm_target_loader_default_loader" value="Flash" />
+      <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/FLM/$(QSPI).FLM" configuration="Flash" />
+      <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
+      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
+      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
+    </groupEntry>
+  </group>
+</propertyGroups>
