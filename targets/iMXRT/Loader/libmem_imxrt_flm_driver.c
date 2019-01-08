@@ -53,6 +53,34 @@ static const libmem_geometry_t geometry[] =
   { 0, 0 } 
 };
 
+#elif defined(FLM_ALGORITHM_MIMXRT106x_QSPI_4KB_SEC)
+
+// MIMXRT106x 8mB QuadSPI NOR Flash
+
+#define FLM_START_ADDRESS 0x60000000
+#define FLM_SIZE 0x00800000
+#define FLM_PAGE_SIZE 0x00000100
+
+static const libmem_geometry_t geometry[] =
+{
+  { 0x800, 0x1000 },
+  { 0, 0 } 
+};
+
+#elif defined(FLM_ALGORITHM_MIMXRT1064_QSPI_4KB_SEC)
+
+// MIMXRT1064 8mB QuadSPI NOR Flash
+
+#define FLM_START_ADDRESS 0x70000000
+#define FLM_SIZE 0x00800000
+#define FLM_PAGE_SIZE 0x00000100
+
+static const libmem_geometry_t geometry[] =
+{
+  { 0x800, 0x1000 },
+  { 0, 0 } 
+};
+
 #else
 
 #error unknown FLM algorithm
