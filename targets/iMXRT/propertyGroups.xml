@@ -80,7 +80,7 @@
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
-      <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/FLM/$(HYPER).FLM" configuration="Flash" />
+      <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(HYPER)_Loader.elf" configuration="Flash" />
       <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
@@ -90,7 +90,7 @@
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
-      <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/FLM/$(QSPI).FLM" configuration="Flash" />
+      <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(QSPI)_Loader.elf" configuration="Flash" />
       <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
