@@ -44,7 +44,7 @@
  * The CPU macro should be declared in the project or makefile.
  */
 #if (defined(CPU_MIMXRT1052CVJ5B) || defined(CPU_MIMXRT1052CVL5B) || defined(CPU_MIMXRT1052DVJ6B) || \
-    defined(CPU_MIMXRT1052DVL6B))
+     defined(CPU_MIMXRT1052DVL6B) || defined(CPU_MIMXRT1052DVL6A) || defined(CPU_MIMXRT1052CVL5A))
 
 #define MIMXRT1052_SERIES
 
