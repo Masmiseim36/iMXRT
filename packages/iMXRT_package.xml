@@ -118,6 +118,8 @@
 	  <description>Added SDRAM-Segment to Memory-Map</description>
       <description>Add support for iMXRT1061 and fixed some naming issues</description>
 	  <description>Added support for Adesto EcoXiP Flash</description>
+	  <description>Added dedicated memory-map Files per Controller</description>
+	  <description>Added NonCacheable-Section in the SD-RAM as recommended by NXP</description>
     </version>
     <version name="4.2">
       <description>Add support for iMXRT1060 and iMXRT1064 devices.</description>
