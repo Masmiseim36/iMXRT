@@ -13,7 +13,6 @@
     <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
     <property name="target_reset_script" value="Reset()" />
     <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
-    <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
     <property name="arm_linker_stack_size" value="1024" />
     <property name="arm_linker_heap_size" value="1024" />
     <property name="linker_output_format" />
