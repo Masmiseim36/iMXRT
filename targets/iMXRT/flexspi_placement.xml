@@ -54,5 +54,7 @@
   <MemorySegment name="$(RAM2_NAME:SDRAM)">
     <ProgramSection alignment="4" load="No" name=".data2_run" />
     <ProgramSection alignment="4" load="No" name=".bss2" />
+
+    <ProgramSection alignment="4" load="No" name="NonCacheable" size="0x200000" place_from_segment_end="Yes" />
   </MemorySegment>
 </Root>
