@@ -83,7 +83,7 @@
       <p>For iMXRT projects the set of placements are:</p>
       <ul>
         <li><b>TCM</b> application runs ITCM and DTCM memories.</li>
-        <li><b>RAM</b> application runs in OCRAM memory.</li>
+        <li><b>RAM</b> application runs in External SD-RAM memory.</li>
         <li><b>FlexSPI (HYPER)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
 		<li><b>FlexSPI (EcoXiP)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
         <li><b>FlexSPI (QuadSPI)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
@@ -109,6 +109,8 @@
       <h5>Target Reset Script</h5>
       <p>The reset script <a href="file:$(TargetsDir)/iMXRT/iMXRT_Target.js">iMXRT_Target.js</a> is used by the
       debugger to reset the target board.</p>
+	  <p>This Files includes also the functionality to initialize the external Memory-Interface for SD-RAM. These functions must be called after the Reset Script (Debugger -> Target Script -> Reset Script) when using a Configuration which runs from the external memory-Interface.</p>
+	  
       
     </section>
   </documentation>
@@ -120,6 +122,7 @@
 	  <description>Added support for Adesto EcoXiP Flash</description>
 	  <description>Added dedicated memory-map Files per Controller</description>
 	  <description>Added NonCacheable-Section in the SD-RAM as recommended by NXP</description>
+	  <description>Added SDRAM Initialization to the Reset-Script</description>
     </version>
     <version name="4.2">
       <description>Add support for iMXRT1060 and iMXRT1064 devices.</description>

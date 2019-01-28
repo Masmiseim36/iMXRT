@@ -89,7 +89,6 @@
           <file file_name="targets/iMXRT/XML/MIMXRT1064_Registers.xml" />
         </folder>
         <file file_name="targets/iMXRT/flexspi_placement.xml" />
-        <file file_name="targets/iMXRT/iMXRT_MemoryMap.xml" />
         <file file_name="targets/iMXRT/iMXRT_Target.js" />
         <file file_name="targets/iMXRT/project_templates.xml" />
         <file file_name="targets/iMXRT/propertyGroups.xml" />
@@ -99,6 +98,10 @@
         <file file_name="targets/iMXRT/startup_MIMXRT1061.s" />
         <file file_name="targets/iMXRT/startup_MIMXRT1062.s" />
         <file file_name="targets/iMXRT/startup_MIMXRT1064.s" />
+        <file file_name="targets/iMXRT/MemoryMap_MIMXRT105x.xml" />
+        <file file_name="targets/iMXRT/MemoryMap_MIMXRT106x.xml" />
+        <file file_name="targets/iMXRT/MemoryMap_MIMXRT1015.xml" />
+        <file file_name="targets/iMXRT/MemoryMap_MIMXRT1021.xml" />
       </folder>
     </folder>
   </project>
