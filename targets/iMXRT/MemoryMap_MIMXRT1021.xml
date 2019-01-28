@@ -5,5 +5,5 @@
   <MemorySegment name="OCRAM" start="0x20200000" size="$(OCRAMSIZE:0x00020000)"/>
   <MemorySegment name="DTCM" start="0x20000000" size="$(DTCMSIZE:0x00010000)"/>
   <MemorySegment name="ITCM" start="0x00000000" size="$(ITCMSIZE:0x00010000)"/>
-  <MemorySegment name="SDRAM"  start="0x80000000" size="$(RAMSIZE:0x02000000)"/>
+  <MemorySegment name="SDRAM"  start="0x80000000" size="$(SDRAMSIZE:0x02000000)"/>
 </Root>

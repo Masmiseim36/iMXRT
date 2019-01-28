@@ -155,7 +155,7 @@
     </groupEntry>
     <groupEntry name="RAM">
       <property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/ram_placement.xml" />
-      <property name="linker_section_placement_macros" value="RAM_NAME=OCRAM" />
+      <property name="linker_section_placement_macros" value="RAM_NAME=SDRAM" />
       <property name="arm_target_loader_applicable_loaders" value=""/>
       <property name="arm_target_loader_default_loader" value=""/>
     </groupEntry>
