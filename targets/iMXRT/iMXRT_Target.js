@@ -72,15 +72,35 @@ function EnableTrace(traceInterfaceType)
   // TODO: Enable trace
 }
 
-function Clock_Init ()
+var DeviceName = "unknown"
+
+function SetDeviceName (name)
 {
-	var IDcode = TargetInterface.idcode()
-	TargetInterface.message (IDCode);
-	Clock_Init_105x ();
+	TargetInterface.message ("set Device " + name);
+	DeviceName = name;
 }
 
+function Clock_Init ()
+{
+	switch (DeviceName)
+	{
+		case "MIMXRT1015":
+		case "MIMXRT1021":
+			Clock_Init_1021 ();
+			break;
+		case "MIMXRT1051":
+        case "MIMXRT1052":
+        case "MIMXRT1061":
+        case "MIMXRT1062":
+        case "MIMXRT1054":
+			Clock_Init_105x ();
+			break;
+		default:
+			TargetInterface.message ("Clock_Init - unknown Device: " + DeviceName);
+			break;
+	}
+}
 
-var Is1021 = false;
 
 function Clock_Init_1021 () 
 {
@@ -125,9 +145,9 @@ function Clock_Init_1021 ()
   reg = TargetInterface.peekUint32 (0xE000ED94);
   reg &= ~0x1;
   TargetInterface.pokeUint32 (0xE000ED94, reg);
-  Is1021 = true;
   TargetInterface.message ("Clock_Init_1021 - Done");
 }
+
 function Clock_Init_105x () 
 {
 	TargetInterface.message ("Clock_Init_105x");
@@ -161,7 +181,6 @@ function Clock_Init_105x ()
   // SEMC_ALT_CLK_SEL: 0 PLL2 (SYS PLL) PFD2
   // SEMC_CLK_SEL: 1 SEMC_ALT_CLK
   TargetInterface.pokeUint32 (0x400FC014, 0x00010D40);
-  Is1021 = false;
   TargetInterface.message ("Clock_Init_105x - Done");
 }
 
@@ -211,7 +230,7 @@ function SDRAM_Init ()
   TargetInterface.pokeUint32 (0x401F8078, 0x00000000); // EMC_25
   TargetInterface.pokeUint32 (0x401F807C, 0x00000000); // EMC_26
   TargetInterface.pokeUint32 (0x401F8080, 0x00000000); // EMC_27
-  if (Is1021 == true)
+  if (DeviceName == "MIMXRT1021")
     TargetInterface.pokeUint32 (0x401F8084, 0x00000010); // EMC_28, DQS PIN, enable SION
   else
     TargetInterface.pokeUint32 (0x401F8084, 0x00000000); // EMC_28
@@ -225,10 +244,10 @@ function SDRAM_Init ()
   TargetInterface.pokeUint32 (0x401F80A4, 0x00000000); // EMC_36
   TargetInterface.pokeUint32 (0x401F80A8, 0x00000000); // EMC_37
   TargetInterface.pokeUint32 (0x401F80AC, 0x00000000); // EMC_38
-  if (Is1021 == false)
-    TargetInterface.pokeUint32 (0x401F80B0, 0x00000010); // EMC_39, DQS PIN, enable SION
+  if (DeviceName == "MIMXRT1021")
+    TargetInterface.pokeUint32 (0x401F80B0, 0x00000000); // EMC_39, DQS PIN, enable SION
   else
-    TargetInterface.pokeUint32 (0x401F80B0, 0x00000000); // EMC_39
+    TargetInterface.pokeUint32 (0x401F80B0, 0x00000010); // EMC_39
   TargetInterface.pokeUint32 (0x401F80B4, 0x00000000); // EMC_40
   TargetInterface.pokeUint32 (0x401F80B8, 0x00000000); // EMC_41
 

@@ -1,31 +1,49 @@
 <!DOCTYPE CrossStudio_Session_File>
 <session>
  <Bookmarks>
-  <BookmarkItem objectName="" line="77" column="-1" path="C:/Users/Markus/AppData/Local/Rowley Associates Limited/CrossWorks for ARM/v4/packages/targets/iMXRT/Loader/libmem_imxrt_flm_driver.c" number="5" extra="static const libmem_geometry_t geometry[] =" color="5"/>
+  <BookmarkItem objectName="" line="63" column="-1" path="C:/Users/Markus/AppData/Local/Rowley Associates Limited/CrossWorks for ARM/v4/packages/targets/iMXRT/Loader/libmem_imxrt_flm_driver.c" number="4" extra="static const libmem_geometry_t geometry[] =" color="5"/>
   <BookmarkItem objectName="" line="21" column="-1" path="C:/Users/Markus/AppData/Local/Rowley Associates Limited/CrossWorks for ARM/v4/packages/targets/iMXRT/Loader/libmem_imxrt_flm_driver.c" number="1" extra="static const libmem_geometry_t geometry[] =" color="5"/>
   <BookmarkItem objectName="" line="35" column="-1" path="C:/Users/Markus/AppData/Local/Rowley Associates Limited/CrossWorks for ARM/v4/packages/targets/iMXRT/Loader/libmem_imxrt_flm_driver.c" number="2" extra="static const libmem_geometry_t geometry[] =" color="5"/>
   <BookmarkItem objectName="" line="49" column="-1" path="C:/Users/Markus/AppData/Local/Rowley Associates Limited/CrossWorks for ARM/v4/packages/targets/iMXRT/Loader/libmem_imxrt_flm_driver.c" number="3" extra="static const libmem_geometry_t geometry[] =" color="5"/>
-  <BookmarkItem objectName="" line="63" column="-1" path="C:/Users/Markus/AppData/Local/Rowley Associates Limited/CrossWorks for ARM/v4/packages/targets/iMXRT/Loader/libmem_imxrt_flm_driver.c" number="4" extra="static const libmem_geometry_t geometry[] =" color="5"/>
+  <BookmarkItem objectName="" line="77" column="-1" path="C:/Users/Markus/AppData/Local/Rowley Associates Limited/CrossWorks for ARM/v4/packages/targets/iMXRT/Loader/libmem_imxrt_flm_driver.c" number="5" extra="static const libmem_geometry_t geometry[] =" color="5"/>
  </Bookmarks>
- <Breakpoints groups="Breakpoints" active_group="Breakpoints"/>
+ <Breakpoints groups="Breakpoints" active_group="Breakpoints">
+  <Exceptions set="MemManage;UsageFault_Coprocessor;UsageFault_CheckingError;UsageFault_StateError;BusFault;ExceptionEntryReturnFault;HardFault"/>
+ </Breakpoints>
  <ExecutionProfileWindow/>
  <FrameBufferWindow>
   <FrameBufferWindow bufferHeight="-1" addressSpace="" addressText="" bufferWidth="-1"/>
  </FrameBufferWindow>
- <Memory1/>
- <Memory2/>
- <Memory3/>
- <Memory4/>
+ <Memory1>
+  <MemoryWindow addressSpace="" dataSize="2" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="iMXRT Loader" radix="16" sizeText="" addressText="0x6000B0AE"/>
+ </Memory1>
+ <Memory2>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="iMXRT Loader" radix="16" sizeText="" addressText=""/>
+ </Memory2>
+ <Memory3>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="iMXRT Loader" radix="16" sizeText="" addressText=""/>
+ </Memory3>
+ <Memory4>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="iMXRT Loader" radix="16" sizeText="" addressText=""/>
+ </Memory4>
  <Project>
   <ProjectSessionItem path="Loader"/>
   <ProjectSessionItem path="Loader;iMXRT Loader"/>
   <ProjectSessionItem path="Loader;iMXRT Loader;Source Files"/>
   <ProjectSessionItem path="Loader;iMXRT Loader;System Files"/>
  </Project>
- <Register1/>
- <Register2/>
- <Register3/>
- <Register4/>
+ <Register1>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="iMXRT Loader" decimalNodes="" octalNodes="" unsignedNodes=""/>
+ </Register1>
+ <Register2>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="iMXRT Loader" decimalNodes="" octalNodes="" unsignedNodes=""/>
+ </Register2>
+ <Register3>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="iMXRT Loader" decimalNodes="" octalNodes="" unsignedNodes=""/>
+ </Register3>
+ <Register4>
+  <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="iMXRT Loader" decimalNodes="" octalNodes="" unsignedNodes=""/>
+ </Register4>
  <TargetWindow programLoadAddress="" programSize="" uploadStartAddress="" programMemoryInterface="" programFileName="" uploadMemoryInterface="" programFileType="" uploadFileName="" uploadFileType="" programAction="" uploadSize=""/>
  <Threads>
   <ThreadsWindow showLists=""/>
@@ -46,10 +64,8 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="142" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../libraries/libmem_drivers/libmem_flm_driver.c" selected="0" top="91" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="29" useTextEdit="1" useBinaryEdit="0" left="0" path="loader.c" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="16" useTextEdit="1" useBinaryEdit="0" left="0" path="libmem_imxrt_flm_driver.c" selected="1" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="75" useTextEdit="1" useBinaryEdit="0" left="0" path="../../../libraries/libmem_drivers/libmem_flm_driver.h" selected="0" top="8" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="27" y="43" useTextEdit="1" useBinaryEdit="0" left="0" path="libmem_imxrt_flm_driver.c" selected="1" top="0" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="iMXRT Loader" fileDialogDefaultFilter="*.c" autoConnectTarget="" buildConfiguration="MIMXRT106x_HYPER_256KB_SEC Release" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="0"/>
+ <ARMCrossStudioWindow activeProject="iMXRT Loader" fileDialogDefaultFilter="*.asm;*.s;*.inc" autoConnectTarget="SEGGER J-Link" buildConfiguration="MIMXRT1021_QuadSPI_4KB_SEC Debug" debugSearchFileMap="/home/products-x64-1604/build/packages/arm/crossworks_v4/crossworks_v4/target_build/target/iMXRT/Loader/loader_startup.s&#xa;" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="1663"/>
 </session>

@@ -1,4 +1,6 @@
 del *.bak /S
+rmdir /s /q "./targets/iMXRT/Loader/iMXRT Loader MIMXRT1015_QuadSPI_4KB_SEC Debug"
+rmdir /s /q "./targets/iMXRT/Loader/iMXRT Loader MIMXRT1015_QuadSPI_4KB_SEC Release"
 rmdir /s /q "./targets/iMXRT/Loader/iMXRT Loader MIMXRT1021_QuadSPI_4KB_SEC Debug"
 rmdir /s /q "./targets/iMXRT/Loader/iMXRT Loader MIMXRT1021_QuadSPI_4KB_SEC Release"
 rmdir /s /q "./targets/iMXRT/Loader/iMXRT Loader MIMXRT105x_QuadSPI_4KB_SEC Debug"

@@ -12,75 +12,77 @@
     </folder>
     <folder Name="targets">
       <folder Name="iMXRT">
-        <folder Name="devices">
-          <folder Name="MIMXRT1021">
-            <file file_name="targets/iMXRT/devices/MIMXRT1021/fsl_device_registers.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1021/MIMXRT1021.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1021/MIMXRT1021_features.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.h" />
-          </folder>
-          <folder Name="MIMXRT1051">
-            <file file_name="targets/iMXRT/devices/MIMXRT1051/fsl_device_registers.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1051/MIMXRT1051.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1051/MIMXRT1051_features.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.h" />
-          </folder>
-          <folder Name="MIMXRT1052">
-            <file file_name="targets/iMXRT/devices/MIMXRT1052/fsl_device_registers.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1052/MIMXRT1052.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1052/MIMXRT1052_features.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.h" />
-          </folder>
-          <folder Name="MIMXRT1061">
-            <file file_name="targets/iMXRT/devices/MIMXRT1061/fsl_device_registers.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1061/MIMXRT1061.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1061/MIMXRT1061_features.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.c" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.h" />
-          </folder>
-          <folder Name="MIMXRT1062">
-            <file file_name="targets/iMXRT/devices/MIMXRT1062/fsl_device_registers.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1062/MIMXRT1062.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1062/MIMXRT1062_features.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.h" />
-          </folder>
-          <folder Name="MIMXRT1064">
-            <file file_name="targets/iMXRT/devices/MIMXRT1064/fsl_device_registers.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1064/MIMXRT1064.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1064/MIMXRT1064_features.h" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c" />
-            <file file_name="targets/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.h" />
-          </folder>
-        </folder>
-        <folder Name="FLM">
-          <file file_name="targets/iMXRT/FLM/MIMXRT105x_ECOXIP_4MB_SEC.FLM" />
-          <file file_name="targets/iMXRT/FLM/MIMXRT105x_HYPER_256KB_SEC.FLM" />
-          <file file_name="targets/iMXRT/FLM/MIMXRT105x_QuadSPI_4KB_SEC.FLM" />
-          <file file_name="targets/iMXRT/FLM/MIMXRT106x_QSPI_4KB_SEC.FLM" />
-          <file file_name="targets/iMXRT/FLM/MIMXRT1021_QuadSPI_4KB_SEC.FLM" />
-          <file file_name="targets/iMXRT/FLM/MIMXRT1064_QSPI_4KB_SEC.FLM" />
-        </folder>
         <folder Name="Loader">
           <file file_name="targets/iMXRT/Loader/libmem_imxrt_flm_driver.c" />
           <file file_name="targets/iMXRT/Loader/loader.c" />
           <file file_name="targets/iMXRT/Loader/Loader.hzp" />
           <file file_name="targets/iMXRT/Loader/Loader.hzs" />
           <file file_name="targets/iMXRT/Loader/loader_startup.s" />
+          <file file_name="targets/iMXRT/Loader/MIMXRT1015_QuadSPI_4KB_SEC_Loader.elf" />
+          <file file_name="targets/iMXRT/Loader/MIMXRT1021_QuadSPI_4KB_SEC_Loader.elf" />
           <file file_name="targets/iMXRT/Loader/MIMXRT105x_EcoXiP_4KB_SEC_Loader.elf" />
           <file file_name="targets/iMXRT/Loader/MIMXRT105x_HYPER_256KB_SEC_Loader.elf" />
           <file file_name="targets/iMXRT/Loader/MIMXRT105x_QuadSPI_4KB_SEC_Loader.elf" />
           <file file_name="targets/iMXRT/Loader/MIMXRT106x_EcoXiP_4KB_SEC_Loader.elf" />
-          <file file_name="targets/iMXRT/Loader/MIMXRT106x_HYPER_4KB_SEC_Loader.elf" />
+          <file file_name="targets/iMXRT/Loader/MIMXRT106x_HYPER_256KB_SEC_Loader.elf" />
           <file file_name="targets/iMXRT/Loader/MIMXRT106x_QSPI_4KB_SEC_Loader.elf" />
-          <file file_name="targets/iMXRT/Loader/MIMXRT1021_QuadSPI_4KB_SEC_Loader.elf" />
           <file file_name="targets/iMXRT/Loader/MIMXRT1064_QSPI_4KB_SEC_Loader.elf" />
           <file file_name="targets/iMXRT/Loader/ram_placement.xml" />
+          <folder Name="FLM">
+            <file file_name="targets/iMXRT/FLM/MIMXRT105x_ECOXIP_4MB_SEC.FLM" />
+            <file file_name="targets/iMXRT/FLM/MIMXRT105x_HYPER_256KB_SEC.FLM" />
+            <file file_name="targets/iMXRT/FLM/MIMXRT105x_QuadSPI_4KB_SEC.FLM" />
+            <file file_name="targets/iMXRT/FLM/MIMXRT106x_QSPI_4KB_SEC.FLM" />
+            <file file_name="targets/iMXRT/FLM/MIMXRT1021_QuadSPI_4KB_SEC.FLM" />
+            <file file_name="targets/iMXRT/FLM/MIMXRT1064_QSPI_4KB_SEC.FLM" />
+            <file file_name="targets/iMXRT/FLM/MIMXRT1015_QuadSPI_4KB_SEC.FLM" />
+          </folder>
         </folder>
-        <folder Name="XML">
+        <file file_name="targets/iMXRT/flexspi_placement.xml" />
+        <file file_name="targets/iMXRT/iMXRT_Target.js" />
+        <file file_name="targets/iMXRT/project_templates.xml" />
+        <file file_name="targets/iMXRT/propertyGroups.xml" />
+        <folder Name="System">
+          <file file_name="targets/iMXRT/system_MIMXRT1015.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1015.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1021.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1021.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1051.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1051.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1052.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1052.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1061.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1061.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1062.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1062.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1064.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1064.h" />
+        </folder>
+        <folder Name="Startup">
+          <file file_name="targets/iMXRT/startup_MIMXRT1021.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1051.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1052.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1061.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1062.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1064.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1015.s" />
+        </folder>
+        <folder Name="Device">
+          <file file_name="targets/iMXRT/MIMXRT1015.h" />
+          <file file_name="targets/iMXRT/MIMXRT1015_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT1021.h" />
+          <file file_name="targets/iMXRT/MIMXRT1021_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT1051.h" />
+          <file file_name="targets/iMXRT/MIMXRT1051_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT1052.h" />
+          <file file_name="targets/iMXRT/MIMXRT1052_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT1061.h" />
+          <file file_name="targets/iMXRT/MIMXRT1061_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT1062.h" />
+          <file file_name="targets/iMXRT/MIMXRT1062_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT1064.h" />
+          <file file_name="targets/iMXRT/MIMXRT1064_features.h" />
+          <file file_name="targets/iMXRT/XML/MIMXRT1015_Registers.xml" />
           <file file_name="targets/iMXRT/XML/MIMXRT1021_Registers.xml" />
           <file file_name="targets/iMXRT/XML/MIMXRT1051_Registers.xml" />
           <file file_name="targets/iMXRT/XML/MIMXRT1052_Registers.xml" />
@@ -88,20 +90,11 @@
           <file file_name="targets/iMXRT/XML/MIMXRT1062_Registers.xml" />
           <file file_name="targets/iMXRT/XML/MIMXRT1064_Registers.xml" />
         </folder>
-        <file file_name="targets/iMXRT/flexspi_placement.xml" />
-        <file file_name="targets/iMXRT/iMXRT_Target.js" />
-        <file file_name="targets/iMXRT/project_templates.xml" />
-        <file file_name="targets/iMXRT/propertyGroups.xml" />
-        <file file_name="targets/iMXRT/startup_MIMXRT1021.s" />
-        <file file_name="targets/iMXRT/startup_MIMXRT1051.s" />
-        <file file_name="targets/iMXRT/startup_MIMXRT1052.s" />
-        <file file_name="targets/iMXRT/startup_MIMXRT1061.s" />
-        <file file_name="targets/iMXRT/startup_MIMXRT1062.s" />
-        <file file_name="targets/iMXRT/startup_MIMXRT1064.s" />
         <file file_name="targets/iMXRT/MemoryMap_MIMXRT105x.xml" />
         <file file_name="targets/iMXRT/MemoryMap_MIMXRT106x.xml" />
         <file file_name="targets/iMXRT/MemoryMap_MIMXRT1015.xml" />
         <file file_name="targets/iMXRT/MemoryMap_MIMXRT1021.xml" />
+        <file file_name="targets/iMXRT/fsl_device_registers.h" />
       </folder>
     </folder>
   </project>
