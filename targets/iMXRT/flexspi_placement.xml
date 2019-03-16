@@ -51,7 +51,7 @@
     <ProgramSection alignment="4" load="Yes" runin=".data2_run" name=".data2" />
   </MemorySegment>
 
-  <MemorySegment name="$(RAM2_NAME:SDRAM)">
+  <MemorySegment name="$(RAM2_NAME:RAM)">
     <ProgramSection alignment="4" load="No" name=".data2_run" />
     <ProgramSection alignment="4" load="No" name=".bss2" />
 
