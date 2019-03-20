@@ -95,7 +95,18 @@
         <file file_name="targets/iMXRT/MemoryMap_MIMXRT1015.xml" />
         <file file_name="targets/iMXRT/MemoryMap_MIMXRT1021.xml" />
         <file file_name="targets/iMXRT/fsl_device_registers.h" />
+        <file file_name="targets/iMXRT/core_cm7.h" />
       </folder>
+    </folder>
+    <folder Name="samples">
+      <file file_name="samples/iMXRT/flexspi_boot.c" />
+      <file file_name="samples/iMXRT/flexspi_boot.h" />
+      <file file_name="samples/iMXRT/flexspi_flash.h" />
+      <file file_name="samples/iMXRT/flexspi_flash_EcoXiP.c" />
+      <file file_name="samples/iMXRT/flexspi_flash_Hyperflash.c" />
+      <file file_name="samples/iMXRT/flexspi_flash_QSPI.c" />
+      <file file_name="samples/iMXRT/iMXRT.hzp" />
+      <file file_name="samples/iMXRT/main.cpp" />
     </folder>
   </project>
 </solution>
