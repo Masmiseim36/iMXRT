@@ -89,10 +89,10 @@ function Clock_Init ()
 			Clock_Init_1021 ();
 			break;
 		case "MIMXRT1051":
-        case "MIMXRT1052":
-        case "MIMXRT1061":
-        case "MIMXRT1062":
-        case "MIMXRT1054":
+		case "MIMXRT1052":
+		case "MIMXRT1061":
+		case "MIMXRT1062":
+		case "MIMXRT1054":
 			Clock_Init_105x ();
 			break;
 		default:
@@ -106,40 +106,41 @@ function Clock_Init_1021 ()
 {
   TargetInterface.message ("Clock_Init_1021");
   // Enable all clocks
-  TargetInterface.pokeUint32 (0x400FC068, 0xffffffff);
-  TargetInterface.pokeUint32 (0x400FC06C, 0xffffffff);
-  TargetInterface.pokeUint32 (0x400FC070, 0xffffffff);
-  TargetInterface.pokeUint32 (0x400FC074, 0xffffffff);
-  TargetInterface.pokeUint32 (0x400FC078, 0xffffffff);
-  TargetInterface.pokeUint32 (0x400FC07C, 0xffffffff);
-  TargetInterface.pokeUint32 (0x400FC080, 0xffffffff);
+  TargetInterface.pokeUint32 (0x400FC068, 0xffffffff);	// CCM->CCGR0
+  TargetInterface.pokeUint32 (0x400FC06C, 0xffffffff);	// CCM->CCGR1
+  TargetInterface.pokeUint32 (0x400FC070, 0xffffffff);	// CCM->CCGR2
+  TargetInterface.pokeUint32 (0x400FC074, 0xffffffff);	// CCM->CCGR3
+  TargetInterface.pokeUint32 (0x400FC078, 0xffffffff);	// CCM->CCGR4
+  TargetInterface.pokeUint32 (0x400FC07C, 0xffffffff);	// CCM->CCGR5
+  TargetInterface.pokeUint32 (0x400FC080, 0xffffffff);	// CCM->CCGR6
 
   // IPG_PODF: 2 divide by 3
-  TargetInterface.pokeUint32 (0x400FC014,0x000A8200);
+  TargetInterface.pokeUint32 (0x400FC014,0x000A8200);	// CCM->CBCDR
   // PERCLK_PODF: 1 divide by 2
-  TargetInterface.pokeUint32 (0x400FC01C, 0x04900001);
+  TargetInterface.pokeUint32 (0x400FC01C, 0x04900001);  // CCM->CSCMR1 
   // Enable SYS PLL but keep it bypassed.
-  TargetInterface.pokeUint32 (0x400D8030, 0x00012001);
+  TargetInterface.pokeUint32 (0x400D8030, 0x00012001);	// CCM_ANALOG->PLL_SYS 
   var reg;
   do
   {
-    reg = TargetInterface.peekUint32 (0x400D8030);
+    reg = TargetInterface.peekUint32 (0x400D8030);		// CCM_ANALOG->PLL_SYS 
   }
   while((reg & 0x80000000) == 0);
+
   // Disable bypass of SYS PLL
-  TargetInterface.pokeUint32 (0x400D8030, 0x00002001);
+  TargetInterface.pokeUint32 (0x400D8030, 0x00002001);	// CCM_ANALOG->PLL_SYS 
 
   // Ungate SYS PLL PFD2
-  reg = TargetInterface.peekUint32 (0x400D8100);
-  reg &= ~0x00800000;
-  TargetInterface.pokeUint32 (0x400D8100, reg);  
+  reg = TargetInterface.peekUint32 (0x400D8100);		// CCM_ANALOG->PFD_528 
+  reg &= ~0x00800000;									// CCM_ANALOG_PFD_528_PFD2_CLKGATE_MASK
+  TargetInterface.pokeUint32 (0x400D8100, reg);			// CCM_ANALOG->PFD_528
 
   // SEMC_ALT_CLK_SEL: 0 PLL2 (SYS PLL) PFD2
   // SEMC_CLK_SEL: 1 SEMC_ALT_CLK
   // SEMC_PODF: 2 divide by 3
-  reg = TargetInterface.peekUint32 (0x400FC014);
+  reg = TargetInterface.peekUint32 (0x400FC014);		// CCM->CBCDR
   reg |= 0x20040;
-  TargetInterface.pokeUint32 (0x400FC014, reg);    
+  TargetInterface.pokeUint32 (0x400FC014, reg);			// CCM->CBCDR
 
   // Disable MPU which will be enabled by ROM to prevent code execution
   reg = TargetInterface.peekUint32 (0xE000ED94);
@@ -152,35 +153,35 @@ function Clock_Init_105x ()
 {
 	TargetInterface.message ("Clock_Init_105x");
   // Enable all clocks
-  TargetInterface.pokeUint32 (0x400FC068, 0xffffffff);
-  TargetInterface.pokeUint32 (0x400FC06C, 0xffffffff);
-  TargetInterface.pokeUint32 (0x400FC070, 0xffffffff);
-  TargetInterface.pokeUint32 (0x400FC074, 0xffffffff);
-  TargetInterface.pokeUint32 (0x400FC078, 0xffffffff);
-  TargetInterface.pokeUint32 (0x400FC07C, 0xffffffff);
-  TargetInterface.pokeUint32 (0x400FC080, 0xffffffff);
+  TargetInterface.pokeUint32 (0x400FC068, 0xffffffff);	// CCM->CCGR0
+  TargetInterface.pokeUint32 (0x400FC06C, 0xffffffff);	// CCM->CCGR1
+  TargetInterface.pokeUint32 (0x400FC070, 0xffffffff);	// CCM->CCGR2
+  TargetInterface.pokeUint32 (0x400FC074, 0xffffffff);	// CCM->CCGR3
+  TargetInterface.pokeUint32 (0x400FC078, 0xffffffff);	// CCM->CCGR4
+  TargetInterface.pokeUint32 (0x400FC07C, 0xffffffff);	// CCM->CCGR5
+  TargetInterface.pokeUint32 (0x400FC080, 0xffffffff);	// CCM->CCGR6
 
   // PERCLK_PODF: 1 divide by 2
-  TargetInterface.pokeUint32 (0x400FC01C, 0x04900001);
+  TargetInterface.pokeUint32 (0x400FC01C, 0x04900001);  // CCM->CSCMR1 
   // Enable SYS PLL but keep it bypassed.
-  TargetInterface.pokeUint32 (0x400D8030, 0x00012001);
+  TargetInterface.pokeUint32 (0x400D8030, 0x00012001);	// CCM_ANALOG->PLL_SYS 
   var reg;
   do
   {
-    reg = TargetInterface.peekUint32 (0x400D8030);
+    reg = TargetInterface.peekUint32 (0x400D8030);		// CCM_ANALOG->PLL_SYS 
   }
   while((reg & 0x80000000) == 0);
   // Disable bypass of SYS PLL
-  TargetInterface.pokeUint32 (0x400D8030, 0x00002001);
+  TargetInterface.pokeUint32 (0x400D8030, 0x00002001);	// CCM_ANALOG->PLL_SYS 
   
   // PFD2_FRAC: 29, PLL2 PFD2=528*18/PFD2_FRAC=327
   // Ungate SYS PLL PFD2
-  TargetInterface.pokeUint32 (0x400D8100, 0x001d0000);
+  TargetInterface.pokeUint32 (0x400D8100, 0x001d0000);	// CCM_ANALOG->PFD_528
   
   // SEMC_PODF: 001, AHB_PODF: 011, IPG_PODF: 01
   // SEMC_ALT_CLK_SEL: 0 PLL2 (SYS PLL) PFD2
   // SEMC_CLK_SEL: 1 SEMC_ALT_CLK
-  TargetInterface.pokeUint32 (0x400FC014, 0x00010D40);
+  TargetInterface.pokeUint32 (0x400FC014, 0x00010D40);	// CCM->CBCDR
   TargetInterface.message ("Clock_Init_105x - Done");
 }
 

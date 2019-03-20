@@ -1,1 +1,4 @@
-svd2mm.exe MIMXRT1015.xml MIMXRT1015.xml -core 7 -mpu -fpu -pp -nvic 4 -irq-start 0
+svd2mm.exe MIMXRT1015.xml MIMXRT1015_Registers.xml -core 7 -mpu -fpu -pp -nvic 4 -irq-start 0
+
+
+-nvic 4: compare __NVIC_PRIO_BITS
