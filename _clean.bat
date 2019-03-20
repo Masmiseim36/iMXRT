@@ -18,6 +18,9 @@ rmdir /s /q "./targets/iMXRT/Loader/iMXRT Loader MIMXRT106x_EcoXiP_4KB_SEC Relea
 rmdir /s /q "./targets/iMXRT/Loader/iMXRT Loader MIMXRT1064_QSPI_4KB_SEC Debug"
 rmdir /s /q "./targets/iMXRT/Loader/iMXRT Loader MIMXRT1064_QSPI_4KB_SEC Release"
 
+rmdir /s /q "./samples/iMXRT/SayHello THUMB Debug"
+rmdir /s /q "./samples/iMXRT/SayHello THUMB Release"
+
 cd "./targets/iMXRT/Loader/"
 del /f /q *.map
 cd ..

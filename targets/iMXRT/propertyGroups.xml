@@ -47,7 +47,7 @@
       <property name="macros" value="DeviceName=MIMXRT1051;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT105x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT105x.xml" />
       <cdefine name="CPU_MIMXRT1051CVJ5B"/>
-    </groupEntry>	
+    </groupEntry>
     <groupEntry name="MIMXRT1051DVL6A" aka="MIMXRT1051xxx6A" family="iMXRT1050">
       <property name="macros" value="DeviceName=MIMXRT1051;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT105x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT105x.xml" />
@@ -72,7 +72,7 @@
       <property name="macros" value="DeviceName=MIMXRT1052;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT105x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT105x.xml" />
       <cdefine name="CPU_MIMXRT1052CVJ5B"/>
-    </groupEntry>	
+    </groupEntry>
     <groupEntry name="MIMXRT1052DVL6A" aka="MIMXRT1052xxx6A" family="iMXRT1050">
       <property name="macros" value="DeviceName=MIMXRT1052;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT105x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT105x.xml" />
@@ -87,7 +87,8 @@
       <property name="macros" value="DeviceName=MIMXRT1052;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT105x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT105x.xml" />
       <cdefine name="CPU_MIMXRT1052DVJ6B"/>
-    </groupEntry>	
+    </groupEntry>
+
     <groupEntry name="MIMXRT1061CVL5A" aka="MIMXRT1061xxx5A" family="iMXRT1060">
       <property name="macros" value="DeviceName=MIMXRT1061;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
@@ -140,13 +141,13 @@
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value=""/>
       <property name="arm_target_loader_default_loader" value=""/>
+      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
     <groupEntry name="RAM">
       <property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/ram_placement.xml" />
       <property name="linker_section_placement_macros" value="RAM_NAME=SDRAM" />
       <property name="arm_target_loader_applicable_loaders" value=""/>
       <property name="arm_target_loader_default_loader" value=""/>
-      <property name="target_reset_script=" value="Reset()&#xa;Clock_Init_1021()&#xa;SDRAM_Init()" />
     </groupEntry>
     <groupEntry name="FlexSPI (HYPER)">
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />

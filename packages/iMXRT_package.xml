@@ -5,6 +5,10 @@
   </group>
   <targets>
     <category name="iMXRT1020">
+      <cpu name="MIMXRT1015CAF4A" /> 
+      <cpu name="MIMXRT1015DAF5A" />
+    </category>
+    <category name="iMXRT1020">
       <cpu name="MIMXRT1021CAG4A" /> 
       <cpu name="MIMXRT1021CAF4A" />
       <cpu name="MIMXRT1021DAG4A" /> 
@@ -76,6 +80,8 @@
       explorer and selecting the <b>Target Processor</b> entry.</p>
       <p>Selecting the target processor will specify the memory map that is used for the build and debug. You can view the selected 
       memory map by right clicking on the project node in the project explorer and selecting <b>Edit Memory Map</b>.</p>
+      <p>In addition, the corresponding system-specific Files are added to the Project (MIMXRT10xx_features.h,
+	  system_MIMXRT10xx.h/.c, startup_MIMXRT10xx.s and MIMXRT10xx.h). Reload the project for updating project-tree.</p>
        
       <h5>Section Placement</h5>
       <p>CrossStudio for ARM supports iMXRT projects running applications in a number of different
@@ -83,7 +89,25 @@
       <p>For iMXRT projects the set of placements are:</p>
       <ul>
         <li><b>TCM</b> application runs ITCM and DTCM memories.</li>
-        <li><b>RAM</b> application runs in External SD-RAM memory.</li>
+        <li>
+          <b>RAM</b> application runs in External SD-RAM memory.
+          <p>Change the project-property <b>Debug -> Target-Script -> Reset Script</b> from</p> <samp>“Reset()”</samp> <p>to</p>
+          <samp>“Reset()<br />
+            SetDeviceName("DeviceName")<br />
+            Clock_Init()<br />
+            SDRAM_Init()”</samp>
+          <p>Where "DeviceName" is one of the following (including the quotes)</p>
+          <ul>
+            <li>"MIMXRT1015"</li>
+            <li>"MIMXRT1021"</li>
+            <li>"MIMXRT1051"</li>
+            <li>"MIMXRT1052"</li>
+            <li>"MIMXRT1061"</li>
+            <li>"MIMXRT1062"</li>
+            <li>"MIMXRT1054"</li>
+          </ul>
+          <p>Choose the Controller you are using in your project. These routines initializing the external RAM, so it can be used for Code-Execution</p>
+		</li>
         <li><b>FlexSPI (HYPER)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
 		<li><b>FlexSPI (EcoXiP)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
         <li><b>FlexSPI (QuadSPI)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
@@ -118,9 +142,9 @@
     <version name="4.3">
       <description>FlexSPI-Configurations are also using TCM- and OCRAM-memory now</description>
 	  <description>Added SDRAM-Segment to Memory-Map</description>
-      <description>Add support for iMXRT1061 and fixed some naming issues</description>
+      <description>Add support for iMXRT1015, iMXRT1061 and fixed some naming issues</description>
 	  <description>Added support for Adesto EcoXiP Flash</description>
-	  <description>Added dedicated memory-map Files per Controller</description>
+	  <description>Added dedicated memory-map files per Controller</description>
 	  <description>Added NonCacheable-Section in the SD-RAM as recommended by NXP</description>
 	  <description>Added SDRAM Initialization to the Reset-Script</description>
     </version>
