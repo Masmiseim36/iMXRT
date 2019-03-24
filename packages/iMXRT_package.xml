@@ -1,26 +1,36 @@
 <!DOCTYPE CrossStudio_Package_Description_File>
-<package name="iMXRT" author="Rowley Associates Ltd" cpu_manufacturer="NXP" cpu_family="iMXRT" version="4.2" crossstudio_versions="8:4.2-" dependencies="CMSIS" build_version="2018120301.12497;crossworks_v4;crossworks_v4" >
+<package name="iMXRT" author="Rowley Associates Ltd" cpu_manufacturer="NXP" cpu_family="iMXRT" version="4.3" crossstudio_versions="8:4.2-" dependencies="CMSIS" build_version="2019032201.12597;crossworks_v4;crossworks_v4" >
   <group title="System Solutions">
     <file title="iMXRT Loader Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader.hzp" />
   </group>
   <targets>
+    <category name="iMXRT1015">
+      <cpu name="MIMXRT1015CAF4A" />
+      <cpu name="MIMXRT1015DAF5A" />
+    </category>
     <category name="iMXRT1020">
       <cpu name="MIMXRT1021CAG4A" /> 
       <cpu name="MIMXRT1021CAF4A" />
-      <cpu name="MIMXRT1021DAG4A" /> 
-      <cpu name="MIMXRT1021DAF4A" />
+      <cpu name="MIMXRT1021DAG5A" /> 
+      <cpu name="MIMXRT1021DAF5A" />
     </category>
     <category name="iMXRT1050">
       <cpu name="MIMXRT1051CVL5A" />
       <cpu name="MIMXRT1051CVL5B" />
+      <cpu name="MIMXRT1051CVJ5B" />
       <cpu name="MIMXRT1051DVL6A" />
       <cpu name="MIMXRT1051DVL6B" />
       <cpu name="MIMXRT1052CVL5A" />
       <cpu name="MIMXRT1052CVL5B" />
+      <cpu name="MIMXRT1052CVJ5B" />
       <cpu name="MIMXRT1052DVL6A" />
       <cpu name="MIMXRT1052DVL6B" />
+      <cpu name="MIMXRT1052DVJ6B" />
     </category>
     <category name="iMXRT1060">
+      <cpu name="MIMXRT1061CVJ5A" />
+      <cpu name="MIMXRT1061CVL5A" />
+      <cpu name="MIMXRT1061DVL6A" />
       <cpu name="MIMXRT1062CVJ5A" />
       <cpu name="MIMXRT1062CVL5A" />
       <cpu name="MIMXRT1062DVJ6A" />
@@ -43,7 +53,7 @@
       </ul>
       <h5>To import IAR project files supplied with the NXP iMXRT SDK</h5>
       <ul>
-        <li>Select <b>File &gt; Import IAR Ewarm / Keil MDK / GPDSC Project</b> menu item.</li>
+        <li>Select <b>File &gt; Import Project... &gt; IAR Ewarm Project</b> menu item.</li>
         <li>Navigate to the directory containing the project e.g. E:/NXP/EVKB-IMXRT1050/boards/evkbimxrt1050/driver_examples/gpio/led_output/iar.</li>
         <li>Select the workspace e.g. igpio_led_output.ewd.</li>
       </ul>
@@ -106,6 +116,9 @@
     </section>
   </documentation>
   <history>
+    <version name="4.3">
+      <description>Add support for iMXRT1015 devices.</description>
+    </version>
     <version name="4.2">
       <description>Add support for iMXRT1060 and iMXRT1064 devices.</description>
     </version>

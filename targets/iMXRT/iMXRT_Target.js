@@ -11,7 +11,9 @@
 
 function Reset()
 {
-  TargetInterface.resetAndStop(1000);  
+  TargetInterface.resetAndStop(1000);
+  if (TargetInterface.implementation() == "crossworks_simulator")
+    return;
 
   ocotp_base = 0x401F4000;
   ocotp_fuse_bank0_base = ocotp_base + 0x400;
