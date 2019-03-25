@@ -58,6 +58,7 @@
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT105x.xml" />
       <cdefine name="CPU_MIMXRT1051DVL6B"/>
     </groupEntry>
+
     <groupEntry name="MIMXRT1052CVL5A" aka="MIMXRT1052xxx5A" family="iMXRT1050">
       <property name="macros" value="DeviceName=MIMXRT1052;HYPER=MIMXRT105x_HYPER_256KB_SEC;ECOXIP=MIMXRT105x_EcoXiP_4KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT105x.xml" />
@@ -104,32 +105,34 @@
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
       <cdefine name="CPU_MIMXRT1061DVL6A"/>
     </groupEntry>
-    <groupEntry name="MIMXRT1062CVJ5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
-      <property name="macros" value="DeviceName=MIMXRT1062;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
-      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
-      <cdefine name="CPU_MIMXRT1062CVJ5A"/>
-    </groupEntry>
+
     <groupEntry name="MIMXRT1062CVL5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
       <property name="macros" value="DeviceName=MIMXRT1062;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
       <cdefine name="CPU_MIMXRT1062CVL5A"/>
     </groupEntry>
-    <groupEntry name="MIMXRT1062DVJ6A" aka="MIMXRT1062xxx6A" family="iMXRT1060">
+    <groupEntry name="MIMXRT1062CVJ5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
       <property name="macros" value="DeviceName=MIMXRT1062;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
-      <cdefine name="CPU_MIMXRT1062DVJ6A"/>
+      <cdefine name="CPU_MIMXRT1062CVJ5A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1062DVL6A" aka="MIMXRT1062xxx6A" family="iMXRT1060">
       <property name="macros" value="DeviceName=MIMXRT1062;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
       <cdefine name="CPU_MIMXRT1062DVL6A"/>
     </groupEntry>
-    <groupEntry name="MIMXRT1064CVL5A" aka="MIMXRT1064xxx5A" family="iMXRT1060">
+    <groupEntry name="MIMXRT1062DVJ6A" aka="MIMXRT1062xxx6A" family="iMXRT1060">
+      <property name="macros" value="DeviceName=MIMXRT1062;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
+      <cdefine name="CPU_MIMXRT1062DVJ6A"/>
+    </groupEntry>
+
+    <groupEntry name="MIMXRT1064CVL5A" aka="MIMXRT1064xxx5A" family="iMXRT1064">
       <property name="macros" value="DeviceName=MIMXRT1064;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
       <cdefine name="CPU_MIMXRT1064CVL5A"/>
     </groupEntry>
-    <groupEntry name="MIMXRT1064DVL6A" aka="MIMXRT1064xxx6A" family="iMXRT1060">
+    <groupEntry name="MIMXRT1064DVL6A" aka="MIMXRT1064xxx6A" family="iMXRT1064">
       <property name="macros" value="DeviceName=MIMXRT1064;HYPER=MIMXRT106x_HYPER_256KB_SEC;ECOXIP=MIMXRT106x_EcoXiP_4KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
       <cdefine name="CPU_MIMXRT1064DVL6A"/>

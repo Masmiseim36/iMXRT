@@ -148,9 +148,9 @@ ISR_HANDLER2 FLEXRAM
 ISR_HANDLER2 KPP                                  
 ISR_HANDLER2 TSC_DIG                              
 ISR_HANDLER2 GPR_IRQ                              
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
+ISR_RESERVED                                
+ISR_RESERVED                                  
+ISR_RESERVED                                  
 ISR_HANDLER2 WDOG2                                
 ISR_HANDLER2 SNVS_HP_WRAPPER                      
 ISR_HANDLER2 SNVS_HP_WRAPPER_TZ                   
@@ -228,40 +228,40 @@ ISR_HANDLER2 ADC_ETC_IRQ0
 ISR_HANDLER2 ADC_ETC_IRQ1                         
 ISR_HANDLER2 ADC_ETC_IRQ2                         
 ISR_HANDLER2 ADC_ETC_ERROR_IRQ                    
-ISR_HANDLER2 PIT
-ISR_HANDLER2 ACMP1
-ISR_HANDLER2 ACMP2
-ISR_HANDLER2 ACMP3
-ISR_HANDLER2 ACMP4
-ISR_RESERVED
-ISR_RESERVED
-ISR_HANDLER2 ENC1
-ISR_HANDLER2 ENC2
-ISR_HANDLER2 ENC3
-ISR_HANDLER2 ENC4
-ISR_HANDLER2 TMR1
-ISR_HANDLER2 TMR2
-ISR_HANDLER2 TMR3
-ISR_HANDLER2 TMR4
-ISR_HANDLER2 PWM2_0
-ISR_HANDLER2 PWM2_1
-ISR_HANDLER2 PWM2_2
-ISR_HANDLER2 PWM2_3
-ISR_HANDLER2 PWM2_FAULT
-ISR_HANDLER2 PWM3_0
-ISR_HANDLER2 PWM3_1
-ISR_HANDLER2 PWM3_2
-ISR_HANDLER2 PWM3_3
-ISR_HANDLER2 PWM3_FAULT
-ISR_HANDLER2 PWM4_0
-ISR_HANDLER2 PWM4_1
-ISR_HANDLER2 PWM4_2
-ISR_HANDLER2 PWM4_3
-ISR_HANDLER2 PWM4_FAULT
-ISR_HANDLER2 ENET2
-ISR_HANDLER2 ENET2_1588_Timer
-ISR_HANDLER2 CAN3
-ISR_RESERVED
+ISR_HANDLER2 PIT                                  
+ISR_HANDLER2 ACMP1                                
+ISR_HANDLER2 ACMP2                                
+ISR_HANDLER2 ACMP3                                
+ISR_HANDLER2 ACMP4                                
+ISR_RESERVED                          
+ISR_RESERVED                         
+ISR_HANDLER2 ENC1                                 
+ISR_HANDLER2 ENC2                                 
+ISR_HANDLER2 ENC3                                 
+ISR_HANDLER2 ENC4                                 
+ISR_HANDLER2 TMR1                                 
+ISR_HANDLER2 TMR2                                 
+ISR_HANDLER2 TMR3                                 
+ISR_HANDLER2 TMR4                                 
+ISR_HANDLER2 PWM2_0                               
+ISR_HANDLER2 PWM2_1                               
+ISR_HANDLER2 PWM2_2                               
+ISR_HANDLER2 PWM2_3                               
+ISR_HANDLER2 PWM2_FAULT                           
+ISR_HANDLER2 PWM3_0                               
+ISR_HANDLER2 PWM3_1                               
+ISR_HANDLER2 PWM3_2                               
+ISR_HANDLER2 PWM3_3                               
+ISR_HANDLER2 PWM3_FAULT                           
+ISR_HANDLER2 PWM4_0                               
+ISR_HANDLER2 PWM4_1                               
+ISR_HANDLER2 PWM4_2                               
+ISR_HANDLER2 PWM4_3                               
+ISR_HANDLER2 PWM4_FAULT                           
+ISR_HANDLER2 ENET2                          
+ISR_HANDLER2 ENET2_1588_Timer                         
+ISR_HANDLER2 CAN3                         
+ISR_RESERVED                          
 ISR_HANDLER2 FLEXIO3
 ISR_HANDLER2 GPIO6_7_8_9
 ISR_RESERVED                       
