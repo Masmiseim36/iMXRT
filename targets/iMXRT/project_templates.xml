@@ -51,7 +51,6 @@
     <property name="target_reset_script" value="Reset()" />
     <property name="debug_startup_completion_point" value="main" />
     <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
-    <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
     <property name="external_build_file_name" />
   </project>
 </projects>
