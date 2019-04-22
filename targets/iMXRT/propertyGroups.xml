@@ -138,19 +138,22 @@
       <cdefine name="CPU_MIMXRT1064DVL6A"/>
     </groupEntry>
   </group>
+
   <group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="TCM" >
     <groupEntry name="TCM">
       <property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/tcm_placement.xml" />
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value=""/>
       <property name="arm_target_loader_default_loader" value=""/>
+      <property name="target_reset_script" value="Reset()" />
       <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
-    <groupEntry name="RAM">
+    <groupEntry name="SDRAM">
       <property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/ram_placement.xml" />
       <property name="linker_section_placement_macros" value="RAM_NAME=SDRAM" />
       <property name="arm_target_loader_applicable_loaders" value=""/>
       <property name="arm_target_loader_default_loader" value=""/>
+      <property name="target_reset_script" value="Reset()&#xa;Clock_Init()&#xa;SDRAM_Init()" />
     </groupEntry>
     <groupEntry name="FlexSPI (HYPER)">
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
@@ -158,6 +161,7 @@
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
       <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(HYPER)_Loader.elf" configuration="Flash" />
+      <property name="target_reset_script" value="Reset()" />
       <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
@@ -170,6 +174,7 @@
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
       <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(ECOXIP)_Loader.elf" configuration="Flash" />
+      <property name="target_reset_script" value="Reset()" />
       <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
@@ -182,6 +187,7 @@
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
       <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(QSPI)_Loader.elf" configuration="Flash" />
+      <property name="target_reset_script" value="Reset()" />
       <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
@@ -194,6 +200,7 @@
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
       <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(QSPI)_Loader.elf" configuration="Flash" />
+      <property name="target_reset_script" value="Reset()" />
       <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>

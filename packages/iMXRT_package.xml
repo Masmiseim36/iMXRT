@@ -90,27 +90,9 @@
       <p>For iMXRT projects the set of placements are:</p>
       <ul>
         <li><b>TCM</b> application runs ITCM and DTCM memories.</li>
-        <li>
-          <b>RAM</b> application runs in External SD-RAM memory.
-          <p>Change the project-property <b>Debug -> Target-Script -> Reset Script</b> from</p> <samp>“Reset()”</samp> <p>to</p>
-          <samp>“Reset()<br />
-            SetDeviceName("DeviceName")<br />
-            Clock_Init()<br />
-            SDRAM_Init()”</samp>
-          <p>Where "DeviceName" is one of the following (including the quotes)</p>
-          <ul>
-            <li>"MIMXRT1015"</li>
-            <li>"MIMXRT1021"</li>
-            <li>"MIMXRT1051"</li>
-            <li>"MIMXRT1052"</li>
-            <li>"MIMXRT1061"</li>
-            <li>"MIMXRT1062"</li>
-            <li>"MIMXRT1054"</li>
-          </ul>
-          <p>Choose the Controller you are using in your project. These routines initializing the external RAM, so it can be used for Code-Execution</p>
-		</li>
+        <li><b>SDRAM</b> application runs in External SD-RAM memory.</li>
         <li><b>FlexSPI (HYPER)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
-		<li><b>FlexSPI (EcoXiP)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
+        <li><b>FlexSPI (EcoXiP)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
         <li><b>FlexSPI (QuadSPI)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
         <li><b>FlexSPI2 (QuadSPI)</b> application runs in FlexSPI2, ITCM, DTCM and OCRAM memories.</li>
       </ul>
