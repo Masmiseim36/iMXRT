@@ -1,0 +1,223 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="Loader" target="8" version="2">
+  <configuration
+    Name="Debug"
+    c_preprocessor_definitions="DEBUG=1"
+    gcc_debugging_level="Level 3"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="None"
+    hidden="Yes" />
+  <configuration
+    Name="Release"
+    c_preprocessor_definitions="NDEBUG=1;STARTUP_FROM_RESET=1"
+    gcc_debugging_level="None"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="Level 1"
+    hidden="Yes" />
+  <configuration
+    Name="1015"
+    Target="MIMXRT1015CAF4A"
+    c_preprocessor_definitions="CPU_MIMXRT1015CAF4A"
+    c_user_include_directories=".;./iMXRT1015/."
+    hidden="Yes"
+    linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1015.xml"
+    macros="DeviceName=MIMXRT1015" />
+  <configuration
+    Name="1020"
+    Target="MIMXRT1021DAF5A"
+    c_preprocessor_definitions="CPU_MIMXRT1021DAF5A"
+    c_user_include_directories=".;./iMXRT1020/."
+    hidden="Yes"
+    linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1021.xml"
+    macros="DeviceName=MIMXRT1021" />
+  <configuration
+    Name="1050"
+    Target="MIMXRT1052DVJ6B"
+    c_preprocessor_definitions="CPU_MIMXRT1052DVJ6B"
+    c_user_include_directories=".;./iMXRT1050/."
+    hidden="Yes"
+    linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT105x.xml"
+    macros="DeviceName=MIMXRT1052" />
+  <configuration
+    Name="1060"
+    Target="MIMXRT1062DVJ6A"
+    c_preprocessor_definitions="CPU_MIMXRT1062DVJ6A"
+    c_user_include_directories=".;./iMXRT1060/."
+    hidden="Yes"
+    linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml"
+    macros="DeviceName=MIMXRT1062" />
+  <configuration
+    Name="1064"
+    Target="MIMXRT1064DVL6A"
+    c_preprocessor_definitions="CPU_MIMXRT1064DVL6A"
+    c_user_include_directories=".;./iMXRT1064/."
+    hidden="Yes"
+    linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml"
+    macros="DeviceName=MIMXRT1064" />
+  <configuration
+    Name="MIMXRT1015_Debug"
+    build_output_file_name="Loader_iMXRT1010_Debug.elf"
+    inherited_configurations="1015;Debug" />
+  <configuration
+    Name="MIMXRT1015_Release"
+    build_output_file_name="Loader_iMXRT1010.elf"
+    inherited_configurations="1015;Release" />
+  <configuration
+    Name="MIMXRT1020_Debug"
+    build_output_file_name="Loader_iMXRT1020_Debug.elf"
+    inherited_configurations="1020;Debug" />
+  <configuration
+    Name="MIMXRT1020_Release"
+    build_output_file_name="Loader_iMXRT1020.elf"
+    inherited_configurations="1020;Release" />
+  <configuration
+    Name="MIMXRT1050_Debug"
+    build_output_file_name="Loader_iMXRT1050_Debug.elf"
+    inherited_configurations="1050;Debug" />
+  <configuration
+    Name="MIMXRT1050_Release"
+    build_output_file_name="Loader_iMXRT1050.elf"
+    inherited_configurations="1050;Release" />
+  <configuration
+    Name="MIMXRT1060_Debug"
+    build_output_file_name="Loader_iMXRT1060_Debug.elf"
+    inherited_configurations="1060;Debug" />
+  <configuration
+    Name="MIMXRT1060_Release"
+    build_output_file_name="Loader_iMXRT1060.elf"
+    inherited_configurations="1060;Release" />
+  <configuration
+    Name="MIMXRT1064_Debug"
+    build_output_file_name="Loader_iMXRT1064_Debug.elf"
+    inherited_configurations="1064;Debug" />
+  <configuration
+    Name="MIMXRT1064_Release"
+    build_output_file_name="Loader_iMXRT1064.elf"
+    inherited_configurations="1064;Release" />
+  <project Name="Loader">
+    <configuration
+      CMSIS_CORE="Yes"
+      Name="Common"
+      Placement="TCM"
+      Platform="ARM"
+      arm_architecture="v7EM"
+      arm_core_type="Cortex-M7"
+      arm_fp_abi="Hard"
+      arm_fpu_type="FPv5-SP-D16"
+      arm_instruction_set="Thumb"
+      arm_library_instruction_set="Thumb"
+      arm_library_optimization="Small"
+      arm_linker_heap_size="1024"
+      arm_linker_stack_size="2048"
+      arm_simulator_memory_simulation_parameter="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000"
+      arm_target_loader_applicable_loaders=""
+      arm_target_loader_default_loader=""
+      arm_target_loader_parameter="666"
+      batch_build_configurations="MIMXRT1015_Release;MIMXRT1020_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release"
+      c_preprocessor_definitions="__THUMB;FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ=0"
+      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/$(DeviceName)_registers.xml"
+      debug_startup_completion_point="main"
+      linker_additional_files="$(StudioDir)/lib/libmem$(LibExt)$(LIB);$(StudioDir)/lib/libmem_loader$(LibExt)$(LIB)"
+      linker_keep_symbols="libmem_crc32"
+      linker_section_placement_file="$(StudioDir)/targets/Cortex_M/tcm_placement.xml"
+      project_directory=""
+      project_type="Executable"
+      property_groups_file_path="$(TargetsDir)/iMXRT/propertyGroups.xml"
+      target_connect_script="Connect()"
+      target_reset_script="Reset()"
+      target_script_file="iMXRT_Target.js" />
+    <folder Name="System Files">
+      <file file_name="thumb_crt0.s" />
+      <file file_name="$(TargetsDir)/iMXRT/system_$(DeviceName).h" />
+      <file file_name="$(TargetsDir)/iMXRT/system_$(DeviceName).c" />
+      <file file_name="$(TargetsDir)/iMXRT/$(DeviceName).h" />
+      <file file_name="$(TargetsDir)/iMXRT/$(DeviceName)_features.h" />
+      <file file_name="$(TargetsDir)/iMXRT/fsl_device_registers.h" />
+      <file file_name="startup.s" />
+      <file file_name="iMXRT_Target.js">
+        <configuration Name="Common" file_type="Target Script" />
+      </file>
+    </folder>
+    <folder Name="drivers">
+      <file file_name="fsl_common.c" />
+      <file file_name="fsl_common.h" />
+      <file file_name="fsl_cache.c" />
+      <file file_name="fsl_cache.h" />
+      <folder Name="iMXRT1015">
+        <file file_name="iMXRT1015/fsl_clock.c" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1015" build_exclude_from_build="No" />
+        <file file_name="iMXRT1015/clock_config.c" />
+        <file file_name="iMXRT1015/clock_config.h" />
+        <file file_name="iMXRT1015/fsl_iomuxc.h" />
+        <file file_name="iMXRT1015/fsl_clock.h" />
+        <file file_name="iMXRT1015/pin_mux.c" />
+        <file file_name="iMXRT1015/board.h" />
+      </folder>
+      <folder Name="iMXRT1020">
+        <file file_name="iMXRT1020/fsl_clock.h" />
+        <file file_name="iMXRT1020/fsl_iomuxc.h" />
+        <file file_name="iMXRT1020/fsl_clock.c" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1020" build_exclude_from_build="No" />
+        <file file_name="iMXRT1020/clock_config.c" />
+        <file file_name="iMXRT1020/clock_config.h" />
+        <file file_name="iMXRT1020/pin_mux.c" />
+        <file file_name="iMXRT1020/board.h" />
+      </folder>
+      <folder Name="iMXRT1050">
+        <file file_name="iMXRT1050/fsl_clock.h" />
+        <file file_name="iMXRT1050/fsl_iomuxc.h" />
+        <file file_name="iMXRT1050/fsl_clock.c" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1050" build_exclude_from_build="No" />
+        <file file_name="iMXRT1050/clock_config.c" />
+        <file file_name="iMXRT1050/clock_config.h" />
+        <file file_name="iMXRT1050/pin_mux.c" />
+        <file file_name="iMXRT1050/board.h" />
+      </folder>
+      <folder Name="iMXRT1060">
+        <file file_name="iMXRT1060/fsl_clock.h" />
+        <file file_name="iMXRT1060/fsl_iomuxc.h" />
+        <file file_name="iMXRT1060/fsl_clock.c" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1060" build_exclude_from_build="No" />
+        <file file_name="iMXRT1060/clock_config.c" />
+        <file file_name="iMXRT1060/clock_config.h" />
+        <file file_name="iMXRT1060/pin_mux.c" />
+        <file file_name="iMXRT1060/board.h" />
+      </folder>
+      <folder Name="iMXRT1064">
+        <file file_name="iMXRT1064/fsl_clock.h" />
+        <file file_name="iMXRT1064/fsl_iomuxc.h" />
+        <file file_name="iMXRT1064/fsl_clock.c" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1064" build_exclude_from_build="No" />
+        <file file_name="iMXRT1064/clock_config.c" />
+        <file file_name="iMXRT1064/clock_config.h" />
+        <file file_name="iMXRT1064/pin_mux.c" />
+        <file file_name="iMXRT1064/board.h" />
+      </folder>
+      <file file_name="fsl_flexspi.c" />
+      <file file_name="fsl_flexspi.h" />
+      <file file_name="fsl_dmamux.c" />
+      <file file_name="fsl_dmamux.h" />
+      <file file_name="pin_mux.h" />
+      <file file_name="fsl_lpuart.c" />
+      <file file_name="fsl_lpuart.h" />
+    </folder>
+    <folder Name="Source">
+      <file file_name="loader.c" />
+      <file file_name="board.c" />
+      <file file_name="libmem_driver_Hyperflash.c" />
+      <file file_name="libmem_driver_Hyperflash.h" />
+      <file file_name="libmem_Tools.c" />
+      <file file_name="libmem_Tools.h" />
+      <file file_name="libmem_driver_xSPI.c" />
+      <file file_name="libmem_driver_xSPI.h" />
+      <file file_name="DebugPrint.h" />
+      <file file_name="DebugPrint.c" />
+    </folder>
+  </project>
+</solution>

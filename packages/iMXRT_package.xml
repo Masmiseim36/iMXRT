@@ -1,5 +1,5 @@
 <!DOCTYPE CrossStudio_Package_Description_File>
-<package name="iMXRT" author="Rowley Associates Ltd" cpu_manufacturer="NXP" cpu_family="iMXRT" version="4.4" crossstudio_versions="8:4.2-" dependencies="CMSIS" build_version="crossworks_v4" >
+<package name="iMXRT" author="Rowley Associates Ltd" cpu_manufacturer="NXP" cpu_family="iMXRT" version="4.4.2" crossstudio_versions="8:4.2-" dependencies="CMSIS" build_version="crossworks_v4" >
   <group title="System Solutions">
     <file title="iMXRT Loader Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader.hzp" />
     <file title="iMX RT Samples" file_name="$(SamplesDir)/iMXRT/iMXRT.hzp" />

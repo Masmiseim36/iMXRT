@@ -90,12 +90,19 @@
           <file file_name="targets/iMXRT/XML/MIMXRT1062_Registers.xml" />
           <file file_name="targets/iMXRT/XML/MIMXRT1064_Registers.xml" />
         </folder>
-        <file file_name="targets/iMXRT/MemoryMap_MIMXRT105x.xml" />
-        <file file_name="targets/iMXRT/MemoryMap_MIMXRT106x.xml" />
         <file file_name="targets/iMXRT/MemoryMap_MIMXRT1015.xml" />
         <file file_name="targets/iMXRT/MemoryMap_MIMXRT1021.xml" />
+        <file file_name="targets/iMXRT/MemoryMap_MIMXRT105x.xml" />
+        <file file_name="targets/iMXRT/MemoryMap_MIMXRT106x.xml" />
         <file file_name="targets/iMXRT/fsl_device_registers.h" />
         <file file_name="targets/iMXRT/core_cm7.h" />
+        <folder Name="Loader2">
+          <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1010.elf" />
+          <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1020.elf" />
+          <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1050.elf" />
+          <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1060.elf" />
+          <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1064.elf" />
+        </folder>
       </folder>
     </folder>
     <folder Name="samples">
