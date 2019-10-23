@@ -15,45 +15,51 @@ function Connect()
 
 function Reset()
 {
-  TargetInterface.resetDebugInterface();
-  TargetInterface.resetAndStop(1000);
-  if (TargetInterface.implementation() == "crossworks_simulator")
-    return;
+	TargetInterface.resetAndStop(1000);
+	if (TargetInterface.implementation() == "crossworks_simulator")
+		return;
 
-  ocotp_base = 0x401F4000;
-  ocotp_fuse_bank0_base = ocotp_base + 0x400;
-  dcdc_base = 0x40080000;
-  
-  dcdc_trim_loaded = 0;
+	var CCGR6 = TargetInterface.peekWord (0x400FC080);	// CCM->CCGR6
+	TargetInterface.pokeUint32 (0x400FC080, CCGR6 | 0xC00);	// Enable FlexSPI
+	TargetInterface.delay(1);
 
-  reg = TargetInterface.peekWord(ocotp_fuse_bank0_base + 0x90);
-  if (reg & (1<<10))
-    {
-      // DCDC: REG0->VBG_TRM
-      trim_value = (reg & (0x1F << 11)) >> 11; 
-      reg = (TargetInterface.peekWord(dcdc_base + 0x4) & ~(0x1F << 24)) | (trim_value << 24);
-      TargetInterface.pokeWord(dcdc_base + 0x4, reg);
-      dcdc_trim_loaded = 1;
-    }
+	ocotp_base = 0x401F4000;
+	ocotp_fuse_bank0_base = ocotp_base + 0x400;
+	dcdc_base = 0x40080000;
 
-  reg = TargetInterface.peekWord(ocotp_fuse_bank0_base + 0x80);
-  if (reg & (1<<30))
-    {
-      index = (reg & (3 << 28)) >> 28;
-      if (index < 4)
-        {
-          // DCDC: REG3->TRG 
-          reg = (TargetInterface.peekWord(dcdc_base + 0xC) & ~(0x1F)) | ((0xF + index));
-          TargetInterface.pokeWord(dcdc_base + 0xC, reg);
-          dcdc_trim_loaded = 1;
-        }
-    }
+	dcdc_trim_loaded = 0;
 
-  if (dcdc_trim_loaded)
-    {
-      // delay about 400us till dcdc is stable.
-      TargetInterface.delay(1);
-    }
+	reg = TargetInterface.peekWord(ocotp_fuse_bank0_base + 0x90);
+	if (reg & (1<<10))
+	{
+		// DCDC: REG0->VBG_TRM
+		trim_value = (reg & (0x1F << 11)) >> 11; 
+		reg = (TargetInterface.peekWord(dcdc_base + 0x4) & ~(0x1F << 24)) | (trim_value << 24);
+		TargetInterface.pokeWord(dcdc_base + 0x4, reg);
+		dcdc_trim_loaded = 1;
+	}
+
+	reg = TargetInterface.peekWord(ocotp_fuse_bank0_base + 0x80);
+	if (reg & (1<<30))
+	{
+		index = (reg & (3 << 28)) >> 28;
+		if (index < 4)
+		{
+			// DCDC: REG3->TRG 
+			reg = (TargetInterface.peekWord(dcdc_base + 0xC) & ~(0x1F)) | ((0xF + index));
+			TargetInterface.pokeWord(dcdc_base + 0xC, reg);
+			dcdc_trim_loaded = 1;
+		}
+	}
+
+	if (dcdc_trim_loaded)
+	{
+		// delay about 400us till dcdc is stable.
+		TargetInterface.delay(1);
+	}
+
+	TargetInterface.setRegister ("r0", 1);
+    TargetInterface.setRegister ("r1", 1);
 }
 
 
@@ -81,22 +87,7 @@ function EnableTrace(traceInterfaceType)
 
 function GetProjectPartName ()
 {
-	var TargetFullName = TargetInterface.getProjectProperty ("Target");
-	var TargetShort = TargetFullName.substring (0, 10);
-
-	switch (TargetFullName.slice(-4))
-	{
-		case "_cm7":
-			TargetShort += '_cm7';
-			break;
-		case "_cm4":
-			TargetShort += '_cm4';
-			break;
-		default:
-			// Do nothing
-	}
-
-	return TargetShort;
+	return TargetInterface.getProjectProperty ("Target").substring (0, 10);
 }
 
 function Clock_Init ()
@@ -123,8 +114,10 @@ function Clock_Init ()
 	}
 }
 
-function ClockGate_EnableAll ()
+
+function Clock_Init_1021 () 
 {
+	TargetInterface.message ("Clock_Init_1021");
 	// Enable all clocks
 	TargetInterface.pokeUint32 (0x400FC068, 0xffffffff);	// CCM->CCGR0
 	TargetInterface.pokeUint32 (0x400FC06C, 0xffffffff);	// CCM->CCGR1
@@ -133,13 +126,6 @@ function ClockGate_EnableAll ()
 	TargetInterface.pokeUint32 (0x400FC078, 0xffffffff);	// CCM->CCGR4
 	TargetInterface.pokeUint32 (0x400FC07C, 0xffffffff);	// CCM->CCGR5
 	TargetInterface.pokeUint32 (0x400FC080, 0xffffffff);	// CCM->CCGR6
-}
-
-
-function Clock_Init_1021 () 
-{
-	TargetInterface.message ("Clock_Init_1021");
-	ClockGate_EnableAll ();	// Enable all clocks
 
 	// IPG_PODF: 2 divide by 3
 	TargetInterface.pokeUint32 (0x400FC014,0x000A8200);		// CCM->CBCDR
@@ -179,7 +165,14 @@ function Clock_Init_1021 ()
 function Clock_Init_105x () 
 {
 	TargetInterface.message ("Clock_Init_105x");
-	ClockGate_EnableAll ();	// Enable all clocks
+	// Enable all clocks
+	TargetInterface.pokeUint32 (0x400FC068, 0xffffffff);	// CCM->CCGR0
+	TargetInterface.pokeUint32 (0x400FC06C, 0xffffffff);	// CCM->CCGR1
+	TargetInterface.pokeUint32 (0x400FC070, 0xffffffff);	// CCM->CCGR2
+	TargetInterface.pokeUint32 (0x400FC074, 0xffffffff);	// CCM->CCGR3
+	TargetInterface.pokeUint32 (0x400FC078, 0xffffffff);	// CCM->CCGR4
+	TargetInterface.pokeUint32 (0x400FC07C, 0xffffffff);	// CCM->CCGR5
+	TargetInterface.pokeUint32 (0x400FC080, 0xffffffff);	// CCM->CCGR6
 
 	// PERCLK_PODF: 1 divide by 2
 	TargetInterface.pokeUint32 (0x400FC01C, 0x04900001);	// CCM->CSCMR1 
@@ -366,67 +359,4 @@ function SDRAM_Init ()
 	SDRAM_WaitIpCmdDone();
 	TargetInterface.pokeUint32 (0x402F004C, 0x50210A09); // enable sdram self refresh again after initialization done.
 	TargetInterface.message ("SDRAM_Init - Done");
-}
-
-function AlterRegister (Addr, Clear, Set)
-{
-	var temp = TargetInterface.peekWord (Addr);
-	temp &= ~Clear;
-	temp |= Set;
-	TargetInterface.pokeUint32 (Addr, temp);
-}
-
-function FLEXSPI_Init (FlexSPI)
-{
-	var FlexSPI1 = 0x402A8000;
-	var FlexSPI2 = 0x402A4000;
-	var base = 0;
-
-	switch (FlexSPI)
-	{
-		case 1:
-			base = FlexSPI1;
-			break;
-		case 2:
-			base = FlexSPI2;
-			break;
-		default:
-			TargetInterface.message ("FLEXSPI_Init - Invalid Interface");
-	}
-
-	var CCM = 0x400FC000;
-	var CCM_CBCMR = CCM + 0x18;
-	var CCM_CSCMR1 = CCM + 0x1C;
-	var CCM_CSCMR2 = CCM + 0x20;
-
-	var CCM_ANALOG = 0x400D8000;
-	var CCM_ANALOG_PFD480 = CCM_ANALOG + 0xF0;
-
-	// Set flexspi root clock to 166MHZ.
-	AlterRegister (CCM_ANALOG_PFD480, 0xBF, 0x80);	// Disable the clock output first.
-	AlterRegister (CCM_ANALOG_PFD480, 0xBF, 26);	// Set the new value and enable output.
-
-	// Choose PLL3 PFD0 clock as flexspi source clock and set internal clock 83 Megaherz
-	AlterRegister (CCM_CSCMR1, 0x60000000 | 0x3800000, (3 << 29) | (3 << 23));
-
-	var FlexSPI_MCR0        = base + 0x00;
-	var FlexSPI_MCR1        = base + 0x04;
-	var FlexSPI_MCR2        = base + 0x08;
-	var FlexSPI_AHBCR       = base + 0x0C;
-	var FlexSPI_AHBRXBUFCR0 = base + 0x20;
-	var FlexSPI_IPRXFCR     = base + 0xD8;
-	var FlexSPI_IPTXFCR     = base + 0xBC;
-	var FlexSPI_FLSHCR0     = base + 0x60;
-	AlterRegister (FlexSPI_MCR0, 2, 0);	// Enable flexSPI
-
-	TargetInterface.pokeUint32     (FlexSPI_MCR0,  0xffff3032);
-	TargetInterface.pokeUint32     (FlexSPI_MCR1,  0xffffffff);
-	TargetInterface.pokeUint32     (FlexSPI_MCR2,  0x200801f7);
-	TargetInterface.pokeUint32     (FlexSPI_AHBCR, 0x00000078);
-	TargetInterface.pokeMultUint32 (FlexSPI_AHBRXBUFCR0, [0x20, 0x20, 0x20, 0x20]);
-	TargetInterface.pokeUint32     (FlexSPI_IPRXFCR, 0);
-	TargetInterface.pokeUint32     (FlexSPI_IPTXFCR, 0);
-	TargetInterface.pokeMultUint32 (FlexSPI_FLSHCR0, [0x0, 0x0, 0x0, 0x0]);
-
-	AlterRegister                  (FlexSPI_MCR0,  0, 1);	// Perform a SW-Reset
 }
