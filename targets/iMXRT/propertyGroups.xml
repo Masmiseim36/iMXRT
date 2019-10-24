@@ -1,13 +1,24 @@
 <!DOCTYPE CrossStudio_Group_Values>
 <propertyGroups>
   <group short="Target Processor" group="Build Options" long="Select a Controller (CM7)" name="Target" default="MIMXRT1052DVL6B" >  
-    <groupEntry name="MIMXRT1015CAF4A" aka="MIMXRT1015xxx4A" family="iMXRT1010">
-      <property name="macros" value="DeviceName=MIMXRT1015;Family=iMXRT1010" />
+    <groupEntry name="MIMXRT1011CAE4A" aka="MIMXRT1011xxx4A" family="iMXRT1011">
+      <property name="macros" value="DeviceName=MIMXRT1011;Family=iMXRT1011" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1015.xml" />
+      <cdefine name="CPU_MIMXRT1011CAE4A"/>
+    </groupEntry>
+    <groupEntry name="MIMXRT1011DAE5A" aka="MIMXRT1011xxx5A" family="iMXRT1011">
+      <property name="macros" value="DeviceName=MIMXRT1011;Family=iMXRT1011" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1015.xml" />
+      <cdefine name="CPU_MIMXRT1011DAE5A"/>
+    </groupEntry>
+
+    <groupEntry name="MIMXRT1015CAF4A" aka="MIMXRT1015xxx4A" family="iMXRT1015">
+      <property name="macros" value="DeviceName=MIMXRT1015;Family=iMXRT1015" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1015.xml" />
       <cdefine name="CPU_MIMXRT1015CAF4A"/>
     </groupEntry>
-    <groupEntry name="MIMXRT1015DAF5A" aka="MIMXRT1015xxx5A" family="iMXRT1010">
-      <property name="macros" value="DeviceName=MIMXRT1015;Family=iMXRT1010" />
+    <groupEntry name="MIMXRT1015DAF5A" aka="MIMXRT1015xxx5A" family="iMXRT1015">
+      <property name="macros" value="DeviceName=MIMXRT1015;Family=iMXRT1015" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1015.xml" />
       <cdefine name="CPU_MIMXRT1015DAF5A"/>
     </groupEntry>

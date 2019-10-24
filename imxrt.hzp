@@ -43,6 +43,8 @@
         <file file_name="targets/iMXRT/project_templates.xml" />
         <file file_name="targets/iMXRT/propertyGroups.xml" />
         <folder Name="System">
+          <file file_name="targets/iMXRT/system_MIMXRT1011.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1011.h" />
           <file file_name="targets/iMXRT/system_MIMXRT1015.c" />
           <file file_name="targets/iMXRT/system_MIMXRT1015.h" />
           <file file_name="targets/iMXRT/system_MIMXRT1021.c" />
@@ -59,15 +61,18 @@
           <file file_name="targets/iMXRT/system_MIMXRT1064.h" />
         </folder>
         <folder Name="Startup">
+          <file file_name="targets/iMXRT/startup_MIMXRT1011.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1015.s" />
           <file file_name="targets/iMXRT/startup_MIMXRT1021.s" />
           <file file_name="targets/iMXRT/startup_MIMXRT1051.s" />
           <file file_name="targets/iMXRT/startup_MIMXRT1052.s" />
           <file file_name="targets/iMXRT/startup_MIMXRT1061.s" />
           <file file_name="targets/iMXRT/startup_MIMXRT1062.s" />
           <file file_name="targets/iMXRT/startup_MIMXRT1064.s" />
-          <file file_name="targets/iMXRT/startup_MIMXRT1015.s" />
         </folder>
         <folder Name="Device">
+          <file file_name="targets/iMXRT/MIMXRT1011.h" />
+          <file file_name="targets/iMXRT/MIMXRT1011_features.h" />
           <file file_name="targets/iMXRT/MIMXRT1015.h" />
           <file file_name="targets/iMXRT/MIMXRT1015_features.h" />
           <file file_name="targets/iMXRT/MIMXRT1021.h" />
@@ -82,6 +87,7 @@
           <file file_name="targets/iMXRT/MIMXRT1062_features.h" />
           <file file_name="targets/iMXRT/MIMXRT1064.h" />
           <file file_name="targets/iMXRT/MIMXRT1064_features.h" />
+          <file file_name="targets/iMXRT/XML/MIMXRT1011_Registers.xml" />
           <file file_name="targets/iMXRT/XML/MIMXRT1015_Registers.xml" />
           <file file_name="targets/iMXRT/XML/MIMXRT1021_Registers.xml" />
           <file file_name="targets/iMXRT/XML/MIMXRT1051_Registers.xml" />
@@ -97,7 +103,8 @@
         <file file_name="targets/iMXRT/fsl_device_registers.h" />
         <file file_name="targets/iMXRT/core_cm7.h" />
         <folder Name="Loader2">
-          <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1010.elf" />
+          <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1011.elf" />
+          <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1015.elf" />
           <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1020.elf" />
           <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1050.elf" />
           <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1060.elf" />
