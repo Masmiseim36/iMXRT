@@ -104,11 +104,10 @@ int main (uint32_t flags, uint32_t param)
 //			enum LibmemStatus res = Libmem_InitializeDriver_Hyperflash (&FlexSPI1_Handle, FLEXSPI);	// Register iMX-RT internal FLASH driver
 //		#endif
 
-		BOARD_InitOctaSPIPins ();
-//		LibmemStatus_t res = Libmem_InitializeDriver_Hyperflash (&FlexSPI1_Handle, FLEXSPI);	// Register iMX-RT internal FLASH driver
-		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (&FlexSPI1_Handle, FLEXSPI, MemType_OctaSPI_DDR);
-
 //		BOARD_InitQuadSPIPins ();
+		BOARD_InitOctaSPIPins ();
+//		LibmemStatus_t res = Libmem_InitializeDriver_Hyperflash (&FlexSPI1_Handle, FLEXSPI);
+		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (&FlexSPI1_Handle, FLEXSPI, MemType_OctaSPI_DDR);
 //		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (&FlexSPI1_Handle, FLEXSPI, MemType_QuadSPI);
 		if (res == LibmemStaus_Success)
 			ExecuteTest ((uint32_t *)(FLASH_START_ADDRESS + 0x40000));		// Testcode

@@ -167,6 +167,7 @@
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HYPERFLASH" value="1"/>
+      <cdefine name="XIP_BOOT_FLEXSPI1" value="1"/>
       <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
     <groupEntry name="FlexSPI (OctaSPI)">
@@ -180,8 +181,8 @@
       <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
-      <cdefine name="XIP_BOOT_ECOXIP" value="1"/>
       <cdefine name="XIP_BOOT_OCTASPI" value="1"/>
+      <cdefine name="XIP_BOOT_FLEXSPI1" value="1"/>
       <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
     <groupEntry name="FlexSPI (QuadSPI)">
@@ -196,6 +197,7 @@
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_QSPI" value="1"/>
+      <cdefine name="XIP_BOOT_FLEXSPI1" value="1"/>
       <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
     <groupEntry name="FlexSPI2 (QuadSPI)">
@@ -210,6 +212,22 @@
       <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
       <cdefine name="XIP_BOOT_QSPI" value="1"/>
+      <cdefine name="XIP_BOOT_FLEXSPI2" value="1"/>
+      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+    </groupEntry>
+    <groupEntry name="FlexSPI2 (OctaSPI)">
+      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
+      <property name="linker_section_placement_macros" value="" />
+      <property name="arm_target_loader_applicable_loaders" value="Flash" />
+      <property name="arm_target_loader_default_loader" value="Flash" />
+      <property name="arm_target_loader_parameter" value="32" configuration="Flash" />
+      <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family).elf" configuration="Flash" />
+      <property name="target_reset_script" value="Reset()" />
+      <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
+      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
+      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
+      <cdefine name="XIP_BOOT_OCTASPI" value="1"/>
+      <cdefine name="XIP_BOOT_FLEXSPI2" value="1"/>
       <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
   </group>

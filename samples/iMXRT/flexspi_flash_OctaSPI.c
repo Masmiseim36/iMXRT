@@ -41,7 +41,7 @@
   */
 
 #include "flexspi_flash.h"
-#if defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0 && defined XIP_BOOT_ECOXIP
+#if defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0 && defined XIP_BOOT_OCTASPI
 
 /*******************************************************************************
  * Code
@@ -103,4 +103,4 @@ __attribute__((section(".boot_hdr.conf"))) const flexspi_nor_config_t FlashBootH
 	.isUniformBlockSize		= true,
 };
 
-#endif	// defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0 && defined XIP_BOOT_ECOXIP
+#endif	// defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0 && defined XIP_BOOT_OCTASPI

@@ -11,7 +11,6 @@
     <property name="arm_fpu_type" value="FPv5-SP-D16" />
     <property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x04000000" />
     <property name="debug_startup_completion_point" value="main" />
-    <property name="target_attach_script" value="Attach()" />
     <property name="target_connect_script" value="Connect()" />
     <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
     <property name="arm_target_loader_reset_after_download" value="No" />
