@@ -36,6 +36,7 @@
 
 #if defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0
 #include <stdint.h>
+#include "fsl_device_registers.h"
 
 /************************************* 
  *  IVT Data 
@@ -86,8 +87,14 @@ typedef struct _ivt_
 #define IVT_RSVD            (uint32_t)(0x00000000)
 
 /* Set resume entry */
-#define FLASH_BASE            0x60000000
-#define FLASH_END             0x70800000
+#if defined XIP_BOOT_FLEXSPI1
+	#define FLASH_BASE FlexSPI_AMBA_BASE
+#elif defined XIP_BOOT_FLEXSPI2 && defined FLEXSPI2
+	#define FLASH_BASE FlexSPI2_AMBA_BASE
+#else
+	#error "unknown interface"
+#endif
+#define FLASH_END  (FLASH_BASE + 0x04000000)
 extern void reset_handler(void);
 #define IMAGE_ENTRY_ADDRESS ((uint32_t)reset_handler)
 #define FLASH_SIZE (FLASH_END-FLASH_BASE)
