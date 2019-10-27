@@ -160,6 +160,24 @@
       <file file_name="fsl_common.h" />
       <file file_name="fsl_cache.c" />
       <file file_name="fsl_cache.h" />
+      <file file_name="fsl_flexspi.c" />
+      <file file_name="fsl_flexspi.h" />
+      <file file_name="fsl_dmamux.c" />
+      <file file_name="fsl_dmamux.h" />
+      <file file_name="pin_mux.h" />
+      <file file_name="fsl_lpuart.c" />
+      <file file_name="fsl_lpuart.h" />
+      <folder Name="iMXRT1011">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1011" build_exclude_from_build="No" />
+        <file file_name="iMXRT1011/pin_mux.c" />
+        <file file_name="iMXRT1011/board.h" />
+        <file file_name="iMXRT1011/clock_config.c" />
+        <file file_name="iMXRT1011/clock_config.h" />
+        <file file_name="iMXRT1011/fsl_iomuxc.h" />
+        <file file_name="iMXRT1011/fsl_clock.c" />
+        <file file_name="iMXRT1011/fsl_clock.h" />
+      </folder>
       <folder Name="iMXRT1015">
         <file file_name="iMXRT1015/fsl_clock.c" />
         <configuration Name="Common" build_exclude_from_build="Yes" />
@@ -172,66 +190,48 @@
         <file file_name="iMXRT1015/board.h" />
       </folder>
       <folder Name="iMXRT1020">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1020" build_exclude_from_build="No" />
         <file file_name="iMXRT1020/fsl_clock.h" />
         <file file_name="iMXRT1020/fsl_iomuxc.h" />
         <file file_name="iMXRT1020/fsl_clock.c" />
-        <configuration Name="Common" build_exclude_from_build="Yes" />
-        <configuration Name="1020" build_exclude_from_build="No" />
         <file file_name="iMXRT1020/clock_config.c" />
         <file file_name="iMXRT1020/clock_config.h" />
         <file file_name="iMXRT1020/pin_mux.c" />
         <file file_name="iMXRT1020/board.h" />
       </folder>
       <folder Name="iMXRT1050">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1050" build_exclude_from_build="No" />
         <file file_name="iMXRT1050/fsl_clock.h" />
         <file file_name="iMXRT1050/fsl_iomuxc.h" />
         <file file_name="iMXRT1050/fsl_clock.c" />
-        <configuration Name="Common" build_exclude_from_build="Yes" />
-        <configuration Name="1050" build_exclude_from_build="No" />
         <file file_name="iMXRT1050/clock_config.c" />
         <file file_name="iMXRT1050/clock_config.h" />
         <file file_name="iMXRT1050/pin_mux.c" />
         <file file_name="iMXRT1050/board.h" />
       </folder>
       <folder Name="iMXRT1060">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1060" build_exclude_from_build="No" />
         <file file_name="iMXRT1060/fsl_clock.h" />
         <file file_name="iMXRT1060/fsl_iomuxc.h" />
         <file file_name="iMXRT1060/fsl_clock.c" />
-        <configuration Name="Common" build_exclude_from_build="Yes" />
-        <configuration Name="1060" build_exclude_from_build="No" />
         <file file_name="iMXRT1060/clock_config.c" />
         <file file_name="iMXRT1060/clock_config.h" />
         <file file_name="iMXRT1060/pin_mux.c" />
         <file file_name="iMXRT1060/board.h" />
       </folder>
       <folder Name="iMXRT1064">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1064" build_exclude_from_build="No" />
         <file file_name="iMXRT1064/fsl_clock.h" />
         <file file_name="iMXRT1064/fsl_iomuxc.h" />
         <file file_name="iMXRT1064/fsl_clock.c" />
-        <configuration Name="Common" build_exclude_from_build="Yes" />
-        <configuration Name="1064" build_exclude_from_build="No" />
         <file file_name="iMXRT1064/clock_config.c" />
         <file file_name="iMXRT1064/clock_config.h" />
         <file file_name="iMXRT1064/pin_mux.c" />
         <file file_name="iMXRT1064/board.h" />
-      </folder>
-      <file file_name="fsl_flexspi.c" />
-      <file file_name="fsl_flexspi.h" />
-      <file file_name="fsl_dmamux.c" />
-      <file file_name="fsl_dmamux.h" />
-      <file file_name="pin_mux.h" />
-      <file file_name="fsl_lpuart.c" />
-      <file file_name="fsl_lpuart.h" />
-      <folder Name="iMXRT1011">
-        <configuration Name="Common" build_exclude_from_build="Yes" />
-        <file file_name="iMXRT1011/pin_mux.c" />
-        <file file_name="iMXRT1011/board.h" />
-        <file file_name="iMXRT1011/clock_config.c" />
-        <file file_name="iMXRT1011/clock_config.h" />
-        <file file_name="iMXRT1011/fsl_iomuxc.h" />
-        <file file_name="iMXRT1011/fsl_clock.c" />
-        <file file_name="iMXRT1011/fsl_clock.h" />
-        <configuration Name="1011" build_exclude_from_build="No" />
       </folder>
     </folder>
     <folder Name="Source">
