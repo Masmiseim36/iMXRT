@@ -41,11 +41,11 @@ bool InitializeSystemTick (uint32_t SysTickInMS)
 	TickLength = SysTickInMS;
 
 
-    SysTick->LOAD	= (SystemCoreClock / (1000/SysTickInMS)) -1;
-    SysTick->VAL	= 0;
+	SysTick->LOAD	= (SystemCoreClock / (1000/SysTickInMS)) -1;
+	SysTick->VAL	= 0;
 	SysTick->CTRL	= SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
 
-    __enable_irq ();
+	__enable_irq ();
 	return true;
 }
 
@@ -71,7 +71,7 @@ int main (void)
 	while (true)
 	{
 		Sleep (1000);
-        if (debug_enabled ())
+		if (debug_enabled ())
 			debug_printf ("Hello iMXRT\r\n");
 	}
 	return 0;
