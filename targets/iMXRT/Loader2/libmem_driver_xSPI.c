@@ -48,9 +48,10 @@ enum LUT_CommandOffsets
 	LUT_EnterQPI_Atmel  = 10,
 	LUT_EnterQPI_ISSI   = 12,
 
-	LUT_WriteStatusReg_Adesto   = 8,
-	LUT_WriteConfigReg_Macronix = 9,
-	LUT_WriteConfigReg_Winbond  = 11,
+	LUT_WriteStatusReg_Adesto    = 8,
+	LUT_WriteConfigReg_Macronix  = 9,
+	LUT_WriteConfigReg_Winbond   = 11,
+	LUT_WriteConfigReg1_Macronix = 13,
 };
 
 static flexspi_device_config_t deviceconfig =
@@ -58,10 +59,10 @@ static flexspi_device_config_t deviceconfig =
 	.flexspiRootClk       = 0, // SPI root clock (will be set up later)
 	.flashSize            = BOARD_FLASH_SIZE / 1024, // expressed in KByte
 	.CSIntervalUnit       = kFLEXSPI_CsIntervalUnit1SckCycle,
-	.CSInterval           = 5,
-	.CSHoldTime           = 2,
-	.CSSetupTime          = 4,
-	.dataValidTime        = 1,
+	.CSInterval           = 2,
+	.CSHoldTime           = 3,
+	.CSSetupTime          = 3,
+	.dataValidTime        = 0,
 	.columnspace          = 0, // we don't use colums
 	.enableWordAddress    = 0,
 	.AWRSeqIndex          = 0,
@@ -107,7 +108,7 @@ static const uint32_t LUT_SPI[CUSTOM_LUT_LENGTH] =
 	[33] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_1PAD, 0x01, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 
 	// (9) Write Configuration Register 2 (Macronix)
-	[36] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x72, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 8),
+	[36] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x72, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 32),
 	[37] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_1PAD, 0x01, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 
 	// (10) Enter QPI mode - Atmel
@@ -119,7 +120,9 @@ static const uint32_t LUT_SPI[CUSTOM_LUT_LENGTH] =
 
 	// (12) Enter QPI mode - ISSI
 	[48] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x38, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-	[49] = 0,
+
+	// (13) Write Configuration Register 1 (Macronix)
+	[52] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x01,kFLEXSPI_Command_WRITE_SDR,  kFLEXSPI_1PAD, 1),
 };
 
 #define DUMMY_CYCLES 18	/* Number of dummy cycles after Read Command for Adesto-Flash */
@@ -321,28 +324,34 @@ static const uint32_t LUT_OctaSPI_DDR[CUSTOM_LUT_LENGTH] =
 /* Look UpTable for Macronix MX25UM Octa-Flash devices */
 static const uint32_t LUT_OctaSPI_DDR_2[CUSTOM_LUT_LENGTH] =
 {
-	// (0) Read Array
-	[0]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xEE, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x11),
-	[1]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, 40),
+	// (0) Read Array	- Octa IO DT Read 
+	[0]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xEE, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x11),
+	[1]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, 12),
 	[2]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 128,  kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0),
 
 	// (1) Read Status (byte 1)
-	[4]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x05, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xFA),
-	[5]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, 0x08, kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 1),
+	[4]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x05, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xFA),
+	[5]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x00),
+    [6]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x00),
+	[7]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD,   40, kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 1),
 
 	// (3) Write Enable     
-	[12] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x06, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xF9),
+	[12] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x06, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xF9),
 
 	// (4) Page Program
-	[16] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x12, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xED),
-	[17] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_8PAD, 128),
+//	[16] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x12, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xED),
+//	[17] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_8PAD, 128),
+
+	[16] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x12, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xED),
+	[17] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, 12),
+	[18] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_8PAD, 128,  kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0),
 
 	// (5) Block Erase 4K
-	[20] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x21, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xDE),
+	[20] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x21, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xDE),
 	[21] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0),
 
 	// (6) Chip Erase 
-	[24] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x60, kFLEXSPI_Command_SDR,       kFLEXSPI_8PAD, 0x9F),
+	[24] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x60, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x9F),
 
 	// (8) Write Status/Control Registers
 	[32] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x01, kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_1PAD, 0x04),
@@ -361,7 +370,7 @@ static status_t EnterQuadSPIMode    (FLEXSPI_Type *base, uint32_t baseAddr, enum
 static status_t WriteEnable         (FLEXSPI_Type *base, uint32_t baseAddr);
 static status_t WaitBusBusy         (FLEXSPI_Type *base);
 static status_t UnprotectAll_Adesto (FLEXSPI_Type *base);
-static status_t WriteRegister       (FLEXSPI_Type *base, uint8_t Address, uint8_t value, enum LUT_CommandOffsets cmd);
+static status_t WriteRegister       (FLEXSPI_Type *base, uint32_t Address, uint8_t value, enum LUT_CommandOffsets cmd);
 static status_t EraseChip           (FLEXSPI_Type *base);
 static int EraseSector              (libmem_driver_handle_t *h, libmem_sector_info_t *si);
 static int ProgramPage              (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr);
@@ -564,9 +573,8 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle
 		status_t stat = WriteEnable (base, 0);
 		if (stat != kStatus_Success)
 			return LIBMEM_STATUS_ERROR;
-
 		// Write to status/control register 2 to switch to chosen memory-Type
-		stat = WriteRegister (base, 2, Status, LUT_WriteConfigReg_Macronix);
+		stat = WriteRegister (base, 0, Status, LUT_WriteConfigReg_Macronix);
 		if (stat != kStatus_Success)
 			return LIBMEM_STATUS_ERROR;
 	}
@@ -770,7 +778,7 @@ static status_t WaitBusBusy (FLEXSPI_Type *base)
 }
 
 
-static status_t WriteRegister (FLEXSPI_Type *base, uint8_t Address, uint8_t value, enum LUT_CommandOffsets cmd)
+static status_t WriteRegister (FLEXSPI_Type *base, uint32_t Address, uint8_t value, enum LUT_CommandOffsets cmd)
 {
 	uint32_t Buffer = value;
 

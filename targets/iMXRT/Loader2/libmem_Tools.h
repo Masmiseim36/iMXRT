@@ -47,15 +47,16 @@ Device Size = 2^n in number of bytes.
 @author Markus Klein*/
 enum Capacity
 {
-	Capacity_UNDEF   = 0x00,
-	Capacity_4MBit   = 0x13,
-	Capacity_8MBit   = 0x14,
-	Capacity_16MBit  = 0x15,
-	Capacity_32MBit  = 0x16,
-	Capacity_64MBit  = 0x17,
-	Capacity_128MBit = 0x18,
-	Capacity_256MBit = 0x19,
-	Capacity_512MBit = 0x1A
+	Capacity_UNDEF    = 0x00,
+	Capacity_4MBit    = 0x13,
+	Capacity_8MBit    = 0x14,
+	Capacity_16MBit   = 0x15,
+	Capacity_32MBit   = 0x16,
+	Capacity_64MBit   = 0x17,
+	Capacity_128MBit  = 0x18,
+	Capacity_256MBit  = 0x19,
+	Capacity_512MBit  = 0x1A,
+	Capacity_1024MBit = 0x1B,
 };
 
 uint32_t libmem_CalculateOffset (FLEXSPI_Type *base, uint32_t Addr);
