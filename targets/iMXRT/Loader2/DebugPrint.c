@@ -27,7 +27,7 @@ OF SUCH DAMAGE. */
 #include "fsl_clock.h"
 #include "fsl_lpuart.h"
 
-#define ENABLE_DEBUG_PRINT 0
+#define ENABLE_DEBUG_PRINT 1
 
 #if defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0
 	static LPUART_Type * const uart [] = LPUART_BASE_PTRS;

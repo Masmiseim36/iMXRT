@@ -59,7 +59,7 @@ function Reset()
 	}
 
 	TargetInterface.setRegister ("r0", 1);
-    TargetInterface.setRegister ("r1", 1);
+	TargetInterface.setRegister ("r1", 1);
 }
 
 
@@ -87,7 +87,22 @@ function EnableTrace(traceInterfaceType)
 
 function GetProjectPartName ()
 {
-	return TargetInterface.getProjectProperty ("Target").substring (0, 10);
+	var TargetFullName = TargetInterface.getProjectProperty ("Target");
+	var TargetShort = TargetFullName.substring (0, 10);
+
+	switch (TargetFullName.slice(-4))
+	{
+		case "_cm7":
+			TargetShort += '_cm7';
+			break;
+		case "_cm4":
+			TargetShort += '_cm4';
+			break;
+		default:
+			// Do nothing
+	}
+
+	return TargetShort;
 }
 
 function Clock_Init ()
@@ -114,10 +129,8 @@ function Clock_Init ()
 	}
 }
 
-
-function Clock_Init_1021 () 
+function ClockGate_EnableAll ()
 {
-	TargetInterface.message ("Clock_Init_1021");
 	// Enable all clocks
 	TargetInterface.pokeUint32 (0x400FC068, 0xffffffff);	// CCM->CCGR0
 	TargetInterface.pokeUint32 (0x400FC06C, 0xffffffff);	// CCM->CCGR1
@@ -126,6 +139,13 @@ function Clock_Init_1021 ()
 	TargetInterface.pokeUint32 (0x400FC078, 0xffffffff);	// CCM->CCGR4
 	TargetInterface.pokeUint32 (0x400FC07C, 0xffffffff);	// CCM->CCGR5
 	TargetInterface.pokeUint32 (0x400FC080, 0xffffffff);	// CCM->CCGR6
+}
+
+
+function Clock_Init_1021 () 
+{
+	TargetInterface.message ("Clock_Init_1021");
+	ClockGate_EnableAll ();	// Enable all clocks
 
 	// IPG_PODF: 2 divide by 3
 	TargetInterface.pokeUint32 (0x400FC014,0x000A8200);		// CCM->CBCDR
@@ -165,14 +185,7 @@ function Clock_Init_1021 ()
 function Clock_Init_105x () 
 {
 	TargetInterface.message ("Clock_Init_105x");
-	// Enable all clocks
-	TargetInterface.pokeUint32 (0x400FC068, 0xffffffff);	// CCM->CCGR0
-	TargetInterface.pokeUint32 (0x400FC06C, 0xffffffff);	// CCM->CCGR1
-	TargetInterface.pokeUint32 (0x400FC070, 0xffffffff);	// CCM->CCGR2
-	TargetInterface.pokeUint32 (0x400FC074, 0xffffffff);	// CCM->CCGR3
-	TargetInterface.pokeUint32 (0x400FC078, 0xffffffff);	// CCM->CCGR4
-	TargetInterface.pokeUint32 (0x400FC07C, 0xffffffff);	// CCM->CCGR5
-	TargetInterface.pokeUint32 (0x400FC080, 0xffffffff);	// CCM->CCGR6
+	ClockGate_EnableAll ();	// Enable all clocks
 
 	// PERCLK_PODF: 1 divide by 2
 	TargetInterface.pokeUint32 (0x400FC01C, 0x04900001);	// CCM->CSCMR1 
