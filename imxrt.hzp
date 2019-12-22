@@ -38,7 +38,8 @@
             <file file_name="targets/iMXRT/FLM/MIMXRT1015_QuadSPI_4KB_SEC.FLM" />
           </folder>
         </folder>
-        <file file_name="targets/iMXRT/flexspi_placement.xml" />
+        <file file_name="targets/iMXRT/placement_flexspi.xml" />
+        <file file_name="targets/iMXRT/placement_tcm.xml" />
         <file file_name="targets/iMXRT/iMXRT_Target.js" />
         <file file_name="targets/iMXRT/project_templates.xml" />
         <file file_name="targets/iMXRT/propertyGroups.xml" />

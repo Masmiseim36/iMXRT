@@ -31,7 +31,7 @@ function Reset()
     {
       // DCDC: REG0->VBG_TRM
       trim_value = (reg & (0x1F << 11)) >> 11; 
-      reg = (TargetInterface.peekWord(dcdc_base + 0x4) & ~(0x1F << 24)) | (trim_value << 24);
+      reg = (TargetInterface.peekWord (dcdc_base + 0x4) & ~(0x1F << 24)) | (trim_value << 24);
       TargetInterface.pokeWord(dcdc_base + 0x4, reg);
       dcdc_trim_loaded = 1;
     }
@@ -43,7 +43,7 @@ function Reset()
       if (index < 4)
         {
           // DCDC: REG3->TRG 
-          reg = (TargetInterface.peekWord(dcdc_base + 0xC) & ~(0x1F)) | ((0xF + index));
+          reg = (TargetInterface.peekWord (dcdc_base + 0xC) & ~(0x1F)) | ((0xF + index));
           TargetInterface.pokeWord(dcdc_base + 0xC, reg);
           dcdc_trim_loaded = 1;
         }
@@ -52,10 +52,9 @@ function Reset()
   if (dcdc_trim_loaded)
     {
       // delay about 400us till dcdc is stable.
-      TargetInterface.delay(1);
+      TargetInterface.delay (1);
     }
 }
-
 
 function GetPartName()
 {    
