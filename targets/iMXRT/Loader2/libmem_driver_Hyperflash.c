@@ -69,17 +69,17 @@ static flexspi_device_config_t deviceconfig =
 /** customLUT:  */
 static const uint32_t customLUT[CUSTOM_LUT_LENGTH] =
 {
-	// Read Data
+	// (0) Read Data
 	[4 * LUT_ReadData]        = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0xA0, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 0x18),
 //	[4 * LUT_ReadData + 1]    = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_CADDR_DDR, kFLEXSPI_8PAD, 0x10, kFLEXSPI_Command_READ_DDR,  kFLEXSPI_8PAD, 0x04),
 	[4 * LUT_ReadData + 1]    = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_CADDR_DDR, kFLEXSPI_8PAD, 0x10, kFLEXSPI_Command_DUMMY_DDR, kFLEXSPI_8PAD, 0x06),
     [4 * LUT_ReadData + 2]    = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,  kFLEXSPI_8PAD, 0x04, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0x0),
 
-	// Write Data
+	// (1) Write Data
 	[4 * LUT_WriteData]       = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0x20, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 0x18),
 	[4 * LUT_WriteData + 1]   = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_CADDR_DDR, kFLEXSPI_8PAD, 0x10, kFLEXSPI_Command_WRITE_DDR, kFLEXSPI_8PAD, 0x02),
 
-	// Read Status
+	// (2) Read Status
 	[4 * LUT_ReadStatus + 0]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0x00),
 	[4 * LUT_ReadStatus + 1]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0xAA), // ADDR 0x555 --> 0x555/8 = 0xAA
 	[4 * LUT_ReadStatus + 2]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0x05), //            --> 0x555%8 = 0x05
@@ -88,7 +88,7 @@ static const uint32_t customLUT[CUSTOM_LUT_LENGTH] =
 	[4 * LUT_ReadStatus + 5]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_CADDR_DDR, kFLEXSPI_8PAD, 0x10, kFLEXSPI_Command_DUMMY_RWDS_DDR, kFLEXSPI_8PAD, 0x0B),
 	[4 * LUT_ReadStatus + 6]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,  kFLEXSPI_8PAD, 0x04, kFLEXSPI_Command_STOP, kFLEXSPI_1PAD, 0x0),
 
-	// Write Enable
+	// (4) Write Enable
 	[4 * LUT_WriteEnable + 0] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0x00),
 	[4 * LUT_WriteEnable + 1] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0xAA), // ADDR 0x555 --> 0x555/8 = 0xAA
 	[4 * LUT_WriteEnable + 2] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0x05), //            --> 0x555%8 = 0x05
@@ -98,7 +98,7 @@ static const uint32_t customLUT[CUSTOM_LUT_LENGTH] =
 	[4 * LUT_WriteEnable + 6] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0x02), //            --> 0x2AA%8 = 0x02
 	[4 * LUT_WriteEnable + 7] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0x55), // Data 0x55
 
-	// Erase Sector
+	// (6) Erase Sector
 	[4 * LUT_EraseSector + 0] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0x00),
 	[4 * LUT_EraseSector + 1] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0xAA), // ADDR 0x555 --> 0x555/8 = 0xAA
 	[4 * LUT_EraseSector + 2] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR, kFLEXSPI_8PAD, 0x05), //            --> 0x555%8 = 0x05

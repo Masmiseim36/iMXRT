@@ -152,7 +152,7 @@
 
   <group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="TCM" >
     <groupEntry name="TCM">
-      <property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/tcm_placement.xml" />
+      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_tcm.xml" />
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value=""/>
       <property name="arm_target_loader_default_loader" value=""/>
@@ -167,7 +167,7 @@
       <property name="target_reset_script" value="Reset()&#xa;Clock_Init()&#xa;SDRAM_Init()" />
     </groupEntry>
     <groupEntry name="FlexSPI (HYPER)">
-      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
+      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
@@ -182,7 +182,7 @@
       <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
     <groupEntry name="FlexSPI (OctaSPI)">
-      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
+      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
@@ -197,7 +197,7 @@
       <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
     <groupEntry name="FlexSPI (QuadSPI)">
-      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
+      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
@@ -212,7 +212,7 @@
       <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
     <groupEntry name="FlexSPI2 (QuadSPI)">
-      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
+      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
       <property name="linker_section_placement_macros" value="FLASH_NAME=FlexSPI2" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
@@ -227,7 +227,7 @@
       <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
     </groupEntry>
     <groupEntry name="FlexSPI2 (OctaSPI)">
-      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
+      <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
