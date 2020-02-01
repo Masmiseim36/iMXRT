@@ -5,6 +5,10 @@
     <file title="iMX RT Samples" file_name="$(SamplesDir)/iMXRT/iMXRT.hzp" />
   </group>
   <targets>
+    <category name="iMXRT1011">
+      <cpu name="MIMXRT1011CAE4A" />
+      <cpu name="MIMXRT1011DAE5A" />
+    </category>
     <category name="iMXRT1015">
       <cpu name="MIMXRT1015CAF4A" />
       <cpu name="MIMXRT1015DAF5A" />
@@ -21,6 +25,7 @@
       <cpu name="MIMXRT1051CVJ5B" />
       <cpu name="MIMXRT1051DVL6A" />
       <cpu name="MIMXRT1051DVL6B" />
+      <cpu name="MIMXRT1051DVJ6B" />
       <cpu name="MIMXRT1052CVL5A" />
       <cpu name="MIMXRT1052CVL5B" />
       <cpu name="MIMXRT1052CVJ5B" />
@@ -120,7 +125,7 @@
     </section>
   </documentation>
   <history>
-    <version name="4.4">
+    <version name="4.4.2">
       <description>FlexSPI-Configurations are also using TCM- and OCRAM-memory now</description>
       <description>Added SDRAM-Segment to Memory-Map</description>
       <description>Added support for Adesto EcoXiP Flash</description>
