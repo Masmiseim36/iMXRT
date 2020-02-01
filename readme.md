@@ -32,10 +32,12 @@ The Support for [iMXRT1170](https://www.nxp.com/products/processors-and-microcon
 
 The Package is provided unpacked and has to be packed before it can be installed. For this open the Project File located in the root of the project with the Crossworks IDE (File imxrt.hzp). Then “compile" it like a normal project (Build -> Build iMXRT). This will create the CPU-Support package in the root-Folder of the project (-> iMXRT.hzq).
 To install the new created package, go to Tools -> Packages -> Manually Install Packages and choose the new File.
-![Package Manager](./doc/Menu_PackageManagerManual.png)
+![Package Manager](./doc/Menu_PackageManagerManual.png)  
 :grey_exclamation: Uninstall a possibly already existing iMXRT-CPU-Support package before installing the new one. The Folder Structure and the predefined macros are different, those packages are not compatible to each other. :grey_exclamation:
 
-## How it works
+## The Loader
+
+### How it works
 
 The iMXRT is flashless, therefore you need to add external Flash to run the code from. You get Flash memory with different Interfaces (SPI, QSPI, OSPI, HyperInteface) and these interfaces speak often different dialects. To get access to those memories you need a software which configures the memory interface according the used Memory. This is done by the Loader.
 The Loader is transmitted by the development Environment to the Internal-RAM of the controller and is executed there like a ‘normal’ application. After the Loader has initialized the interface, the Program Code is transmitted via the JTAG/SWD Interface to the unused areas of the internal RAM and then written to the Flash memory by the Loader.
@@ -56,3 +58,14 @@ enum eMemoryType
 ```
 
 The lowest Nibble of the parameter is used to configure the first FlexSPI-Interface, the next nibble for the second Interface if available on the target device.
+
+### Supported Flashes
+
+* Adesto
+  * AT25SF128A-SHB-T
+  * ATXP032
+* ISSI
+  * IS25LP064A-JBLE
+  * IS25WP064A-JBLE
+* CYPRESS
+  * S26KS512SDPBHI020

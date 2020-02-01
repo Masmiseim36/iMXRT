@@ -3,12 +3,12 @@
   <group short="Target Processor" group="Build Options" long="Select a Controller (CM7)" name="Target" default="MIMXRT1052DVL6B" >  
     <groupEntry name="MIMXRT1011CAE4A" aka="MIMXRT1011xxx4A" family="iMXRT1011">
       <property name="macros" value="DeviceName=MIMXRT1011;Family=iMXRT1011" />
-      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1015.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1011.xml" />
       <cdefine name="CPU_MIMXRT1011CAE4A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1011DAE5A" aka="MIMXRT1011xxx5A" family="iMXRT1011">
       <property name="macros" value="DeviceName=MIMXRT1011;Family=iMXRT1011" />
-      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1015.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1011.xml" />
       <cdefine name="CPU_MIMXRT1011DAE5A"/>
     </groupEntry>
 
@@ -171,7 +171,7 @@
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
-	  <property name="arm_target_loader_parameter" value="1" configuration="Flash" />
+      <property name="arm_target_loader_parameter" value="1" configuration="Flash" />
       <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family).elf" configuration="Flash" />
       <property name="target_reset_script" value="Reset()" />
       <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
