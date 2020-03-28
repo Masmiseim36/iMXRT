@@ -45,13 +45,14 @@
       debug_register_definition_file="$(TargetsDir)/iMXRT/XML/$(DeviceName)_registers.xml"
       debug_startup_completion_point="main"
       linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT105x.xml"
-      linker_section_placement_file="$(TargetsDir)/iMXRT/flexspi_placement.xml"
+      linker_section_placement_file="$(TargetsDir)/iMXRT/placement_flexspi.xml"
       linker_section_placement_macros=""
       macros="DeviceName=MIMXRT1052;Family=iMXRT1050"
       project_directory=""
       project_type="Executable"
       property_groups_file_path="$(TargetsDir)/iMXRT/propertyGroups.xml"
       target_connect_script="Connect()"
+      target_get_partname_script="GetPartName()"
       target_reset_script="Reset()"
       target_script_file="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
     <folder Name="System Files">
@@ -68,7 +69,7 @@
     </folder>
     <folder Name="XIP_BOOT_HEADER">
       <file file_name="flexspi_flash.h" />
-      <file file_name="flexspi_flash_OctaSPI.c" />
+      <file file_name="flexspi_flash_OSPI_Adesto.c" />
       <file file_name="flexspi_flash_Hyperflash.c" />
       <file file_name="flexspi_flash_QSPI.c" />
       <file file_name="flexspi_boot.c" />

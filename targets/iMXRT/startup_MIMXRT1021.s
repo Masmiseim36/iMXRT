@@ -32,7 +32,7 @@
  * __NO_SYSTEM_INIT
  *
  *   If defined, the SystemInit() function will NOT be called. By default SystemInit()
- *   is called after reset to enable the clocks and memories to be initialised 
+ *   is called after reset to enable the clocks and memories to be initialised
  *   prior to any C startup initialisation.
  *
  * VECTORS_IN_RAM
@@ -82,7 +82,7 @@
   .global reset_handler
 
   .section .vectors, "ax"
-  .code 16 
+  .code 16
   .global _vectors
 _vectors:
    .long   __stack_end__
@@ -397,7 +397,7 @@ l1:
   vmsr fpscr, r0
   // clear the CONTROL.FPCA bit
   mov r0, #0
-  msr control, r0 
+  msr control, r0
   // FPDSCR similarly
   movw r1, 0xEF3C
   movt r1, 0xE000

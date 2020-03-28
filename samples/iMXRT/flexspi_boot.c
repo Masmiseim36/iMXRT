@@ -32,12 +32,26 @@
  */
 
 #include "flexspi_boot.h"
-#if defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0
+
+#if defined XIP_EXTERNAL_FLASH && XIP_EXTERNAL_FLASH
+
+
+#if defined(__CC_ARM) || defined(__GNUC__) || defined __SES_ARM || defined __CROSSWORKS_ARM
+	__attribute__((section(".boot_hdr.ivt")))
+#elif defined(__ICCARM__)
+	extern void __iar_program_start (void);
+	#define Reset_Handler __iar_program_start
+	#pragma section="app_image"
+	#pragma location=".boot_hdr.ivt"
+	__root
+#else
+	#error "Unknown Compiler"
+#endif
 
 /************************************* 
  *  IVT Data 
  *************************************/
-__attribute__((section(".boot_hdr.ivt"))) const ivt image_vector_table =
+const ivt image_vector_table =
 {
 	IVT_HEADER,                         /* IVT Header */
 	IMAGE_ENTRY_ADDRESS,                /* Image  Entry Function */
@@ -49,10 +63,19 @@ __attribute__((section(".boot_hdr.ivt"))) const ivt image_vector_table =
 	IVT_RSVD                            /* Reserved = 0 */
 };
 
+#if defined(__CC_ARM) || defined(__GNUC__) || defined __SES_ARM || defined __CROSSWORKS_ARM
+	__attribute__((section(".boot_hdr.boot_data")))
+#elif defined(__ICCARM__)
+	#pragma location=".boot_hdr.boot_data"
+	__root
+#else
+	#error "Unknown Compiler"
+#endif
+
 /************************************* 
  *  Boot Data 
  *************************************/
-__attribute__((section(".boot_hdr.boot_data"))) const BOOT_DATA_T boot_data =
+const BOOT_DATA_T boot_data =
 {
 	FLASH_BASE,                 /* boot start location */
 	FLASH_SIZE,                 /* size */
@@ -60,4 +83,4 @@ __attribute__((section(".boot_hdr.boot_data"))) const BOOT_DATA_T boot_data =
 	0xFFFFFFFF  	            /* empty - extra data word */
 };
 
-#endif	// defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0
+#endif	// #if defined XIP_EXTERNAL_FLASH && XIP_EXTERNAL_FLASH

@@ -13,6 +13,8 @@ Loader MIMXRT1060_Release
 Loader MIMXRT1060_Debug
 Loader MIMXRT1064_Release
 Loader MIMXRT1064_Debug
+Loader MIMXRT1170_Debug
+Loader MIMXRT1170_Release
 SayHello THUMB Release
 SayHello THUMB Debug
 iMXRT Loader MIMXRT1011_QuadSPI_4KB_SEC Debug
@@ -35,3 +37,7 @@ iMXRT Loader MIMXRT106x_QSPI_4KB_SEC Debug
 iMXRT Loader MIMXRT106x_QSPI_4KB_SEC Release
 iMXRT Loader MIMXRT1064_QSPI_4KB_SEC Debug
 iMXRT Loader MIMXRT1064_QSPI_4KB_SEC Release
+DualCore_M4 THUMB Debug
+DualCore_M4 THUMB Release
+DualCore_M7 THUMB Debug
+DualCore_M7 THUMB Release

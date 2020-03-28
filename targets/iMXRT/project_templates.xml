@@ -12,6 +12,8 @@
     <property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x04000000" />
     <property name="debug_startup_completion_point" value="main" />
     <property name="target_connect_script" value="Connect()" />
+    <property name="target_get_partname_script" value="GetPartName()" />
+    <property name="target_reset_script" value="Reset()" />
     <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
     <property name="arm_target_loader_reset_after_download" value="No" />
     <property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT" />
@@ -25,6 +27,7 @@
     <property name="linker_scanf_fp_enabled" />
     <property name="linker_scanf_character_group_matching_enabled" />
     <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/$(DeviceName)_registers.xml"/>
+    <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family).elf" configuration="Flash" />
     <propertygroup name="CMSIS_CORE" value="Yes" />
     <folder name="Source Files" filter="c;cpp;cxx;cc;h;s;asm;inc">
       <file name="main.c" source="$(StudioDir)/samples/Shared/main.c" />
@@ -48,6 +51,8 @@
     <property name="arm_fp_abi" value="Hard" />
     <property name="arm_fpu_type" value="FPv5-D16" />
     <property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000" />
+    <property name="target_connect_script" value="Connect()" />
+    <property name="target_get_partname_script" value="GetPartName()" />
     <property name="target_reset_script" value="Reset()" />
     <property name="debug_startup_completion_point" value="main" />
     <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />

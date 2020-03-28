@@ -1,51 +1,15 @@
 /*
- * The Clear BSD License
- * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2018 NXP
  * All rights reserved.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification,
- * are permitted (subject to the limitations in the disclaimer below) provided
- * that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this
- * list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice,
- * this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of Freescale Semiconductor, Inc. nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS LICENSE.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
- * FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * SPDX-License-Identifier: BSD-3-Clause
  */
-
 #ifndef __FLEXSPI_NOR_FLASH_H__
 #define __FLEXSPI_NOR_FLASH_H__
 
 #include <stdint.h>
 #include <stdbool.h>
 #include "fsl_device_registers.h"
-#if defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0
 
 #ifdef __cplusplus
 extern "C" {
@@ -126,7 +90,7 @@ typedef enum _FlexSpiSerialClockFreq
 } flexspi_serial_clk_freq_t;
 
 //!@brief FlexSPI clock configuration type
-enum ClockConfiguration
+enum FlexSpiClk
 {
     kFlexSpiClk_SDR, //!< Clock configured for SDR mode
     kFlexSpiClk_DDR, //!< Clock configured for DDR mode
@@ -151,11 +115,11 @@ enum FlexSpiMiscOffset
     kFlexSpiMiscOffset_WordAddressableEnable = 3,    //!< Bit for Word Addressable enable
     kFlexSpiMiscOffset_SafeConfigFreqEnable = 4,     //!< Bit for Safe Configuration Frequency enable
     kFlexSpiMiscOffset_PadSettingOverrideEnable = 5, //!< Bit for Pad setting override enable
-    kFlexSpiMiscOffset_DdrModeEnable = 6,            //!< Bit for DDR clock configuration indication.
+    kFlexSpiMiscOffset_DdrModeEnable = 6,            //!< Bit for DDR clock confiuration indication.
 };
 
 //!@brief Flash Type Definition
-enum FlashType
+enum FlexSpiDeviceType
 {
     kFlexSpiDeviceType_SerialNOR = 1,       //!< Flash devices are Serial NOR
     kFlexSpiDeviceType_SerialNAND = 2,      //!< Flash devices are Serial NAND
@@ -192,6 +156,8 @@ enum FlashCommandType
     kDeviceConfigCmdType_Reset,      //!< Reset device command
 };
 
+#if defined XIP_EXTERNAL_FLASH
+
 //!@brief FlexSPI Memory Configuration Block
 typedef struct _FlexSPIConfig
 {
@@ -217,8 +183,7 @@ typedef struct _FlexSPIConfig
     uint32_t reserved1;	             //!< [0x02c-0x02f] Reserved for future use
     uint32_t configCmdArgs[3];       //!< [0x030-0x03b] Arguments/Parameters for device Configuration commands
     uint32_t reserved2;              //!< [0x03c-0x03f] Reserved for future use
-    uint32_t controllerMiscOption;   //!< [0x040-0x043] Controller Misc Options, see Misc feature bit definitions for more
-    //! details
+    uint32_t controllerMiscOption;   //!< [0x040-0x043] Controller Misc Options, see Misc feature bit definitions for more details
     uint8_t deviceType;              //!< [0x044-0x044] Device Type:  See Flash Type Definition for more details
     uint8_t sflashPadType;           //!< [0x045-0x045] Serial Flash Pad Type: 1 - Single, 2 - Dual, 4 - Quad, 8 - Octal
     uint8_t serialClkFreq;           //!< [0x046-0x046] Serial Flash Frequency, device specific definitions, See System Boot
@@ -291,10 +256,11 @@ typedef struct _flexspi_nor_config
 
 extern const flexspi_nor_config_t FlashBootHeader;
 
+#endif // XIP_EXTERNAL_FLASH
+
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif	// defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0
-#endif	// __FLEXSPI_NOR_FLASH_H__
+#endif // __FLEXSPI_NOR_FLASH_H__

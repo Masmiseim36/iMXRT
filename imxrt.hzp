@@ -42,6 +42,7 @@
         </folder>
         <file file_name="targets/iMXRT/placement_flexspi.xml" />
         <file file_name="targets/iMXRT/placement_tcm.xml" />
+        <file file_name="targets/iMXRT/placement_ocram.xml" />
         <file file_name="targets/iMXRT/iMXRT_Target.js" />
         <file file_name="targets/iMXRT/project_templates.xml" />
         <file file_name="targets/iMXRT/propertyGroups.xml" />
@@ -99,8 +100,8 @@
           <file file_name="targets/iMXRT/XML/MIMXRT1062_Registers.xml" />
           <file file_name="targets/iMXRT/XML/MIMXRT1064_Registers.xml" />
         </folder>
-        <file file_name="targets/iMXRT/MemoryMap_MIMXRT1015.xml" />
         <file file_name="targets/iMXRT/MemoryMap_MIMXRT1011.xml" />
+        <file file_name="targets/iMXRT/MemoryMap_MIMXRT1015.xml" />
         <file file_name="targets/iMXRT/MemoryMap_MIMXRT1021.xml" />
         <file file_name="targets/iMXRT/MemoryMap_MIMXRT105x.xml" />
         <file file_name="targets/iMXRT/MemoryMap_MIMXRT106x.xml" />
@@ -120,10 +121,12 @@
       <file file_name="samples/iMXRT/flexspi_boot.c" />
       <file file_name="samples/iMXRT/flexspi_boot.h" />
       <file file_name="samples/iMXRT/flexspi_flash.h" />
-      <file file_name="samples/iMXRT/flexspi_flash_EcoXiP.c" />
       <file file_name="samples/iMXRT/flexspi_flash_Hyperflash.c" />
       <file file_name="samples/iMXRT/flexspi_flash_QSPI.c" />
       <file file_name="samples/iMXRT/main.cpp" />
+      <file file_name="samples/iMXRT/iMXRT.hzp" />
+      <file file_name="samples/iMXRT/flexspi_flash_OSPI_Adesto.c" />
+      <file file_name="samples/iMXRT/flexspi_flash_OSPI_Macronix.c" />
     </folder>
   </project>
   <import file_name="targets/iMXRT/Loader/Loader.hzp" />
