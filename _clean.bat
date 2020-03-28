@@ -33,10 +33,16 @@ rmdir /s /q "./targets/iMXRT/Loader2/Loader MIMXRT1060_Debug"
 rmdir /s /q "./targets/iMXRT/Loader2/Loader MIMXRT1060_Release"
 rmdir /s /q "./targets/iMXRT/Loader2/Loader MIMXRT1064_Debug"
 rmdir /s /q "./targets/iMXRT/Loader2/Loader MIMXRT1064_Release"
+rmdir /s /q "./targets/iMXRT/Loader2/Loader MIMXRT1170_Debug"
+rmdir /s /q "./targets/iMXRT/Loader2/Loader MIMXRT1170_Release"
 
 
 rmdir /s /q "./samples/iMXRT/SayHello THUMB Debug"
 rmdir /s /q "./samples/iMXRT/SayHello THUMB Release"
+rmdir /s /q "./samples/iMXRT/DualCore_M4 THUMB Debug"
+rmdir /s /q "./samples/iMXRT/DualCore_M4 THUMB Release"
+rmdir /s /q "./samples/iMXRT/DualCore_M7 THUMB Debug"
+rmdir /s /q "./samples/iMXRT/DualCore_M7 THUMB Release"
 
 cd "./targets/iMXRT/Loader/"
 del /f /q *.map

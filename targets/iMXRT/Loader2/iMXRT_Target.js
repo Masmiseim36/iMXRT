@@ -1,5 +1,6 @@
 /*****************************************************************************
- * Copyright (c) 2016 Rowley Associates Limited.                             *
+ * Original work Copyright (c) 2016 Rowley Associates Limited.               *
+ * Modified work Copyright (C) 2020 Markus Klein                             *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
@@ -34,7 +35,7 @@ function Reset()
 	{
 		// DCDC: REG0->VBG_TRM
 		trim_value = (reg & (0x1F << 11)) >> 11; 
-		reg = (TargetInterface.peekWord(dcdc_base + 0x4) & ~(0x1F << 24)) | (trim_value << 24);
+		reg = (TargetInterface.peekWord (dcdc_base + 0x4) & ~(0x1F << 24)) | (trim_value << 24);
 		TargetInterface.pokeWord(dcdc_base + 0x4, reg);
 		dcdc_trim_loaded = 1;
 	}
@@ -46,7 +47,7 @@ function Reset()
 		if (index < 4)
 		{
 			// DCDC: REG3->TRG 
-			reg = (TargetInterface.peekWord(dcdc_base + 0xC) & ~(0x1F)) | ((0xF + index));
+			reg = (TargetInterface.peekWord (dcdc_base + 0xC) & ~(0x1F)) | ((0xF + index));
 			TargetInterface.pokeWord(dcdc_base + 0xC, reg);
 			dcdc_trim_loaded = 1;
 		}
@@ -55,7 +56,7 @@ function Reset()
 	if (dcdc_trim_loaded)
 	{
 		// delay about 400us till dcdc is stable.
-		TargetInterface.delay(1);
+		TargetInterface.delay (1);
 	}
 
 	TargetInterface.setRegister ("r0", 1);
@@ -63,21 +64,23 @@ function Reset()
 }
 
 
+// This function is used to return the controller type as a string
+// we use it also to do some initializations as this function is called right bevor
+// writing the code to the controller
 function GetPartName()
-{    
+{
   var PART = "";
   return PART;
 }
 
 function MatchPartName(name)
 {
-  var partName = GetPartName();
+	var partName = GetPartName();
 
-  if (partName == "")
-    return false;
+	if (partName == "")
+		return false;
 
-  return partName.substring(0, 6) == name.substring(0, 6);
-
+	return partName.substring(0, 6) == name.substring(0, 6);
 }
 
 function EnableTrace(traceInterfaceType)
@@ -112,6 +115,7 @@ function Clock_Init ()
 
 	switch (DeviceName)
 	{
+		case "MIMXRT1011":
 		case "MIMXRT1015":
 		case "MIMXRT1021":
 			Clock_Init_1021 ();

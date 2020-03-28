@@ -1,5 +1,6 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019  Markus Klein
+Copyright (C) 2019-2020  Markus Klein
+https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -21,6 +22,7 @@ OF SUCH DAMAGE. */
 
 #include "fsl_common.h"
 #include "fsl_iomuxc.h"
+#include "fsl_gpio.h"
 #include "pin_mux.h"
 
 
@@ -90,4 +92,40 @@ void BOARD_InitOctaSPIPins (void)
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_04_FLEXSPI_B_DATA01, BOARD_FlexSPIPinConfig);
 
 	BOARD_InitQuadSPIPins ();
+}
+
+
+void BOARD_PerformJEDECReset (void)
+{
+	gpio_pin_config_t jreset_pin_config = 
+	{
+		kGPIO_DigitalOutput, 1, kGPIO_NoIntmode
+	};
+
+	// Configure the 3 pins used in JEDEC reset as GPIOs
+	IOMUXC_SetPinMux (IOMUXC_GPIO_SD_B1_11_GPIO3_IO31, 1);	// IOMUXC_GPIO_SD_B1_11_FLEXSPI_A_SS0_B
+	IOMUXC_SetPinMux (IOMUXC_GPIO_SD_B1_08_GPIO3_IO28, 1);	// IOMUXC_GPIO_SD_B1_08_FLEXSPI_A_DATA00
+	IOMUXC_SetPinMux (IOMUXC_GPIO_SD_B1_07_GPIO3_IO27, 1);	// IOMUXC_GPIO_SD_B1_07_FLEXSPI_A_SCLK
+
+	// Set the direction of 3 pins used in JEDEC reset to output
+	GPIO_PinInit (GPIO3, 31, &jreset_pin_config); // CS
+	GPIO_PinInit (GPIO3, 28, &jreset_pin_config); // SI/IO0
+	GPIO_PinInit (GPIO3, 27, &jreset_pin_config); // SCK
+
+
+	// Perform a reset sequence:
+	// CS goes low 4 times with alternating values of SOUT
+	// SCK is drive low or high and must stay in one state
+	GPIO_WritePinOutput(GPIO3, 27, 0); // set SCK low
+	for (uint32_t i = 0; i < 4; i++)
+	{
+		// drive CS low
+		GPIO_WritePinOutput (GPIO3, 31, 0);
+		//for(j=0; j<100; j++);
+		// drive SI low or high: alternate its state every iteration
+		GPIO_WritePinOutput (GPIO3, 28, (i&1));
+		// drive CS high; SI state will be captured on the CS rising edge
+		GPIO_WritePinOutput (GPIO3, 31, 1);
+		//for(j=0; j<100; j++);
+	}
 }

@@ -1,5 +1,6 @@
 /*****************************************************************************
- * Copyright (c) 2016 Rowley Associates Limited.                             *
+ * Original work Copyright (c) 2016 Rowley Associates Limited.               *
+ * Modified work Copyright (C) 2020 Markus Klein                             *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
@@ -15,51 +16,51 @@ function Connect()
 
 function Reset()
 {
-  TargetInterface.resetDebugInterface();
-  TargetInterface.resetAndStop(1000);
-  if (TargetInterface.implementation() == "crossworks_simulator")
-    return;
+	TargetInterface.resetDebugInterface();
+	TargetInterface.resetAndStop(1000);
+	if (TargetInterface.implementation() == "crossworks_simulator")
+		return;
 
-  ocotp_base = 0x401F4000;
-  ocotp_fuse_bank0_base = ocotp_base + 0x400;
-  dcdc_base = 0x40080000;
-  
-  dcdc_trim_loaded = 0;
+	ocotp_base = 0x401F4000;
+	ocotp_fuse_bank0_base = ocotp_base + 0x400;
+	dcdc_base = 0x40080000;
 
-  reg = TargetInterface.peekWord(ocotp_fuse_bank0_base + 0x90);
-  if (reg & (1<<10))
-    {
-      // DCDC: REG0->VBG_TRM
-      trim_value = (reg & (0x1F << 11)) >> 11; 
-      reg = (TargetInterface.peekWord (dcdc_base + 0x4) & ~(0x1F << 24)) | (trim_value << 24);
-      TargetInterface.pokeWord(dcdc_base + 0x4, reg);
-      dcdc_trim_loaded = 1;
-    }
+	dcdc_trim_loaded = 0;
 
-  reg = TargetInterface.peekWord(ocotp_fuse_bank0_base + 0x80);
-  if (reg & (1<<30))
-    {
-      index = (reg & (3 << 28)) >> 28;
-      if (index < 4)
-        {
-          // DCDC: REG3->TRG 
-          reg = (TargetInterface.peekWord (dcdc_base + 0xC) & ~(0x1F)) | ((0xF + index));
-          TargetInterface.pokeWord(dcdc_base + 0xC, reg);
-          dcdc_trim_loaded = 1;
-        }
-    }
+	reg = TargetInterface.peekWord(ocotp_fuse_bank0_base + 0x90);
+	if (reg & (1<<10))
+	{
+		// DCDC: REG0->VBG_TRM
+		trim_value = (reg & (0x1F << 11)) >> 11; 
+		reg = (TargetInterface.peekWord (dcdc_base + 0x4) & ~(0x1F << 24)) | (trim_value << 24);
+		TargetInterface.pokeWord(dcdc_base + 0x4, reg);
+		dcdc_trim_loaded = 1;
+	}
 
-  if (dcdc_trim_loaded)
-    {
-      // delay about 400us till dcdc is stable.
-      TargetInterface.delay (1);
-    }
+	reg = TargetInterface.peekWord(ocotp_fuse_bank0_base + 0x80);
+	if (reg & (1<<30))
+	{
+		index = (reg & (3 << 28)) >> 28;
+		if (index < 4)
+		{
+			// DCDC: REG3->TRG 
+			reg = (TargetInterface.peekWord (dcdc_base + 0xC) & ~(0x1F)) | ((0xF + index));
+			TargetInterface.pokeWord(dcdc_base + 0xC, reg);
+			dcdc_trim_loaded = 1;
+		}
+	}
+
+	if (dcdc_trim_loaded)
+	{
+		// delay about 400us till dcdc is stable.
+		TargetInterface.delay (1);
+	}
 }
 
 function GetPartName()
 {    
-  var PART = "";
-  return PART;
+	var PART = "";
+	return PART;
 }
 
 function MatchPartName(name)
@@ -70,7 +71,6 @@ function MatchPartName(name)
     return false;
 
   return partName.substring(0, 6) == name.substring(0, 6);
-
 }
 
 function EnableTrace(traceInterfaceType)
@@ -105,6 +105,7 @@ function Clock_Init ()
 
 	switch (DeviceName)
 	{
+		case "MIMXRT1011":
 		case "MIMXRT1015":
 		case "MIMXRT1021":
 			Clock_Init_1021 ();
@@ -401,11 +402,11 @@ function FLEXSPI_Init (FlexSPI)
 	var CCM_ANALOG = 0x400D8000;
 	var CCM_ANALOG_PFD480 = CCM_ANALOG + 0xF0;
 
-	// Set flexspi root clock to 166MHZ.
+	// Set flexSPI root clock to 166MHZ.
 	AlterRegister (CCM_ANALOG_PFD480, 0xBF, 0x80);	// Disable the clock output first.
 	AlterRegister (CCM_ANALOG_PFD480, 0xBF, 26);	// Set the new value and enable output.
 
-	// Choose PLL3 PFD0 clock as flexspi source clock and set internal clock 83 Megaherz
+	// Choose PLL3 PFD0 clock as flexSPI source clock and set internal clock 83 megahertz
 	AlterRegister (CCM_CSCMR1, 0x60000000 | 0x3800000, (3 << 29) | (3 << 23));
 
 	var FlexSPI_MCR0        = base + 0x00;
@@ -413,7 +414,7 @@ function FLEXSPI_Init (FlexSPI)
 	var FlexSPI_MCR2        = base + 0x08;
 	var FlexSPI_AHBCR       = base + 0x0C;
 	var FlexSPI_AHBRXBUFCR0 = base + 0x20;
-	var FlexSPI_IPRXFCR     = base + 0xD8;
+	var FlexSPI_IPRXFCR     = base + 0xB8;
 	var FlexSPI_IPTXFCR     = base + 0xBC;
 	var FlexSPI_FLSHCR0     = base + 0x60;
 	AlterRegister (FlexSPI_MCR0, 2, 0);	// Enable flexSPI

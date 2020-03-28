@@ -1,5 +1,6 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019  Markus Klein
+Copyright (C) 2019-2020  Markus Klein
+https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -223,9 +224,9 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (libmem_driver_handle_t *Flash
 	config.enableCombination              = true;
 	FLEXSPI_Init (base, &config);
 
-	FLEXSPI_SetFlashConfig (base, &deviceconfig, kFLEXSPI_PortA1);	// Configure flash settings according to serial flash feature.
-	FLEXSPI_UpdateLUT      (base, 0, customLUT, CUSTOM_LUT_LENGTH);	// Update LUT table.
-	FLEXSPI_SoftwareReset  (base);									// Do software reset.
+	FLEXSPI_SetFlashConfig (base, &deviceconfig, kFLEXSPI_PortA1);  // Configure flash settings according to serial flash feature.
+	FLEXSPI_UpdateLUT      (base, 0, customLUT, CUSTOM_LUT_LENGTH); // Update LUT table.
+	FLEXSPI_SoftwareReset  (base);                                  // Do software reset.
 //	EraseChip (base);
 
 	static uint8_t write_buffer[HYPERFLASH_PAGE_SIZE];

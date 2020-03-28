@@ -31,10 +31,11 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _XIP_BOOT_H_
-#define _XIP_BOOT_H_
+#ifndef _FLEXSPI_BOOT_H_
+#define _FLEXSPI_BOOT_H_
 
-#if defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0
+#if defined XIP_EXTERNAL_FLASH && XIP_EXTERNAL_FLASH
+
 #include <stdint.h>
 #include "fsl_device_registers.h"
 
@@ -87,17 +88,55 @@ typedef struct _ivt_
 #define IVT_RSVD            (uint32_t)(0x00000000)
 
 /* Set resume entry */
-#if defined XIP_BOOT_FLEXSPI1
-	#define FLASH_BASE FlexSPI_AMBA_BASE
-#elif defined XIP_BOOT_FLEXSPI2 && defined FLEXSPI2
-	#define FLASH_BASE FlexSPI2_AMBA_BASE
+#if defined(__CC_ARM)
+	extern uint32_t __Vectors[];
+	extern uint32_t Image$$RW_m_config_text$$Base[];
+	#define IMAGE_ENTRY_ADDRESS ((uint32_t)__Vectors)
+	#define FLASH_BASE ((uint32_t)Image$$RW_m_config_text$$Base)
+#elif defined(__MCUXPRESSO)
+	extern uint32_t __Vectors[];
+	extern uint32_t __boot_hdr_start__[];
+	#define IMAGE_ENTRY_ADDRESS ((uint32_t)__Vectors)
+	#define FLASH_BASE          ((uint32_t)__boot_hdr_start__)
+#elif defined(__ICCARM__)
+	#define IMAGE_ENTRY_ADDRESS  ((uint32_t)__iar_program_start)
+	#define FLASH_BASE           ((uint32_t)__section_begin("app_image"))
+	#define FLASH_END            (((uint32_t)__section_begin("app_image")) + ((uint32_t )__section_size("app_image")))
+	#define FLASH_SIZE            __section_size("app_image")
+#elif defined __CROSSWORKS_ARM
+	#if defined XIP_BOOT_FLEXSPI1 && defined FlexSPI_AMBA_BASE
+		#define FLASH_BASE    FlexSPI_AMBA_BASE
+	#elif defined XIP_BOOT_FLEXSPI1 && defined FlexSPI1_AMBA_BASE
+		#define FLASH_BASE    FlexSPI1_AMBA_BASE
+	#elif defined XIP_BOOT_FLEXSPI2 && defined FLEXSPI2
+		#define FLASH_BASE    FlexSPI2_AMBA_BASE
+	#else
+		#error "unknown interface"
+	#endif
+	#define FLASH_END  (FLASH_BASE + 0x0800000)
+	extern void reset_handler(void);
+	#define IMAGE_ENTRY_ADDRESS ((uint32_t)reset_handler)
+#elif defined __SES_ARM
+	#define FLASH_BASE            0x60000000
+	#define FLASH_END             0x70800000
+	extern void Reset_Handler(void);
+	#define IMAGE_ENTRY_ADDRESS ((uint32_t)Reset_Handler)
+#elif defined(__GNUC__)
+	extern uint32_t __VECTOR_TABLE[];
+	extern uint32_t __FLASH_BASE[];
+	#define IMAGE_ENTRY_ADDRESS ((uint32_t)__VECTOR_TABLE)
+	#define FLASH_BASE ((uint32_t)__FLASH_BASE)
+
+	extern void Reset_Handler (void);
+	#define IMAGE_ENTRY_ADDRESS ((uint32_t)Reset_Handler)
 #else
-	#error "unknown interface"
+	#error "Unknown Compiler"
 #endif
-#define FLASH_END  (FLASH_BASE + 0x04000000)
-extern void reset_handler(void);
-#define IMAGE_ENTRY_ADDRESS ((uint32_t)reset_handler)
-#define FLASH_SIZE (FLASH_END-FLASH_BASE)
+
+
+#ifndef FLASH_SIZE
+	#define FLASH_SIZE (FLASH_END-FLASH_BASE)
+#endif
 
 #define DCD_ADDRESS           dcd_data
 #define BOOT_DATA_ADDRESS     &boot_data
@@ -111,7 +150,7 @@ typedef struct _boot_data_ {
   uint32_t start;           /* boot start location */
   uint32_t size;            /* size */
   uint32_t plugin;          /* plugin flag - 1 if downloaded application is plugin */
-  uint32_t placeholder;	    /* placeholder to make even 0x10 size */
+  uint32_t placeholder;     /* placeholder to make even 0x10 size */
 } BOOT_DATA_T;
 
 
@@ -132,5 +171,5 @@ typedef struct _boot_data_ {
 /* External Variables */
 extern const BOOT_DATA_T boot_data;
 
-#endif	// defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0
-#endif	// _XIP_BOOT_H_
+#endif	// defined #if defined XIP_EXTERNAL_FLASH && XIP_EXTERNAL_FLASH
+#endif	// _FLEXSPI_BOOT_H_

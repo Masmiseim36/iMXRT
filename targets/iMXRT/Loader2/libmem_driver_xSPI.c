@@ -1,5 +1,6 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019  Markus Klein
+Copyright (C) 2019-2020  Markus Klein
+https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -73,7 +74,13 @@ static flexspi_device_config_t deviceconfig =
 	.AHBWriteWaitInterval = 0,
 };
 
-static const uint32_t LUT_SPI[CUSTOM_LUT_LENGTH] =
+enum DummyCycles
+{
+	DummyCycles_Adesto   = 18,	// Number of dummy cycles after Read Command for Adesto-Flash
+	DummyCycles_Macronix = 12,	// Number of dummy cycles after Read Command for Macronix-Flash - Set 0x04 To the Config
+};
+
+static const uint32_t LUT_SPI_Generic[CUSTOM_LUT_LENGTH] =
 {
 	// (0) Read Array
 	[0]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,        kFLEXSPI_1PAD, 0x0B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 32),
@@ -125,13 +132,11 @@ static const uint32_t LUT_SPI[CUSTOM_LUT_LENGTH] =
 	[52] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x01,kFLEXSPI_Command_WRITE_SDR,  kFLEXSPI_1PAD, 1),
 };
 
-#define DUMMY_CYCLES 18	/* Number of dummy cycles after Read Command for Adesto-Flash */
-
 static const uint32_t LUT_QuadSPI[CUSTOM_LUT_LENGTH] =
 {
 	// (0) Read Array
 	[0]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x0B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 32),
-	[1]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR,   kFLEXSPI_4PAD, DUMMY_CYCLES, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 128),
+	[1]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR,   kFLEXSPI_4PAD, DummyCycles_Adesto, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 128),
 //	[2]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_JUMP_ON_CS,  kFLEXSPI_4PAD, 0,
 
 	// (1) Read Status (byte 1)
@@ -161,7 +166,7 @@ static const uint32_t LUT_QuadSPI[CUSTOM_LUT_LENGTH] =
 };
 
 // LUT for ISSI
-static const uint32_t LUT_QuadSPI_2[CUSTOM_LUT_LENGTH] =
+static const uint32_t LUT_QuadSPI_ISSI[CUSTOM_LUT_LENGTH] =
 {
 	// (0) Read Array
 	[0]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xEB, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 0x18),
@@ -220,16 +225,16 @@ static const uint32_t LUT_QuadSPI_3[CUSTOM_LUT_LENGTH] =
 	[32] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x01, kFLEXSPI_Command_WRITE_SDR, kFLEXSPI_1PAD, 0x04),
 };
 
-static const uint32_t LUT_OctaSPI[CUSTOM_LUT_LENGTH] =
+static const uint32_t LUT_OctaSPI_Adesto[CUSTOM_LUT_LENGTH] =
 {
 	// (0) Read Array
 	[0]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,          kFLEXSPI_8PAD, 0x0B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_8PAD, 32),
-	[1]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR,    kFLEXSPI_8PAD, DUMMY_CYCLES, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_8PAD, 128),
-//	[2]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_JUMP_ON_CS,   kFLEXSPI_8PAD, 0,                         kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
+	[1]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR,    kFLEXSPI_8PAD, DummyCycles_Adesto, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_8PAD, 128),
+//	[2]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_JUMP_ON_CS,   kFLEXSPI_8PAD, 0,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 
 	// (1) Read Status (byte 1)
 	[4]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,          kFLEXSPI_8PAD, 0x05, kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_8PAD, 4),
-	[5]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_SDR,     kFLEXSPI_8PAD, 1,                         kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
+	[5]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_SDR,     kFLEXSPI_8PAD, 1,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 
 	// (3) Write Enable     
 	[12] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x06,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
@@ -252,11 +257,11 @@ static const uint32_t LUT_OctaSPI[CUSTOM_LUT_LENGTH] =
 	[33] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_8PAD, 1,     kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0)
 };
 
-static const uint32_t LUT_QuadSPI_DDR[CUSTOM_LUT_LENGTH] =
+static const uint32_t LUT_QuadSPI_DDR_Adesto[CUSTOM_LUT_LENGTH] =
 {
 	// (0) Read Array
 	[0]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x0B,  kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_4PAD, 32),
-	[1]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_4PAD, DUMMY_CYCLES*2+1, kFLEXSPI_Command_READ_DDR,  kFLEXSPI_4PAD, 128),
+	[1]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_4PAD, DummyCycles_Adesto*2+1, kFLEXSPI_Command_READ_DDR,  kFLEXSPI_4PAD, 128),
 //	[2]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_JUMP_ON_CS,  kFLEXSPI_4PAD, 0,     kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 
 	// (1) Read Status (byte 1)
@@ -285,7 +290,7 @@ static const uint32_t LUT_QuadSPI_DDR[CUSTOM_LUT_LENGTH] =
 };
 
 
-static const uint32_t LUT_OctaSPI_DDR[CUSTOM_LUT_LENGTH] =
+static const uint32_t LUT_OctaSPI_DDR_Adesto[CUSTOM_LUT_LENGTH] =
 {
 	// (0) Read Array
 	[0]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x0B, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 32),
@@ -321,12 +326,13 @@ static const uint32_t LUT_OctaSPI_DDR[CUSTOM_LUT_LENGTH] =
 };
 
 
-/* Look UpTable for Macronix MX25UM Octa-Flash devices */
-static const uint32_t LUT_OctaSPI_DDR_2[CUSTOM_LUT_LENGTH] =
+// LookUp Table for Macronix MX25UM Octa-Flash devices in Octa configuration with DDR
+// Reading seems to be broken
+static const uint32_t LUT_OctaSPI_DDR_Macronix[CUSTOM_LUT_LENGTH] =
 {
 	// (0) Read Array	- Octa IO DT Read 
 	[0]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xEE, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x11),
-	[1]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, 12),
+	[1]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, DummyCycles_Macronix),
 	[2]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 128,  kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0),
 
 	// (1) Read Status (byte 1)
@@ -339,12 +345,8 @@ static const uint32_t LUT_OctaSPI_DDR_2[CUSTOM_LUT_LENGTH] =
 	[12] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x06, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xF9),
 
 	// (4) Page Program
-//	[16] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x12, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xED),
-//	[17] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_8PAD, 128),
-
 	[16] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x12, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xED),
-	[17] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, 12),
-	[18] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_8PAD, 128,  kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0),
+	[17] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_8PAD, 128),
 
 	// (5) Block Erase 4K
 	[20] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x21, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xDE),
@@ -355,6 +357,47 @@ static const uint32_t LUT_OctaSPI_DDR_2[CUSTOM_LUT_LENGTH] =
 
 	// (8) Write Status/Control Registers
 	[32] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x01, kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_1PAD, 0x04),
+
+	// (9) Write Configuration Register 2
+	[36] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x72, kFLEXSPI_Command_RADDR_SDR,   kFLEXSPI_1PAD, 32),
+	[37] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_1PAD, 1,    kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0),
+	[38] = 0
+};
+// LookUp Table for Macronix MX25UM Octa-Flash devices in Octa configuration without DDR
+static const uint32_t LUT_OctaSPI_Macronix[CUSTOM_LUT_LENGTH] =
+{
+	// (0) Read Array	- Octa Read 
+	[0]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xEC, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x13),
+	[1]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_SDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_DUMMY_SDR,   kFLEXSPI_8PAD, DummyCycles_Macronix),
+	[2]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_SDR,    kFLEXSPI_8PAD, 256,  kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0),
+
+	// (1) Read Status (byte 1)
+	[4]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x05, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xFA),
+	[5]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x00),
+	[6]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x00),
+	[7]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR,   kFLEXSPI_8PAD,   40, kFLEXSPI_Command_READ_SDR,    kFLEXSPI_8PAD, 1),
+
+	// (3) Write Enable     
+	[12] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x06, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xF9),
+
+	// (4) Page Program
+	[16] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x12, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xED),
+	[17] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_SDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_8PAD, 128),
+
+	// (5) Block Erase 4K
+	[20] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x21, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xDE),
+	[21] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_SDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0),
+
+	// (6) Chip Erase 
+	[24] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x60, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x9F),
+
+	// (8) Write Status/Control Registers
+	[32] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x01, kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_1PAD, 0x04),
+
+	// (9) Write Configuration Register 2
+	[36] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x72, kFLEXSPI_Command_RADDR_SDR,   kFLEXSPI_1PAD, 32),
+	[37] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_1PAD, 1,    kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0),
+	[38] = 0
 };
 
 
@@ -424,6 +467,115 @@ void SetClockConfig (FLEXSPI_Type *base, uint32_t div)
 #endif
 
 
+LibmemStatus_t Init_AdestoXiP (FLEXSPI_Type *base, enum eMemoryType MemType, const uint32_t **lut)
+{
+	DebugPrint ("Found Adesto Flash\r\n");
+	// Unlock all sectors
+	UnprotectAll_Adesto (base);
+
+	// Switch the configuration according to the configured memory-type
+	uint8_t Status = 0;
+	switch (MemType)
+	{
+		case MemType_OctaSPI_DDR:
+			// Enter Octal-Mode with DDR.
+			Status = 0x88;
+			*lut = LUT_OctaSPI_DDR_Adesto;
+			break;
+		case MemType_OctaSPI:
+			Status = 0x08;
+			*lut = LUT_OctaSPI_Adesto;
+			break;
+		case MemType_QuadSPI_DDR:
+			Status = 0x84;
+			*lut = LUT_QuadSPI_DDR_Adesto;
+			break;
+		case MemType_QuadSPI:
+			Status = 0x04;
+			*lut = LUT_QuadSPI;
+			break;
+		case MemType_SPI:
+			// don't update the LUT, we are already in SPI-mode
+			Status = 0x00;
+			break;
+		default:
+			return LibmemStaus_Error;
+	}
+
+	// send write-enable 
+	status_t stat = WriteEnable (base, 0);
+	if (stat != kStatus_Success)
+		return LibmemStaus_Error;
+
+	// Write to status/control register 2 to switch to chosen memory-Type
+	stat = WriteRegister (base, 2, Status, LUT_WriteStatusReg_Adesto);
+	if (stat != kStatus_Success)
+		return LibmemStaus_Error;
+
+	stat = EnterQuadSPIMode (base, 0, LUT_EnterQPI);
+	if (stat != kStatus_Success)
+		return LibmemStaus_Error;
+
+	return LibmemStaus_Success;
+}
+
+LibmemStatus_t Init_Macronix (FLEXSPI_Type *base, enum eMemoryType MemType, const uint32_t **lut)
+{
+	DebugPrint ("Found Macronix Flash\r\n");
+	uint8_t Status = 0;
+	switch (MemType)
+	{
+		case MemType_OctaSPI_DDR:
+			// Enter Octal-Mode with DDR.
+			// DDR is not working. Fall back to SDR
+//			Status = 2;
+//			*lut = LUT_OctaSPI_DDR_Macronix;
+//			break;
+		case MemType_OctaSPI:
+			Status = 1;
+			*lut = LUT_OctaSPI_Macronix;
+			break;
+		case MemType_SPI:
+			// don't update the LUT, we are already in SPI-mode
+			Status = 0x00;
+			break;
+		default:
+			return LibmemStaus_Error;
+	}
+
+	// SET Dummy Cycles
+	// send write-enable 
+	status_t stat = WriteEnable (base, 0);
+	if (stat != kStatus_Success)
+		return LibmemStaus_Error;
+	// Write to status/control register 2 to set the Dummy-Cycles
+	stat = WriteRegister (base, 0x300, 12, LUT_WriteConfigReg_Macronix);
+	if (stat != kStatus_Success)
+		return LibmemStaus_Error;
+/*
+	// Set Output inpedance
+	// send write-enable 
+	stat = WriteEnable (base, 0);
+	if (stat != kStatus_Success)
+		return LibmemStaus_Error;
+	// Write to status/control register 1 to switch to chosen memory-Type
+	stat = WriteRegister (base, 0, 2, LUT_WriteConfigReg1_Macronix);	// 2 --> 52 Ohm. Compare "Output Driver Strength Table in the Reference manual"
+	if (stat != kStatus_Success)
+		return LibmemStaus_Error;*/
+
+	// Switch to OSPI-Mode
+	// send write-enable 
+	stat = WriteEnable (base, 0);
+	if (stat != kStatus_Success)
+		return LibmemStaus_Error;
+	// Write to status/control register 2 to switch to chosen memory-Type
+	stat = WriteRegister (base, 0, Status, LUT_WriteConfigReg_Macronix);
+	if (stat != kStatus_Success)
+		return LibmemStaus_Error;
+
+	return LibmemStaus_Success;
+}
+
 /** Libmem_InitializeDriver_xSPI:
 Initialize the FlexSPI Interface for using as a SPI-Interface
 @param FlashHandle The handle which should be initialized
@@ -442,7 +594,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle
 	deviceconfig.flexspiRootClk = FlexSPI_Clock_Hz;
 
 	// Get FLEXSPI default settings and configure the FlexSPI.
-	flexspi_config_t config;
+	flexspi_config_t config = {0};
 	FLEXSPI_GetDefaultConfig (&config);
 
 	// Need to set the combination-enable option. This options combines 8 data lines from FlexSPI channel A with
@@ -454,74 +606,44 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle
 	config.ahbConfig.enableAHBCachable    = true;
 	config.rxSampleClock = kFLEXSPI_ReadSampleClkLoopbackFromDqsPad;	// To achieve high speeds - always use DQS
 	FLEXSPI_Init           (base, &config);
-	FLEXSPI_SetFlashConfig (base, &deviceconfig, kFLEXSPI_PortA1);	// Configure flash settings according to serial flash feature.
-	FLEXSPI_UpdateLUT      (base, 0, LUT_SPI, CUSTOM_LUT_LENGTH);	// Update LUT table
-	FLEXSPI_SoftwareReset  (base);									// Do software reset.
+	FLEXSPI_SetFlashConfig (base, &deviceconfig, kFLEXSPI_PortA1);        // Configure flash settings according to serial flash feature.
+	FLEXSPI_UpdateLUT      (base, 0, LUT_SPI_Generic, CUSTOM_LUT_LENGTH); // Update LUT table
+	FLEXSPI_SoftwareReset  (base);                                        // Do software reset.
 
 
+	// Get the JEDEC Informations
 	struct DeviceInfo Info;
 	status_t status = ReadJEDEC (base, &Info);
 	if (status != kStatus_Success)
+	{
+		DebugPrint ("JEDEC read Error\r\n");
 		return LibmemStaus_InvalidDevice;
+	}
 
 	// Check for the Manufacture-ID and adapt the Configuration
 	const uint32_t *lut = NULL;
 	if (Info.ManufactureID == ManufactureID_AdestoTechnologies)
 	{
-		DebugPrint ("Found Adesto Flash\r\n");
-		// Unlock all sectors
-		UnprotectAll_Adesto (base);
-
-		// Switch the configuration according to the configured memory-type
-		uint8_t Status = 0;
-		switch (MemType)
-		{
-			case MemType_OctaSPI_DDR:
-				// Enter Octal-Mode with DDR.
-				Status = 0x88;
-				lut = LUT_OctaSPI_DDR;
-				break;
-			case MemType_OctaSPI:
-				Status = 0x08;
-				lut = LUT_OctaSPI;
-				break;
-			case MemType_QuadSPI_DDR:
-				Status = 0x84;
-				lut = LUT_QuadSPI_DDR;
-				break;
-			case MemType_QuadSPI:
-				Status = 0x04;
-				lut = LUT_QuadSPI;
-				break;
-			case MemType_SPI:
-				// don't update the LUT, we are already in SPI-mode
-				Status = 0x00;
-				break;
-			default:
-				return LIBMEM_STATUS_ERROR;
-		}
-
-		// send write-enable 
-		status_t stat = WriteEnable (base, 0);
-		if (stat != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
-
-		// Write to status/control register 2 to switch to chosen memory-Type
-		stat = WriteRegister (base, 2, Status, LUT_WriteStatusReg_Adesto);
-		if (stat != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
-
-		stat = EnterQuadSPIMode (base, 0, LUT_EnterQPI);
-		if (stat != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
+		LibmemStatus_t res = Init_AdestoXiP (base, MemType, &lut);
+		if (res != LibmemStaus_Success)
+			return res;
 	}
 	else if (Info.ManufactureID == ManufactureID_Atmel)
 	{
 		DebugPrint ("Found Atmel Flash\r\n");
-		status_t stat = EnterQuadSPIMode (base, 0, LUT_EnterQPI_Atmel);
-		if (stat != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
-		lut = LUT_QuadSPI_3;
+		if (Info.Type == 0xA8)
+		{
+			LibmemStatus_t res = Init_AdestoXiP (base, MemType, &lut);
+			if (res != LibmemStaus_Success)
+				return res;
+		}
+		else
+		{
+			status_t stat = EnterQuadSPIMode (base, 0, LUT_EnterQPI_Atmel);
+			if (stat != kStatus_Success)
+				return LibmemStaus_Error;
+			lut = LUT_QuadSPI_3;
+		}
 	}
 	else if (Info.ManufactureID == ManufactureID_Nexcom)	// Winbond
 	{
@@ -529,63 +651,29 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle
 		// send write-enable 
 		status_t stat = WriteEnable (base, 0);
 		if (stat != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
+			return LibmemStaus_Error;
 
 		// Write to status/control register 2 to switch to enter quad-Mode
 		stat = WriteRegister (base, 0, 2, LUT_WriteConfigReg_Winbond);
 		if (stat != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
+			return LibmemStaus_Error;
 
 		lut = LUT_QuadSPI_3;
 	}
 	else if (Info.ManufactureID == ManufactureID_Macronix)
 	{
-		DebugPrint ("Found Macronix Flash\r\n");
-		uint8_t Status = 0;
-		switch (MemType)
-		{
-			case MemType_OctaSPI_DDR:
-				// Enter Octal-Mode with DDR.
-				Status = 2;
-				lut = LUT_OctaSPI_DDR_2;
-				break;
-			case MemType_OctaSPI:
-				Status = 1;
-//				lut = LUT_OctaSPI;
-				break;
-//			case MemType_QuadSPI_DDR:
-//				Status = 0x84;
-//				lut = LUT_QuadSPI_DDR;
-//				break;
-//			case MemType_QuadSPI:
-//				Status = 0x04;
-//				lut = LUT_QuadSPI;
-				break;
-			case MemType_SPI:
-				// don't update the LUT, we are already in SPI-mode
-				Status = 0x00;
-				break;
-			default:
-				return LIBMEM_STATUS_ERROR;
-		}
-
-		// send write-enable 
-		status_t stat = WriteEnable (base, 0);
-		if (stat != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
-		// Write to status/control register 2 to switch to chosen memory-Type
-		stat = WriteRegister (base, 0, Status, LUT_WriteConfigReg_Macronix);
-		if (stat != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
+		LibmemStatus_t res = Init_Macronix (base, MemType, &lut);
+		if (res != LibmemStaus_Success)
+			return res;
 	}
 	else if (Info.ManufactureID == ManufactureID_Lucent)
 	{
 		DebugPrint ("Found Lucent Flash\r\n");
 		status_t stat = EnterQuadSPIMode (base, 0, LUT_EnterQPI_ISSI);
 		if (stat != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
+			return LibmemStaus_Error;
 
-		lut = LUT_QuadSPI_2;
+		lut = LUT_QuadSPI_ISSI;
 	}
 	else
 	{
@@ -616,7 +704,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle
 	FLEXSPI_SoftwareReset (base);
 	status_t stat = WaitBusBusy (base);
 	if (stat != kStatus_Success)
-		return LIBMEM_STATUS_ERROR;
+		return LibmemStaus_Error;
 
 
 	static uint8_t write_buffer[QSPIFLASH_PAGE_SIZE];
@@ -641,6 +729,11 @@ static status_t UnprotectAll_Adesto (FLEXSPI_Type *base)
 	return WaitBusBusy (base);
 }
 
+/** ReadJEDEC
+Read the JEDEC Device informations
+@param base The Flex-SPI-base to use
+@param Info The read Device informations from the flash memory
+@return status_t Status of the Operation - kStatus_Success when successfully */
 static status_t ReadJEDEC (FLEXSPI_Type *base, struct DeviceInfo *Info)
 {
 	uint8_t Identification[16] = { 0U };
@@ -670,6 +763,7 @@ static status_t ReadJEDEC (FLEXSPI_Type *base, struct DeviceInfo *Info)
 
 		Info->ManufactureID = (enum SerialFlash_ManufactureID)(((i+1)<<8) | Identification[i]);
 		Info->Type          = Identification[i+1];
+		Info->Capacity      = (enum Capacity)Identification[i+2];
 		switch (Info->ManufactureID)
 		{
 			case ManufactureID_AdestoTechnologies:
@@ -693,14 +787,18 @@ static status_t ReadJEDEC (FLEXSPI_Type *base, struct DeviceInfo *Info)
 				Info->Capacity = (enum Capacity)(Identification[i+2] & 0x1F);
 				break;
 			case ManufactureID_Atmel:
-				if (Info->Type == 0x89)	// AT25SF128A
+				switch (Info->Type)
 				{
-					Info->Capacity = Capacity_128MBit;
-					break;
+					case  0x89:	// AT25SF128A
+						Info->Capacity = Capacity_128MBit;
+						break;
+					case  0xA8:	// ATXP064
+						Info->Capacity = Capacity_64MBit;
+						break;
 				}
-				// fall through
+				break;
 			default:
-				Info->Capacity = (enum Capacity)Identification[i+2];
+				break;
 		}
 	}
 
@@ -836,19 +934,19 @@ static status_t EraseChip (FLEXSPI_Type *base)
 Erase a sector of the Flash-Memory
 @param h Handle to the Flash-Driver
 @param si Information about the sector which should be erased
-@return static int LIBMEM_STATUS_SUCCESS when the erase operation was successfully, otherwise LIBMEM_STATUS_ERROR */
+@return static int LibmemStaus_Success when the erase operation was successfully, otherwise LibmemStaus_Error */
 static int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 {
 	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
 	uint32_t SectorAddr = libmem_CalculateOffset (base, (uint32_t)si->start);
 	if (SectorAddr == UINT32_MAX)
-		return LIBMEM_STATUS_ERROR;
+		return LibmemStaus_Error;
 
 	DebugPrintf ("EraseSector at 0x%x, size: %d\r\n", SectorAddr, si->size);
 
 	status_t status = WriteEnable (base, SectorAddr);
 	if (status != kStatus_Success)
-		return LIBMEM_STATUS_ERROR;
+		return LibmemStaus_Error;
 
 	flexspi_transfer_t flashXfer;
 	flashXfer.deviceAddress = SectorAddr;
@@ -859,13 +957,13 @@ static int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 	status = FLEXSPI_TransferBlocking (base, &flashXfer);
 
 	if (status != kStatus_Success)
-		return LIBMEM_STATUS_ERROR;
+		return LibmemStaus_Error;
 
 	status = WaitBusBusy (base);
 	if (status != kStatus_Success)
-		return LIBMEM_STATUS_ERROR;
+		return LibmemStaus_Error;
 
-	return LIBMEM_STATUS_SUCCESS;
+	return LibmemStaus_Success;
 }
 
 /** ProgramPage:
@@ -873,20 +971,20 @@ Write Data to a Flash-Page
 @param h Handle to the Flash-Driver
 @param Destination Address to write the Data to. This Address is in the Address-Range of the Controller
 @param Source Address of the Array with the Data to write
-@return static int LIBMEM_STATUS_SUCCESS when the write operation was successfully, otherwise LIBMEM_STATUS_ERROR */
+@return static int LibmemStaus_Success when the write operation was successfully, otherwise LibmemStaus_Error */
 static int ProgramPage (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr)
 {
 	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
 	uint32_t DeviceAddress = libmem_CalculateOffset (base, (uint32_t)dest_addr);
 	if (DeviceAddress == UINT32_MAX)
-		return LIBMEM_STATUS_ERROR;
+		return LibmemStaus_Error;
 
 	DebugPrintf ("ProgramPage at 0x%X\r\n", DeviceAddress);
 
 	// Write enable
 	status_t status = WriteEnable (base, DeviceAddress);
 	if (status != kStatus_Success)
-		return LIBMEM_STATUS_ERROR;
+		return LibmemStaus_Error;
 
 	// Prepare page program command
 	flexspi_transfer_t flashXfer;
@@ -899,13 +997,13 @@ static int ProgramPage (libmem_driver_handle_t *h, uint8_t *dest_addr, const uin
 	flashXfer.dataSize      = QSPIFLASH_PAGE_SIZE;
 	status = FLEXSPI_TransferBlocking (base, &flashXfer);
 	if (status != kStatus_Success)
-		return LIBMEM_STATUS_ERROR;
+		return LibmemStaus_Error;
 
 	status = WaitBusBusy (base);
 	if (status != kStatus_Success)
-		return LIBMEM_STATUS_ERROR;
+		return LibmemStaus_Error;
 
-	return LIBMEM_STATUS_SUCCESS;
+	return LibmemStaus_Success;
 }
 
 /** libmem_ProgramPage:
@@ -952,9 +1050,10 @@ The LIBMEM driver's read extended function.
 @return int The LIBMEM status result */
 static int libmem_Read (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
 {
+	(void)h;
 	if (size)
 		memcpy (dest, src, size);
-	return LIBMEM_STATUS_SUCCESS;
+	return LibmemStaus_Success;
 }
 
 /** libmem_CRC32:
@@ -966,6 +1065,7 @@ The LIBMEM driver's crc32 extended function.
 @return uint32_t The computed CRC-32 value. */
 static uint32_t libmem_CRC32 (libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc)
 {
+	(void)h;
 	crc = libmem_crc32_direct (start, size, crc);
 	return crc;
 }

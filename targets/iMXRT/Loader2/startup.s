@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2018 Rowley Associates Limited.                      *
+ * Copyright (c) 2018 Rowley Associates Limited.                             *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
@@ -192,155 +192,155 @@ ISR_HANDLER2 GPIO4_Combined_0_15
 ISR_HANDLER2 GPIO4_Combined_16_31
 ISR_HANDLER2 GPIO5_Combined_0_15
 ISR_HANDLER2 GPIO5_Combined_16_31
-ISR_HANDLER2 FLEXIO1                              
-ISR_HANDLER2 FLEXIO2                              
-ISR_HANDLER2 WDOG1                                
-ISR_HANDLER2 RTWDOG                               
-ISR_HANDLER2 EWM                                  
-ISR_HANDLER2 CCM_1                                
-ISR_HANDLER2 CCM_2                                
-ISR_HANDLER2 GPC                                  
-ISR_HANDLER2 SRC                                  
-ISR_RESERVED                          
-ISR_HANDLER2 GPT1                                 
-ISR_HANDLER2 GPT2                                 
-ISR_HANDLER2 PWM1_0                               
-ISR_HANDLER2 PWM1_1                               
-ISR_HANDLER2 PWM1_2                               
-ISR_HANDLER2 PWM1_3                               
-ISR_HANDLER2 PWM1_FAULT                           
-ISR_RESERVED                          
-ISR_HANDLER2 FLEXSPI                              
-ISR_HANDLER2 SEMC                                 
-ISR_HANDLER2 USDHC1                               
-ISR_HANDLER2 USDHC2                               
-ISR_HANDLER2 USB_OTG2                             
-ISR_HANDLER2 USB_OTG1                             
-ISR_HANDLER2 ENET                                 
-ISR_HANDLER2 ENET_1588_Timer                      
-ISR_HANDLER2 XBAR1_IRQ_0_1                        
-ISR_HANDLER2 XBAR1_IRQ_2_3                        
-ISR_HANDLER2 ADC_ETC_IRQ0                         
-ISR_HANDLER2 ADC_ETC_IRQ1                         
-ISR_HANDLER2 ADC_ETC_IRQ2                         
-ISR_HANDLER2 ADC_ETC_ERROR_IRQ                    
-ISR_HANDLER2 PIT                                  
-ISR_HANDLER2 ACMP1                                
-ISR_HANDLER2 ACMP2                                
-ISR_HANDLER2 ACMP3                                
-ISR_HANDLER2 ACMP4                                
-ISR_RESERVED                          
-ISR_RESERVED                         
-ISR_HANDLER2 ENC1                                 
-ISR_HANDLER2 ENC2                                 
-ISR_HANDLER2 ENC3                                 
-ISR_HANDLER2 ENC4                                 
-ISR_HANDLER2 TMR1                                 
-ISR_HANDLER2 TMR2                                 
-ISR_HANDLER2 TMR3                                 
-ISR_HANDLER2 TMR4                                 
-ISR_HANDLER2 PWM2_0                               
-ISR_HANDLER2 PWM2_1                               
-ISR_HANDLER2 PWM2_2                               
-ISR_HANDLER2 PWM2_3                               
-ISR_HANDLER2 PWM2_FAULT                           
-ISR_HANDLER2 PWM3_0                               
-ISR_HANDLER2 PWM3_1                               
-ISR_HANDLER2 PWM3_2                               
-ISR_HANDLER2 PWM3_3                               
-ISR_HANDLER2 PWM3_FAULT                           
-ISR_HANDLER2 PWM4_0                               
-ISR_HANDLER2 PWM4_1                               
-ISR_HANDLER2 PWM4_2                               
-ISR_HANDLER2 PWM4_3                               
-ISR_HANDLER2 PWM4_FAULT                           
-ISR_RESERVED                          
-ISR_RESERVED                         
-ISR_RESERVED                          
-ISR_RESERVED                          
-ISR_RESERVED                          
-ISR_RESERVED                          
-ISR_HANDLER2 SJC_ARM_DEBUG_IRQHandler                        
-ISR_HANDLER2 NMI_WAKEUP_IRQHandler                           
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
+ISR_HANDLER2 FLEXIO1
+ISR_HANDLER2 FLEXIO2
+ISR_HANDLER2 WDOG1
+ISR_HANDLER2 RTWDOG
+ISR_HANDLER2 EWM
+ISR_HANDLER2 CCM_1
+ISR_HANDLER2 CCM_2
+ISR_HANDLER2 GPC
+ISR_HANDLER2 SRC
+ISR_RESERVED
+ISR_HANDLER2 GPT1
+ISR_HANDLER2 GPT2
+ISR_HANDLER2 PWM1_0
+ISR_HANDLER2 PWM1_1
+ISR_HANDLER2 PWM1_2
+ISR_HANDLER2 PWM1_3
+ISR_HANDLER2 PWM1_FAULT
+ISR_RESERVED
+ISR_HANDLER2 FLEXSPI
+ISR_HANDLER2 SEMC
+ISR_HANDLER2 USDHC1
+ISR_HANDLER2 USDHC2
+ISR_HANDLER2 USB_OTG2
+ISR_HANDLER2 USB_OTG1
+ISR_HANDLER2 ENET
+ISR_HANDLER2 ENET_1588_Timer
+ISR_HANDLER2 XBAR1_IRQ_0_1
+ISR_HANDLER2 XBAR1_IRQ_2_3
+ISR_HANDLER2 ADC_ETC_IRQ0
+ISR_HANDLER2 ADC_ETC_IRQ1
+ISR_HANDLER2 ADC_ETC_IRQ2
+ISR_HANDLER2 ADC_ETC_ERROR_IRQ
+ISR_HANDLER2 PIT
+ISR_HANDLER2 ACMP1
+ISR_HANDLER2 ACMP2
+ISR_HANDLER2 ACMP3
+ISR_HANDLER2 ACMP4
+ISR_RESERVED
+ISR_RESERVED
+ISR_HANDLER2 ENC1
+ISR_HANDLER2 ENC2
+ISR_HANDLER2 ENC3
+ISR_HANDLER2 ENC4
+ISR_HANDLER2 TMR1
+ISR_HANDLER2 TMR2
+ISR_HANDLER2 TMR3
+ISR_HANDLER2 TMR4
+ISR_HANDLER2 PWM2_0
+ISR_HANDLER2 PWM2_1
+ISR_HANDLER2 PWM2_2
+ISR_HANDLER2 PWM2_3
+ISR_HANDLER2 PWM2_FAULT
+ISR_HANDLER2 PWM3_0
+ISR_HANDLER2 PWM3_1
+ISR_HANDLER2 PWM3_2
+ISR_HANDLER2 PWM3_3
+ISR_HANDLER2 PWM3_FAULT
+ISR_HANDLER2 PWM4_0
+ISR_HANDLER2 PWM4_1
+ISR_HANDLER2 PWM4_2
+ISR_HANDLER2 PWM4_3
+ISR_HANDLER2 PWM4_FAULT
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_HANDLER2 SJC_ARM_DEBUG_IRQHandler
+ISR_HANDLER2 NMI_WAKEUP_IRQHandler
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
+ISR_RESERVED
 .long 0xFFFFFFFF   /*  Reserved for user TRIM value*/
 
   .section .vectors, "ax"

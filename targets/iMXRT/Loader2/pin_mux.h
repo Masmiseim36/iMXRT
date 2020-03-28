@@ -1,5 +1,6 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019  Markus Klein
+Copyright (C) 2019-2020  Markus Klein
+https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -37,6 +38,8 @@ enum BOARD_PinConfiguratiomn
 void BOARD_InitUARTPins    (void);
 void BOARD_InitQuadSPIPins (void);
 void BOARD_InitOctaSPIPins (void);
+
+void BOARD_PerformJEDECReset (void);
 
 #if defined FLEXSPI2
 	void BOARD_InitQuadSPI2Pins (void);

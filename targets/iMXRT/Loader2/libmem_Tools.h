@@ -1,5 +1,6 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019  Markus Klein
+Copyright (C) 2019-2020  Markus Klein
+https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -142,7 +143,7 @@ enum SerialFlash_ManufactureID
 	ManufactureID_Zilog                        = 0x100 | 0x1A,
 	ManufactureID_Eurotechnique                = 0x100 | 0x9B,
 	ManufactureID_Mitsubishi                   = 0x100 | 0x1C,
-	ManufactureID_Lucent                       = 0x100 | 0x9D,	// AT&T
+	ManufactureID_Lucent                       = 0x100 | 0x9D,	// AT&T - ISSI?
 	ManufactureID_Exel                         = 0x100 | 0x9E,	// 30
 	ManufactureID_Atmel                        = 0x100 | 0x1F,	// Bought by Adesto; October 01, 2012
 	ManufactureID_SGSThomson                   = 0x100 | 0x20,

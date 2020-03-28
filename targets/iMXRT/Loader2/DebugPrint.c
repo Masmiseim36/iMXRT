@@ -1,5 +1,6 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019  Markus Klein
+Copyright (C) 2019-2020  Markus Klein
+https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -27,7 +28,7 @@ OF SUCH DAMAGE. */
 #include "fsl_clock.h"
 #include "fsl_lpuart.h"
 
-#define ENABLE_DEBUG_PRINT 1
+#define ENABLE_DEBUG_PRINT 0
 
 #if defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0
 	static LPUART_Type * const uart [] = LPUART_BASE_PTRS;

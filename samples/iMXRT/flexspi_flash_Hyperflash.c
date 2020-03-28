@@ -32,15 +32,25 @@
  */
 
 #include "flexspi_flash.h"
-#if defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0 && defined XIP_BOOT_HYPERFLASH
+#if defined XIP_BOOT_HYPERFLASH	/* Is defined in the iMXRT CPU Support package depended on the selected placement */
 
 /*******************************************************************************
  * Code
  ******************************************************************************/
+#if defined(__CC_ARM) || defined(__GNUC__) || defined __SES_ARM || defined __CROSSWORKS_ARM
+	__attribute__((section(".boot_hdr.conf")))
+#elif defined(__ICCARM__)
+	#pragma section="app_image"
+	#pragma location=".boot_hdr.conf"
+	__root
+#else
+	#error "Unknown Compiler"
+#endif
+
 //
 // HyperFlash boot header
 //
-__attribute__((section(".boot_hdr.conf"))) const flexspi_nor_config_t FlashBootHeader =
+const flexspi_nor_config_t FlashBootHeader =
 {
 	.memConfig =
 	{
@@ -60,16 +70,44 @@ __attribute__((section(".boot_hdr.conf"))) const flexspi_nor_config_t FlashBootH
 //		.busyBitPolarity		= 1,        //1 – busy bit is 0 if device is busy
 		.lookupTable =
 		{
-			// Configure LUT for read
-			FLEXSPI_LUT_SEQ(CMD_DDR,   FLEXSPI_8PAD, 0xA0, RADDR_DDR, FLEXSPI_8PAD, 0x18),
-			FLEXSPI_LUT_SEQ(CADDR_DDR, FLEXSPI_8PAD, 0x10, DUMMY_DDR, FLEXSPI_8PAD, 0x06),
-			FLEXSPI_LUT_SEQ(READ_DDR,  FLEXSPI_8PAD, 0x04, STOP,      FLEXSPI_1PAD, 0x0),
+			// (0) Configure LUT for read
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0xA0, RADDR_DDR,      FLEXSPI_8PAD, 0x18),
+			FLEXSPI_LUT_SEQ (CADDR_DDR, FLEXSPI_8PAD, 0x10, DUMMY_DDR,      FLEXSPI_8PAD, 0x06),
+			FLEXSPI_LUT_SEQ (READ_DDR,  FLEXSPI_8PAD, 0x04, STOP,           FLEXSPI_1PAD, 0x0),
+			0,
+			// (1) Read Status
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0x00),
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0xAA), // ADDR 0x555 --> 0x555/8 = 0xAA
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0x05), //            --> 0x555%8 = 0x05
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0x70), // DATA 0x70
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0xA0, RADDR_DDR,      FLEXSPI_8PAD, 0x18),
+			FLEXSPI_LUT_SEQ (CADDR_DDR, FLEXSPI_8PAD, 0x10, DUMMY_RWDS_DDR, FLEXSPI_8PAD, 0x0B),
+			FLEXSPI_LUT_SEQ (READ_DDR,  FLEXSPI_8PAD, 0x04, STOP,           FLEXSPI_1PAD, 0x0),
+			0,
+			// (3) Write Enable
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0x00),
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0xAA), // ADDR 0x555 --> 0x555/8 = 0xAA
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0x05), //            --> 0x555%8 = 0x05
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0xAA), // DATA 0xAA
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0x00),
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0x55), // ADDR 0x2AA --> 0x2AA/8 = 0x55
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0x02), //            --> 0x2AA%8 = 0x02
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0x55), // Data 0x55
+			// (5) Program Page
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0x00),
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0xAA), // ADDR 0x555 --> 0x555/8 = 0xAA
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0x05), //            --> 0x555%8 = 0x05
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, CMD_DDR,        FLEXSPI_8PAD, 0xA0), // DATA 0xA0
+			FLEXSPI_LUT_SEQ (CMD_DDR,   FLEXSPI_8PAD, 0x00, RADDR_DDR,      FLEXSPI_8PAD, 0x18),
+			FLEXSPI_LUT_SEQ (CADDR_DDR, FLEXSPI_8PAD, 0x10, WRITE_DDR,      FLEXSPI_8PAD, 0x80),
+			0,
+			0
 		},
 	},
-	.pageSize				= 512,
-	.sectorSize				= 256 * 1024,
-	.blockSize				= 256 * 1024,
-	.isUniformBlockSize		= true,
+	.pageSize           = 512,
+	.sectorSize         = 256 * 1024,
+	.blockSize          = 256 * 1024,
+	.isUniformBlockSize = true,
 };
 
-#endif	// defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0 && defined XIP_BOOT_HYPERFLASH
+#endif	// #if defined XIP_BOOT_HYPERFLASH	/* is defined by Rowley Crossworks from the iMXRT BXP */

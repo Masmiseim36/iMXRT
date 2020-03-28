@@ -32,15 +32,25 @@
  */
 
 #include "flexspi_flash.h"
-#if defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0 && defined XIP_BOOT_QSPI
+#if defined XIP_BOOT_QSPI	/* Is defined in the iMXRT CPU Support package depended on the selected placement */
 
 /*******************************************************************************
  * Code
  ******************************************************************************/
+#if defined(__CC_ARM) || defined(__GNUC__) || defined __SES_ARM || defined __CROSSWORKS_ARM
+	__attribute__((section(".boot_hdr.conf")))
+#elif defined(__ICCARM__)
+	#pragma section="app_image"
+	#pragma location=".conf"
+	__root
+#else
+	#error "Unknown Compiler"
+#endif
+
 //
 // QSPI boot header
 //
-__attribute__((section(".boot_hdr.conf"))) const flexspi_nor_config_t qspiflash_config =
+const flexspi_nor_config_t FlashBootHeader =
 {
 	.memConfig =
 	{
@@ -55,9 +65,26 @@ __attribute__((section(".boot_hdr.conf"))) const flexspi_nor_config_t qspiflash_
 		.sflashA1Size     = 16u * 1024u * 1024u,
 		.lookupTable =
 		{
-			// Read LUTs
-			FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD, 0xEB, RADDR_SDR, FLEXSPI_4PAD, 0x18),
-			FLEXSPI_LUT_SEQ(DUMMY_SDR, FLEXSPI_4PAD, 0x06, READ_SDR, FLEXSPI_4PAD, 0x04),
+			// (0) Read Array
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0xEB, RADDR_SDR, FLEXSPI_4PAD, 0x18),
+			FLEXSPI_LUT_SEQ (DUMMY_SDR, FLEXSPI_4PAD, 0x06, READ_SDR,  FLEXSPI_4PAD, 0x04),
+			0,
+			0,
+			// (1) Read Status
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x05, RADDR_SDR, FLEXSPI_1PAD, 0x04),
+			0,
+			0,
+			0,
+			// (3) Write Enable  
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x06, STOP,      FLEXSPI_1PAD, 0),
+			0,
+			0,
+			0,
+			// (4) Write Status/Control Registers
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x01, WRITE_SDR, FLEXSPI_1PAD, 0x04),
+			0,
+			0,
+			0,
 		},
 	},
 	.pageSize           = 256u,
@@ -66,4 +93,4 @@ __attribute__((section(".boot_hdr.conf"))) const flexspi_nor_config_t qspiflash_
 	.isUniformBlockSize = false,
 	};
 
-	#endif	// defined XIP_BOOT_HEADER_ENABLE && XIP_BOOT_HEADER_ENABLE != 0 && defined XIP_BOOT_QSPI
+	#endif // XIP_BOOT_QSPI

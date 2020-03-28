@@ -1,5 +1,6 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019  Markus Klein
+Copyright (C) 2019-2020  Markus Klein
+https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -83,7 +84,9 @@ int main (uint32_t flags, uint32_t param)
 		CLOCK_InitUsb1Pll   (&ConfigUsbPll);
 	#endif
 	CLOCK_EnableClock   (kCLOCK_Iomuxc);
-	SCB_DisableDCache   ();
+	#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
+		SCB_DisableDCache   ();
+	#endif
 	ConfigUart          ();
 	DebugPrint ("Hello iMXRT Loader\r\n");
 
@@ -170,7 +173,7 @@ int main (uint32_t flags, uint32_t param)
 	else
 	{
 		char ErrorString[64];
-		sprintf (ErrorString, "Error %s occurred\r\n", Libmem_GetErrorString (res));
+		sprintf (ErrorString, "Error '%s' occurred\r\n", Libmem_GetErrorString (res));
 		DebugPrint (ErrorString);
 		libmem_rpc_loader_exit (res, ErrorString);
 	}
@@ -182,33 +185,77 @@ int main (uint32_t flags, uint32_t param)
 
 enum LibmemStatus Init_Libmem (libmem_driver_handle_t *handle, enum eMemoryType MemType, FLEXSPI_Type *base)
 {
+	enum LibmemStatus status;
+	uint32_t Trials = 0;
+
 	switch (MemType)
 	{
 		case MemType_Hyperflash:
-			// Init for Hyperflash
-			DebugPrint ("Init Loader for Hyperflash\r\n");
-			InitOctaSPIPins (base);
-			return Libmem_InitializeDriver_Hyperflash (handle, base);
+			do
+			{
+				// Init for Hyperflash
+				DebugPrint ("Init Loader for Hyperflash\r\n");
+				InitOctaSPIPins (base);
+				status = Libmem_InitializeDriver_Hyperflash (handle, base);
+				if (status != LibmemStaus_Success)
+				{
+					Trials ++;
+					BOARD_PerformJEDECReset ();
+				}
+			}
+			while (status != LibmemStaus_Success && Trials < 3);
+			break;
 		case MemType_OctaSPI_DDR:
 		case MemType_OctaSPI:
-			// Init for Octal-SPI with DDR
-			DebugPrint ("Init Loader for Octal-SPI (DDR)\r\n");
-			InitOctaSPIPins (base);
-			return Libmem_InitializeDriver_xSPI (handle, base, MemType);
+			do
+			{
+				// Init for Octal-SPI with DDR
+				DebugPrint ("Init Loader for Octal-SPI (DDR)\r\n");
+				InitOctaSPIPins (base);
+				status =  Libmem_InitializeDriver_xSPI (handle, base, MemType);
+				if (status != LibmemStaus_Success)
+				{
+					Trials ++;
+					BOARD_PerformJEDECReset ();
+				}
+			}
+			while (status != LibmemStaus_Success && Trials < 3);
+			break;
 		case MemType_QuadSPI_DDR:
 //		case MemType_QuadSPI:
-			// Init for Octal-SPI with DDR
-			DebugPrint ("Init Loader for Quad-SPI-DDR\r\n");
-			InitQuadSPIPins (base);
-			return Libmem_InitializeDriver_xSPI (handle, base, MemType);
+			do
+			{
+				// Init for Octal-SPI with DDR
+				DebugPrint ("Init Loader for Quad-SPI-DDR\r\n");
+				InitQuadSPIPins (base);
+				status =  Libmem_InitializeDriver_xSPI (handle, base, MemType);
+				if (status != LibmemStaus_Success)
+				{
+					Trials ++;
+					BOARD_PerformJEDECReset ();
+				}
+			}
+			while (status != LibmemStaus_Success && Trials < 3);
+			break;
 		case MemType_QuadSPI:
-			// Init for Quad-SPI
-			DebugPrint ("Init Loader for Quad-SPI\r\n");
-			InitQuadSPIPins (base);
-			return Libmem_InitializeDriver_xSPI (handle, base, MemType);
+			do
+			{
+				// Init for Quad-SPI
+				DebugPrint ("Init Loader for Quad-SPI\r\n");
+				InitQuadSPIPins (base);
+				status =  Libmem_InitializeDriver_xSPI (handle, base, MemType);
+				if (status != LibmemStaus_Success)
+				{
+					Trials ++;
+					BOARD_PerformJEDECReset ();
+				}
+			}
+			while (status != LibmemStaus_Success && Trials < 3);
+			break;
 		default:
 			return LibmemStatus_InvalidMemoryType;
 	}
+	return status;
 }
 
 void InitOctaSPIPins (FLEXSPI_Type *base)
