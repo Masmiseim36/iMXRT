@@ -42,8 +42,8 @@
 		<ProgramSection alignment="4"      load="No"  name=".tbss" />
 		<ProgramSection alignment="4"      load="No"  name=".tdata_run" />
 		<ProgramSection alignment="4"      load="No"  name=".non_init" />
-		<ProgramSection alignment="4"      load="No"  name=".heap" size="__HEAPSIZE__" />
-		<ProgramSection alignment="8"      load="No"  name=".stack" size="__STACKSIZE__" />
+		<ProgramSection alignment="4"      load="No"  name=".heap"          size="__HEAPSIZE__" />
+		<ProgramSection alignment="8"      load="No"  name=".stack"         size="__STACKSIZE__" />
 		<ProgramSection alignment="8"      load="No"  name=".stack_process" size="__STACKSIZE_PROCESS__" />
 	</MemorySegment>
 

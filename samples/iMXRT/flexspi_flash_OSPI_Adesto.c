@@ -41,7 +41,7 @@
   */
 
 #include "flexspi_flash.h"
-#if defined XIP_BOOT_OCTASPI	/* Is defined in the iMXRT CPU Support package depended on the selected placement */
+#if defined XIP_BOOT_OCTASPI	// Is defined in the iMXRT CPU Support package depended on the selected placement
 
 /*******************************************************************************
  * Code
@@ -78,7 +78,7 @@ const flexspi_nor_config_t FlashBootHeader =
 		.controllerMiscOption = (1u << kFlexSpiMiscOffset_DdrModeEnable) | (1u << kFlexSpiMiscOffset_SafeConfigFreqEnable),
 		.deviceType           = kFlexSpiDeviceType_SerialNOR, // serial NOR
 		.sflashPadType        = kSerialFlash_8Pads,
-		.serialClkFreq        = kFlexSpiSerialClk_80MHz,
+		.serialClkFreq        = kFlexSpiSerialClk_133MHz,
 		.lutCustomSeqEnable   = 0, // Use pre-defined LUT sequence index and number
 		.sflashA1Size         = 8 * 1024U * 1024U,
 		.dataValidTime        = {[0] = 20}, //2ns from DQS to data

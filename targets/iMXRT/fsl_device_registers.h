@@ -15,7 +15,21 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
- #if (defined(CPU_MIMXRT1011CAE4A) || defined(CPU_MIMXRT1011DAE5A))
+ #if (defined(CPU_MIMXRT633SFAWBR) || defined(CPU_MIMXRT633SFFOB) || defined(CPU_MIMXRT633SFVKB))
+	#define MIMXRT633S_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT633S.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT633S_features.h"
+
+#elif (defined(CPU_MIMXRT685SFAWBR_cm33) || defined(CPU_MIMXRT685SFFOB_cm33) || defined(CPU_MIMXRT685SFVKB_cm33))
+	#define MIMXRT685S_cm33_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT685S_cm33.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT685S_cm33_features.h"
+
+#elif (defined(CPU_MIMXRT1011CAE4A) || defined(CPU_MIMXRT1011DAE5A))
 	#define MIMXRT1011_SERIES
 	/* CMSIS-style register definitions */
 	#include "MIMXRT1011.h"

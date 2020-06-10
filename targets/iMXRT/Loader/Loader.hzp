@@ -1,5 +1,5 @@
 <!DOCTYPE CrossStudio_Project_File>
-<solution Name="Loader" target="8" version="2">
+<solution Name="iMXRT Loader(FLM)" target="8" version="2">
   <configuration
     Name="MIMXRT1011_QuadSPI_4KB_SEC Release"
     inherited_configurations="MIMXRT1011_QuadSPI_4KB_SEC;Release" />

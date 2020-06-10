@@ -7,7 +7,6 @@
 
 #include "fsl_common.h"
 #include "board.h"
-#include "fsl_iomuxc.h"
 
 /*******************************************************************************
  * Code
@@ -29,6 +28,7 @@ void BOARD_ConfigMPU (void)
     }
 #endif
 
+    #if defined ARM_MPU_ARMV7_H
     /* Disable MPU */
     ARM_MPU_Disable();
 
@@ -130,7 +130,12 @@ void BOARD_ConfigMPU (void)
 
     /* Enable MPU */
     ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);
-
+    #elif defined ARM_MPU_ARMV8_H
+    	#warning " MPU for ARMv8 Architecture not supported"
+    // ToDo
+    #else
+    	#error "unknown MPU type"
+    #endif
     /* Enable I cache and D cache */
 #if defined(__DCACHE_PRESENT) && __DCACHE_PRESENT
     SCB_EnableDCache();
