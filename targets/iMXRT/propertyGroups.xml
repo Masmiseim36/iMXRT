@@ -151,6 +151,11 @@
   </group>
 
   <group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="TCM" >
+    <groupEntry name="User defined">
+      <property name="linker_section_placement_file" value=""/>
+      <property name="arm_target_loader_applicable_loaders" value=""/>
+      <property name="arm_target_loader_default_loader" value=""/>
+    </groupEntry>
     <groupEntry name="TCM">
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_tcm.xml" />
       <property name="linker_section_placement_macros" value="" />
