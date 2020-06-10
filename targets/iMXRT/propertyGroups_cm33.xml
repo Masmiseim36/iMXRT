@@ -1,0 +1,86 @@
+<!DOCTYPE CrossStudio_Group_Values>
+<propertyGroups>
+	<group short="Target Processor" group="Build Options" long="Select one Controller (CM33)" name="Target" default="MIMXRT633SFxxxR" >  
+		<groupEntry name="MIMXRT633SFAWBR" aka="MIMXRT633SFxxxR" family="iMXRT600">
+			<property name="macros" value="DeviceName=MIMXRT633S;Family=iMXRT600" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT600.xml" />
+			<cdefine name="CPU_MIMXRT633SFAWBR"/>
+		</groupEntry>
+		<groupEntry name="MIMXRT633SFFOB" aka="MIMXRT633SxxxB" family="iMXRT600">
+			<property name="macros" value="DeviceName=MIMXRT633S;Family=iMXRT600" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT600.xml" />
+			<cdefine name="CPU_MIMXRT633SFFOB"/>
+		</groupEntry>
+		<groupEntry name="MIMXRT633SFVKB" aka="MIMXRT633SxxxB" family="iMXRT600">
+			<property name="macros" value="DeviceName=MIMXRT633S;Family=iMXRT600" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT600.xml" />
+			<cdefine name="CPU_MIMXRT633SFVKB"/>
+		</groupEntry>
+
+		<groupEntry name="MIMXRT685SFAWBR_cm33" aka="MIMXRT685SFxxxR_cm33" family="iMXRT600">
+			<property name="macros" value="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT600.xml" />
+			<cdefine name="CPU_MIMXRT685SFAWBR_cm33"/>
+		</groupEntry>
+		<groupEntry name="MIMXRT685SFFOB_cm33" aka="MIMXRT685SxxxB_cm33" family="iMXRT600">
+			<property name="macros" value="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT600.xml" />
+			<cdefine name="CPU_MIMXRT685SFFOB_cm33"/>
+		</groupEntry>
+		<groupEntry name="MIMXRT685SFVKB_cm33" aka="MIMXRT685SxxxB_cm33" family="iMXRT600">
+			<property name="macros" value="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT600.xml" />
+			<cdefine name="CPU_MIMXRT685SFVKB_cm33"/>
+		</groupEntry>
+	</group>
+
+	<group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="TCM" >
+		<groupEntry name="SRAM">
+			<property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/ram_placement.xml" />
+			<property name="linker_section_placement_macros" value="RAM_NAME=SRAM" />
+			<property name="arm_target_loader_applicable_loaders" value=""/>
+			<property name="arm_target_loader_default_loader" value=""/>
+			<property name="target_reset_script" value="Reset()" />
+		</groupEntry>
+		<groupEntry name="FlexSPI (HYPER)">
+			<property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/flash_placement.xml" />
+			<property name="linker_section_placement_macros" value="" />
+			<property name="arm_target_loader_applicable_loaders" value="Flash" />
+			<property name="arm_target_loader_default_loader" value="Flash" />
+			<property name="arm_target_loader_parameter" value="1" configuration="Flash" />
+			<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family).elf" configuration="Flash" />
+			<property name="target_reset_script" value="Reset()" />
+			<cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
+			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
+			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
+			<cdefine name="XIP_BOOT_HYPERFLASH" value="1"/>
+			<cdefine name="XIP_BOOT_FLEXSPI1" value="1"/>
+		</groupEntry>
+		<groupEntry name="FlexSPI (OctaSPI)">
+			<property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/flash_placement.xml" />
+			<property name="linker_section_placement_macros" value="" />
+			<property name="arm_target_loader_applicable_loaders" value="Flash" />
+			<property name="arm_target_loader_default_loader" value="Flash" />
+			<property name="arm_target_loader_parameter" value="2" configuration="Flash" />
+			<property name="target_reset_script" value="Reset()" />
+			<cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
+			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
+			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
+			<cdefine name="XIP_BOOT_OCTASPI" value="1"/>
+			<cdefine name="XIP_BOOT_FLEXSPI1" value="1"/>
+		</groupEntry>
+		<groupEntry name="FlexSPI (QuadSPI)">
+			<property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/flash_placement.xml" />
+			<property name="linker_section_placement_macros" value="" />
+			<property name="arm_target_loader_applicable_loaders" value="Flash" />
+			<property name="arm_target_loader_default_loader" value="Flash" />
+			<property name="arm_target_loader_parameter" value="5" configuration="Flash" />
+			<property name="target_reset_script" value="Reset()" />
+			<cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
+			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
+			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
+			<cdefine name="XIP_BOOT_QSPI" value="1"/>
+			<cdefine name="XIP_BOOT_FLEXSPI1" value="1"/>
+		</groupEntry>
+	</group>
+</propertyGroups>

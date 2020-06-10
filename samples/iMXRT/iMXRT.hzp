@@ -1,5 +1,5 @@
 <!DOCTYPE CrossStudio_Project_File>
-<solution Name="iMXRT" target="8" version="2">
+<solution Name="Sample: Flash Boot" target="8" version="2">
   <configuration Name="THUMB Debug" inherited_configurations="THUMB;Debug" />
   <configuration
     Name="THUMB"

@@ -12,15 +12,56 @@
 
 function Connect()
 {
+	var DeviceName = GetProjectPartName ();
+	TargetInterface.message ("## Connect to " + DeviceName);
+	switch (DeviceName)
+	{
+		case "MIMXRT1011":
+		case "MIMXRT1015":
+		case "MIMXRT1021":
+		case "MIMXRT1051":
+		case "MIMXRT1052":
+		case "MIMXRT1061":
+		case "MIMXRT1062":
+		case "MIMXRT1064":
+			// Do nothing
+			break;
+		default:
+			TargetInterface.message ("Connect - unknown Device: " + DeviceName);
+			break;
+	}
 }
 
 function Reset()
 {
-	TargetInterface.resetDebugInterface();
-	TargetInterface.resetAndStop(1000);
+//	TargetInterface.resetDebugInterface();
+
 	if (TargetInterface.implementation() == "crossworks_simulator")
 		return;
 
+	var DeviceName = GetProjectPartName ();
+	TargetInterface.message ("## Reset " + DeviceName);
+	switch (DeviceName)
+	{
+		case "MIMXRT1011":
+		case "MIMXRT1015":
+		case "MIMXRT1021":
+		case "MIMXRT1051":
+		case "MIMXRT1052":
+		case "MIMXRT1061":
+		case "MIMXRT1062":
+		case "MIMXRT1064":
+			TargetInterface.resetAndStop (1000);
+			DcDc_Init_10xx ();
+			break;
+		default:
+			TargetInterface.message ("Reset - unknown Device: " + DeviceName);
+			break;
+	}
+}
+
+function DcDc_Init_10xx ()
+{
 	ocotp_base = 0x401F4000;
 	ocotp_fuse_bank0_base = ocotp_base + 0x400;
 	dcdc_base = 0x40080000;
@@ -57,6 +98,10 @@ function Reset()
 	}
 }
 
+
+// This function is used to return the controller type as a string
+// we use it also to do some initializations as this function is called right before
+// writing the code to the controller
 function GetPartName()
 {    
 	var PART = "";
@@ -123,7 +168,7 @@ function Clock_Init ()
 	}
 }
 
-function ClockGate_EnableAll ()
+function ClockGate_EnableAll_10xx ()
 {
 	// Enable all clocks
 	TargetInterface.pokeUint32 (0x400FC068, 0xffffffff);	// CCM->CCGR0
@@ -139,7 +184,7 @@ function ClockGate_EnableAll ()
 function Clock_Init_1021 () 
 {
 	TargetInterface.message ("Clock_Init_1021");
-	ClockGate_EnableAll ();	// Enable all clocks
+	ClockGate_EnableAll_10xx ();	// Enable all clocks
 
 	// IPG_PODF: 2 divide by 3
 	TargetInterface.pokeUint32 (0x400FC014,0x000A8200);		// CCM->CBCDR
@@ -179,7 +224,7 @@ function Clock_Init_1021 ()
 function Clock_Init_105x () 
 {
 	TargetInterface.message ("Clock_Init_105x");
-	ClockGate_EnableAll ();	// Enable all clocks
+	ClockGate_EnableAll_10xx ();	// Enable all clocks
 
 	// PERCLK_PODF: 1 divide by 2
 	TargetInterface.pokeUint32 (0x400FC01C, 0x04900001);	// CCM->CSCMR1 
@@ -206,16 +251,16 @@ function Clock_Init_105x ()
 }
 
 
-function SDRAM_WaitIpCmdDone () 
+function SDRAM_WaitIpCmdDone (SEMC) 
 {
 	var reg;
 	do
 	{
-		reg = TargetInterface.peekUint32 (0x402F003C);
+		reg = TargetInterface.peekUint32 (SEMC + 0x3C);	// INTR - Interrupt Enable Register
 	}
 	while ((reg & 0x3) == 0);
 
-	TargetInterface.pokeUint32 (0x402F003C,0x00000003); // clear IPCMDERR and IPCMDDONE bits
+	TargetInterface.pokeUint32 (SEMC + 0x3C,0x00000003); // clear IPCMDERR and IPCMDDONE bits
 	TargetInterface.message ("SDRAM_WaitIpCmdDone");
 }
 
@@ -223,8 +268,33 @@ function SDRAM_Init ()
 {
 	var DeviceName = GetProjectPartName ();
 	TargetInterface.message ("SDRAM interface initialize for " + DeviceName);
+	switch (DeviceName)
+	{
+		case "MIMXRT1011":
+		case "MIMXRT1015":
+			TargetInterface.message ("SDRAM_Init: " + DeviceName - " has no memory interface");
+			break;
+		case "MIMXRT1021":
+		case "MIMXRT1051":
+		case "MIMXRT1052":
+		case "MIMXRT1061":
+		case "MIMXRT1062":
+		case "MIMXRT1064":
+			SDRAM_Init_10xx ();
+			break;
+		default:
+			TargetInterface.message ("SDRAM_Init - unknown Device: " + DeviceName);
+			return;
+	}
 
-	// Config IOMUX for SDRAM
+	TargetInterface.message ("SDRAM_Init - Done");
+}
+
+function SDRAM_Init_10xx ()
+{
+	var DeviceName = GetProjectPartName ();
+
+	// Configure IOMUX for SDRAM
 	TargetInterface.pokeUint32 (0x401F8014, 0x00000000); // EMC_00
 	TargetInterface.pokeUint32 (0x401F8018, 0x00000000); // EMC_01
 	TargetInterface.pokeUint32 (0x401F801C, 0x00000000); // EMC_02
@@ -320,53 +390,54 @@ function SDRAM_Init ()
 	TargetInterface.pokeUint32 (0x401F82A4, 0x000110F9); // EMC_40
 	TargetInterface.pokeUint32 (0x401F82A8, 0x000110F9); // EMC_41
 
-	// Config SDR Controller Registers
+	// Configure SDR Controller Registers
+	var SEMC = 0x402F0000;
 	TargetInterface.message ("SDR Controller Registers");
-	TargetInterface.pokeUint32 (0x402F0000, 0x10000004); // MCR
-	TargetInterface.pokeUint32 (0x402F0008, 0x00030524); // BMCR0
-	TargetInterface.pokeUint32 (0x402F000C, 0x06030524); // BMCR1
-	TargetInterface.pokeUint32 (0x402F0010, 0x8000001B); // BR0, 32MB
-	TargetInterface.pokeUint32 (0x402F0014, 0x8200001B); // BR1, 32MB
-	TargetInterface.pokeUint32 (0x402F0018, 0x8400001B); // BR2, 32MB
-	TargetInterface.pokeUint32 (0x402F001C, 0x8600001B); // BR3, 32MB
-	TargetInterface.pokeUint32 (0x402F0020, 0x90000021); // BR4,
-	TargetInterface.pokeUint32 (0x402F0024, 0xA0000019); // BR5,
-	TargetInterface.pokeUint32 (0x402F0028, 0xA8000017); // BR6,
-	TargetInterface.pokeUint32 (0x402F002C, 0xA900001B); // BR7,
-	TargetInterface.pokeUint32 (0x402F0030, 0x00000021); // BR8,
-	TargetInterface.pokeUint32 (0x402F0004, 0x000079A8); //IOCR,SEMC_CCSX0 as NOR CE, SEMC_CSX1 as PSRAM CE, SEMC_CSX2 as NAND CE, SEMC_CSX3 as DBI CE.
+	TargetInterface.pokeUint32 (SEMC + 0x00, 0x10000004); // MCR
+	TargetInterface.pokeUint32 (SEMC + 0x08, 0x00030524); // BMCR0
+	TargetInterface.pokeUint32 (SEMC + 0x0C, 0x06030524); // BMCR1
+	TargetInterface.pokeUint32 (SEMC + 0x10, 0x8000001B); // BR0 - Base Register 0 (For SDRAM CS0 device), 32MB --> 0x8000001D for 64MB
+	TargetInterface.pokeUint32 (SEMC + 0x14, 0x8200001B); // BR1, 32MB
+	TargetInterface.pokeUint32 (SEMC + 0x18, 0x8400001B); // BR2, 32MB
+	TargetInterface.pokeUint32 (SEMC + 0x1C, 0x8600001B); // BR3, 32MB
+	TargetInterface.pokeUint32 (SEMC + 0x20, 0x90000021); // BR4,
+	TargetInterface.pokeUint32 (SEMC + 0x24, 0xA0000019); // BR5,
+	TargetInterface.pokeUint32 (SEMC + 0x28, 0xA8000017); // BR6,
+	TargetInterface.pokeUint32 (SEMC + 0x2C, 0xA900001B); // BR7,
+	TargetInterface.pokeUint32 (SEMC + 0x30, 0x00000021); // BR8,
+	TargetInterface.pokeUint32 (SEMC + 0x04, 0x000079A8); //IOCR,SEMC_CCSX0 as NOR CE, SEMC_CSX1 as PSRAM CE, SEMC_CSX2 as NAND CE, SEMC_CSX3 as DBI CE.
 
-	TargetInterface.pokeUint32 (0x402F0040, 0x00000F31); // SDRAMCR0
-	TargetInterface.pokeUint32 (0x402F0044, 0x00652922); // SDRAMCR1
-	TargetInterface.pokeUint32 (0x402F0048, 0x00010920); // SDRAMCR2
-	TargetInterface.pokeUint32 (0x402F004C, 0x50210A09); // SDRAMCR3
+	TargetInterface.pokeUint32 (SEMC + 0x40, 0x00000F31); // SDRAMCR0
+	TargetInterface.pokeUint32 (SEMC + 0x44, 0x00652922); // SDRAMCR1
+	TargetInterface.pokeUint32 (SEMC + 0x48, 0x00010920); // SDRAMCR2
+	TargetInterface.pokeUint32 (SEMC + 0x4C, 0x50210A09); // SDRAMCR3
 
-	TargetInterface.pokeUint32 (0x402F0040, 0x00000F31); // SDRAMCR0
-	TargetInterface.pokeUint32 (0x402F0044, 0x00652922); // SDRAMCR1
-	TargetInterface.pokeUint32 (0x402F0048, 0x00010920); // SDRAMCR2
-	TargetInterface.pokeUint32 (0x402F004C, 0x50210A09); // SDRAMCR3
+	TargetInterface.pokeUint32 (SEMC + 0x40, 0x00000F31); // SDRAMCR0
+	TargetInterface.pokeUint32 (SEMC + 0x44, 0x00652922); // SDRAMCR1
+	TargetInterface.pokeUint32 (SEMC + 0x48, 0x00010920); // SDRAMCR2
+	TargetInterface.pokeUint32 (SEMC + 0x4C, 0x50210A09); // SDRAMCR3
 
-	TargetInterface.pokeUint32 (0x402F0080, 0x00000021); // DBICR0
-	TargetInterface.pokeUint32 (0x402F0084, 0x00888888); // DBICR1
-	TargetInterface.pokeUint32 (0x402F0094, 0x00000002); // IPCR1
-	TargetInterface.pokeUint32 (0x402F0098, 0x00000000); // IPCR2
+	TargetInterface.pokeUint32 (SEMC + 0x80, 0x00000021); // DBICR0
+	TargetInterface.pokeUint32 (SEMC + 0x84, 0x00888888); // DBICR1
+	TargetInterface.pokeUint32 (SEMC + 0x94, 0x00000002); // IPCR1
+	TargetInterface.pokeUint32 (SEMC + 0x98, 0x00000000); // IPCR2
 
-	TargetInterface.pokeUint32 (0x402F0090, 0x80000000); // IPCR0
-	TargetInterface.pokeUint32 (0x402F009C, 0xA55A000F); // IPCMD, SD_CC_IPREA
-	SDRAM_WaitIpCmdDone();
-	TargetInterface.pokeUint32 (0x402F0090, 0x80000000); // IPCR0
-	TargetInterface.pokeUint32 (0x402F009C, 0xA55A000C); // SD_CC_IAF
-	SDRAM_WaitIpCmdDone();
-	TargetInterface.pokeUint32 (0x402F0090, 0x80000000); // IPCR0
-	TargetInterface.pokeUint32 (0x402F009C, 0xA55A000C); // SD_CC_IAF
-	SDRAM_WaitIpCmdDone();
-	TargetInterface.pokeUint32 (0x402F00A0, 0x00000033); // IPTXDAT
-	TargetInterface.pokeUint32 (0x402F0090, 0x80000000); // IPCR0
-	TargetInterface.pokeUint32 (0x402F009C, 0xA55A000A); // SD_CC_IMS
-	SDRAM_WaitIpCmdDone();
-	TargetInterface.pokeUint32 (0x402F004C, 0x50210A09); // enable sdram self refresh again after initialization done.
-	TargetInterface.message ("SDRAM_Init - Done");
+	TargetInterface.pokeUint32 (SEMC + 0x90, 0x80000000); // IPCR0
+	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000F); // IPCMD, SD_CC_IPREA
+	SDRAM_WaitIpCmdDone        (SEMC);
+	TargetInterface.pokeUint32 (SEMC + 0x90, 0x80000000); // IPCR0
+	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000C); // SD_CC_IAF
+	SDRAM_WaitIpCmdDone        (SEMC);
+	TargetInterface.pokeUint32 (SEMC + 0x90, 0x80000000); // IPCR0
+	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000C); // SD_CC_IAF
+	SDRAM_WaitIpCmdDone        (SEMC);
+	TargetInterface.pokeUint32 (SEMC + 0xA0, 0x00000033); // IPTXDAT
+	TargetInterface.pokeUint32 (SEMC + 0x90, 0x80000000); // IPCR0
+	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000A); // SD_CC_IMS
+	SDRAM_WaitIpCmdDone        (SEMC);
+	TargetInterface.pokeUint32 (SEMC + 0x4C, 0x50210A09); // enable SDRAM self refresh again after initialization done.
 }
+
 
 function AlterRegister (Addr, Clear, Set)
 {
@@ -380,8 +451,26 @@ function FLEXSPI_Init (FlexSPI)
 {
 	var FlexSPI1 = 0x402A8000;
 	var FlexSPI2 = 0x402A4000;
-	var base = 0;
 
+	switch (DeviceName)
+	{
+		case "MIMXRT1011":
+		case "MIMXRT1015":
+		case "MIMXRT1021":
+		case "MIMXRT1051":
+		case "MIMXRT1052":
+			FlexSPI2 = 0;			// no second flexSPI
+			break;
+		case "MIMXRT1061":
+		case "MIMXRT1062":
+		case "MIMXRT1064":
+			break;					// do nothing
+		default:
+			TargetInterface.message ("FLEXSPI_Init - unknown Device: " + DeviceName);
+			return;
+	}
+
+	var base = 0;
 	switch (FlexSPI)
 	{
 		case 1:

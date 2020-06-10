@@ -1,5 +1,5 @@
 <!DOCTYPE CrossStudio_Project_File>
-<solution Name="Loader" target="8" version="2">
+<solution Name="iMXRT Loader CM7" target="8" version="2">
   <configuration
     Name="Debug"
     c_preprocessor_definitions="DEBUG=1"
@@ -110,7 +110,7 @@
     Name="MIMXRT1064_Release"
     build_output_file_name="Loader_iMXRT1064.elf"
     inherited_configurations="1064;Release" />
-  <project Name="Loader">
+  <project Name="Loader_CM7">
     <configuration
       CMSIS_CORE="Yes"
       Name="Common"

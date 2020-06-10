@@ -1,20 +1,20 @@
 *.hzs
 *.hzq
 *.map
-Loader MIMXRT1011_Release
-Loader MIMXRT1011_Debug
-Loader MIMXRT1015_Release
-Loader MIMXRT1015_Debug
-Loader MIMXRT1020_Release
-Loader MIMXRT1020_Debug
-Loader MIMXRT1050_Release
-Loader MIMXRT1050_Debug
-Loader MIMXRT1060_Release
-Loader MIMXRT1060_Debug
-Loader MIMXRT1064_Release
-Loader MIMXRT1064_Debug
-Loader MIMXRT1170_Debug
-Loader MIMXRT1170_Release
+Loader_CM7 MIMXRT1011_Release
+Loader_CM7 MIMXRT1011_Debug
+Loader_CM7 MIMXRT1015_Release
+Loader_CM7 MIMXRT1015_Debug
+Loader_CM7 MIMXRT1020_Release
+Loader_CM7 MIMXRT1020_Debug
+Loader_CM7 MIMXRT1050_Release
+Loader_CM7 MIMXRT1050_Debug
+Loader_CM7 MIMXRT1060_Release
+Loader_CM7 MIMXRT1060_Debug
+Loader_CM7 MIMXRT1064_Release
+Loader_CM7 MIMXRT1064_Debug
+Loader_CM7 MIMXRT1170_Debug
+Loader_CM7 MIMXRT1170_Release
 SayHello THUMB Release
 SayHello THUMB Debug
 iMXRT Loader MIMXRT1011_QuadSPI_4KB_SEC Debug
