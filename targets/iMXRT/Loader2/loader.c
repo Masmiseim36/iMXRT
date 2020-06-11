@@ -211,6 +211,13 @@ enum LibmemStatus Init_Libmem (libmem_driver_handle_t *handle, enum eMemoryType 
 			{
 				// Init for Octal-SPI with DDR
 				DebugPrint ("Init Loader for Octal-SPI (DDR)\r\n");
+            
+            /* A small delay is need here */
+            for(int i=0; i<1000000; i++)
+            {
+              __asm__ volatile("nop");
+            }
+            
 				InitOctaSPIPins (base);
 				status =  Libmem_InitializeDriver_xSPI (handle, base, MemType);
 				if (status != LibmemStaus_Success)
