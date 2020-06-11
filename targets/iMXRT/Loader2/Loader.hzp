@@ -130,7 +130,7 @@
       arm_target_loader_default_loader=""
       arm_target_loader_parameter="666"
       batch_build_configurations="MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1020_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release"
-      c_preprocessor_definitions="__THUMB;FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ=0"
+      c_preprocessor_definitions="__THUMB;FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ=0;SKIP_SYSCLK_INIT"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
       debug_startup_completion_point="main"
