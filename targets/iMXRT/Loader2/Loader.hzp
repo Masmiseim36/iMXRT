@@ -139,7 +139,7 @@
       linker_section_placement_file="$(StudioDir)/targets/Cortex_M/tcm_placement.xml"
       project_directory=""
       project_type="Executable"
-      property_groups_file_path="../propertyGroups.xml"
+      property_groups_file_path="$(ProjectDir)/../propertyGroups.xml"
       target_connect_script="Connect()"
       target_reset_script="Reset()"
       target_script_file="iMXRT_Target.js" />
