@@ -118,12 +118,12 @@
     </groupEntry>
 
     <groupEntry name="MIMXRT1062CVL5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
-      <property name="macros" value="DeviceName=MIMXRT1062;Family=iMXRT1064" />
+      <property name="macros" value="DeviceName=MIMXRT1062;Family=iMXRT1060" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
       <cdefine name="CPU_MIMXRT1062CVL5A"/>
     </groupEntry>
     <groupEntry name="MIMXRT1062CVJ5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
-      <property name="macros" value="DeviceName=MIMXRT1062;Family=iMXRT1064" />
+      <property name="macros" value="DeviceName=MIMXRT1062;Family=iMXRT1060" />
       <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
       <cdefine name="CPU_MIMXRT1062CVJ5A"/>
     </groupEntry>
