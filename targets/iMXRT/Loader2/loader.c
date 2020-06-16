@@ -25,7 +25,6 @@ OF SUCH DAMAGE. */
 #include <stdio.h>
 
 #include "board.h"
-#include "fsl_dmamux.h"
 #include "fsl_common.h"
 #include "fsl_clock.h"
 #include "libmem_Tools.h"
@@ -33,10 +32,6 @@ OF SUCH DAMAGE. */
 #include "libmem_driver_xSPI.h"
 #include "pin_mux.h"
 #include "DebugPrint.h"
-
-extern uint8_t __DTCM_segment_start__;
-extern uint8_t __DTCM_segment_used_end__;
-extern uint8_t __DTCM_segment_end__;
 
 extern void BOARD_BootClockGate (void);
 
@@ -156,8 +151,18 @@ int main (uint32_t flags, uint32_t param)
 	// Start loader
 	if (res == LIBMEM_STATUS_SUCCESS)
 	{
+		#if defined INITIALIZE_TCM_SECTIONS
 		DebugPrint ("Start RPC loader\r\n");
+			extern uint8_t __DTCM_segment_start__;
+			extern uint8_t __DTCM_segment_used_end__;
+			extern uint8_t __DTCM_segment_end__;
 		res = libmem_rpc_loader_start (&__DTCM_segment_used_end__, &__DTCM_segment_end__ - 1);
+		#else
+			extern uint8_t __SRAM_segment_start__;
+			extern uint8_t __SRAM_segment_used_end__;
+			extern uint8_t __SRAM_segment_end__;
+			res = libmem_rpc_loader_start (&__SRAM_segment_used_end__, &__SRAM_segment_end__ - 1);
+		#endif
 	}
 	else
 		DebugPrint ("Libmem Driver coudn't be loaded\r\n");
@@ -211,13 +216,13 @@ enum LibmemStatus Init_Libmem (libmem_driver_handle_t *handle, enum eMemoryType 
 			{
 				// Init for Octal-SPI with DDR
 				DebugPrint ("Init Loader for Octal-SPI (DDR)\r\n");
-            
-            /* A small delay is need here */
-            for(int i=0; i<1000000; i++)
-            {
-              __asm__ volatile("nop");
-            }
-            
+
+				/* A small delay is need here */
+				for(int i=0; i<1000000; i++)
+				{
+					__asm__ volatile("nop");
+				}
+
 				InitOctaSPIPins (base);
 				status =  Libmem_InitializeDriver_xSPI (handle, base, MemType);
 				if (status != LibmemStaus_Success)

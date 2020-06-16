@@ -131,7 +131,8 @@
       arm_target_loader_parameter="666"
       batch_build_configurations="MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1020_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release"
       c_preprocessor_definitions="__THUMB;FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ=0;SKIP_SYSCLK_INIT"
-      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
+      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(PackagesDir)/libraries/libmem_drivers"
+      c_user_include_directories=".;./.."
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
       debug_startup_completion_point="main"
       linker_additional_files="$(StudioDir)/lib/libmem$(LibExt)$(LIB);$(StudioDir)/lib/libmem_loader$(LibExt)$(LIB)"
@@ -179,6 +180,9 @@
         <file file_name="iMXRT1011/fsl_clock.h" />
         <file file_name="iMXRT1011/fsl_gpio.c" />
         <file file_name="iMXRT1011/fsl_gpio.h" />
+        <file file_name="../MemoryMap_MIMXRT1011.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
       </folder>
       <folder Name="iMXRT1015">
         <file file_name="iMXRT1015/fsl_clock.c" />
@@ -192,6 +196,9 @@
         <file file_name="iMXRT1015/board.h" />
         <file file_name="iMXRT1015/fsl_gpio.c" />
         <file file_name="iMXRT1015/fsl_gpio.h" />
+        <file file_name="../MemoryMap_MIMXRT1015.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
       </folder>
       <folder Name="iMXRT1020">
         <configuration Name="Common" build_exclude_from_build="Yes" />
@@ -205,6 +212,9 @@
         <file file_name="iMXRT1020/board.h" />
         <file file_name="iMXRT1020/fsl_gpio.c" />
         <file file_name="iMXRT1020/fsl_gpio.h" />
+        <file file_name="../MemoryMap_MIMXRT1021.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
       </folder>
       <folder Name="iMXRT1050">
         <configuration Name="Common" build_exclude_from_build="Yes" />
@@ -218,6 +228,9 @@
         <file file_name="iMXRT1050/board.h" />
         <file file_name="iMXRT1050/fsl_gpio.c" />
         <file file_name="iMXRT1050/fsl_gpio.h" />
+        <file file_name="../MemoryMap_MIMXRT105x.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
       </folder>
       <folder Name="iMXRT1060">
         <configuration Name="Common" build_exclude_from_build="Yes" />
@@ -231,6 +244,9 @@
         <file file_name="iMXRT1060/board.h" />
         <file file_name="iMXRT1060/fsl_gpio.c" />
         <file file_name="iMXRT1060/fsl_gpio.h" />
+        <file file_name="../MemoryMap_MIMXRT106x.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
       </folder>
       <folder Name="iMXRT1064">
         <configuration Name="Common" build_exclude_from_build="Yes" />
@@ -244,6 +260,9 @@
         <file file_name="iMXRT1064/board.h" />
         <file file_name="iMXRT1064/fsl_gpio.c" />
         <file file_name="iMXRT1064/fsl_gpio.h" />
+        <file file_name="../MemoryMap_MIMXRT106x.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
       </folder>
     </folder>
     <folder Name="Source">
