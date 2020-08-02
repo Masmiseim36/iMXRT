@@ -748,58 +748,57 @@ static status_t ReadJEDEC (FLEXSPI_Type *base, struct DeviceInfo *Info)
 	flashXfer.dataSize      = sizeof(Identification);
 
 	status_t status = FLEXSPI_TransferBlocking (base, &flashXfer);
+	if (status != kStatus_Success)
+		return status;
 
-	if (status == kStatus_Success)
+	if (Identification[0] == 0 || Identification[0] == 0xFF)
+		return kStatus_Fail;	// got no ID-Code: No Flash available
+
+	int i=0;
+	for (; i<8; i++)
 	{
-		if (Identification[0] == 0 || Identification[0] == 0xFF)
-			return kStatus_Fail;	// got no ID-Code: No Flash available
+		if (Identification[i] != ManufactureID_NEXT_MARKER)
+			break;
+	}
 
-		int i=0;
-		for (; i<8; i++)
-		{
-			if (Identification[i] != ManufactureID_NEXT_MARKER)
-				break;
-		}
-
-		Info->ManufactureID = (enum SerialFlash_ManufactureID)(((i+1)<<8) | Identification[i]);
-		Info->Type          = Identification[i+1];
-		Info->Capacity      = (enum Capacity)Identification[i+2];
-		switch (Info->ManufactureID)
-		{
-			case ManufactureID_AdestoTechnologies:
-				switch (Info->Type & 0x1F)
-				{
-					case 0x06:
-						Info->Capacity = Capacity_16MBit;
-						break;
-					case 0x07:
-						Info->Capacity = Capacity_32MBit;
-						break;
-					case 0x08:
-						Info->Capacity = Capacity_64MBit;
-						break;
-					case 0x09:
-						Info->Capacity = Capacity_128MBit;
-						break;
-				}
-				break;
-			case ManufactureID_Macronix:
-				Info->Capacity = (enum Capacity)(Identification[i+2] & 0x1F);
-				break;
-			case ManufactureID_Atmel:
-				switch (Info->Type)
-				{
-					case  0x89:	// AT25SF128A
-						Info->Capacity = Capacity_128MBit;
-						break;
-					case  0xA8:	// ATXP064
-						Info->Capacity = Capacity_64MBit;
-						break;
-				}
-				break;
-			default:
-				break;
-		}
+	Info->ManufactureID = (enum SerialFlash_ManufactureID)(((i+1)<<8) | Identification[i]);
+	Info->Type          = Identification[i+1];
+	Info->Capacity      = (enum Capacity)Identification[i+2];
+	switch (Info->ManufactureID)
+	{
+		case ManufactureID_AdestoTechnologies:
+			switch (Info->Type & 0x1F)
+			{
+				case 0x06:
+					Info->Capacity = Capacity_16MBit;
+					break;
+				case 0x07:
+					Info->Capacity = Capacity_32MBit;
+					break;
+				case 0x08:
+					Info->Capacity = Capacity_64MBit;
+					break;
+				case 0x09:
+					Info->Capacity = Capacity_128MBit;
+					break;
+			}
+			break;
+		case ManufactureID_Macronix:
+			Info->Capacity = (enum Capacity)(Identification[i+2] & 0x1F);
+			break;
+		case ManufactureID_Atmel:
+			switch (Info->Type)
+			{
+				case  0x89:	// AT25SF128A
+					Info->Capacity = Capacity_128MBit;
+					break;
+				case  0xA8:	// ATXP064
+					Info->Capacity = Capacity_64MBit;
+					break;
+			}
+			break;
+		default:
+			break;
 	}
 
 	return status;

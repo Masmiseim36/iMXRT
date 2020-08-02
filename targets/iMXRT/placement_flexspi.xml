@@ -9,18 +9,18 @@
 		<ProgramSection alignment="0x1000" load="Yes" name=".vectors" address_symbol="__VECTOR_TABLE" />
 		<ProgramSection alignment="4"      load="Yes" name=".init" />
 		<ProgramSection alignment="4"      load="Yes" name=".init_rodata" />
+		<ProgramSection alignment="4"      load="Yes" name=".fast"       runin=".fast_run" />
 		<ProgramSection alignment="4"      load="Yes" name=".text" />
 		<ProgramSection alignment="4"      load="Yes" name=".dtors" />
 		<ProgramSection alignment="4"      load="Yes" name=".ctors" />
 		<ProgramSection alignment="4"      load="Yes" name=".rodata" />
 		<ProgramSection alignment="4"      load="Yes" name=".rodata2" />
 		<ProgramSection alignment="4"      load="Yes" name=".ARM.exidx" address_symbol="__exidx_start" end_symbol="__exidx_end" />
-		<ProgramSection alignment="4"      load="Yes" name=".fast"       runin=".fast_run" />
 		<ProgramSection alignment="4"      load="Yes" name=".data"       runin=".data_run" />
 		<ProgramSection alignment="4"      load="Yes" name=".tdata"      runin=".tdata_run" />
-		<ProgramSection alignment="4"      load="Yes" name=".text_tcm"   runin=".text_tcm_run" />
 		<ProgramSection alignment="4"      load="Yes" name=".data_tcm"   runin=".data_tcm_run" />
 		<ProgramSection alignment="4"      load="Yes" name=".rodata_tcm" runin=".rodata_tcm_run" />
+		<ProgramSection alignment="4"      load="Yes" name=".text_tcm"   runin=".text_tcm_run" />
 	</MemorySegment>
 
 	<MemorySegment name="$(RAM_NAME:ITCM)">
@@ -30,15 +30,14 @@
 	</MemorySegment>
 
 	<MemorySegment name="$(DTCM_NAME:DTCM)">
-		<ProgramSection alignment="4"      load="No"  name=".bss_tcm" />
 		<ProgramSection alignment="4"      load="No"  name=".data_tcm_run" />
+		<ProgramSection alignment="4"      load="No"  name=".bss_tcm" />
 		<ProgramSection alignment="4"      load="No"  name=".rodata_tcm_run" />
 	</MemorySegment>
 
 	<MemorySegment name="$(RAM_NAME:OCRAM)">
 		<ProgramSection alignment="4"      load="No"  name=".data_run" />
 		<ProgramSection alignment="4"      load="No"  name=".bss" />
-		<ProgramSection alignment="4"      load="No"  name=".bss2" />
 		<ProgramSection alignment="4"      load="No"  name=".tbss" />
 		<ProgramSection alignment="4"      load="No"  name=".tdata_run" />
 		<ProgramSection alignment="4"      load="No"  name=".non_init" />

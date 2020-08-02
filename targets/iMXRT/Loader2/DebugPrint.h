@@ -24,10 +24,18 @@ OF SUCH DAMAGE. */
 
 #include "board.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 void ConfigUart (void);
 void DebugPrint (const char *Message);
 void DebugPrintf (const char *Message, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif	// _DEBUG_PRINT_H_

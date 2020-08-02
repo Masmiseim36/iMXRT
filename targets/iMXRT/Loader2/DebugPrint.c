@@ -61,7 +61,7 @@ OF SUCH DAMAGE. */
 	@return void */
 	void DebugPrint (const char *Message)
 	{
-		LPUART_WriteBlocking (uart[BOARD_DEBUG_UART_INSTANCE], Message, strlen(Message));
+		LPUART_WriteBlocking (uart[BOARD_DEBUG_UART_INSTANCE], (uint8_t *)Message, strlen(Message));
 	}
 	/** DebugPrintf:
 	Send a formated Message to the UART
@@ -73,11 +73,11 @@ OF SUCH DAMAGE. */
 		static char Buffer [128];
 		va_list ArgPtr;
 		va_start(ArgPtr, Message);
-		int Length = vsnprintf (Buffer, sizeof(Buffer), Message, ArgPtr);
+		size_t Length = vsnprintf (Buffer, sizeof(Buffer), Message, ArgPtr);
 		va_end(ArgPtr);
 
 		if (Length > 0 && Length <= sizeof(Buffer))
-			LPUART_WriteBlocking (uart[BOARD_DEBUG_UART_INSTANCE], Buffer, Length);
+			LPUART_WriteBlocking (uart[BOARD_DEBUG_UART_INSTANCE], (uint8_t *)Buffer, Length);
 	}
 #else
 	inline void ConfigUart (void)

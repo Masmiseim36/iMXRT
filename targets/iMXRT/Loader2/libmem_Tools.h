@@ -25,6 +25,11 @@ OF SUCH DAMAGE. */
 #include "fsl_device_registers.h"
 #include "libmem.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #ifndef FlexSPI_AMBA_BASE
 	#define FlexSPI_AMBA_BASE FlexSPI1_AMBA_BASE 
 	#define FLEXSPI FLEXSPI1
@@ -1145,5 +1150,9 @@ struct DeviceInfo
 	uint8_t                        Type;          // Device specific type, defined by manufacturer
 	enum Capacity                  Capacity;      // Flash capacity in Bits
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif	// _LIBMEM_TOOLS_H_
