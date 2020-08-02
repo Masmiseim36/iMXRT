@@ -1,4 +1,4 @@
-<Processor name="MIMXRT1011" description="MIMXRT1011xxxxx">
+<Processor name="MIMXRT1011" description="MIMXRT1011DAE5A">
   <RegisterGroup name="AIPSTZ1" start="0x4007C000" description="AIPSTZ Control Registers">
     <Register start="+0" size="4" name="AIPSTZ1_MPR" access="Read/Write" description="Master Priviledge Registers" reset_value="0x77000000" reset_mask="0xFFFFFFFF">
       <BitField start="8" size="4" name="MPROT5" description="Master 5 Priviledge, Buffer, Read, Write Control.">
