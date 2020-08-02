@@ -73,6 +73,14 @@
           <file file_name="targets/iMXRT/MemoryMap_MIMXRT106x.xml" />
           <file file_name="targets/iMXRT/startup_MIMXRT1064.s" />
         </folder>
+        <folder Name="106A">
+          <file file_name="targets/iMXRT/MIMXRT106A.h" />
+          <file file_name="targets/iMXRT/MIMXRT106A_features.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT106A.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT106A.h" />
+          <file file_name="targets/iMXRT/XML/MIMXRT106A_Registers.xml" />
+          <file file_name="targets/iMXRT/startup_MIMXRT106A.s" />
+        </folder>
         <folder Name="63x">
           <file file_name="targets/iMXRT/MIMXRT633S.h" />
           <file file_name="targets/iMXRT/MIMXRT633S_features.h" />
@@ -87,14 +95,6 @@
           <file file_name="targets/iMXRT/startup_MIMXRT633S.s" />
           <file file_name="targets/iMXRT/startup_MIMXRT685S_cm33.s" />
           <file file_name="targets/iMXRT/MemoryMap_MIMXRT600.xml" />
-        </folder>
-        <folder Name="106A">
-          <file file_name="targets/iMXRT/MIMXRT106A.h" />
-          <file file_name="targets/iMXRT/MIMXRT106A_features.h" />
-          <file file_name="targets/iMXRT/system_MIMXRT106A.c" />
-          <file file_name="targets/iMXRT/system_MIMXRT106A.h" />
-          <file file_name="targets/iMXRT/XML/MIMXRT106A_Registers.xml" />
-          <file file_name="targets/iMXRT/startup_MIMXRT106A.s" />
         </folder>
       </folder>
       <folder Name="Loader">
