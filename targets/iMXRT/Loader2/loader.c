@@ -43,7 +43,7 @@ void ExecuteTest (uint32_t *MemPointer)
 {
 	static uint32_t buffer[512];
 	memset (buffer, 0, sizeof(buffer));
-	for (int i=0; i<sizeof(buffer)/sizeof(buffer[0]); i++)
+	for (size_t i=0; i<sizeof(buffer)/sizeof(buffer[0]); i++)
 		buffer[i] = (uint32_t)(((uint32_t *)buffer) + i);
 
 	uint8_t *erase_start = 0;
@@ -54,7 +54,7 @@ void ExecuteTest (uint32_t *MemPointer)
 
 	// Check if everything is erased
 	uint32_t ErrorCounter = 0;
-	for (int i=0; i<erase_size/sizeof(uint32_t); i++)
+	for (size_t i=0; i<erase_size/sizeof(uint32_t); i++)
 	{
 		if (MemPointer[i] != 0xFFFFFFFF)
 			ErrorCounter++;
@@ -78,7 +78,9 @@ int main (uint32_t flags, uint32_t param)
 		const clock_usb_pll_config_t ConfigUsbPll = {.loopDivider = 0U};
 		CLOCK_InitUsb1Pll   (&ConfigUsbPll);
 	#endif
-	CLOCK_EnableClock   (kCLOCK_Iomuxc);
+	#if defined FSL_FEATURE_SOC_IOMUXC_COUNT && FSL_FEATURE_SOC_IOMUXC_COUNT > 0
+		CLOCK_EnableClock (kCLOCK_Iomuxc);
+	#endif
 	#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
 		SCB_DisableDCache   ();
 	#endif
@@ -275,10 +277,12 @@ void InitOctaSPIPins (FLEXSPI_Type *base)
 	switch ((uint32_t)base)
 	{
 		case FLEXSPI_BASE:
-			return BOARD_InitOctaSPIPins ();
+			BOARD_InitOctaSPIPins ();
+			break;
 		#ifdef FLEXSPI2
 		case FLEXSPI2_BASE:
-			return BOARD_InitOctaSPI2Pins ();
+			BOARD_InitOctaSPI2Pins ();
+			break;
 		#endif
 		default:
 			return;
@@ -290,10 +294,12 @@ void InitQuadSPIPins (FLEXSPI_Type *base)
 	switch ((uint32_t)base)
 	{
 		case FLEXSPI_BASE:
-			return BOARD_InitQuadSPIPins ();
+			BOARD_InitQuadSPIPins ();
+			break;
 		#ifdef FLEXSPI2
 		case FLEXSPI2_BASE:
-			return BOARD_InitQuadSPI2Pins ();
+			BOARD_InitQuadSPI2Pins ();
+			break;
 		#endif
 		default:
 			return;

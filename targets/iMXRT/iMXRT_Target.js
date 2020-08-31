@@ -32,10 +32,8 @@ function Connect()
 	}
 }
 
-function Reset()
+function Reset ()
 {
-//	TargetInterface.resetDebugInterface();
-
 	if (TargetInterface.implementation() == "crossworks_simulator")
 		return;
 
@@ -102,23 +100,23 @@ function DcDc_Init_10xx ()
 // This function is used to return the controller type as a string
 // we use it also to do some initializations as this function is called right before
 // writing the code to the controller
-function GetPartName()
-{    
+function GetPartName ()
+{
 	var PART = "";
 	return PART;
 }
 
-function MatchPartName(name)
+function MatchPartName (name)
 {
-  var partName = GetPartName();
+  var partName = GetPartName ();
 
   if (partName == "")
     return false;
 
-  return partName.substring(0, 6) == name.substring(0, 6);
+  return partName.substring (0, 6) == name.substring (0, 6);
 }
 
-function EnableTrace(traceInterfaceType)
+function EnableTrace (traceInterfaceType)
 {
 	// TODO: Enable trace
 }
@@ -135,6 +133,9 @@ function GetProjectPartName ()
 			break;
 		case "_cm4":
 			TargetShort += '_cm4';
+			break;
+		case "cm33":
+			TargetShort += '_cm33';
 			break;
 		default:
 			// Do nothing
@@ -180,6 +181,17 @@ function ClockGate_EnableAll_10xx ()
 	TargetInterface.pokeUint32 (0x400FC080, 0xffffffff);	// CCM->CCGR6
 }
 
+function DisableMPU ()
+{
+	TargetInterface.message ("### DisableMPU");
+
+	var MPU = 0xE000E000 + 0x0D90;	// SCS_BASE + MPU offset
+	// Disable MPU which will be enabled by ROM to prevent code execution
+	reg = TargetInterface.peekUint32 (MPU + 0x04);			// MPU->CTRL
+	reg &= ~0x1;											// Disable Enable Flag
+	TargetInterface.pokeUint32 (MPU + 0x04, reg);
+}
+
 
 function Clock_Init_1021 () 
 {
@@ -215,9 +227,7 @@ function Clock_Init_1021 ()
 	TargetInterface.pokeUint32 (0x400FC014, reg);			// CCM->CBCDR
 
 	// Disable MPU which will be enabled by ROM to prevent code execution
-	reg = TargetInterface.peekUint32 (0xE000ED94);
-	reg &= ~0x1;
-	TargetInterface.pokeUint32 (0xE000ED94, reg);
+	DisableMPU ();
 	TargetInterface.message ("Clock_Init_1021 - Done");
 }
 
@@ -484,7 +494,7 @@ function FLEXSPI_Init (FlexSPI)
 	}
 
 	var CCM = 0x400FC000;
-	var CCM_CBCMR = CCM + 0x18;
+	var CCM_CBCMR  = CCM + 0x18;
 	var CCM_CSCMR1 = CCM + 0x1C;
 	var CCM_CSCMR2 = CCM + 0x20;
 

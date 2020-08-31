@@ -1,6 +1,10 @@
 <!DOCTYPE CrossStudio_Project_File>
 <solution Name="iMXRT Loader CM7" target="8" version="2">
   <configuration
+    Name="Common"
+    c_additional_options="-Wextra"
+    c_preprocessor_definitions="DISABLE_WDOG=1" />
+  <configuration
     Name="Debug"
     c_preprocessor_definitions="DEBUG=1"
     gcc_debugging_level="Level 3"
@@ -135,6 +139,8 @@
       c_user_include_directories=".;./.."
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
       debug_startup_completion_point="main"
+      gcc_c_language_standard="gnu11"
+      gcc_cplusplus_language_standard="gnu++11"
       linker_additional_files="$(StudioDir)/lib/libmem$(LibExt)$(LIB);$(StudioDir)/lib/libmem_loader$(LibExt)$(LIB)"
       linker_keep_symbols="libmem_crc32"
       linker_section_placement_file="$(StudioDir)/targets/Cortex_M/tcm_placement.xml"
@@ -155,6 +161,7 @@
       <file file_name="iMXRT_Target.js">
         <configuration Name="Common" file_type="Target Script" />
       </file>
+      <configuration Name="Common" gcc_c_language_standard="gnu11" />
     </folder>
     <folder Name="drivers">
       <file file_name="fsl_common.c" />
@@ -267,7 +274,7 @@
     </folder>
     <folder Name="Source">
       <file file_name="loader.c" />
-      <file file_name="board.c" />
+      <file file_name="board.cpp" />
       <file file_name="libmem_driver_Hyperflash.c" />
       <file file_name="libmem_driver_Hyperflash.h" />
       <file file_name="libmem_Tools.c" />
@@ -276,6 +283,7 @@
       <file file_name="libmem_driver_xSPI.h" />
       <file file_name="DebugPrint.h" />
       <file file_name="DebugPrint.c" />
+      <file file_name="board_generic.h" />
     </folder>
   </project>
 </solution>

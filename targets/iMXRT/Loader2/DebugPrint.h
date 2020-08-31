@@ -23,13 +23,16 @@ OF SUCH DAMAGE. */
 #define _DEBUG_PRINT_H_
 
 #include "board.h"
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-void ConfigUart (void);
+	#define ENABLE_DEBUG_PRINT 0
+
+bool ConfigUart (void);
 void DebugPrint (const char *Message);
 void DebugPrintf (const char *Message, ...);
 

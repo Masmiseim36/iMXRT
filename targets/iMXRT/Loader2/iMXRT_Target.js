@@ -12,7 +12,35 @@
 
 function Connect()
 {
-	TargetInterface.message ("Connect");
+	var DeviceName = GetProjectPartName ();
+	TargetInterface.message ("## Connect to " + DeviceName);
+	switch (DeviceName)
+	{
+		case "MIMXRT633":
+		case "MIMXRT685_cm33":
+//			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0, 0x40000000, 0x00000000);  
+			TargetInterface.selectDevice (0, 0, 0, 0);	// irPre, irPost, drPre, drPost
+			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
+			TargetInterface.setDebugInterfaceProperty ("component_base", 0xE00FE000);
+			TargetInterface.setDebugInterfaceProperty ("component_base", 0xE000E000);
+			TargetInterface.setDebugInterfaceProperty ("component_base", 0xE0001000);
+			TargetInterface.setDebugInterfaceProperty ("component_base", 0xE0002000);
+			break;
+		case "MIMXRT1011":
+		case "MIMXRT1015":
+		case "MIMXRT1021":
+		case "MIMXRT1051":
+		case "MIMXRT1052":
+		case "MIMXRT1061":
+		case "MIMXRT1062":
+		case "MIMXRT1064":
+			// Do nothing
+//			TargetInterface.setNSRST();
+			break;
+		default:
+			TargetInterface.message ("Connect - unknown Device: " + DeviceName);
+			break;
+	}
 }
 
 function Reset()

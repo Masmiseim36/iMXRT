@@ -24,13 +24,11 @@ OF SUCH DAMAGE. */
 #include "libmem_Tools.h"
 #include "fsl_device_registers.h"
 #include "fsl_flexspi.h"
-#include "fsl_dmamux.h"
 #include "fsl_common.h"
 #include "fsl_clock.h"
 #include "DebugPrint.h"
 
 static libmem_driver_paged_write_ctrlblk_t paged_write_ctrlblk;
-static uint32_t s_clk;
 
 
 enum LUT_CommandOffsets
@@ -584,13 +582,33 @@ Initialize the FlexSPI Interface for using as a SPI-Interface
 @return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
 LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle, FLEXSPI_Type *base, enum eMemoryType MemType)
 {
-	// Set up source clock
-	CLOCK_InitSysPfd (kCLOCK_Pfd2, 16);        // Set PLL2 PFD2 clock 594 MHZ.
-	uint32_t SourceClock_Hz = CLOCK_GetSysPfdFreq (kCLOCK_Pfd2);
+	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || defined (MIMXRT595S_cm33_SERIES)
+		uint32_t src = 2;		// Use AUX0_PLL as clock source for the FlexSPI
+		uint32_t FlexSPI_ClockDiv = 4;	// with a divider of four
+		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (FlexSPI_ClockDiv - 1))
+		{
+			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
+			CLKCTL0->FLEXSPIFCLKSEL = CLKCTL0_FLEXSPIFCLKSEL_SEL(src);			// Update flexspi clock.
+			CLKCTL0->FLEXSPIFCLKDIV |= CLKCTL0_FLEXSPIFCLKDIV_RESET_MASK;		// Reset the divider counter
+			CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV(FlexSPI_ClockDiv - 1);
+			while ((CLKCTL0->FLEXSPIFCLKDIV) & CLKCTL0_FLEXSPIFCLKDIV_REQFLAG_MASK)
+				;
+			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
+		}
+		uint32_t FlexSPI_Clock_Hz = CLOCK_GetFlexspiClkFreq ();
+		uint32_t SourceClock_Hz = FlexSPI_Clock_Hz * FlexSPI_ClockDiv;
+	#elif ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1051_SERIES) || \
+		   (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || (defined MIMXRT1064_SERIES))
+		// Set up source clock
+		CLOCK_InitSysPfd (kCLOCK_Pfd2, 16);        // Set PLL2 PFD2 clock 594 MHZ.
+		uint32_t SourceClock_Hz = CLOCK_GetSysPfdFreq (kCLOCK_Pfd2);
 
-	uint32_t FlexSPI_ClockDiv = 6;
-	uint32_t FlexSPI_Clock_Hz = SourceClock_Hz / FlexSPI_ClockDiv;
-	SetClockConfig (base, FlexSPI_ClockDiv);	// flexspi clock 99 MHz.
+		uint32_t FlexSPI_ClockDiv = 6;
+		uint32_t FlexSPI_Clock_Hz = SourceClock_Hz / FlexSPI_ClockDiv;
+		SetClockConfig (base, FlexSPI_ClockDiv);	// flexspi clock 99 MHz.
+	#else
+		#error "unknon controller family"
+	#endif
 	deviceconfig.flexspiRootClk = FlexSPI_Clock_Hz;
 
 	// Get FLEXSPI default settings and configure the FlexSPI.
@@ -612,7 +630,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle
 
 
 	// Get the JEDEC Informations
-	struct DeviceInfo Info;
+	struct DeviceInfo Info = {0};
 	status_t status = ReadJEDEC (base, &Info);
 	if (status != kStatus_Success)
 	{

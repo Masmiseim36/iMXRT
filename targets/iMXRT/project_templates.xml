@@ -46,7 +46,7 @@
 		<configuration name="THUMB Debug" />
 		<configuration name="THUMB Release" />
 		<property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups_cm4.xml" />
-		<propertygroup name="Targe_CM4" value="MIMXRT1175DVMAA_cm4" choose="Yes" />
+		<propertygroup name="Target" value="MIMXRT1175DVMAA_cm4" choose="Yes" />
 		<propertygroup name="Placement" value="TCM" choose="Yes" />
 		<property name="arm_architecture" value="v7EM" />
 		<property name="arm_core_type" value="Cortex-M4" />
@@ -57,6 +57,7 @@
 		<property name="target_connect_script" value="Connect()" />
 		<property name="target_get_partname_script" value="GetPartName()" />
 		<property name="target_reset_script" value="Reset()" />
+		<property name="target_stop_script" value="OnTargetStop_11xx_M4()" />
 		<property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
 		<property name="arm_target_loader_reset_after_download" value="No" />
 		<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT" />

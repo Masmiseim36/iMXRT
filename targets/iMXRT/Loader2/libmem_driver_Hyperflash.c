@@ -24,13 +24,11 @@ OF SUCH DAMAGE. */
 #include "libmem_Tools.h"
 #include "fsl_device_registers.h"
 #include "fsl_flexspi.h"
-#include "fsl_dmamux.h"
 #include "fsl_common.h"
 #include "fsl_clock.h"
 #include "DebugPrint.h"
 
 static libmem_driver_paged_write_ctrlblk_t PagedWrite_CtrlBlk;
-static uint32_t s_clk;
 
 
 /** enum FlashCommands:
@@ -197,18 +195,27 @@ Initialize the FlexSPI Interface for using as a SPI-Interface
 @return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
 LibmemStatus_t Libmem_InitializeDriver_Hyperflash (libmem_driver_handle_t *FlashHandle, FLEXSPI_Type *base)
 {
-	#if defined FSL_FEATURE_SOC_CCM_ANALOG_COUNT && FSL_FEATURE_SOC_CCM_ANALOG_COUNT > 0
+	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || defined(MIMXRT595S_cm33_SERIES)
+		uint32_t src = 2;		// Use AUX0_PLL as clock source for the FlexSPI
+		uint32_t divider = 4;	// with a divider of four
+		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (divider - 1))
+		{
+			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
+			CLKCTL0->FLEXSPIFCLKSEL = CLKCTL0_FLEXSPIFCLKSEL_SEL(src);			// Update flexspi clock.
+			CLKCTL0->FLEXSPIFCLKDIV |= CLKCTL0_FLEXSPIFCLKDIV_RESET_MASK;		// Reset the divider counter
+			CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV(divider - 1);
+			while ((CLKCTL0->FLEXSPIFCLKDIV) & CLKCTL0_FLEXSPIFCLKDIV_REQFLAG_MASK)
+				;
+			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
+		}
+	#elif (defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1051_SERIES) || \
+		  (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || (defined MIMXRT1064_SERIES)
 		// Set flexspi root clock to 166MHZ.
 		CLOCK_InitUsb1Pfd (kCLOCK_Pfd0, 26);        // Set PLL3 PFD0 clock 332MHZ.
 		CLOCK_SetMux      (kCLOCK_FlexspiMux, 0x3); // Choose PLL3 PFD0 clock as flexspi source clock.
 		CLOCK_SetDiv      (kCLOCK_FlexspiDiv, 3);   // flexspi clock 83M, DDR mode, internal clock 42M.
 	#else
-		// Set flexspi root clock to 100MHZ.
-		#warning "do something else"
-		CLOCK_EnableOscRc400M ();
-
-		clock_root_config_t rootCfg = {false, 0, 0, 2, 3};	// Configure FlexSPI using RC400M divided by 4
-		CLOCK_SetRootClock (kCLOCK_Root_Flexspi1, &rootCfg);
+		#error "unknon controller family"
 	#endif
 
 	// Get FLEXSPI default settings and configure the flexspi.
@@ -451,6 +458,7 @@ The LIBMEM driver's read extended function.
 @return int The LIBMEM status result */
 static int libmem_Read (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
 {
+	(void)h;
 	if (size)
 		memcpy (dest, src, size);
 	return LIBMEM_STATUS_SUCCESS;

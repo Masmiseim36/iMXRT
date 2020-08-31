@@ -35,6 +35,10 @@ rmdir /s /q "./targets/iMXRT/Loader2/Loader_CM7 MIMXRT1064_Debug"
 rmdir /s /q "./targets/iMXRT/Loader2/Loader_CM7 MIMXRT1064_Release"
 rmdir /s /q "./targets/iMXRT/Loader2/Loader_CM7 MIMXRT1170_Debug"
 rmdir /s /q "./targets/iMXRT/Loader2/Loader_CM7 MIMXRT1170_Release"
+rmdir /s /q "./targets/iMXRT/Loader2/Loader_CM4 MIMXRT1170_Debug"
+rmdir /s /q "./targets/iMXRT/Loader2/Loader_CM4 MIMXRT1170_Release"
+rmdir /s /q "./targets/iMXRT/Loader2/Loader_CM33 MIMXRT600_Debug"
+rmdir /s /q "./targets/iMXRT/Loader2/Loader_CM33 MIMXRT600_Release"
 
 
 rmdir /s /q "./samples/iMXRT/SayHello THUMB Debug"
@@ -49,6 +53,7 @@ del /f /q *.map
 cd ..
 cd "./Loader2"
 del /f /q *.map
+del /f /q *_Debug.elf
 cd ..
 cd ..
 cd ..

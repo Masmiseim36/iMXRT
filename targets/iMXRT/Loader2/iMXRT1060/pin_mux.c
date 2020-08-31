@@ -171,7 +171,7 @@ void BOARD_PerformJEDECReset (void)
 	// Perform a reset sequence:
 	// CS goes low 4 times with alternating values of SOUT
 	// SCK is drive low or high and must stay in one state
-	GPIO_WritePinOutput(GPIO3, 7, 0); // set SCK low
+	GPIO_WritePinOutput (GPIO3, 7, 0); // set SCK low
 	for (uint32_t i = 0; i < 4; i++)
 	{
 		// drive CS low

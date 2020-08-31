@@ -15,12 +15,12 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MIMXRT106ADVL6A))
-	#define MIMXRT106A_SERIES
+#if (defined(CPU_MIMXRT595SFFOA_cm33))
+	#define MIMXRT595S_cm33_SERIES
 	/* CMSIS-style register definitions */
-	#include "MIMXRT106A.h"
+	#include "MIMXRT595S_cm33.h"
 	/* CPU specific feature definitions */
-	#include "MIMXRT106A_features.h"
+	#include "MIMXRT595S_cm33_features.h"
 
 #elif (defined(CPU_MIMXRT633SFAWBR) || defined(CPU_MIMXRT633SFFOB) || defined(CPU_MIMXRT633SFVKB))
 	#define MIMXRT633S_SERIES
@@ -96,6 +96,13 @@
 	#include "MIMXRT1064.h"
 	/* CPU specific feature definitions */
 	#include "MIMXRT1064_features.h"
+
+#elif (defined(CPU_MIMXRT106ADVL6A))
+	#define MIMXRT106A_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT106A.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT106A_features.h"
 
 #else
 	#error "No valid CPU defined!"

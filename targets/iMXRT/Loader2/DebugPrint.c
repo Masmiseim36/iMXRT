@@ -26,18 +26,18 @@ OF SUCH DAMAGE. */
 #include "DebugPrint.h"
 #include "pin_mux.h"
 #include "fsl_clock.h"
-#include "fsl_lpuart.h"
 
-#define ENABLE_DEBUG_PRINT 0
 
-#if defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0
+#if defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0 && defined LPUART_BASE_PTRS
 	static LPUART_Type * const uart [] = LPUART_BASE_PTRS;
+
+	#include "fsl_lpuart.h"
 
 	/** ConfigUart:
 	Configure a UART to use it to print debug-messages
 	@param  void
-	@return void */
-	void ConfigUart (void)
+	@return bool @true if successfully */
+	bool ConfigUart (void)
 	{
 		BOARD_InitUARTPins ();
 
@@ -52,7 +52,8 @@ OF SUCH DAMAGE. */
 		config.baudRate_Bps = 115200U;
 		config.enableTx     = true;
 		config.enableRx     = true;
-		LPUART_Init (uart[BOARD_DEBUG_UART_INSTANCE], &config, ClockFrequency);
+		status_t status = LPUART_Init (uart[BOARD_DEBUG_UART_INSTANCE], &config, ClockFrequency);
+		return status == kStatus_Success;
 	}
 
 	/** DebugPrint:
@@ -80,8 +81,9 @@ OF SUCH DAMAGE. */
 			LPUART_WriteBlocking (uart[BOARD_DEBUG_UART_INSTANCE], (uint8_t *)Buffer, Length);
 	}
 #else
-	inline void ConfigUart (void)
+	inline bool	ConfigUart (void)
 	{
+		return true;
 	}
 
 	inline void DebugPrint (const char *Message)

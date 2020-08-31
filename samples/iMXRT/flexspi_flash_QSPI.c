@@ -70,16 +70,25 @@ const flexspi_nor_config_t FlashBootHeader =
 			FLEXSPI_LUT_SEQ (DUMMY_SDR, FLEXSPI_4PAD, 0x06, READ_SDR,  FLEXSPI_4PAD, 0x04),
 			0,
 			0,
+
 			// (1) Read Status
 			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x05, RADDR_SDR, FLEXSPI_1PAD, 0x04),
 			0,
 			0,
 			0,
+
+			// (2) 
+			0,
+			0,
+			0,
+			0,
+
 			// (3) Write Enable  
 			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x06, STOP,      FLEXSPI_1PAD, 0),
 			0,
 			0,
 			0,
+
 			// (4) Write Status/Control Registers
 			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x01, WRITE_SDR, FLEXSPI_1PAD, 0x04),
 			0,

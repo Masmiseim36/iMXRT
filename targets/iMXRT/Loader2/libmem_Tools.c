@@ -63,7 +63,7 @@ uint32_t libmem_GetBaseAddress (FLEXSPI_Type *base)
 Return an Error String for printing to the user
 @param Error Error-ID to be converted to a string
 @return const char* const */
-const char * const Libmem_GetErrorString (int Error)
+const char * Libmem_GetErrorString (int Error)
 {
 	switch (Error)
 	{
@@ -94,7 +94,7 @@ const char * const Libmem_GetErrorString (int Error)
 //			return "Invalid CFI command set number";
 		
 		// status Codes
-//        case LIBMEM_STATUS_SUCCESS:
+//		case LIBMEM_STATUS_SUCCESS:
 //			return "Success";
 //		case LIBMEM_CFI_CMDSET_INTEL_EXTENDED:
 //			return "Intel extended command set";
