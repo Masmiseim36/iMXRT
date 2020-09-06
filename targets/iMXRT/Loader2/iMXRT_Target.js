@@ -120,7 +120,14 @@ function EnableTrace(traceInterfaceType)
 function GetProjectPartName ()
 {
 	var TargetFullName = TargetInterface.getProjectProperty ("Target");
-	var TargetShort = TargetFullName.substring (0, 10);
+	if (TargetFullName == null)
+		return "";
+
+	var TargetShort
+	if (TargetFullName.charAt(9) > '9')
+		TargetShort = TargetFullName.substring (0, 9);	// Three digits number in the target name
+	else
+		TargetShort = TargetFullName.substring (0, 10);	// Four digits number in the target name
 
 	switch (TargetFullName.slice(-4))
 	{
@@ -129,6 +136,9 @@ function GetProjectPartName ()
 			break;
 		case "_cm4":
 			TargetShort += '_cm4';
+			break;
+		case "cm33":
+			TargetShort += '_cm33';
 			break;
 		default:
 			// Do nothing
@@ -174,6 +184,17 @@ function ClockGate_EnableAll_10xx ()
 	TargetInterface.pokeUint32 (0x400FC080, 0xffffffff);	// CCM->CCGR6
 }
 
+function DisableMPU ()
+{
+	TargetInterface.message ("### DisableMPU");
+
+	var MPU = 0xE000E000 + 0x0D90;	// SCS_BASE + MPU offset
+	// Disable MPU which will be enabled by ROM to prevent code execution
+	reg = TargetInterface.peekUint32 (MPU + 0x04);			// MPU->CTRL
+	reg &= ~0x1;											// Disable Enable Flag
+	TargetInterface.pokeUint32 (MPU + 0x04, reg);
+}
+
 
 function Clock_Init_1021 () 
 {
@@ -209,9 +230,7 @@ function Clock_Init_1021 ()
 	TargetInterface.pokeUint32 (0x400FC014, reg);			// CCM->CBCDR
 
 	// Disable MPU which will be enabled by ROM to prevent code execution
-	reg = TargetInterface.peekUint32 (0xE000ED94);
-	reg &= ~0x1;
-	TargetInterface.pokeUint32 (0xE000ED94, reg);
+	DisableMPU ();
 	TargetInterface.message ("Clock_Init_1021 - Done");
 }
 
@@ -275,6 +294,7 @@ function SDRAM_Init ()
 		case "MIMXRT1062":
 		case "MIMXRT1064":
 			SDRAM_Init_10xx ();
+			break;
 		default:
 			TargetInterface.message ("SDRAM_Init - unknown Device: " + DeviceName);
 			return;

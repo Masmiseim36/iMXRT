@@ -1,0 +1,124 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="Loader_CM33" target="8" version="2">
+  <configuration
+    Name="Debug"
+    c_preprocessor_definitions="DEBUG=1"
+    gcc_debugging_level="Level 3"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="None"
+    hidden="Yes" />
+  <configuration
+    Name="Release"
+    c_preprocessor_definitions="NDEBUG=1;STARTUP_FROM_RESET=1"
+    gcc_debugging_level="None"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="Level 1"
+    hidden="Yes" />
+  <configuration
+    Name="600"
+    Target="MIMXRT685SFVKB_cm33"
+    c_preprocessor_definitions="CPU_MIMXRT685SFVKB_cm33"
+    c_user_include_directories=".;./iMXRT600/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT600.xml"
+    macros="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
+  <configuration
+    Name="MIMXRT600_Debug"
+    build_output_file_name="Loader_iMXRT600_M33_Debug.elf"
+    inherited_configurations="600;Debug" />
+  <configuration
+    Name="MIMXRT600_Release"
+    build_output_file_name="Loader_iMXRT600_M33.elf"
+    inherited_configurations="600;Release" />
+  <project Name="Loader_CM33">
+    <configuration
+      CMSIS_CORE="Yes"
+      Name="Common"
+      Placement="SRAM"
+      arm_architecture="v8M_Mainline"
+      arm_core_type="Cortex-M33"
+      arm_fpu_type="FPv5-SP-D16"
+      arm_linker_heap_size="1024"
+      arm_linker_stack_size="2048"
+      arm_simulator_memory_simulation_parameter="RAM;0x1FFE0000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20240000;0x00080000;ROM;0x30000000;0x04000000"
+      arm_target_loader_applicable_loaders=""
+      arm_target_loader_default_loader=""
+      arm_target_loader_reset_after_download="No"
+      arm_v8M_has_cmse="Yes"
+      arm_v8M_has_dsp="Yes"
+      batch_build_configurations="MIMXRT600_Release"
+      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
+      c_user_include_directories=". ;./.."
+      debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
+      debug_startup_completion_point="main"
+      linker_additional_files="$(StudioDir)/lib/libmem$(LibExt)$(LIB);$(StudioDir)/lib/libmem_loader$(LibExt)$(LIB)"
+      linker_keep_symbols="libmem_crc32"
+      linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
+      linker_section_placement_macros="RAM_NAME=SRAM"
+      project_directory=""
+      project_type="Executable"
+      property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml"
+      target_connect_script="Connect()"
+      target_get_partname_script="GetPartName()"
+      target_reset_script="Reset()"
+      target_script_file="$(ProjectDir)/iMXRT_Target.js" />
+    <configuration
+      Name="Flash"
+      arm_target_flash_loader_file_path="../Loader2/Loader_$(Family)_M33.elf" />
+    <folder Name="System Files">
+      <file file_name="$(StudioDir)/source/thumb_crt0.s" />
+      <file file_name="../startup_$(DeviceName).s" />
+      <file file_name="../system_$(DeviceName).h" />
+      <file file_name="../system_$(DeviceName).c" />
+      <file file_name="../$(DeviceName).h" />
+      <file file_name="../$(DeviceName)_features.h" />
+      <file file_name="../fsl_device_registers.h" />
+      <file file_name="iMXRT_Target.js" />
+    </folder>
+    <folder Name="drivers">
+      <file file_name="fsl_common.c" />
+      <file file_name="fsl_common.h" />
+      <file file_name="fsl_cache.c">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+      </file>
+      <file file_name="fsl_cache.h" />
+      <file file_name="pin_mux.h" />
+      <folder Name="iMXRT600">
+        <file file_name="iMXRT600/board.h" />
+        <file file_name="iMXRT600/clock_config.c" />
+        <file file_name="iMXRT600/clock_config.h" />
+        <file file_name="iMXRT600/fsl_clock.c" />
+        <file file_name="iMXRT600/fsl_clock.h" />
+        <file file_name="iMXRT600/fsl_dma.c" />
+        <file file_name="iMXRT600/fsl_dma.h" />
+        <file file_name="iMXRT600/fsl_gpio.c" />
+        <file file_name="iMXRT600/fsl_gpio.h" />
+        <file file_name="iMXRT600/fsl_reset.c" />
+        <file file_name="iMXRT600/fsl_reset.h" />
+        <file file_name="iMXRT600/pin_mux.c" />
+        <file file_name="iMXRT600/fsl_iopctl.h" />
+        <file file_name="iMXRT600/fsl_power.c" />
+        <file file_name="iMXRT600/fsl_power.h" />
+      </folder>
+      <file file_name="fsl_flexspi.c" />
+      <file file_name="fsl_flexspi.h" />
+      <file file_name="fsl_usart.c" />
+      <file file_name="fsl_usart.h" />
+      <file file_name="fsl_flexcomm.c" />
+      <file file_name="fsl_flexcomm.h" />
+    </folder>
+    <folder Name="Source">
+      <file file_name="loader.c" />
+      <file file_name="libmem_driver_Hyperflash.c" />
+      <file file_name="libmem_driver_Hyperflash.h" />
+      <file file_name="libmem_Tools.c" />
+      <file file_name="libmem_Tools.h" />
+      <file file_name="libmem_driver_xSPI.c" />
+      <file file_name="libmem_driver_xSPI.h" />
+      <file file_name="DebugPrint.h" />
+      <file file_name="board.cpp" />
+      <file file_name="DebugPrint_USART.c" />
+      <file file_name="board_generic.h" />
+    </folder>
+  </project>
+</solution>

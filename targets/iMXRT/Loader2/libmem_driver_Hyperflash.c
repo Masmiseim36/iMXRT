@@ -240,7 +240,7 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (libmem_driver_handle_t *Flash
 //	libmem_register_driver (FlashHandle, (uint8_t *)libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, &DriverFunctionsExt);
 	libmem_register_driver (FlashHandle, (uint8_t *)libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, NULL);
 	FlashHandle->user_data = (uint32_t)base;
-	return libmem_driver_paged_write_init (&PagedWrite_CtrlBlk, write_buffer, HYPERFLASH_PAGE_SIZE, ProgramPage, 4, LIBMEM_DRIVER_PAGED_WRITE_OPTION_DISABLE_PAGE_PRELOAD);
+	return libmem_driver_paged_write_init (&PagedWrite_CtrlBlk, write_buffer, HYPERFLASH_PAGE_SIZE, ProgramPage, 4, 0);
 }
 
 

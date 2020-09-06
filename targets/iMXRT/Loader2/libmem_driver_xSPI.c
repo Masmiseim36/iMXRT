@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
- Copyright (C) 2019-2020  Markus Klein
+Copyright (C) 2019-2020  Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -729,7 +729,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle
 //	libmem_register_driver (FlashHandle, (uint8_t *)libmem_GetBaseAddress(base), FlashSize, geometry, 0, &DriverFunctions, &DriverFunctions_Extended);
 	libmem_register_driver (FlashHandle, (uint8_t *)libmem_GetBaseAddress(base), FlashSize, geometry, 0, &DriverFunctions, NULL);
 	FlashHandle->user_data = (uint32_t)base;
-	return libmem_driver_paged_write_init (&paged_write_ctrlblk, write_buffer, QSPIFLASH_PAGE_SIZE, ProgramPage, 4, LIBMEM_DRIVER_PAGED_WRITE_OPTION_DISABLE_PAGE_PRELOAD);
+	return libmem_driver_paged_write_init (&paged_write_ctrlblk, write_buffer, QSPIFLASH_PAGE_SIZE, ProgramPage, 4, 0);
 }
 
 

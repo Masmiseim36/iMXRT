@@ -124,7 +124,14 @@ function EnableTrace (traceInterfaceType)
 function GetProjectPartName ()
 {
 	var TargetFullName = TargetInterface.getProjectProperty ("Target");
-	var TargetShort = TargetFullName.substring (0, 10);
+	if (TargetFullName == null)
+		return "";
+
+	var TargetShort
+	if (TargetFullName.charAt(9) > '9')
+		TargetShort = TargetFullName.substring (0, 9);	// Three digits number in the target name
+	else
+		TargetShort = TargetFullName.substring (0, 10);	// Four digits number in the target name
 
 	switch (TargetFullName.slice(-4))
 	{

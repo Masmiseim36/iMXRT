@@ -33,7 +33,6 @@ OF SUCH DAMAGE. */
 #include "pin_mux.h"
 #include "DebugPrint.h"
 
-extern void BOARD_BootClockGate (void);
 
 enum LibmemStatus Init_Libmem (libmem_driver_handle_t *handle, enum eMemoryType, FLEXSPI_Type *base);
 void InitOctaSPIPins (FLEXSPI_Type *base);
@@ -154,11 +153,11 @@ int main (uint32_t flags, uint32_t param)
 	if (res == LIBMEM_STATUS_SUCCESS)
 	{
 		#if defined INITIALIZE_TCM_SECTIONS
-		DebugPrint ("Start RPC loader\r\n");
+			DebugPrint ("Start RPC loader\r\n");
 			extern uint8_t __DTCM_segment_start__;
 			extern uint8_t __DTCM_segment_used_end__;
 			extern uint8_t __DTCM_segment_end__;
-		res = libmem_rpc_loader_start (&__DTCM_segment_used_end__, &__DTCM_segment_end__ - 1);
+			res = libmem_rpc_loader_start (&__DTCM_segment_used_end__, &__DTCM_segment_end__ - 1);
 		#else
 			extern uint8_t __SRAM_segment_start__;
 			extern uint8_t __SRAM_segment_used_end__;

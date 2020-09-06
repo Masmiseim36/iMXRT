@@ -32,9 +32,9 @@ extern "C"
 
 	#define ENABLE_DEBUG_PRINT 0
 
-bool ConfigUart (void);
-void DebugPrint (const char *Message);
-void DebugPrintf (const char *Message, ...);
+	bool ConfigUart (void);
+	void DebugPrint (const char *Message);
+	void DebugPrintf (const char *Message, ...);
 
 #ifdef __cplusplus
 }
