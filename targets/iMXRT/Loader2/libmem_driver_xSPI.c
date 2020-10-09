@@ -462,6 +462,11 @@ void SetClockConfig (FLEXSPI_Type *base, uint32_t div)
 			break;
 	}
 }
+#else
+	void SetClockConfig (FLEXSPI_Type *base, uint32_t div)
+	{
+		BOARD_SetFlexspiClock (2, div);		// Use AUX0_PLL as clock source for the FlexSPI
+	}
 #endif
 
 

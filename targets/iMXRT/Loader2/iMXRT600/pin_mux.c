@@ -330,6 +330,30 @@ void BOARD_PerformJEDECReset (void)
 	}
 }
 
+
+
+/* BOARD_SetFlexspiClock run in RAM used to configure FlexSPI clock source and divider when XIP. */
+void BOARD_SetFlexspiClock(uint32_t src, uint32_t divider)
+{
+    if ((CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src)) ||
+        ((CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (divider - 1)))
+    {
+        /* Disable clock before changing clock source */
+        CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;
+        /* Update flexspi clock. */
+        CLKCTL0->FLEXSPIFCLKSEL = CLKCTL0_FLEXSPIFCLKSEL_SEL(src);
+        CLKCTL0->FLEXSPIFCLKDIV |= CLKCTL0_FLEXSPIFCLKDIV_RESET_MASK; /* Reset the divider counter */
+        CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV(divider - 1);
+        while ((CLKCTL0->FLEXSPIFCLKDIV) & CLKCTL0_FLEXSPIFCLKDIV_REQFLAG_MASK)
+        {
+        }
+        /* Enable FLEXSPI clock again */
+        CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;
+    }
+}
+
+
+
 /***********************************************************************************************************************
  * EOF
  **********************************************************************************************************************/

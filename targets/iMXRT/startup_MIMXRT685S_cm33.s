@@ -351,7 +351,7 @@ ISR_RESERVED
   .section .vectors, "ax"
 _vectors_end:
 
-#ifdef VECTORS_IN_RAM
+#if defined VECTORS_IN_RAM && defined XIP_EXTERNAL_FLASH
   .section .vectors_ram, "ax"
 _vectors_ram:
   .space _vectors_end-_vectors, 0
@@ -368,7 +368,7 @@ reset_handler:
   bl SystemInit
 #endif
 
-#ifdef VECTORS_IN_RAM
+#if defined VECTORS_IN_RAM && defined XIP_EXTERNAL_FLASH
   ldr r0, =__vectors_load_start__
   ldr r1, =__vectors_load_end__
   ldr r2, =_vectors_ram
@@ -410,7 +410,7 @@ l1:
 
   /* Configure vector table offset register */
   ldr r0, =0xE000ED08
-#ifdef VECTORS_IN_RAM
+#if defined VECTORS_IN_RAM && defined XIP_EXTERNAL_FLASH
   ldr r1, =_vectors_ram
 #else
   ldr r1, =_vectors

@@ -99,6 +99,10 @@
         <file file_name="iMXRT600/fsl_iopctl.h" />
         <file file_name="iMXRT600/fsl_power.c" />
         <file file_name="iMXRT600/fsl_power.h" />
+        <file file_name="iMXRT600/libpower_softabi.a" />
+        <file file_name="iMXRT600/placement.xml">
+          <configuration Name="Common" file_type="Section Placement" />
+        </file>
       </folder>
       <file file_name="fsl_flexspi.c" />
       <file file_name="fsl_flexspi.h" />
