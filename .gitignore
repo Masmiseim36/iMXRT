@@ -1,6 +1,8 @@
 *.hzs
 *.hzq
 *.map
+Loader_CM33 MIMXRT600_Release
+Loader_CM33 MIMXRT600_Debug
 Loader_CM7 MIMXRT1011_Release
 Loader_CM7 MIMXRT1011_Debug
 Loader_CM7 MIMXRT1015_Release
@@ -13,8 +15,8 @@ Loader_CM7 MIMXRT1060_Release
 Loader_CM7 MIMXRT1060_Debug
 Loader_CM7 MIMXRT1064_Release
 Loader_CM7 MIMXRT1064_Debug
-Loader_CM7 MIMXRT1170_Debug
 Loader_CM7 MIMXRT1170_Release
+Loader_CM7 MIMXRT1170_Debug
 SayHello THUMB Release
 SayHello THUMB Debug
 iMXRT Loader MIMXRT1011_QuadSPI_4KB_SEC Debug

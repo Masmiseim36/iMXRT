@@ -333,7 +333,7 @@ Erase a sector of the Flash-Memory
 @param h Handle to the Flash-Driver
 @param si Information about the sector which should be erased
 @return static int LIBMEM_STATUS_SUCCESS when the erase operation was successfully, otherwise LIBMEM_STATUS_ERROR */
-static int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
+static status_t EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 {
 	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
 	uint32_t SectorAddr = libmem_CalculateOffset (base, (uint32_t)si->start);

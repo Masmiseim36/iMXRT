@@ -114,11 +114,13 @@ void BOARD_PerformJEDECReset (void)
 	{
 		// drive CS low
 		GPIO_WritePinOutput (GPIO3, 31, 0);
-		//for(j=0; j<100; j++);
 		// drive SI low or high: alternate its state every iteration
 		GPIO_WritePinOutput (GPIO3, 22, (i&1));
+		for (uint32_t j=0; j<100; j++);
 		// drive CS high; SI state will be captured on the CS rising edge
 		GPIO_WritePinOutput (GPIO3, 31, 1);
-		//for(j=0; j<100; j++);
+		for (uint32_t j=0; j<100; j++);
 	}
+
+	SDK_DelayAtLeastUs (110, SystemCoreClock);
 }
