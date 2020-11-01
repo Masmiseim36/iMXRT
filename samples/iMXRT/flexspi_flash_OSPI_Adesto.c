@@ -89,18 +89,24 @@ const flexspi_nor_config_t FlashBootHeader =
 			// (0) Read
 			[ 0] = FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_8PAD, 0x0B, RADDR_DDR, FLEXSPI_8PAD, 0x20),
 			[ 1] = FLEXSPI_LUT_SEQ (DUMMY_DDR, FLEXSPI_8PAD,(DUMMY_CYCLES*2+1), READ_DDR, FLEXSPI_8PAD, 0x80),
+
 			// (1) Read Status (byte 1)
 			[ 4] = FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_8PAD, 0x05, DUMMY_DDR, FLEXSPI_8PAD, 0x08),
 			[ 5] = FLEXSPI_LUT_SEQ (READ_DDR,  FLEXSPI_8PAD, 0x01, STOP,      FLEXSPI_1PAD, 0x0),
+
 			// (3) Write Enable
 			[12] = FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x06, STOP,      FLEXSPI_1PAD, 0x0),
+
 			// (4) Page Program
 			[16] = FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_8PAD, 0x02, RADDR_DDR, FLEXSPI_8PAD, 32),
 			[17] = FLEXSPI_LUT_SEQ (WRITE_SDR, FLEXSPI_8PAD, 128,  STOP,      FLEXSPI_1PAD, 0),
+
 			// (5) Write Status Register Byte 1
 			[20] =  FLEXSPI_LUT_SEQ(CMD_SDR,   FLEXSPI_1PAD, 0x01, WRITE_SDR, FLEXSPI_1PAD, 1),
+
 			// (6) Write Status Register Byte 2
 			[24] =  FLEXSPI_LUT_SEQ(CMD_SDR,   FLEXSPI_1PAD, 0x31, WRITE_SDR, FLEXSPI_1PAD, 1),
+
 			// (14) Write Status/Control Registers (this specifc sequence will writes 2 bytes to status/control regs 2-3)
 			[56] = FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x71, CMD_SDR,   FLEXSPI_1PAD, 0x02),
 			[57] = FLEXSPI_LUT_SEQ (WRITE_SDR, FLEXSPI_1PAD, 0x02, STOP,      FLEXSPI_1PAD, 0x0),

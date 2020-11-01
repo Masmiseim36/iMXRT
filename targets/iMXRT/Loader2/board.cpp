@@ -92,7 +92,7 @@
 void BOARD_ConfigMPU (void)
 {
 	#if defined(__ICACHE_PRESENT) && __ICACHE_PRESENT
-		/* Disable I cache and D cache */
+		// Disable I cache and D cache
 		if (SCB_CCR_IC_Msk == (SCB_CCR_IC_Msk & SCB->CCR))
 		{
 			SCB_DisableICache();
@@ -106,7 +106,7 @@ void BOARD_ConfigMPU (void)
 	#endif
 
 	#if defined ARM_MPU_ARMV7_H
-		/* Disable MPU */
+		// Disable MPU
 		ARM_MPU_Disable ();
 
 		/* MPU configure:
@@ -123,22 +123,14 @@ void BOARD_ConfigMPU (void)
 		 *  TypeExtField  IsShareable  IsCacheable  IsBufferable   Memory Attribtue    Shareability        Cache
 		 *     0             x           0           0             Strongly Ordered    shareable
 		 *     0             x           0           1              Device             shareable
-		 *     0             0           1           0              Normal             not shareable   Outer and inner write
-		 * through no write allocate
-		 *     0             0           1           1              Normal             not shareable   Outer and inner write
-		 * back no write allocate
-		 *     0             1           1           0              Normal             shareable       Outer and inner write
-		 * through no write allocate
-		 *     0             1           1           1              Normal             shareable       Outer and inner write
-		 * back no write allocate
-		 *     1             0           0           0              Normal             not shareable   outer and inner
-		 * noncache
-		 *     1             1           0           0              Normal             shareable       outer and inner
-		 * noncache
-		 *     1             0           1           1              Normal             not shareable   outer and inner write
-		 * back write/read acllocate
-		 *     1             1           1           1              Normal             shareable       outer and inner write
-		 * back write/read acllocate
+		 *     0             0           1           0              Normal             not shareable   Outer and inner write through no write allocate
+		 *     0             0           1           1              Normal             not shareable   Outer and inner write back no write allocate
+		 *     0             1           1           0              Normal             shareable       Outer and inner write through no write allocate
+		 *     0             1           1           1              Normal             shareable       Outer and inner write back no write allocate
+		 *     1             0           0           0              Normal             not shareable   outer and inner noncache
+		 *     1             1           0           0              Normal             shareable       outer and inner noncache
+		 *     1             0           1           1              Normal             not shareable   outer and inner write back write/read acllocate
+		 *     1             1           1           1              Normal             shareable       outer and inner write back write/read acllocate
 		 *     2             x           0           0              Device              not shareable
 		 *  Above are normal use settings, if your want to see more details or want to config different inner/outter cache
 		 * policy.
@@ -188,7 +180,7 @@ void BOARD_ConfigMPU (void)
 			MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_16MB);
 		#endif
 
-		/* Enable MPU */
+		// Enable MPU
 		ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);
 	#elif defined ARM_MPU_ARMV8_H
 		#warning " MPU for ARMv8 Architecture not supported"
@@ -196,7 +188,7 @@ void BOARD_ConfigMPU (void)
 	#else
 		#error "unknown MPU type"
 	#endif
-	/* Enable I cache and D cache */
+	// Enable I cache and D cache
 	#if defined(__DCACHE_PRESENT) && __DCACHE_PRESENT
 		SCB_EnableDCache();
 	#endif

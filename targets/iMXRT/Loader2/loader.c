@@ -70,7 +70,7 @@ void ExecuteTest (uint32_t *MemPointer)
 
 int main (uint32_t flags, uint32_t param)
 {
-	BOARD_ConfigMPU     ();
+//	BOARD_ConfigMPU     ();
 	BOARD_BootClockGate ();
 	BOARD_BootClockRUN  ();
 	#if defined FSL_FEATURE_SOC_CCM_ANALOG_COUNT && FSL_FEATURE_SOC_CCM_ANALOG_COUNT > 0

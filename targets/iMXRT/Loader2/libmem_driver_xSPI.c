@@ -434,7 +434,7 @@ static const libmem_driver_functions_t DriverFunctions =
 	libmem_Flush
 };
 
-static const libmem_ext_driver_functions_t ext_driver_functions =
+static const libmem_ext_driver_functions_t DriverFunctions_Extended =
 {
 	0,
 	libmem_Read,
@@ -933,6 +933,8 @@ Erase the whole-Flash-memory
 @return static status_t Status of the Operation - kStatus_Success when successfully */
 static status_t EraseChip (FLEXSPI_Type *base)
 {
+	DebugPrintf ("EraseChip\r\n");
+
 	status_t stat = WriteEnable (base, 0);
 	if (stat != kStatus_Success)
 		return stat;
@@ -1073,6 +1075,8 @@ The LIBMEM driver's read extended function.
 static int libmem_Read (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
 {
 	(void)h;
+
+	DebugPrintf ("Read at 0x%x, size: %d\r\n", src, size);
 	if (size)
 		memcpy (dest, src, size);
 	return LibmemStaus_Success;
@@ -1089,6 +1093,7 @@ static uint32_t libmem_CRC32 (libmem_driver_handle_t *h, const uint8_t *start, s
 {
 	(void)h;
 	crc = libmem_crc32_direct (start, size, crc);
+	DebugPrintf ("Calculate CRC from 0x%X, size 0x%X, calculated CRC: 0x%X\r\n", start, size, crc);
 	return crc;
 }
 
