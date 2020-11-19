@@ -116,7 +116,7 @@
       build_output_file_name="MIMXRT1021_QuadSPI_4KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1021CAG4A;FLM_ALGORITHM_MIMXRT1021_QuadSPI_4KB_SEC"
       debug_register_definition_file="../XML/MIMXRT1021_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT1021.xml"
+      linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
       macros="DeviceLoaderFile=../FLM/MIMXRT1021_QuadSPI_4KB_SEC.FLM" />
     <configuration
       Name="MIMXRT105x_HYPER_256KB_SEC"

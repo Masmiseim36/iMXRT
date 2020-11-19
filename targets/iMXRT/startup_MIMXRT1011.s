@@ -59,20 +59,6 @@
 1: b 1b /* endless loop */
 .endm
 
-.macro ISR_HANDLER2 name=
-  .section .vectors, "ax"
-  .word \name\()_IRQHandler
-  .section .init, "ax"
-  .thumb_func
-  .weak \name\()_IRQHandler
-\name\()_IRQHandler:
-1: b \name\()_DriverIRQHandler
-  .thumb_func
-  .weak \name\()_DriverIRQHandler
-\name\()_DriverIRQHandler:
-1: b 1b
-.endm
-
 .macro ISR_RESERVED
   .section .vectors, "ax"
   .word 0
@@ -91,20 +77,20 @@ _vectors:
 #else
   .word reset_wait
 #endif /* STARTUP_FROM_RESET */
-ISR_HANDLER NMI_Handler
-ISR_HANDLER HardFault_Handler
-ISR_HANDLER MemManage_Handler
-ISR_HANDLER BusFault_Handler
-ISR_HANDLER UsageFault_Handler
+ISR_HANDLER NMI_Handler                                     /* NMI Handler*/
+ISR_HANDLER HardFault_Handler                               /* Hard Fault Handler*/
+ISR_HANDLER MemManage_Handler                               /* MPU Fault Handler*/
+ISR_HANDLER BusFault_Handler                                /* Bus Fault Handler*/
+ISR_HANDLER UsageFault_Handler                              /* Usage Fault Handler*/
 ISR_RESERVED
 ISR_RESERVED
 ISR_RESERVED
 ISR_RESERVED
-ISR_HANDLER SVC_Handler
-ISR_HANDLER DebugMon_Handler
+ISR_HANDLER SVC_Handler                                     /* SVCall Handler*/
+ISR_HANDLER DebugMon_Handler                                /* Debug Monitor Handler*/
 ISR_RESERVED
-ISR_HANDLER PendSV_Handler
-ISR_HANDLER SysTick_Handler
+ISR_HANDLER PendSV_Handler                                  /* PendSV Handler*/
+ISR_HANDLER SysTick_Handler                                 /* SysTick Handler*/
   // External Interrupts
 ISR_HANDLER DMA0_IRQHandler                                 /* DMA channel 0 transfer complete*/
 ISR_HANDLER DMA1_IRQHandler                                 /* DMA channel 1 transfer complete*/
@@ -186,165 +172,165 @@ ISR_HANDLER ADC_ETC_IRQ1_IRQHandler                         /* ADCETC IRQ1 inter
 ISR_HANDLER ADC_ETC_IRQ2_IRQHandler                         /* ADCETC IRQ2 interrupt*/
 ISR_HANDLER ADC_ETC_IRQ3_IRQHandler                         /* ADCETC IRQ3 interrupt*/
 ISR_HANDLER ADC_ETC_ERROR_IRQ_IRQHandler                    /* ADCETC Error IRQ interrupt*/
-ISR_RESERVED 
-ISR_RESERVED 
-ISR_RESERVED 
-ISR_RESERVED 
-ISR_RESERVED 
-ISR_RESERVED 
-ISR_RESERVED 
-ISR_RESERVED 
-ISR_RESERVED 
-ISR_RESERVED 
-ISR_RESERVED 
-ISR_RESERVED 
-ISR_RESERVED 
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED 
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED 
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
-ISR_RESERVED
+ISR_RESERVED                                                /* 96*/
+ISR_RESERVED                                                /* 97*/
+ISR_RESERVED                                                /* 98*/
+ISR_RESERVED                                                /* 99*/
+ISR_RESERVED                                                /* 100*/
+ISR_RESERVED                                                /* 101*/
+ISR_RESERVED                                                /* 102*/
+ISR_RESERVED                                                /* 103*/
+ISR_RESERVED                                                /* 104*/
+ISR_RESERVED                                                /* 105*/
+ISR_RESERVED                                                /* 106*/
+ISR_RESERVED                                                /* 107*/
+ISR_RESERVED                                                /* 108*/
+ISR_RESERVED                                                /* 109*/
+ISR_RESERVED                                                /* 110*/
+ISR_RESERVED                                                /* 111*/
+ISR_RESERVED                                                /* 112*/
+ISR_RESERVED                                                /* 113*/
+ISR_RESERVED                                                /* 114*/
+ISR_RESERVED                                                /* 115*/
+ISR_RESERVED                                                /* 116*/
+ISR_RESERVED                                                /* 117*/
+ISR_RESERVED                                                /* 118*/
+ISR_RESERVED                                                /* 119*/
+ISR_RESERVED                                                /* 120*/
+ISR_RESERVED                                                /* 121*/
+ISR_RESERVED                                                /* 122*/
+ISR_RESERVED                                                /* 123*/
+ISR_RESERVED                                                /* 124*/
+ISR_RESERVED                                                /* 125*/
+ISR_RESERVED                                                /* 126*/
+ISR_RESERVED                                                /* 127*/
+ISR_RESERVED                                                /* 128*/
+ISR_RESERVED                                                /* 129*/
+ISR_RESERVED                                                /* 130*/
+ISR_RESERVED                                                /* 131*/
+ISR_RESERVED                                                /* 132*/
+ISR_RESERVED                                                /* 133*/
+ISR_RESERVED                                                /* 134*/
+ISR_RESERVED                                                /* 135*/
+ISR_RESERVED                                                /* 136*/
+ISR_RESERVED                                                /* 137*/
+ISR_RESERVED                                                /* 138*/
+ISR_RESERVED                                                /* 139*/
+ISR_RESERVED                                                /* 140*/
+ISR_RESERVED                                                /* 141*/
+ISR_RESERVED                                                /* 142*/
+ISR_RESERVED                                                /* 143*/
+ISR_RESERVED                                                /* 144*/
+ISR_RESERVED                                                /* 145*/
+ISR_RESERVED                                                /* 146*/
+ISR_RESERVED                                                /* 147*/
+ISR_RESERVED                                                /* 148*/
+ISR_RESERVED                                                /* 149*/
+ISR_RESERVED                                                /* 150*/
+ISR_RESERVED                                                /* 151*/
+ISR_RESERVED                                                /* 152*/
+ISR_RESERVED                                                /* 153*/
+ISR_RESERVED                                                /* 154*/
+ISR_RESERVED                                                /* 155*/
+ISR_RESERVED                                                /* 156*/
+ISR_RESERVED                                                /* 157*/
+ISR_RESERVED                                                /* 158*/
+ISR_RESERVED                                                /* 159*/
+ISR_RESERVED                                                /* 160*/
+ISR_RESERVED                                                /* 161*/
+ISR_RESERVED                                                /* 162*/
+ISR_RESERVED                                                /* 163*/
+ISR_RESERVED                                                /* 164*/
+ISR_RESERVED                                                /* 165*/
+ISR_RESERVED                                                /* 166*/
+ISR_RESERVED                                                /* 167*/
+ISR_RESERVED                                                /* 168*/
+ISR_RESERVED                                                /* 169*/
+ISR_RESERVED                                                /* 170*/
+ISR_RESERVED                                                /* 171*/
+ISR_RESERVED                                                /* 172*/
+ISR_RESERVED                                                /* 173*/
+ISR_RESERVED                                                /* 174*/
+ISR_RESERVED                                                /* 175*/
+ISR_RESERVED                                                /* 176*/
+ISR_RESERVED                                                /* 177*/
+ISR_RESERVED                                                /* 178*/
+ISR_RESERVED                                                /* 179*/
+ISR_RESERVED                                                /* 180*/
+ISR_RESERVED                                                /* 181*/
+ISR_RESERVED                                                /* 182*/
+ISR_RESERVED                                                /* 183*/
+ISR_RESERVED                                                /* 184*/
+ISR_RESERVED                                                /* 185*/
+ISR_RESERVED                                                /* 186*/
+ISR_RESERVED                                                /* 187*/
+ISR_RESERVED                                                /* 188*/
+ISR_RESERVED                                                /* 189*/
+ISR_RESERVED                                                /* 190*/
+ISR_RESERVED                                                /* 191*/
+ISR_RESERVED                                                /* 192*/
+ISR_RESERVED                                                /* 193*/
+ISR_RESERVED                                                /* 194*/
+ISR_RESERVED                                                /* 195*/
+ISR_RESERVED                                                /* 196*/
+ISR_RESERVED                                                /* 197*/
+ISR_RESERVED                                                /* 198*/
+ISR_RESERVED                                                /* 199*/
+ISR_RESERVED                                                /* 200*/
+ISR_RESERVED                                                /* 201*/
+ISR_RESERVED                                                /* 202*/
+ISR_RESERVED                                                /* 203*/
+ISR_RESERVED                                                /* 204*/
+ISR_RESERVED                                                /* 205*/
+ISR_RESERVED                                                /* 206*/
+ISR_RESERVED                                                /* 207*/
+ISR_RESERVED                                                /* 208*/
+ISR_RESERVED                                                /* 209*/
+ISR_RESERVED                                                /* 210*/
+ISR_RESERVED                                                /* 211*/
+ISR_RESERVED                                                /* 212*/
+ISR_RESERVED                                                /* 213*/
+ISR_RESERVED                                                /* 214*/
+ISR_RESERVED                                                /* 215*/
+ISR_RESERVED                                                /* 216*/
+ISR_RESERVED                                                /* 217*/
+ISR_RESERVED                                                /* 218*/
+ISR_RESERVED                                                /* 219*/
+ISR_RESERVED                                                /* 220*/
+ISR_RESERVED                                                /* 221*/
+ISR_RESERVED                                                /* 222*/
+ISR_RESERVED                                                /* 223*/
+ISR_RESERVED                                                /* 224*/
+ISR_RESERVED                                                /* 225*/
+ISR_RESERVED                                                /* 226*/
+ISR_RESERVED                                                /* 227*/
+ISR_RESERVED                                                /* 228*/
+ISR_RESERVED                                                /* 229*/
+ISR_RESERVED                                                /* 230*/
+ISR_RESERVED                                                /* 231*/
+ISR_RESERVED                                                /* 232*/
+ISR_RESERVED                                                /* 233*/
+ISR_RESERVED                                                /* 234*/
+ISR_RESERVED                                                /* 235*/
+ISR_RESERVED                                                /* 236*/
+ISR_RESERVED                                                /* 237*/
+ISR_RESERVED                                                /* 238*/
+ISR_RESERVED                                                /* 239*/
+ISR_RESERVED                                                /* 240*/
+ISR_RESERVED                                                /* 241*/
+ISR_RESERVED                                                /* 242*/
+ISR_RESERVED                                                /* 243*/
+ISR_RESERVED                                                /* 244*/
+ISR_RESERVED                                                /* 245*/
+ISR_RESERVED                                                /* 246*/
+ISR_RESERVED                                                /* 247*/
+ISR_RESERVED                                                /* 248*/
+ISR_RESERVED                                                /* 249*/
+ISR_RESERVED                                                /* 250*/
+ISR_RESERVED                                                /* 251*/
+ISR_RESERVED                                                /* 252*/
+ISR_RESERVED                                                /* 253*/
+ISR_RESERVED                                                /* 254*/
 .long 0xFFFFFFFF   /*  Reserved for user TRIM value*/
 
   .section .vectors, "ax"

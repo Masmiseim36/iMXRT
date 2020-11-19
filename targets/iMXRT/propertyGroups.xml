@@ -29,27 +29,39 @@
 
 		<groupEntry name="MIMXRT1021CAG4A" aka="MIMXRT1021xxx4A" family="iMXRT1020">
 			<property name="macros" value="DeviceName=MIMXRT1021;Family=iMXRT1020" />
-			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1021.xml" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT102x.xml" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
 			<cdefine name="CPU_MIMXRT1021CAG4A"/>
 		</groupEntry>
 		<groupEntry name="MIMXRT1021CAF4A" aka="MIMXRT1021xxx4A" family="iMXRT1020">
 			<property name="macros" value="DeviceName=MIMXRT1021;Family=iMXRT1020" />
-			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1021.xml" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT102x.xml" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
 			<cdefine name="CPU_MIMXRT1021CAF4A"/>
 		</groupEntry>
 		<groupEntry name="MIMXRT1021DAG5A" aka="MIMXRT1021xxx5A" family="iMXRT1020">
 			<property name="macros" value="DeviceName=MIMXRT1021;Family=iMXRT1020" />
-			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1021.xml" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT102x.xml" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
 			<cdefine name="CPU_MIMXRT1021DAG5A"/>
 		</groupEntry>
 		<groupEntry name="MIMXRT1021DAF5A" aka="MIMXRT1021xxx5A" family="iMXRT1020">
 			<property name="macros" value="DeviceName=MIMXRT1021;Family=iMXRT1020" />
-			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1021.xml" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT102x.xml" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
 			<cdefine name="CPU_MIMXRT1021DAF5A"/>
+		</groupEntry>
+		<groupEntry name="MIMXRT1024CAG4A" aka="MIMXRT1024xxx4A" family="iMXRT1020">
+			<property name="macros" value="DeviceName=MIMXRT1024;Family=iMXRT1020" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT102x.xml" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1024CAG4A"/>
+		</groupEntry>
+		<groupEntry name="MIMXRT1024DAG5A" aka="MIMXRT1024xxx5A" family="iMXRT1020">
+			<property name="macros" value="DeviceName=MIMXRT1024;Family=iMXRT1020" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT102x.xml" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1024DAG5A"/>
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1051CVL5A" aka="MIMXRT1051xxx5A" family="iMXRT1050">

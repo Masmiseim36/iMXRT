@@ -57,6 +57,13 @@
 	#include "MIMXRT1021.h"
 	/* CPU specific feature definitions */
 	#include "MIMXRT1021_features.h"
+	
+#elif (defined(CPU_MIMXRT1024CAG4A) || defined(CPU_MIMXRT1024DAG5A))
+	#define MIMXRT1024_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT1024.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT1024_features.h"
 
 #elif (defined(CPU_MIMXRT1051CVJ5B) || defined(CPU_MIMXRT1051CVL5B) || defined(CPU_MIMXRT1051DVJ6B) || \
 	defined(CPU_MIMXRT1051DVL6B) || defined(CPU_MIMXRT1051DVL6A) || defined(CPU_MIMXRT1051CVL5A))

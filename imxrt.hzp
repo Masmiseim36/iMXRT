@@ -80,7 +80,13 @@
           <file file_name="targets/iMXRT/startup_MIMXRT1021.s" />
           <file file_name="targets/iMXRT/system_MIMXRT1021.c" />
           <file file_name="targets/iMXRT/system_MIMXRT1021.h" />
-          <file file_name="targets/iMXRT/MemoryMap_MIMXRT1021.xml" />
+          <file file_name="targets/iMXRT/MemoryMap_MIMXRT102x.xml" />
+          <file file_name="targets/iMXRT/MIMXRT1024.h" />
+          <file file_name="targets/iMXRT/MIMXRT1024_features.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1024.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1024.h" />
+          <file file_name="targets/iMXRT/XML/MIMXRT1024_Registers.xml" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1024.s" />
         </folder>
         <folder Name="105x">
           <file file_name="targets/iMXRT/MIMXRT1051.h" />
