@@ -1,5 +1,5 @@
 <!DOCTYPE CrossStudio_Package_Description_File>
-<package name="iMXRT" author="Rowley Associates Ltd" cpu_manufacturer="NXP" cpu_family="iMXRT" version="4.4.2" crossstudio_versions="8:4.2-" dependencies="CMSIS" build_version="crossworks_v4" >
+<package name="iMXRT" author="Rowley Associates Ltd" cpu_manufacturer="NXP" cpu_family="iMXRT" version="4.4.2" crossstudio_versions="8:4.7-" dependencies="CMSIS" build_version="crossworks_v4" >
   <group title="System Solutions">
     <file title="iMXRT Loader Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader.hzp" />
     <file title="iMX RT Samples" file_name="$(SamplesDir)/iMXRT/iMXRT.hzp" />
@@ -18,6 +18,8 @@
       <cpu name="MIMXRT1021CAF4A" />
       <cpu name="MIMXRT1021DAG5A" /> 
       <cpu name="MIMXRT1021DAF5A" />
+      <cpu name="MIMXRT1024CAG4A" />
+      <cpu name="MIMXRT1024DAG5A" />
     </category>
     <category name="iMXRT1050">
       <cpu name="MIMXRT1051CVL5A" />
@@ -97,8 +99,10 @@
         <li><b>TCM</b> application runs ITCM and DTCM memories.</li>
         <li><b>SDRAM</b> application runs in External SD-RAM memory.</li>
         <li><b>FlexSPI (HYPER)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
-        <li><b>FlexSPI (EcoXiP)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
+        <li><b>FlexSPI (OctaSPI)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
         <li><b>FlexSPI (QuadSPI)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
+        <li><b>FlexSPI2 (HYPER)</b> application runs in FlexSPI2, ITCM, DTCM and OCRAM memories.</li>
+        <li><b>FlexSPI2 (OctaSPI)</b> application runs in FlexSPI2, ITCM, DTCM and OCRAM memories.</li>
         <li><b>FlexSPI2 (QuadSPI)</b> application runs in FlexSPI2, ITCM, DTCM and OCRAM memories.</li>
       </ul>
 

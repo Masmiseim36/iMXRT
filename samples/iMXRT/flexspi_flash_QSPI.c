@@ -102,4 +102,4 @@ const flexspi_nor_config_t FlashBootHeader =
 	.isUniformBlockSize = false,
 	};
 
-	#endif // XIP_BOOT_QSPI
+#endif // XIP_BOOT_QSPI

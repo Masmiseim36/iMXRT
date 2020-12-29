@@ -24,7 +24,7 @@
     c_preprocessor_definitions="CPU_MIMXRT1011DAE5A"
     c_user_include_directories=".;./iMXRT1011/."
     hidden="Yes"
-    linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1015.xml"
+    linker_memory_map_file="../MemoryMap_MIMXRT1015.xml"
     macros="DeviceName=MIMXRT1011" />
   <configuration
     Name="1015"
@@ -32,7 +32,7 @@
     c_preprocessor_definitions="CPU_MIMXRT1015CAF4A"
     c_user_include_directories=".;./iMXRT1015/."
     hidden="Yes"
-    linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1015.xml"
+    linker_memory_map_file="../MemoryMap_MIMXRT1015.xml"
     macros="DeviceName=MIMXRT1015" />
   <configuration
     Name="1020"
@@ -40,7 +40,7 @@
     c_preprocessor_definitions="CPU_MIMXRT1021DAF5A"
     c_user_include_directories=".;./iMXRT1020/."
     hidden="Yes"
-    linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT1021.xml"
+    linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
     macros="DeviceName=MIMXRT1021" />
   <configuration
     Name="1050"
@@ -48,7 +48,7 @@
     c_preprocessor_definitions="CPU_MIMXRT1052DVJ6B"
     c_user_include_directories=".;./iMXRT1050/."
     hidden="Yes"
-    linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT105x.xml"
+    linker_memory_map_file="../MemoryMap_MIMXRT105x.xml"
     macros="DeviceName=MIMXRT1052" />
   <configuration
     Name="1060"
@@ -56,7 +56,7 @@
     c_preprocessor_definitions="CPU_MIMXRT1062DVJ6A"
     c_user_include_directories=".;./iMXRT1060/."
     hidden="Yes"
-    linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml"
+    linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
     macros="DeviceName=MIMXRT1062" />
   <configuration
     Name="1064"
@@ -64,7 +64,7 @@
     c_preprocessor_definitions="CPU_MIMXRT1064DVL6A"
     c_user_include_directories=".;./iMXRT1064/."
     hidden="Yes"
-    linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml"
+    linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
     macros="DeviceName=MIMXRT1064" />
   <configuration
     Name="MIMXRT1011_Debug"
@@ -219,7 +219,7 @@
         <file file_name="iMXRT1020/board.h" />
         <file file_name="iMXRT1020/fsl_gpio.c" />
         <file file_name="iMXRT1020/fsl_gpio.h" />
-        <file file_name="../MemoryMap_MIMXRT1021.xml">
+        <file file_name="../MemoryMap_MIMXRT102x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
       </folder>

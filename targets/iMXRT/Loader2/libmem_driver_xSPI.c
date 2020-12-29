@@ -210,13 +210,13 @@ static const uint32_t LUT_QuadSPI_3[CUSTOM_LUT_LENGTH] =
 	[16] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x32, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 0x18),
 	[17] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR, kFLEXSPI_4PAD, 0x04, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 
-    // (5) Block Erase 4K / Sector Erase
+	// (5) Block Erase 4K / Sector Erase
 	[20] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x20, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 0x18),
 
 	// (6) Chip Erase 
 	[24] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xC7, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),	
 
-    // (7) Return to Standard SPI Mode
+	// (7) Return to Standard SPI Mode
 	[28] = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_4PAD, 0xF5, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 	
 	// (8) Write Status/Control Registers
@@ -336,7 +336,7 @@ static const uint32_t LUT_OctaSPI_DDR_Macronix[CUSTOM_LUT_LENGTH] =
 	// (1) Read Status (byte 1)
 	[4]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x05, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xFA),
 	[5]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x00),
-    [6]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x00),
+	[6]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x00),
 	[7]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD,   40, kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 1),
 
 	// (3) Write Enable     

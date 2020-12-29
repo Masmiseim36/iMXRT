@@ -29,8 +29,8 @@ const flexspi_nor_config_t FlashBootHeader =
 		.waitTimeCfgCommands  = 1U,
 		.deviceModeSeq =
 		{
-			.seqNum = 1,
-			.seqId = 6, // See Lookup table for more details
+			.seqNum   = 1,
+			.seqId    = 6, // See Lookup table for more details
 			.reserved = 0,
 		},
 		.deviceModeArg        = 2, // Enable OPI DDR mode

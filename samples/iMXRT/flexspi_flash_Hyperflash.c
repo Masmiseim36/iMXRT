@@ -54,20 +54,20 @@ const flexspi_nor_config_t FlashBootHeader =
 {
 	.memConfig =
 	{
-		.tag					= FLEXSPI_CFG_BLK_TAG,
-		.version				= FLEXSPI_CFG_BLK_VERSION,
-		.readSampleClkSrc		= kFlexSPIReadSampleClk_ExternalInputFromDqsPad,
-		.csHoldTime				= 3U,
-		.csSetupTime			= 3U,
-		.columnAddressWidth		= 3U,
-		.controllerMiscOption	= (1 << kFlexSpiMiscOffset_DdrModeEnable) | (1 << kFlexSpiMiscOffset_WordAddressableEnable) | (1 << kFlexSpiMiscOffset_SafeConfigFreqEnable) | (1u << kFlexSpiMiscOffset_DiffClkEnable),
-//		.deviceType				= kFlexSpiDeviceType_SerialNOR,
-		.sflashPadType			= kSerialFlash_8Pads,
-		.serialClkFreq			= kFlexSpiSerialClk_133MHz,
-		.sflashA1Size			= 64 * 1024 * 1024,
-		.dataValidTime			= {16, 16},
-//		.busyOffset				= 15,            //busy bit offset, valid range : 0-31
-//		.busyBitPolarity		= 1,        //1 – busy bit is 0 if device is busy
+		.tag                  = FLEXSPI_CFG_BLK_TAG,
+		.version              = FLEXSPI_CFG_BLK_VERSION,
+		.readSampleClkSrc     = kFlexSPIReadSampleClk_ExternalInputFromDqsPad,
+		.csHoldTime           = 3U,
+		.csSetupTime          = 3U,
+		.columnAddressWidth   = 3U,
+		.controllerMiscOption = (1 << kFlexSpiMiscOffset_DdrModeEnable) | (1 << kFlexSpiMiscOffset_WordAddressableEnable) | (1 << kFlexSpiMiscOffset_SafeConfigFreqEnable) | (1u << kFlexSpiMiscOffset_DiffClkEnable),
+//		.deviceType           = kFlexSpiDeviceType_SerialNOR,
+		.sflashPadType        = kSerialFlash_8Pads,
+		.serialClkFreq        = kFlexSpiSerialClk_133MHz,
+		.sflashA1Size         = 64 * 1024 * 1024,
+		.dataValidTime        = {16, 16},
+//		.busyOffset           = 15,       // busy bit offset, valid range : 0-31
+//		.busyBitPolarity      = 1,        // 1 – busy bit is 0 if device is busy
 		.lookupTable =
 		{
 			// (0) Configure LUT for read

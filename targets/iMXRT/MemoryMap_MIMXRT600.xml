@@ -1,5 +1,5 @@
 <!DOCTYPE Board_Memory_Definition_File>
 <Root name="iMXRT" >
-	<MemorySegment name="FlexSPI" start="0x08000000" size="$(FlexSPISIZE:0x07FFFFFF)" access="ReadOnly"/>
-	<MemorySegment name="SRAM"    start="0x00000000" size="$(SRAMSIZE:0x0047FFFF)"/>
+	<MemorySegment name="FlexSPI" start="0x08000000" size="$(FlexSPISIZE:0x08000000)" access="ReadOnly"/>
+	<MemorySegment name="SRAM"    start="0x00080000" size="$(SRAMSIZE:0x00480000)"    access="Read/Write"/>
 </Root>
