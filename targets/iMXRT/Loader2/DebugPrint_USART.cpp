@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2020  Markus Klein
+Copyright (C) 2019-2021  Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -28,8 +28,8 @@ OF SUCH DAMAGE. */
 #include "fsl_clock.h"
 
 
-
-#if defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0 && defined USART_BASE_PTRS
+#if defined USART_BASE_PTRS
+#if defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0
 	static USART_Type * const uart [] = USART_BASE_PTRS;
 
 	#include "fsl_usart.h"
@@ -84,19 +84,20 @@ OF SUCH DAMAGE. */
 		if (Length > 0 && Length <= sizeof(Buffer))
 			USART_WriteBlocking (uart[DEBUG_CONSOLE_UART_INDEX], Buffer, Length);
 	}
-#else
-	inline bool	ConfigUart (void)
+#else // defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0
+	bool ConfigUart (void)
 	{
 		return true;
 	}
 
-	inline void DebugPrint (const char *Message)
+	void DebugPrint (const char *Message)
 	{
 		(void)Message;
 	}
 
-	inline void DebugPrintf (const char *Message, ...)
+	void DebugPrintf (const char *Message, ...)
 	{
 		(void)Message;
 	}
-#endif
+#endif // defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0 ... else
+#endif // defined USART_BASE_PTRS

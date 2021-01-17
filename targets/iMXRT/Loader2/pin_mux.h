@@ -25,25 +25,39 @@ OF SUCH DAMAGE. */
 
 #include "fsl_device_registers.h"
 
-enum BOARD_PinConfiguratiomn
-{
-	//                       Slow Slew Rate               | DSE_6_R0_6 (43 Ohm)          | medium(100MHz)                 | Pull/Keeper Enabled           | Hysteresis Disabled | Open Drain Disabled | Keeper | 100K Ohm Pull Down
-	BOARD_UartPinConfig    = IOMUXC_SW_PAD_CTL_PAD_SRE(0) | IOMUXC_SW_PAD_CTL_PAD_DSE(6) | IOMUXC_SW_PAD_CTL_PAD_SPEED(2) | IOMUXC_SW_PAD_CTL_PAD_PKE(1),	// 0x10B0
-
-	//                       Fast Slew Rate               | DSE_6_R0_6 (43 Ohm)          | max(200MHz)                    | Pull/Keeper Enabled           | Hysteresis Disabled | Open Drain Disabled | Keeper | 100K Ohm Pull Down
-	BOARD_FlexSPIPinConfig = IOMUXC_SW_PAD_CTL_PAD_SRE(1) | IOMUXC_SW_PAD_CTL_PAD_DSE(6) | IOMUXC_SW_PAD_CTL_PAD_SPEED(3) | IOMUXC_SW_PAD_CTL_PAD_PKE(1)	// 0x0130F1
-};
-
-
-void BOARD_InitUARTPins    (void);
-void BOARD_InitQuadSPIPins (void);
-void BOARD_InitOctaSPIPins (void);
-
-void BOARD_PerformJEDECReset (void);
-
-#if defined FLEXSPI2
-	void BOARD_InitQuadSPI2Pins (void);
-	void BOARD_InitOctaSPI2Pins (void);
+#if defined(__cplusplus)
+extern "C" {
 #endif
+
+	enum BOARD_PinConfiguratiomn
+	{
+	#ifndef IOMUXC_SW_PAD_CTL_PAD_SPEED
+		BOARD_UartPinConfig = 0x10B0u,
+		BOARD_FlexSPIPinConfig = 0x10B0u,
+	#else
+		//                       Slow Slew Rate               | DSE_6_R0_6 (43 Ohm)          | medium(100MHz)                 | Pull/Keeper Enabled           | Hysteresis Disabled | Open Drain Disabled | Keeper | 100K Ohm Pull Down
+		BOARD_UartPinConfig    = IOMUXC_SW_PAD_CTL_PAD_SRE(0) | IOMUXC_SW_PAD_CTL_PAD_DSE(6) | IOMUXC_SW_PAD_CTL_PAD_SPEED(2) | IOMUXC_SW_PAD_CTL_PAD_PKE(1),	// 0x10B0
+
+		//                       Fast Slew Rate               | DSE_6_R0_6 (43 Ohm)          | max(200MHz)                    | Pull/Keeper Enabled           | Hysteresis Disabled | Open Drain Disabled | Keeper | 100K Ohm Pull Down
+		BOARD_FlexSPIPinConfig = IOMUXC_SW_PAD_CTL_PAD_SRE(1) | IOMUXC_SW_PAD_CTL_PAD_DSE(6) | IOMUXC_SW_PAD_CTL_PAD_SPEED(3) | IOMUXC_SW_PAD_CTL_PAD_PKE(1)	// 0x0130F1
+	#endif
+	};
+
+
+	void BOARD_InitUARTPins    (void);
+	void BOARD_InitQuadSPIPins (void);
+	void BOARD_InitOctaSPIPins (void);
+
+	void BOARD_PerformJEDECReset (void);
+
+	#if defined FLEXSPI2
+		void BOARD_InitQuadSPI2Pins (void);
+		void BOARD_InitOctaSPI2Pins (void);
+	#endif
+
+#if defined(__cplusplus)
+}
+#endif
+
 
 #endif // _PIN_MUX_H_

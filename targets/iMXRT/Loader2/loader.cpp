@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2020  Markus Klein
+Copyright (C) 2019-2021  Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -19,9 +19,12 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE. */
 
-#include <libmem.h>
-#include <libmem_loader.h>
-#include <libmem_flm_driver.h>
+extern "C"
+{
+	#include <libmem.h>
+	#include <libmem_loader.h>
+	#include <libmem_flm_driver.h>
+}
 #include <stdio.h>
 
 #include "board.h"
@@ -47,7 +50,7 @@ void ExecuteTest (uint32_t *MemPointer)
 
 	uint8_t *erase_start = 0;
 	size_t erase_size = 0;
-	LibmemStatus_t res = libmem_erase ((uint8_t *)MemPointer, sizeof(buffer), &erase_start, &erase_size);
+	LibmemStatus_t res = static_cast<LibmemStatus_t>(libmem_erase ((uint8_t *)MemPointer, sizeof(buffer), &erase_start, &erase_size));
 	if (res != LIBMEM_STATUS_SUCCESS)
 		DebugPrintf ("Error '%s' occurred\r\n", Libmem_GetErrorString (res));
 
@@ -61,8 +64,8 @@ void ExecuteTest (uint32_t *MemPointer)
 	if (ErrorCounter > 0)
 		DebugPrintf ("Invalid memory-chunks on erase: %d", ErrorCounter);
 
-	res = libmem_write ((uint8_t *)MemPointer, (uint8_t *)buffer, sizeof(buffer));
-	res = libmem_flush ();
+	res = static_cast<LibmemStatus_t>(libmem_write ((uint8_t *)MemPointer, (uint8_t *)buffer, sizeof(buffer)));
+	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
 	if (memcmp (MemPointer, buffer, sizeof (buffer)) != 0)
 		DebugPrint ("Writing failed\r\n");
@@ -74,7 +77,7 @@ int main (uint32_t flags, uint32_t param)
 	BOARD_BootClockGate ();
 	BOARD_BootClockRUN  ();
 	#if defined FSL_FEATURE_SOC_CCM_ANALOG_COUNT && FSL_FEATURE_SOC_CCM_ANALOG_COUNT > 0
-		const clock_usb_pll_config_t ConfigUsbPll = {.loopDivider = 0U};
+		const clock_usb_pll_config_t ConfigUsbPll = {.loopDivider = 0U, .src = 0U};
 		CLOCK_InitUsb1Pll   (&ConfigUsbPll);
 	#endif
 	#if defined FSL_FEATURE_SOC_IOMUXC_COUNT && FSL_FEATURE_SOC_IOMUXC_COUNT > 0
@@ -94,6 +97,8 @@ int main (uint32_t flags, uint32_t param)
 
 
 	#ifdef DEBUG
+		(void)flags;
+		(void)param;
 		// some test Code, because the Loader can not be debuged while using it in real scenarios
 //		#if defined CPU_MIMXRT1015CAF4A || defined CPU_MIMXRT1021DAF5A || defined CPU_MIMXRT1062DVJ6A || defined CPU_MIMXRT1064DVL6A
 //			BOARD_InitQuadSPIPins (); 
@@ -154,15 +159,15 @@ int main (uint32_t flags, uint32_t param)
 	{
 		#if defined INITIALIZE_TCM_SECTIONS
 			DebugPrint ("Start RPC loader\r\n");
-			extern uint8_t __DTCM_segment_start__;
+			//extern uint8_t __DTCM_segment_start__;
 			extern uint8_t __DTCM_segment_used_end__;
 			extern uint8_t __DTCM_segment_end__;
-			res = libmem_rpc_loader_start (&__DTCM_segment_used_end__, &__DTCM_segment_end__ - 1);
+			res = static_cast<LibmemStatus_t>(libmem_rpc_loader_start (&__DTCM_segment_used_end__, &__DTCM_segment_end__ - 1));
 		#else
 			extern uint8_t __SRAM_segment_start__;
 			extern uint8_t __SRAM_segment_used_end__;
 			extern uint8_t __SRAM_segment_end__;
-			res = libmem_rpc_loader_start (&__SRAM_segment_used_end__, &__SRAM_segment_end__ - 1);
+			res = static_cast<LibmemStatus_t>(libmem_rpc_loader_start (&__SRAM_segment_used_end__, &__SRAM_segment_end__ - 1));
 		#endif
 	}
 	else

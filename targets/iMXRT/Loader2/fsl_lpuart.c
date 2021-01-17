@@ -136,6 +136,7 @@ uint32_t LPUART_GetInstance(LPUART_Type *base)
  */
 size_t LPUART_TransferGetRxRingBufferLength(LPUART_Type *base, lpuart_handle_t *handle)
 {
+    (void)base;
     assert(NULL != handle);
 
     size_t size;
@@ -1462,6 +1463,7 @@ void LPUART_TransferAbortReceive(LPUART_Type *base, lpuart_handle_t *handle)
  */
 status_t LPUART_TransferGetReceiveCount(LPUART_Type *base, lpuart_handle_t *handle, uint32_t *count)
 {
+    (void)base;
     assert(NULL != handle);
     assert(NULL != count);
 
@@ -1725,6 +1727,8 @@ void LPUART_TransferHandleIRQ(LPUART_Type *base, lpuart_handle_t *handle)
  */
 void LPUART_TransferHandleErrorIRQ(LPUART_Type *base, lpuart_handle_t *handle)
 {
+    (void)base;
+    (void)handle;
     /* To be implemented by User. */
 }
 #if defined(FSL_FEATURE_LPUART_HAS_SHARED_IRQ0_IRQ1) && FSL_FEATURE_LPUART_HAS_SHARED_IRQ0_IRQ1

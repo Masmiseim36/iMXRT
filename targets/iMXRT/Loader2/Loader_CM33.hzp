@@ -47,10 +47,14 @@
       arm_v8M_has_cmse="Yes"
       arm_v8M_has_dsp="Yes"
       batch_build_configurations="MIMXRT600_Release"
+      c_additional_options="-fno-signed-char;-Wno-narrowing;-Wall;-Wextra;-Wmisleading-indentation;-Wshadow;-Wdouble-promotion;-Wformat=2"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
       c_user_include_directories=". ;./.."
+      cpp_only_additional_options="-Woverloaded-virtual;-Wnon-virtual-dtor"
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
       debug_startup_completion_point="main"
+      gcc_c_language_standard="c11"
+      gcc_cplusplus_language_standard="gnu++14"
       linker_additional_files="$(StudioDir)/lib/libmem$(LibExt)$(LIB);$(StudioDir)/lib/libmem_loader$(LibExt)$(LIB)"
       linker_keep_symbols="libmem_crc32"
       linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
@@ -99,7 +103,6 @@
         <file file_name="iMXRT600/fsl_iopctl.h" />
         <file file_name="iMXRT600/fsl_power.c" />
         <file file_name="iMXRT600/fsl_power.h" />
-        <file file_name="iMXRT600/libpower_softabi.a" />
         <file file_name="iMXRT600/placement.xml">
           <configuration Name="Common" file_type="Section Placement" />
         </file>
@@ -112,16 +115,16 @@
       <file file_name="fsl_flexcomm.h" />
     </folder>
     <folder Name="Source">
-      <file file_name="loader.c" />
-      <file file_name="libmem_driver_Hyperflash.c" />
+      <file file_name="loader.cpp" />
+      <file file_name="libmem_driver_Hyperflash.cpp" />
       <file file_name="libmem_driver_Hyperflash.h" />
-      <file file_name="libmem_Tools.c" />
+      <file file_name="libmem_Tools.cpp" />
       <file file_name="libmem_Tools.h" />
-      <file file_name="libmem_driver_xSPI.c" />
+      <file file_name="libmem_driver_xSPI.cpp" />
       <file file_name="libmem_driver_xSPI.h" />
       <file file_name="DebugPrint.h" />
       <file file_name="board.cpp" />
-      <file file_name="DebugPrint_USART.c" />
+      <file file_name="DebugPrint_USART.cpp" />
       <file file_name="board_generic.h" />
     </folder>
   </project>

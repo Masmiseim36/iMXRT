@@ -153,29 +153,29 @@ void BOARD_ConfigMPU (void)
 		// Region 1 setting: Memory with Normal type, not shareable, outer/inner write back   - ITCM
 		extern const uint32_t __ITCM_segment_start__;
 		extern const uint32_t __ITCM_segment_size__;
-		extern const uint32_t __ITCM_segment_end__;
+		//extern const uint32_t __ITCM_segment_end__;
 		MPU->RBAR = ARM_MPU_RBAR(1, (uint32_t)&__ITCM_segment_start__);
 		MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, CalculateMpuRegion ((uint32_t)&__ITCM_segment_size__));
 
 		// Region 2 setting: Memory with Normal type, not shareable, outer/inner write back   - DTCM
 		extern const uint32_t __DTCM_segment_start__;
 		extern const uint32_t __DTCM_segment_size__;
-		extern const uint32_t __DTCM_segment_end__;
+		//extern const uint32_t __DTCM_segment_end__;
 		MPU->RBAR = ARM_MPU_RBAR(2, (uint32_t)&__DTCM_segment_start__);
 		MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, CalculateMpuRegion ((uint32_t)&__DTCM_segment_size__));
 
 		// Region 3 setting: Setting Memory with Device type, not shareable, non-cacheable.   - FlexSPI
 		extern const uint32_t __FlexSPI_segment_start__;
-		extern const uint32_t __FlexSPI_segment_size__;
-		extern const uint32_t __FlexSPI_segment_end__;
+		//extern const uint32_t __FlexSPI_segment_size__;
+		//extern const uint32_t __FlexSPI_segment_end__;
 		MPU->RBAR = ARM_MPU_RBAR(3, (uint32_t)&__FlexSPI_segment_start__);
 		MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_16MB);
 
 		#if defined FLEXSPI2
 			// Region 4 setting: Setting Memory with Device type, not shareable, non-cacheable. - FlexSPI2
 			extern const uint32_t __FlexSPI2_segment_start__;
-			extern const uint32_t __FlexSPI2_segment_size__;
-			extern const uint32_t __FlexSPI2_segment_end__;
+			//extern const uint32_t __FlexSPI2_segment_size__;
+			//extern const uint32_t __FlexSPI2_segment_end__;
 			MPU->RBAR = ARM_MPU_RBAR(4, (uint32_t)&__FlexSPI2_segment_start__);
 			MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_16MB);
 		#endif

@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2020  Markus Klein
+Copyright (C) 2019-2021  Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -81,17 +81,17 @@ OF SUCH DAMAGE. */
 			LPUART_WriteBlocking (uart[BOARD_DEBUG_UART_INSTANCE], (uint8_t *)Buffer, Length);
 	}
 #else
-	inline bool	ConfigUart (void)
+	bool	ConfigUart (void)
 	{
 		return true;
 	}
 
-	inline void DebugPrint (const char *Message)
+	void DebugPrint (const char *Message)
 	{
 		(void)Message;
 	}
 
-	inline void DebugPrintf (const char *Message, ...)
+	void DebugPrintf (const char *Message, ...)
 	{
 		(void)Message;
 	}

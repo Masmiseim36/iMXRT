@@ -995,6 +995,7 @@ void USART_TransferAbortReceive(USART_Type *base, usart_handle_t *handle)
  */
 status_t USART_TransferGetReceiveCount(USART_Type *base, usart_handle_t *handle, uint32_t *count)
 {
+    (void)base;
     assert(NULL != handle);
     assert(NULL != count);
 

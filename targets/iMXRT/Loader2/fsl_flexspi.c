@@ -945,6 +945,7 @@ status_t FLEXSPI_TransferNonBlocking(FLEXSPI_Type *base, flexspi_handle_t *handl
  */
 status_t FLEXSPI_TransferGetCount(FLEXSPI_Type *base, flexspi_handle_t *handle, size_t *count)
 {
+    (void)base;
     assert(NULL != handle);
 
     status_t result = kStatus_Success;

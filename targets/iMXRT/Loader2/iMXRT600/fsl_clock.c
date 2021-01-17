@@ -1470,6 +1470,7 @@ void CLOCK_EnableUsbhsHostClock(void)
  */
 bool CLOCK_EnableUsbHs0PhyPllClock(clock_attach_id_t src, uint32_t freq)
 {
+    (void)src;
     uint32_t phyPllDiv  = 0U;
     uint32_t multiplier = 0U;
     bool retVal         = true;

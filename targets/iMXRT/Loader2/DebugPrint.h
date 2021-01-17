@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2020  Markus Klein
+Copyright (C) 2019-2021  Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -23,22 +23,12 @@ OF SUCH DAMAGE. */
 #define _DEBUG_PRINT_H_
 
 #include "board.h"
-#include <stdbool.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#define ENABLE_DEBUG_PRINT 0
 
-	#define ENABLE_DEBUG_PRINT 0
-
-	bool ConfigUart (void);
-	void DebugPrint (const char *Message);
-	void DebugPrintf (const char *Message, ...);
-
-#ifdef __cplusplus
-}
-#endif
+bool ConfigUart (void);
+void DebugPrint (const char *Message);
+void DebugPrintf (const char *Message, ...);
 
 
 #endif	// _DEBUG_PRINT_H_

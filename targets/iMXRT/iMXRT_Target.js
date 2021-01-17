@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Original work Copyright (c) 2016 Rowley Associates Limited.               *
- * Modified work Copyright (C) 2020 Markus Klein                             *
+ * Modified work Copyright (C) 2021 Markus Klein                             *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
