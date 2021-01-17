@@ -258,14 +258,14 @@ void BOARD_BootClockRUN(void)
     /* In SDK projects, external flash (configured by FLEXSPI2) will be initialized by dcd.
      * With this macro XIP_EXTERNAL_FLASH, usb1 pll (selected to be FLEXSPI2 clock source in SDK projects) will be left unchanged.
      * Note: If another clock source is selected for FLEXSPI2, user may want to avoid changing that clock as well.*/
-//#if !(defined(XIP_EXTERNAL_FLASH) && (XIP_EXTERNAL_FLASH == 1))
+#if !(defined(XIP_EXTERNAL_FLASH) && (XIP_EXTERNAL_FLASH == 1))
     /* Disable Flexspi2 clock gate. */
     CLOCK_DisableClock(kCLOCK_FlexSpi2);
     /* Set FLEXSPI2_PODF. */
     CLOCK_SetDiv(kCLOCK_Flexspi2Div, 1);
     /* Set Flexspi2 clock source. */
-    CLOCK_SetMux(kCLOCK_Flexspi2Mux, 1);
-//#endif
+    CLOCK_SetMux(kCLOCK_Flexspi2Mux, 3);
+#endif
     /* Disable CSI clock gate. */
     CLOCK_DisableClock(kCLOCK_Csi);
     /* Set CSI_PODF. */

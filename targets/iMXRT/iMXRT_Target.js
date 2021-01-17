@@ -56,6 +56,7 @@ function Reset ()
 			TargetInterface.message ("Reset - unknown Device: " + DeviceName);
 			break;
 	}
+	TargetInterface.message ("## Reset " + DeviceName + " - done");
 }
 
 function DcDc_Init_10xx ()
