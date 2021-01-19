@@ -43,3 +43,7 @@ DualCore_M4 THUMB Debug
 DualCore_M4 THUMB Release
 DualCore_M7 THUMB Debug
 DualCore_M7 THUMB Release
+Loader_CM4 MIMXRT1170_Debug
+Loader_CM4 MIMXRT1170_Release
+Loader_CM7 MIMXRT1170_Debug
+Loader_CM7 MIMXRT1170_Release

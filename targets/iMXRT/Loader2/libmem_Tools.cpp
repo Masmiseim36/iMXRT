@@ -23,39 +23,43 @@ OF SUCH DAMAGE. */
 #include "libmem.h"
 
 
+uint32_t LibmemDriver::NextFree = 0;
+LibmemDriver LibmemDriver::Drivers[4];
 
 /** libmem_CalculateOffset:
 Recalculate the Address a of a memory-mapped Flash-memory from absolute addressing to memory-Local-Addressing
 @param base the FlexSPI-Interface which is be used
 @param Addr The Address to be converted
 @return uint32_t */
-uint32_t libmem_CalculateOffset (FLEXSPI_Type *base, uint32_t Addr)
+uint32_t libmem_CalculateOffset (libmem_driver_handle_t *handle, uint8_t *Addr)
 {
-	switch ((uint32_t)base)
+	return Addr - handle->start;
+}
+uint8_t *libmem_GetBaseAddress (FLEXSPI_Type *base)
+{
+	switch (reinterpret_cast<uint32_t>(base))
 	{
 		case FLEXSPI_BASE:
-			return Addr - FlexSPI_AMBA_BASE;
+			return reinterpret_cast<uint8_t *>(FlexSPI_AMBA_BASE);
 		#ifdef FLEXSPI2
 		case FLEXSPI2_BASE:
-			return Addr - FlexSPI2_AMBA_BASE;
+			return reinterpret_cast<uint8_t *>(FlexSPI2_AMBA_BASE);
 		#endif
 		default:
-			return UINT32_MAX;
+			return nullptr;
 	}
 }
-uint32_t libmem_GetBaseAddress (FLEXSPI_Type *base)
+
+uint8_t *libmem_GetAliasBaseAddress (FLEXSPI_Type *base)
 {
-	switch ((uint32_t)base)
-	{
-		case FLEXSPI_BASE:
-			return FlexSPI_AMBA_BASE;
-		#ifdef FLEXSPI2
-		case FLEXSPI2_BASE:
-			return FlexSPI2_AMBA_BASE;
-		#endif
-		default:
-			return 0;
-	}
+	#if __CORTEX_M == 4
+	if (reinterpret_cast<uint32_t>(base) == FLEXSPI_BASE)
+		return reinterpret_cast<uint8_t *>(0x08000000);
+	#else
+		(void)base;
+	#endif
+
+	return nullptr;
 }
 
 

@@ -204,7 +204,7 @@ Initialize the FlexSPI Interface for using as a SPI-Interface
 @param FlashHandle The handle which should be initialized
 @param base The Flex-SPI-base to use
 @return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
-LibmemStatus_t Libmem_InitializeDriver_Hyperflash (libmem_driver_handle_t *FlashHandle, FLEXSPI_Type *base)
+LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 {
 	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || defined(MIMXRT595S_cm33_SERIES)
 		uint32_t src = 2;		// Use AUX0_PLL as clock source for the FlexSPI
@@ -225,6 +225,13 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (libmem_driver_handle_t *Flash
 		CLOCK_InitUsb1Pfd (kCLOCK_Pfd0, 26);        // Set PLL3 PFD0 clock 332MHZ.
 		CLOCK_SetMux      (kCLOCK_FlexspiMux, 0x3); // Choose PLL3 PFD0 clock as flexspi source clock.
 		CLOCK_SetDiv      (kCLOCK_FlexspiDiv, 3);   // flexspi clock 83M, DDR mode, internal clock 42M.
+	#elif (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
+		  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
+		// Set flexspi root clock to 100MHZ.
+		CLOCK_EnableOscRc400M ();
+
+		clock_root_config_t rootCfg = {false, 0, 0, 2, 3};	// Configure FlexSPI using RC400M divided by 4
+		CLOCK_SetRootClock (kCLOCK_Root_Flexspi1, &rootCfg);
 	#else
 		#error "unknon controller family"
 	#endif
@@ -248,9 +255,18 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (libmem_driver_handle_t *Flash
 //	EraseChip (base);
 
 	static uint8_t write_buffer[HYPERFLASH_PAGE_SIZE];
-//	libmem_register_driver (FlashHandle, (uint8_t *)libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, &DriverFunctions_Extended);
-	libmem_register_driver (FlashHandle, (uint8_t *)libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, NULL);
+	libmem_driver_handle_t *FlashHandle = LibmemDriver::GetDriver ();
+//	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, &DriverFunctions_Extended);
+	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, NULL);
 	FlashHandle->user_data = (uint32_t)base;
+
+	uint8_t *AliasAddress = libmem_GetAliasBaseAddress (base);
+	if (AliasAddress != nullptr)
+	{
+		FlashHandle = LibmemDriver::GetDriver ();
+		libmem_register_driver (FlashHandle, AliasAddress, BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, NULL);
+		FlashHandle->user_data = (uint32_t)base;
+	}
 	return static_cast<LibmemStatus_t>(libmem_driver_paged_write_init (&PagedWrite_CtrlBlk, write_buffer, HYPERFLASH_PAGE_SIZE, ProgramPage, 4, 0));
 }
 
@@ -347,7 +363,7 @@ Erase a sector of the Flash-Memory
 static status_t EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 {
 	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
-	uint32_t SectorAddr = libmem_CalculateOffset (base, (uint32_t)si->start);
+	uint32_t SectorAddr = libmem_CalculateOffset (h, si->start);
 	if (SectorAddr == UINT32_MAX)
 		return LIBMEM_STATUS_ERROR;
 
@@ -384,7 +400,7 @@ Write Data to a Flash-Page
 static int ProgramPage (libmem_driver_handle_t *h, uint8_t *Dest, const uint8_t *Source)
 {
 	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
-	uint32_t DeviceAddress = libmem_CalculateOffset (base, (uint32_t)Dest);
+	uint32_t DeviceAddress = libmem_CalculateOffset (h, Dest);
 	if (DeviceAddress == UINT32_MAX)
 		return LIBMEM_STATUS_ERROR;
 

@@ -37,10 +37,83 @@ function Connect()
 			// Do nothing
 //			TargetInterface.setNSRST();
 			break;
+		case "MIMXRT1171_cm7":
+		case "MIMXRT1172_cm7":
+		case "MIMXRT1173_cm7":
+		case "MIMXRT1175_cm7":
+		case "MIMXRT1176_cm7":
+			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
+			break;
+		case "MIMXRT1173_cm4":
+		case "MIMXRT1175_cm4":
+		case "MIMXRT1176_cm4":
+			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
+			break;
 		default:
 			TargetInterface.message ("Connect - unknown Device: " + DeviceName);
 			break;
 	}
+}
+
+// This function is used to return the controller type as a string
+// we use it also to do some initializations as this function is called right before
+// writing the code to the controller
+function GetPartName()
+{
+	var DeviceName = GetProjectPartName ();
+	TargetInterface.message ("## get part name of " + DeviceName);
+	switch (DeviceName)
+	{
+		case "MIMXRT1011":
+		case "MIMXRT1015":
+		case "MIMXRT1021":
+		case "MIMXRT1051":
+		case "MIMXRT1052":
+		case "MIMXRT1061":
+		case "MIMXRT1062":
+		case "MIMXRT1064":
+			// Do nothing
+			break;
+		case "MIMXRT1171_cm7":
+		case "MIMXRT1172_cm7":
+		case "MIMXRT1173_cm7":
+		case "MIMXRT1175_cm7":
+		case "MIMXRT1176_cm7":
+			TargetInterface.setDebugRegister (0x02000004, SRC_SRM);  // Transfer Address Register
+			TargetInterface.setDebugRegister (0x0200000C, 0x1400);   // Data Read/Write Register
+			TargetInterface.pokeUint32 (SRC_SRM, 0x1400);
+
+			if (!TargetInterface.isStopped ())
+				TargetInterface.stop ();
+			break;
+		case "MIMXRT1173_cm4":
+		case "MIMXRT1175_cm4":
+		case "MIMXRT1176_cm4":
+			TargetInterface.setDebugRegister (0x02000004, SRC_SCR);  // Transfer Address Register
+			TargetInterface.setDebugRegister (0x0200000C, 0x1);      // Data Read/Write Register
+
+			TargetInterface.setDebugRegister (0x02000004, SRC_SRM);  // Transfer Address Register
+			TargetInterface.setDebugRegister (0x0200000C, 0x1400);   // Data Read/Write Register
+			if (!TargetInterface.isStopped ())
+				TargetInterface.stop ();
+			break;
+		default:
+			TargetInterface.message ("GetPartName - unknown Device: " + DeviceName);
+			break;
+	}
+
+	var PART = "";
+	return PART;
+}
+
+function MatchPartName(name)
+{
+	var partName = GetPartName();
+
+	if (partName == "")
+		return false;
+
+	return partName.substring(0, 6) == name.substring(0, 6);
 }
 
 function Reset()
@@ -90,26 +163,6 @@ function Reset()
 
 	TargetInterface.setRegister ("r0", 1);
 	TargetInterface.setRegister ("r1", 1);
-}
-
-
-// This function is used to return the controller type as a string
-// we use it also to do some initializations as this function is called right before
-// writing the code to the controller
-function GetPartName()
-{
-  var PART = "";
-  return PART;
-}
-
-function MatchPartName(name)
-{
-	var partName = GetPartName();
-
-	if (partName == "")
-		return false;
-
-	return partName.substring(0, 6) == name.substring(0, 6);
 }
 
 function EnableTrace(traceInterfaceType)

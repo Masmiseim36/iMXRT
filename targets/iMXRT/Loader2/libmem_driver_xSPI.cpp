@@ -693,32 +693,32 @@ static const libmem_ext_driver_functions_t DriverFunctions_Extended =
 };
 
 #if defined FSL_FEATURE_SOC_CCM_ANALOG_COUNT && FSL_FEATURE_SOC_CCM_ANALOG_COUNT > 0
-void SetClockConfig (FLEXSPI_Type *base, uint32_t div)
-{
-	switch ((uint32_t)base)
-	{
-		case FLEXSPI_BASE:
-			CLOCK_EnableClock(kCLOCK_FlexSpi);
-			CLOCK_SetMux     (kCLOCK_FlexspiMux, 0x2); // Choose PLL2 PFD2 clock as flexspi source clock.
-			CLOCK_SetDiv     (kCLOCK_FlexspiDiv, div-1);
-			break;
-		#ifdef FLEXSPI2
-		case FLEXSPI2_BASE:
-			CLOCK_EnableClock(kCLOCK_FlexSpi2);
-			CLOCK_SetMux     (kCLOCK_Flexspi2Mux, 0x0); // Choose PLL2 PFD2 clock as flexspi2 source clock.
-			CLOCK_SetDiv     (kCLOCK_Flexspi2Div, div-1);
-			break;
-		#endif
-		default:
-			break;
-	}
-}
-#else
 	void SetClockConfig (FLEXSPI_Type *base, uint32_t div)
 	{
-		(void)base;
-		BOARD_SetFlexspiClock (2, div);		// Use AUX0_PLL as clock source for the FlexSPI
+		switch ((uint32_t)base)
+		{
+			case FLEXSPI_BASE:
+				CLOCK_EnableClock(kCLOCK_FlexSpi);
+				CLOCK_SetMux     (kCLOCK_FlexspiMux, 0x2); // Choose PLL2 PFD2 clock as flexspi source clock.
+				CLOCK_SetDiv     (kCLOCK_FlexspiDiv, div-1);
+				break;
+			#ifdef FLEXSPI2
+			case FLEXSPI2_BASE:
+				CLOCK_EnableClock(kCLOCK_FlexSpi2);
+				CLOCK_SetMux     (kCLOCK_Flexspi2Mux, 0x0); // Choose PLL2 PFD2 clock as flexspi2 source clock.
+				CLOCK_SetDiv     (kCLOCK_Flexspi2Div, div-1);
+				break;
+			#endif
+			default:
+				break;
+		}
 	}
+//#else
+//	void SetClockConfig (FLEXSPI_Type *base, uint32_t div)
+//	{
+//		(void)base;
+//		BOARD_SetFlexspiClock (2, div);		// Use AUX0_PLL as clock source for the FlexSPI
+//	}
 #endif
 
 
@@ -837,7 +837,7 @@ Initialize the FlexSPI Interface for using as a SPI-Interface
 @param base The Flex-SPI-base to use
 @param MemType The Type of SPI-Interface to use if possible
 @return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
-LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle, FLEXSPI_Type *base, enum eMemoryType MemType)
+LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum eMemoryType MemType)
 {
 	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || defined (MIMXRT595S_cm33_SERIES)
 		uint32_t src = 2;		// Use AUX0_PLL as clock source for the FlexSPI
@@ -863,6 +863,21 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle
 		uint32_t FlexSPI_ClockDiv = 6;
 		uint32_t FlexSPI_Clock_Hz = SourceClock_Hz / FlexSPI_ClockDiv;
 		SetClockConfig (base, FlexSPI_ClockDiv);	// flexspi clock 99 MHz.
+	#elif (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
+		  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
+/*		clock_root_config_t rootCfg = {false, 0, 0, 7, 2-1};	// Configure FlexSPI using PLL3Out (-> 480 MHz) divided by 2
+		CLOCK_SetRootClock (kCLOCK_Root_Flexspi1, &rootCfg);
+		CLOCK_ControlGate (kCLOCK_Root_Flexspi1, CCM_LPCG_DIRECT_ON_MASK);*/
+
+//		CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi1, 4);	// Choose SysPll3Pfd0 clock as flexspi source clock. 396M
+//		CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi1, 5);	// flexspi clock 133M
+		CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi1, 2);
+		CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi1, 0);
+
+		uint32_t FlexSPI_Clock_Hz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi1);
+		uint32_t SourceClock_Hz   = FlexSPI_Clock_Hz;
+		uint32_t BusClock_Hz   = CLOCK_GetRootClockFreq (kCLOCK_Root_Bus);
+		uint32_t FlexSPI_ClockDiv = 6;
 	#else
 		#error "unknon controller family"
 	#endif
@@ -969,7 +984,13 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle
 		FlexSPI_ClockDiv = 3;	// ~Double the Frequency in DDR-Mode
 		FlexSPI_Clock_Hz = SourceClock_Hz / FlexSPI_ClockDiv;
 		deviceconfig.flexspiRootClk = FlexSPI_Clock_Hz;
-		SetClockConfig (base, FlexSPI_ClockDiv); // Divide source clock the source/root ratio // Divide source clock the source/root ratio --> 148,5 Mhz
+
+		#if defined FSL_FEATURE_SOC_CCM_ANALOG_COUNT && FSL_FEATURE_SOC_CCM_ANALOG_COUNT > 0
+			SetClockConfig (base, FlexSPI_ClockDiv); // Divide source clock the source/root ratio // Divide source clock the source/root ratio --> 148,5 Mhz
+		#else
+//			CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi1, 3);	// flexspi clock 133M
+//			FlexSPI_Clock_Hz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi1);
+		#endif
 	}
 
 	if (lut != NULL)
@@ -983,9 +1004,19 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle
 
 
 	static uint8_t write_buffer[QSPIFLASH_PAGE_SIZE];
-//	libmem_register_driver (FlashHandle, (uint8_t *)libmem_GetBaseAddress(base), FlashSize, geometry, 0, &DriverFunctions, &DriverFunctions_Extended);
-	libmem_register_driver (FlashHandle, (uint8_t *)libmem_GetBaseAddress(base), FlashSize, geometry, 0, &DriverFunctions, NULL);
+	libmem_driver_handle_t *FlashHandle = LibmemDriver::GetDriver ();
+//	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), FlashSize, geometry, 0, &DriverFunctions, &DriverFunctions_Extended);
+	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), FlashSize, geometry, 0, &DriverFunctions, NULL);
 	FlashHandle->user_data = (uint32_t)base;
+
+	uint8_t *AliasAddress = libmem_GetAliasBaseAddress (base);
+	if (AliasAddress != nullptr)
+	{
+		FlashHandle = LibmemDriver::GetDriver ();
+		libmem_register_driver (FlashHandle, AliasAddress, FlashSize, geometry, 0, &DriverFunctions, NULL);
+		FlashHandle->user_data = (uint32_t)base;
+		DebugPrint ("### Add Driver for Alias\r\n");
+	}
 	return static_cast<LibmemStatus_t>(libmem_driver_paged_write_init (&paged_write_ctrlblk, write_buffer, QSPIFLASH_PAGE_SIZE, ProgramPage, 4, 0));
 }
 
@@ -1214,7 +1245,7 @@ Erase a sector of the Flash-Memory
 static int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 {
 	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
-	uint32_t SectorAddr = libmem_CalculateOffset (base, (uint32_t)si->start);
+	uint32_t SectorAddr = libmem_CalculateOffset (h, si->start);
 	if (SectorAddr == UINT32_MAX)
 		return LibmemStaus_Error;
 
@@ -1251,7 +1282,7 @@ Write Data to a Flash-Page
 static int ProgramPage (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr)
 {
 	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
-	uint32_t DeviceAddress = libmem_CalculateOffset (base, (uint32_t)dest_addr);
+	uint32_t DeviceAddress = libmem_CalculateOffset (h, dest_addr);
 	if (DeviceAddress == UINT32_MAX)
 		return LibmemStaus_Error;
 

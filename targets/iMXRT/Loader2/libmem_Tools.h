@@ -65,10 +65,35 @@ extern "C"
 		Capacity_1024MBit = 0x1B,
 	};
 
-	uint32_t libmem_CalculateOffset (FLEXSPI_Type *base, uint32_t Addr);
-	uint32_t libmem_GetBaseAddress  (FLEXSPI_Type *base);
-	const char * Libmem_GetErrorString (int Error);
+	uint32_t libmem_CalculateOffset         (libmem_driver_handle_t *handle, uint8_t *Addr);
+	uint8_t *libmem_GetBaseAddress          (FLEXSPI_Type *base);
+	uint8_t *libmem_GetAliasBaseAddress     (FLEXSPI_Type *base);
+	const char * Libmem_GetErrorString      (int Error);
 	uint_least32_t CalculateCapacity_KBytes (enum Capacity c);
+
+	class LibmemDriver: public libmem_driver_handle_t
+	{
+	private:
+		static LibmemDriver Drivers[4];	// We should not need more than four
+		static uint32_t NextFree;
+	public:
+		static LibmemDriver *GetDriver (void)
+		{
+			if (NextFree >= sizeof (LibmemDriver::Drivers)/sizeof(LibmemDriver::Drivers[0]))
+				return nullptr;
+			else
+			{
+				LibmemDriver *drv = &LibmemDriver::Drivers[LibmemDriver::NextFree];
+				LibmemDriver::NextFree++;
+				return drv;
+			}
+		}
+
+		uint32_t CalculateOffset (uint8_t *Addr)
+		{
+			return Addr - this->start;
+		}
+	};
 
 
 	enum eMemoryType

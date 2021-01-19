@@ -37,7 +37,7 @@ extern "C"
 #include "DebugPrint.h"
 
 
-enum LibmemStatus Init_Libmem (libmem_driver_handle_t *handle, enum eMemoryType, FLEXSPI_Type *base);
+enum LibmemStatus Init_Libmem (enum eMemoryType, FLEXSPI_Type *base);
 void InitOctaSPIPins (FLEXSPI_Type *base);
 void InitQuadSPIPins (FLEXSPI_Type *base);
 
@@ -73,7 +73,7 @@ void ExecuteTest (uint32_t *MemPointer)
 
 int main (uint32_t flags, uint32_t param)
 {
-//	BOARD_ConfigMPU     ();
+	BOARD_ConfigMPU     ();
 	BOARD_BootClockGate ();
 	BOARD_BootClockRUN  ();
 	#if defined FSL_FEATURE_SOC_CCM_ANALOG_COUNT && FSL_FEATURE_SOC_CCM_ANALOG_COUNT > 0
@@ -89,36 +89,35 @@ int main (uint32_t flags, uint32_t param)
 	ConfigUart          ();
 	DebugPrint ("Hello iMXRT Loader\r\n");
 
-	static libmem_driver_handle_t FlexSPI1_Handle;
-	#if defined FLEXSPI2
-		static libmem_driver_handle_t FlexSPI2_Handle;
-	#endif
-
-
-
 	#ifdef DEBUG
 		(void)flags;
 		(void)param;
 		// some test Code, because the Loader can not be debuged while using it in real scenarios
 //		#if defined CPU_MIMXRT1015CAF4A || defined CPU_MIMXRT1021DAF5A || defined CPU_MIMXRT1062DVJ6A || defined CPU_MIMXRT1064DVL6A
 //			BOARD_InitQuadSPIPins (); 
-//			enum LibmemStatus res = Libmem_InitializeDriver_xSPI (&FlexSPI1_Handle, FLEXSPI, MemType_QuadSPI);	// Register iMX-RT internal FLASH driver
+//			enum LibmemStatus res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_QuadSPI);	// Register iMX-RT internal FLASH driver
 //		#else
 //			BOARD_InitOctaSPIPins ();
 //			enum LibmemStatus res = Libmem_InitializeDriver_Hyperflash (&FlexSPI1_Handle, FLEXSPI);	// Register iMX-RT internal FLASH driver
 //		#endif
 
+		BOARD_PerformJEDECReset ();
 //		BOARD_InitQuadSPIPins ();
 		BOARD_InitOctaSPIPins ();
 //		LibmemStatus_t res = Libmem_InitializeDriver_Hyperflash (&FlexSPI1_Handle, FLEXSPI);
-		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (&FlexSPI1_Handle, FLEXSPI, MemType_OctaSPI_DDR);
-//		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (&FlexSPI1_Handle, FLEXSPI, MemType_QuadSPI);
+		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_OctaSPI_DDR);
+//		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_QuadSPI);
+		if (res != LibmemStaus_Success)
+		{
+			BOARD_PerformJEDECReset ();
+			res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_OctaSPI_DDR);
+		}
 		if (res == LibmemStaus_Success)
 			ExecuteTest ((uint32_t *)(FLASH_START_ADDRESS + 0x40000));		// Testcode
 
 		#if defined FLEXSPI2
 			BOARD_InitQuadSPI2Pins ();
-			LibmemStatus_t res2 = Libmem_InitializeDriver_xSPI (&FlexSPI2_Handle, FLEXSPI2, MemType_QuadSPI);
+			LibmemStatus_t res2 = Libmem_InitializeDriver_xSPI (FLEXSPI2, MemType_QuadSPI);
 			if (res2 == LibmemStaus_Success)
 				ExecuteTest ((uint32_t *)(FLASH2_START_ADDRESS + 0x40000));	// Testcode
 		#endif
@@ -129,9 +128,9 @@ int main (uint32_t flags, uint32_t param)
 		{
 			DebugPrintf ("libmem Parameter: 0x%X\r\n", param);
 			// Register iMX-RT internal FLASH driver
-			LibmemStatus_t res1 = Init_Libmem (&FlexSPI1_Handle, (enum eMemoryType)(param & 0x0F), FLEXSPI);
+			LibmemStatus_t res1 = Init_Libmem ((enum eMemoryType)(param & 0x0F), FLEXSPI);
 			#if defined FLEXSPI2
-				LibmemStatus_t res2 = Init_Libmem (&FlexSPI2_Handle, (enum eMemoryType)((param & 0xF0) >> 4), FLEXSPI2);
+				LibmemStatus_t res2 = Init_Libmem ((enum eMemoryType)((param & 0xF0) >> 4), FLEXSPI2);
 			#endif
 			if (res1 == LibmemStatus_InvalidMemoryType 
 			#if defined FLEXSPI2
@@ -194,7 +193,7 @@ int main (uint32_t flags, uint32_t param)
 
 
 
-enum LibmemStatus Init_Libmem (libmem_driver_handle_t *handle, enum eMemoryType MemType, FLEXSPI_Type *base)
+enum LibmemStatus Init_Libmem (enum eMemoryType MemType, FLEXSPI_Type *base)
 {
 	enum LibmemStatus status;
 	uint32_t Trials = 0;
@@ -207,7 +206,7 @@ enum LibmemStatus Init_Libmem (libmem_driver_handle_t *handle, enum eMemoryType 
 				// Init for Hyperflash
 				DebugPrint ("Init Loader for Hyperflash\r\n");
 				InitOctaSPIPins (base);
-				status = Libmem_InitializeDriver_Hyperflash (handle, base);
+				status = Libmem_InitializeDriver_Hyperflash (base);
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
@@ -230,7 +229,7 @@ enum LibmemStatus Init_Libmem (libmem_driver_handle_t *handle, enum eMemoryType 
 				}
 
 				InitOctaSPIPins (base);
-				status =  Libmem_InitializeDriver_xSPI (handle, base, MemType);
+				status =  Libmem_InitializeDriver_xSPI (base, MemType);
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
@@ -246,7 +245,7 @@ enum LibmemStatus Init_Libmem (libmem_driver_handle_t *handle, enum eMemoryType 
 				// Init for Octal-SPI with DDR
 				DebugPrint ("Init Loader for Quad-SPI-DDR\r\n");
 				InitQuadSPIPins (base);
-				status =  Libmem_InitializeDriver_xSPI (handle, base, MemType);
+				status =  Libmem_InitializeDriver_xSPI (base, MemType);
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
@@ -261,7 +260,7 @@ enum LibmemStatus Init_Libmem (libmem_driver_handle_t *handle, enum eMemoryType 
 				// Init for Quad-SPI
 				DebugPrint ("Init Loader for Quad-SPI\r\n");
 				InitQuadSPIPins (base);
-				status =  Libmem_InitializeDriver_xSPI (handle, base, MemType);
+				status =  Libmem_InitializeDriver_xSPI (base, MemType);
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;

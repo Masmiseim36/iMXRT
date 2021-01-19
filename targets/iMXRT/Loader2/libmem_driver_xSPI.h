@@ -28,6 +28,6 @@ OF SUCH DAMAGE. */
 
 
 
-LibmemStatus_t Libmem_InitializeDriver_xSPI (libmem_driver_handle_t *FlashHandle, FLEXSPI_Type *base, enum eMemoryType MemType);
+LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum eMemoryType MemType);
 
 #endif	// _LIBMEM_DRIVER_QCTA_SPI_H_

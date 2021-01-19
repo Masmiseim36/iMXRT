@@ -26,6 +26,6 @@ OF SUCH DAMAGE. */
 #include "fsl_device_registers.h"
 #include "libmem_Tools.h"
 
-LibmemStatus_t Libmem_InitializeDriver_Hyperflash (libmem_driver_handle_t *FlashHandle, FLEXSPI_Type *base);
+LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base);
 
 #endif	// _LIBMEM_DRIVER_H_

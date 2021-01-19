@@ -41,11 +41,25 @@ OF SUCH DAMAGE. */
 	{
 		BOARD_InitUARTPins ();
 
-		uint32_t ClockFrequency = 0;
-		if (CLOCK_GetMux (kCLOCK_UartMux) == 0) // --> PLL3 div6 80M
-			ClockFrequency = (CLOCK_GetPllFreq (kCLOCK_PllUsb1) / 6U) / (CLOCK_GetDiv(kCLOCK_UartDiv) + 1U);
-		else
-			ClockFrequency = CLOCK_GetOscFreq() / (CLOCK_GetDiv(kCLOCK_UartDiv) + 1U);
+		#if defined FSL_FEATURE_SOC_CCM_ANALOG_COUNT && FSL_FEATURE_SOC_CCM_ANALOG_COUNT > 0
+			uint32_t ClockFrequency = 0;
+			if (CLOCK_GetMux (kCLOCK_UartMux) == 0) // --> PLL3 div6 80M
+				ClockFrequency = (CLOCK_GetPllFreq (kCLOCK_PllUsb1) / 6U) / (CLOCK_GetDiv(kCLOCK_UartDiv) + 1U);
+			else
+				ClockFrequency = CLOCK_GetOscFreq() / (CLOCK_GetDiv(kCLOCK_UartDiv) + 1U);
+		#else
+			// Configure Lpuartx using SysPll2
+			static const clock_root_t RootClocks [] = {static_cast<clock_root_t>(0x7F), kCLOCK_Root_Lpuart1, kCLOCK_Root_Lpuart2, kCLOCK_Root_Lpuart3, kCLOCK_Root_Lpuart4, kCLOCK_Root_Lpuart5, kCLOCK_Root_Lpuart6, kCLOCK_Root_Lpuart7, kCLOCK_Root_Lpuart8, kCLOCK_Root_Lpuart9, kCLOCK_Root_Lpuart10, kCLOCK_Root_Lpuart11, kCLOCK_Root_Lpuart12};
+			static const clock_ip_name_t clocks [] = LPUART_CLOCKS;
+
+			clock_root_config_t rootCfg {};
+			rootCfg.mux = 6;
+			rootCfg.div = 21;
+			CLOCK_SetRootClock (RootClocks[BOARD_DEBUG_UART_INSTANCE], &rootCfg);
+			CLOCK_ControlGate  (clocks[BOARD_DEBUG_UART_INSTANCE], kCLOCK_On);
+
+			uint32_t ClockFrequency = CLOCK_GetRootClockFreq (RootClocks[BOARD_DEBUG_UART_INSTANCE]);
+		#endif
 
 		lpuart_config_t config;
 		LPUART_GetDefaultConfig (&config);

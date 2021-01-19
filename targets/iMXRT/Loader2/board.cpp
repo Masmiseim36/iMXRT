@@ -85,117 +85,165 @@
 	}
 #endif
 
-/*******************************************************************************
- * Code
- ******************************************************************************/
-/* MPU configuration. */
-void BOARD_ConfigMPU (void)
-{
-	#if defined(__ICACHE_PRESENT) && __ICACHE_PRESENT
-		// Disable I cache and D cache
-		if (SCB_CCR_IC_Msk == (SCB_CCR_IC_Msk & SCB->CCR))
+#if defined ARM_MPU_ARMV7_H
+	#if defined LMEM
+		#include "cm4/fsl_cache.h"
+		// The M4 core has a NXP properity cache
+		void BOARD_ConfigMPU (void)
 		{
-			SCB_DisableICache();
+			// Cleans and invalidates the processor system bus cache.
+			//L1CACHE_CleanInvalidateSystemCache ();
+			L1CACHE_DisableCodeCache ();
+			L1CACHE_DisableSystemCache ();
+
+			// Disable MPU
+			ARM_MPU_Disable ();
+
+			/*uint32_t Region = 0;
+			// setting: Setting Memory with Device type, not shareable, non-cacheable.   - FlexSPI
+			extern const uint32_t __FlexSPI_segment_start__;
+			extern const uint32_t __FlexSPI_segment_size__;
+			extern const uint32_t __FlexSPI_segment_end__;
+			MPU->RBAR = ARM_MPU_RBAR(Region, (uint32_t)&__FlexSPI_segment_start__);
+			MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 1, 0, 0, 0, 0, CalculateMpuRegion ((uint32_t)&__FlexSPI_segment_size__));
+			Region++;
+
+			#if defined FLEXSPI2
+				// setting: Setting Memory with Device type, not shareable, non-cacheable. - FlexSPI2
+				extern const uint32_t __FlexSPI2_segment_start__;
+				extern const uint32_t __FlexSPI2_segment_size__;
+				extern const uint32_t __FlexSPI2_segment_end__;
+				MPU->RBAR = ARM_MPU_RBAR(Region, (uint32_t)&__FlexSPI2_segment_start__);
+				MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 1, 0, 0, 0, 0, CalculateMpuRegion ((uint32_t)&__FlexSPI2_segment_size__));
+				Region++;
+			#endif
+
+			// setting: Memory with Normal type, not shareable, non-cacheable   - DTCM
+			extern const uint32_t __DTCM_segment_start__;
+			extern const uint32_t __DTCM_segment_size__;
+			extern const uint32_t __DTCM_segment_end__;
+			MPU->RBAR = ARM_MPU_RBAR(Region, (uint32_t)&__DTCM_segment_start__);
+			MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 1, 0, 0, 0, 0, CalculateMpuRegion ((uint32_t)&__DTCM_segment_size__));
+
+			// Enable MPU
+			ARM_MPU_Enable (MPU_CTRL_PRIVDEFENA_Msk);*/
 		}
-	#endif
-	#if defined(__DCACHE_PRESENT) && __DCACHE_PRESENT
-		if (SCB_CCR_DC_Msk == (SCB_CCR_DC_Msk & SCB->CCR))
-		{
-			SCB_DisableDCache();
-		}
-	#endif
-
-	#if defined ARM_MPU_ARMV7_H
-		// Disable MPU
-		ARM_MPU_Disable ();
-
-		/* MPU configure:
-		 * Use ARM_MPU_RASR(DisableExec, AccessPermission, TypeExtField, IsShareable, IsCacheable, IsBufferable,
-		 * SubRegionDisable, Size)
-		 * API in core_cm7.h.
-		 * param DisableExec       Instruction access (XN) disable bit,0=instruction fetches enabled, 1=instruction fetches
-		 * disabled.
-		 * param AccessPermission  Data access permissions, allows you to configure read/write access for User and
-		 * Privileged mode.
-		 *      Use MACROS defined in core_cm7.h:
-		 * ARM_MPU_AP_NONE/ARM_MPU_AP_PRIV/ARM_MPU_AP_URO/ARM_MPU_AP_FULL/ARM_MPU_AP_PRO/ARM_MPU_AP_RO
-		 * Combine TypeExtField/IsShareable/IsCacheable/IsBufferable to configure MPU memory access attributes.
-		 *  TypeExtField  IsShareable  IsCacheable  IsBufferable   Memory Attribtue    Shareability        Cache
-		 *     0             x           0           0             Strongly Ordered    shareable
-		 *     0             x           0           1              Device             shareable
-		 *     0             0           1           0              Normal             not shareable   Outer and inner write through no write allocate
-		 *     0             0           1           1              Normal             not shareable   Outer and inner write back no write allocate
-		 *     0             1           1           0              Normal             shareable       Outer and inner write through no write allocate
-		 *     0             1           1           1              Normal             shareable       Outer and inner write back no write allocate
-		 *     1             0           0           0              Normal             not shareable   outer and inner noncache
-		 *     1             1           0           0              Normal             shareable       outer and inner noncache
-		 *     1             0           1           1              Normal             not shareable   outer and inner write back write/read acllocate
-		 *     1             1           1           1              Normal             shareable       outer and inner write back write/read acllocate
-		 *     2             x           0           0              Device              not shareable
-		 *  Above are normal use settings, if your want to see more details or want to config different inner/outter cache
-		 * policy.
-		 *  please refer to Table 4-55 /4-56 in arm cortex-M7 generic user guide <dui0646b_cortex_m7_dgug.pdf>
-		 * param SubRegionDisable  Sub-region disable field. 0=sub-region is enabled, 1=sub-region is disabled.
-		 * param Size              Region size of the region to be configured. use ARM_MPU_REGION_SIZE_xxx MACRO in
-		 * core_cm7.h. */
-
-		/* MPU Configuration
-		The M7 Core has 16 entires: http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0489d/Chdecfea.html
-		Compare chapter "Chapter 32 ARM Cortex M7 Platform (M7)"
-
-		The M4 Core has 8 entries: http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0439b/Chdecfea.html
-		compare chapter "33.5.4 Memory Protection Unit (MPU)" */
-
-		// Region 0 setting: Memory with Device type, not shareable, non-cacheable.           - ITCM + ROM
-		MPU->RBAR = ARM_MPU_RBAR(0, 0x00000000U);
-		MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 2, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_1GB);
-
-		// Region 1 setting: Memory with Normal type, not shareable, outer/inner write back   - ITCM
-		extern const uint32_t __ITCM_segment_start__;
-		extern const uint32_t __ITCM_segment_size__;
-		//extern const uint32_t __ITCM_segment_end__;
-		MPU->RBAR = ARM_MPU_RBAR(1, (uint32_t)&__ITCM_segment_start__);
-		MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, CalculateMpuRegion ((uint32_t)&__ITCM_segment_size__));
-
-		// Region 2 setting: Memory with Normal type, not shareable, outer/inner write back   - DTCM
-		extern const uint32_t __DTCM_segment_start__;
-		extern const uint32_t __DTCM_segment_size__;
-		//extern const uint32_t __DTCM_segment_end__;
-		MPU->RBAR = ARM_MPU_RBAR(2, (uint32_t)&__DTCM_segment_start__);
-		MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, CalculateMpuRegion ((uint32_t)&__DTCM_segment_size__));
-
-		// Region 3 setting: Setting Memory with Device type, not shareable, non-cacheable.   - FlexSPI
-		extern const uint32_t __FlexSPI_segment_start__;
-		//extern const uint32_t __FlexSPI_segment_size__;
-		//extern const uint32_t __FlexSPI_segment_end__;
-		MPU->RBAR = ARM_MPU_RBAR(3, (uint32_t)&__FlexSPI_segment_start__);
-		MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_16MB);
-
-		#if defined FLEXSPI2
-			// Region 4 setting: Setting Memory with Device type, not shareable, non-cacheable. - FlexSPI2
-			extern const uint32_t __FlexSPI2_segment_start__;
-			//extern const uint32_t __FlexSPI2_segment_size__;
-			//extern const uint32_t __FlexSPI2_segment_end__;
-			MPU->RBAR = ARM_MPU_RBAR(4, (uint32_t)&__FlexSPI2_segment_start__);
-			MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_16MB);
-		#endif
-
-		// Enable MPU
-		ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);
-	#elif defined ARM_MPU_ARMV8_H
-		#warning " MPU for ARMv8 Architecture not supported"
-		// ToDo
 	#else
-		#error "unknown MPU type"
+		// The M7 core has ARM specific cache
+		void BOARD_ConfigMPU (void)
+		{
+			#if defined(__ICACHE_PRESENT) && __ICACHE_PRESENT
+				// Disable I cache and D cache
+				if (SCB_CCR_IC_Msk == (SCB_CCR_IC_Msk & SCB->CCR))
+				{
+					SCB_DisableICache();
+				}
+			#endif
+			#if defined(__DCACHE_PRESENT) && __DCACHE_PRESENT
+				if (SCB_CCR_DC_Msk == (SCB_CCR_DC_Msk & SCB->CCR))
+				{
+					SCB_DisableDCache();
+				}
+			#endif
+
+			// Disable MPU
+			ARM_MPU_Disable ();
+
+			/* MPU configure:
+			 * Use ARM_MPU_RASR(DisableExec, AccessPermission, TypeExtField, IsShareable, IsCacheable, IsBufferable,
+			 * SubRegionDisable, Size)
+			 * API in core_cm7.h.
+			 * param DisableExec       Instruction access (XN) disable bit,0=instruction fetches enabled, 1=instruction fetches
+			 * disabled.
+			 * param AccessPermission  Data access permissions, allows you to configure read/write access for User and
+			 * Privileged mode.
+			 *      Use MACROS defined in core_cm7.h:
+			 * ARM_MPU_AP_NONE/ARM_MPU_AP_PRIV/ARM_MPU_AP_URO/ARM_MPU_AP_FULL/ARM_MPU_AP_PRO/ARM_MPU_AP_RO
+			 * Combine TypeExtField/IsShareable/IsCacheable/IsBufferable to configure MPU memory access attributes.
+			 *  TypeExtField  IsShareable  IsCacheable  IsBufferable   Memory Attribtue    Shareability        Cache
+			 *     0             x           0           0             Strongly Ordered    shareable
+			 *     0             x           0           1              Device             shareable
+			 *     0             0           1           0              Normal             not shareable   Outer and inner write through no write allocate
+			 *     0             0           1           1              Normal             not shareable   Outer and inner write back no write allocate
+			 *     0             1           1           0              Normal             shareable       Outer and inner write through no write allocate
+			 *     0             1           1           1              Normal             shareable       Outer and inner write back no write allocate
+			 *     1             0           0           0              Normal             not shareable   outer and inner noncache
+			 *     1             1           0           0              Normal             shareable       outer and inner noncache
+			 *     1             0           1           1              Normal             not shareable   outer and inner write back write/read acllocate
+			 *     1             1           1           1              Normal             shareable       outer and inner write back write/read acllocate
+			 *     2             x           0           0              Device              not shareable
+			 *  Above are normal use settings, if your want to see more details or want to config different inner/outter cache
+			 * policy.
+			 *  please refer to Table 4-55 /4-56 in arm cortex-M7 generic user guide <dui0646b_cortex_m7_dgug.pdf>
+			 * param SubRegionDisable  Sub-region disable field. 0=sub-region is enabled, 1=sub-region is disabled.
+			 * param Size              Region size of the region to be configured. use ARM_MPU_REGION_SIZE_xxx MACRO in
+			 * core_cm7.h. */
+
+			/* MPU Configuration
+			The M7 Core has 16 entires: http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0489d/Chdecfea.html
+			Compare chapter "Chapter 32 ARM Cortex M7 Platform (M7)"
+
+			The M4 Core has 8 entries: http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.ddi0439b/Chdecfea.html
+			compare chapter "33.5.4 Memory Protection Unit (MPU)" */
+
+/*			uint32_t Region = 0;
+			// Region 1 setting: Memory with Device type, not shareable, non-cacheable.                - ITCM + ROM
+			MPU->RBAR = ARM_MPU_RBAR(Region, 0x00000000U);
+			MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 2, 0, 0, 0, 0, ARM_MPU_REGION_SIZE_1GB);
+			Region++;
+
+			// Region 1 setting: Memory with Normal type, not shareable, outer/inner write back   - ITCM
+			extern const uint32_t __ITCM_segment_start__;
+			extern const uint32_t __ITCM_segment_size__;
+			extern const uint32_t __ITCM_segment_end__;
+			MPU->RBAR = ARM_MPU_RBAR(Region, (uint32_t)&__ITCM_segment_start__);
+			MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, CalculateMpuRegion ((uint32_t)&__ITCM_segment_size__));
+			Region++;
+
+			// Region 2 setting: Memory with Normal type, not shareable, outer/inner write back   - DTCM
+			extern const uint32_t __DTCM_segment_start__;
+			extern const uint32_t __DTCM_segment_size__;
+			extern const uint32_t __DTCM_segment_end__;
+			MPU->RBAR = ARM_MPU_RBAR(Region, (uint32_t)&__DTCM_segment_start__);
+			MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_FULL, 0, 0, 1, 1, 0, CalculateMpuRegion ((uint32_t)&__DTCM_segment_size__));
+			Region++;
+
+			// Region 3 setting: Setting Memory with Device type, not shareable, non-cacheable.   - FlexSPI
+			extern const uint32_t __FlexSPI_segment_start__;
+			extern const uint32_t __FlexSPI_segment_size__;
+			extern const uint32_t __FlexSPI_segment_end__;
+			MPU->RBAR = ARM_MPU_RBAR(Region, (uint32_t)&__FlexSPI_segment_start__);
+			MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_16MB);
+			Region++;
+
+			#if defined FLEXSPI2
+				// Region 4 setting: Setting Memory with Device type, not shareable, non-cacheable. - FlexSPI2
+				extern const uint32_t __FlexSPI2_segment_start__;
+				extern const uint32_t __FlexSPI2_segment_size__;
+				extern const uint32_t __FlexSPI2_segment_end__;
+				MPU->RBAR = ARM_MPU_RBAR(Region, (uint32_t)&__FlexSPI2_segment_start__);
+				MPU->RASR = ARM_MPU_RASR(0, ARM_MPU_AP_RO, 0, 0, 1, 1, 0, ARM_MPU_REGION_SIZE_16MB);
+				Region++;
+			#endif
+
+			// Enable MPU
+			ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);
+
+			// Enable I cache and D cache
+			#if defined(__DCACHE_PRESENT) && __DCACHE_PRESENT
+				SCB_EnableDCache();
+			#endif
+			#if defined(__ICACHE_PRESENT) && __ICACHE_PRESENT
+				SCB_EnableICache();
+			#endif*/
+		}
+
 	#endif
-	// Enable I cache and D cache
-	#if defined(__DCACHE_PRESENT) && __DCACHE_PRESENT
-		SCB_EnableDCache();
-	#endif
-	#if defined(__ICACHE_PRESENT) && __ICACHE_PRESENT
-		SCB_EnableICache();
-	#endif
-}
+#else
+	#warning " MPU for ARMv8 Architecture not supported"
+	// ToDo
+#endif
+
 
 
 void BOARD_BootClockGate (void)
