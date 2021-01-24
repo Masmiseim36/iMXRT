@@ -48,12 +48,16 @@ extern "C" {
 	void BOARD_InitQuadSPIPins (void);
 	void BOARD_InitOctaSPIPins (void);
 
-	void BOARD_PerformJEDECReset (void);
+	void BOARD_PerformJEDECReset_FlexSPI1 (void);
 
 	#if defined FLEXSPI2
 		void BOARD_InitQuadSPI2Pins (void);
 		void BOARD_InitOctaSPI2Pins (void);
+		void BOARD_PerformJEDECReset_FlexSPI2 (void);
 	#endif
+
+
+	void BOARD_PerformJEDECReset (FLEXSPI_Type *base);
 
 #if defined(__cplusplus)
 }

@@ -86,7 +86,7 @@ int main (uint32_t flags, uint32_t param)
 	#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
 		SCB_DisableDCache   ();
 	#endif
-	ConfigUart          ();
+	ConfigUart ();
 	DebugPrint ("Hello iMXRT Loader\r\n");
 
 	#ifdef DEBUG
@@ -98,18 +98,19 @@ int main (uint32_t flags, uint32_t param)
 //			enum LibmemStatus res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_QuadSPI);	// Register iMX-RT internal FLASH driver
 //		#else
 //			BOARD_InitOctaSPIPins ();
-//			enum LibmemStatus res = Libmem_InitializeDriver_Hyperflash (&FlexSPI1_Handle, FLEXSPI);	// Register iMX-RT internal FLASH driver
+//			enum LibmemStatus res = Libmem_InitializeDriver_Hyperflash (FLEXSPI);	// Register iMX-RT internal FLASH driver
 //		#endif
 
-		BOARD_PerformJEDECReset ();
+		BOARD_PerformJEDECReset (FLEXSPI);
 //		BOARD_InitQuadSPIPins ();
 		BOARD_InitOctaSPIPins ();
-//		LibmemStatus_t res = Libmem_InitializeDriver_Hyperflash (&FlexSPI1_Handle, FLEXSPI);
+//		LibmemStatus_t res = Libmem_InitializeDriver_Hyperflash (FLEXSPI);
 		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_OctaSPI_DDR);
 //		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_QuadSPI);
 		if (res != LibmemStaus_Success)
 		{
-			BOARD_PerformJEDECReset ();
+			BOARD_PerformJEDECReset (FLEXSPI);
+			BOARD_InitOctaSPIPins ();
 			res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_OctaSPI_DDR);
 		}
 		if (res == LibmemStaus_Success)
@@ -117,8 +118,14 @@ int main (uint32_t flags, uint32_t param)
 
 		#if defined FLEXSPI2
 			BOARD_InitQuadSPI2Pins ();
-			LibmemStatus_t res2 = Libmem_InitializeDriver_xSPI (FLEXSPI2, MemType_QuadSPI);
-			if (res2 == LibmemStaus_Success)
+			res = Libmem_InitializeDriver_xSPI (FLEXSPI2, MemType_QuadSPI);
+			if (res != LibmemStaus_Success)
+			{
+				BOARD_PerformJEDECReset (FLEXSPI2);
+				BOARD_InitQuadSPI2Pins ();
+				res = Libmem_InitializeDriver_xSPI (FLEXSPI2, MemType_QuadSPI);
+			}
+			if (res == LibmemStaus_Success)
 				ExecuteTest ((uint32_t *)(FLASH2_START_ADDRESS + 0x40000));	// Testcode
 		#endif
 
@@ -198,6 +205,8 @@ enum LibmemStatus Init_Libmem (enum eMemoryType MemType, FLEXSPI_Type *base)
 	enum LibmemStatus status;
 	uint32_t Trials = 0;
 
+	BOARD_PerformJEDECReset (base);
+
 	switch (MemType)
 	{
 		case MemType_Hyperflash:
@@ -210,7 +219,7 @@ enum LibmemStatus Init_Libmem (enum eMemoryType MemType, FLEXSPI_Type *base)
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
-					BOARD_PerformJEDECReset ();
+					BOARD_PerformJEDECReset (base);
 				}
 			}
 			while (status != LibmemStaus_Success && Trials < 3);
@@ -233,7 +242,7 @@ enum LibmemStatus Init_Libmem (enum eMemoryType MemType, FLEXSPI_Type *base)
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
-					BOARD_PerformJEDECReset ();
+					BOARD_PerformJEDECReset (base);
 				}
 			}
 			while (status != LibmemStaus_Success && Trials < 3);
@@ -249,7 +258,7 @@ enum LibmemStatus Init_Libmem (enum eMemoryType MemType, FLEXSPI_Type *base)
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
-					BOARD_PerformJEDECReset ();
+					BOARD_PerformJEDECReset (base);
 				}
 			}
 			while (status != LibmemStaus_Success && Trials < 3);
@@ -264,7 +273,7 @@ enum LibmemStatus Init_Libmem (enum eMemoryType MemType, FLEXSPI_Type *base)
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
-					BOARD_PerformJEDECReset ();
+					BOARD_PerformJEDECReset (base);
 				}
 			}
 			while (status != LibmemStaus_Success && Trials < 3);

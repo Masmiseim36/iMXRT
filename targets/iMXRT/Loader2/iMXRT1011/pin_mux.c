@@ -96,7 +96,7 @@ IOMUXC_GPIO_11_FLEXSPI_B_SS1_B
 IOMUXC_GPIO_09_FLEXSPI_A_SS1_B
 IOMUXC_GPIO_00_FLEXSPI_B_DQS */
 
-void BOARD_PerformJEDECReset (void)
+void BOARD_PerformJEDECReset_FlexSPI1 (void)
 {
 	gpio_pin_config_t jreset_pin_config = 
 	{
@@ -122,12 +122,12 @@ void BOARD_PerformJEDECReset (void)
 	{
 		// drive CS low
 		GPIO_WritePinOutput (GPIO2, 6, 0);
+		SDK_DelayAtLeastUs (1, SystemCoreClock);
 		// drive SI low or high: alternate its state every iteration
 		GPIO_WritePinOutput (GPIO2, 9, (i&1));
-		for (uint32_t j=0; j<100; j++);
 		// drive CS high; SI state will be captured on the CS rising edge
 		GPIO_WritePinOutput (GPIO2, 6, 1);
-		for (uint32_t j=0; j<100; j++);
+		SDK_DelayAtLeastUs (1, SystemCoreClock);
 	}
 
 	SDK_DelayAtLeastUs (110, SystemCoreClock);

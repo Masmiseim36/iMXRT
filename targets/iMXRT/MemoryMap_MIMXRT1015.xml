@@ -1,6 +1,6 @@
 <!DOCTYPE Board_Memory_Definition_File>
 <Root name="iMXRT" >
-	<!-- The ROM expects the 512-byte FlexSPI NOR configuration parameters to be present at offset 0 in Serial NOR flash.
+	<!-- The ROM expects the 512-byte FlexSPI NOR configuration parameters to be present at offset 0x0 in Serial NOR flash.
 		Compare Chapter "8.6.1.2 FlexSPI Serial NOR Flash Boot Operation" in the reference manual -->
 	<MemorySegment name="BootOffset"  start="0x60000000" size="$(BootRomOffset:0x0)" access="ReadOnly"/>
 	<MemorySegment name="FlexSPI"     start="0x60000000" size="$(FlexSPISIZE:0x04000000)" access="ReadOnly"/>

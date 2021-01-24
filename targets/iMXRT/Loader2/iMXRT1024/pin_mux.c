@@ -45,23 +45,12 @@ void BOARD_InitQuadSPIPins (void)
 	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_05_FLEXSPI_A_DQS, 1U);
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_05_FLEXSPI_A_DQS, BOARD_FlexSPIPinConfig);
 
-	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_06_FLEXSPI_A_DATA03, 1U);
-	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_06_FLEXSPI_A_DATA03, BOARD_FlexSPIPinConfig);
-
-	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_07_FLEXSPI_A_SCLK, 1U);
-	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_07_FLEXSPI_A_SCLK, BOARD_FlexSPIPinConfig);
-
-	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_08_FLEXSPI_A_DATA00, 1U);
-	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_08_FLEXSPI_A_DATA00, BOARD_FlexSPIPinConfig);
-
-	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_09_FLEXSPI_A_DATA02, 1U);
-	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_09_FLEXSPI_A_DATA02, BOARD_FlexSPIPinConfig);
-
-	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_10_FLEXSPI_A_DATA01, 1U);
-	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_10_FLEXSPI_A_DATA01, BOARD_FlexSPIPinConfig);
-
-	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_11_FLEXSPI_A_SS0_B, 1U);
-	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_11_FLEXSPI_A_SS0_B, BOARD_FlexSPIPinConfig);
+	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_00_FLEXSPI_A_DATA03, 1U);
+	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_01_FLEXSPI_A_SCLK,   1U);
+	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_02_FLEXSPI_A_DATA00, 1U);
+	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_03_FLEXSPI_A_DATA02, 1U);
+	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_04_FLEXSPI_A_DATA01, 1U);
+	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_05_FLEXSPI_A_SS0_B,  1U);
 }
 
 
@@ -69,21 +58,6 @@ void BOARD_InitQuadSPIPins (void)
 Set pin muxing and configure electrical properties for Hyperflash/OctaSPI */ 
 void BOARD_InitOctaSPIPins (void)
 {
-	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_00_FLEXSPI_B_DATA03, 1U);
-	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_00_FLEXSPI_B_DATA03, BOARD_FlexSPIPinConfig);
-
-	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_01_FLEXSPI_B_SCLK, 1U);
-	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_01_FLEXSPI_B_SCLK, BOARD_FlexSPIPinConfig);
-
-	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_02_FLEXSPI_B_DATA00, 1U);
-	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_02_FLEXSPI_B_DATA00, BOARD_FlexSPIPinConfig);
-
-	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_03_FLEXSPI_B_DATA02, 1U);
-	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_03_FLEXSPI_B_DATA02, BOARD_FlexSPIPinConfig);
-
-	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_04_FLEXSPI_B_DATA01, 1U);
-	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_04_FLEXSPI_B_DATA01, BOARD_FlexSPIPinConfig);
-
 	BOARD_InitQuadSPIPins ();
 }
 
@@ -96,29 +70,29 @@ void BOARD_PerformJEDECReset_FlexSPI1 (void)
 	};
 
 	// Configure the 3 pins used in JEDEC reset as GPIOs
-	IOMUXC_SetPinMux (IOMUXC_GPIO_SD_B1_11_GPIO3_IO31, 1);	// IOMUXC_GPIO_SD_B1_11_FLEXSPI_A_SS0_B
-	IOMUXC_SetPinMux (IOMUXC_GPIO_SD_B1_02_GPIO3_IO22, 1);	// IOMUXC_GPIO_SD_B1_02_FLEXSPI_B_DATA00
-	IOMUXC_SetPinMux (IOMUXC_GPIO_SD_B1_07_GPIO3_IO27, 1);	// IOMUXC_GPIO_SD_B1_07_FLEXSPI_A_SCLK
+	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_05_GPIO1_IO21, 1);	// IOMUXC_GPIO_AD_B1_05_FLEXSPI_A_SS0_B
+	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_02_GPIO1_IO18, 1);	// IOMUXC_GPIO_AD_B1_02_FLEXSPI_A_DATA00
+	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_01_GPIO1_IO17, 1);	// IOMUXC_GPIO_AD_B1_01_FLEXSPI_A_SCLK
 
 	// Set the direction of 3 pins used in JEDEC reset to output
-	GPIO_PinInit (GPIO3, 31, &jreset_pin_config); // CS
-	GPIO_PinInit (GPIO3, 22, &jreset_pin_config); // SI/IO0
-	GPIO_PinInit (GPIO3, 27, &jreset_pin_config); // SCK
+	GPIO_PinInit (GPIO1, 21, &jreset_pin_config); // CS		31 --> 21
+	GPIO_PinInit (GPIO1, 18, &jreset_pin_config); // SI/IO0	28 --> 18
+	GPIO_PinInit (GPIO1, 17, &jreset_pin_config); // SCK	27 --> 17
 
 
 	// Perform a reset sequence:
 	// CS goes low 4 times with alternating values of SOUT
 	// SCK is drive low or high and must stay in one state
-	GPIO_WritePinOutput(GPIO3, 27, 0); // set SCK low
+	GPIO_WritePinOutput(GPIO1, 17, 0); // set SCK low
 	for (uint32_t i = 0; i < 4; i++)
 	{
 		// drive CS low
-		GPIO_WritePinOutput (GPIO3, 31, 0);
+		GPIO_WritePinOutput (GPIO1, 21, 0);
 		SDK_DelayAtLeastUs (1, SystemCoreClock);
 		// drive SI low or high: alternate its state every iteration
-		GPIO_WritePinOutput (GPIO3, 22, (i&1));
+		GPIO_WritePinOutput (GPIO1, 18, (i&1));
 		// drive CS high; SI state will be captured on the CS rising edge
-		GPIO_WritePinOutput (GPIO3, 31, 1);
+		GPIO_WritePinOutput (GPIO1, 21, 1);
 		SDK_DelayAtLeastUs (1, SystemCoreClock);
 	}
 

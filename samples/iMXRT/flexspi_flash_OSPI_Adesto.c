@@ -79,8 +79,8 @@ const flexspi_nor_config_t FlashBootHeader =
 		.deviceType           = kFlexSpiDeviceType_SerialNOR, // serial NOR
 		.sflashPadType        = kSerialFlash_8Pads,
 		.serialClkFreq        = kFlexSpiSerialClk_133MHz,
-		.lutCustomSeqEnable   = 0, // Use pre-defined LUT sequence index and number
-		.sflashA1Size         = 8 * 1024U * 1024U,
+		.lutCustomSeqEnable   = 0U, // Use pre-defined LUT sequence index and number
+		.sflashA1Size         = 8U * 1024U * 1024U,
 		.dataValidTime        = {[0] = 20}, //2ns from DQS to data
 		.busyOffset           = 0U, // busy bit in bit 0
 		.busyBitPolarity      = 0U, // busy bit is 1 when device is busy

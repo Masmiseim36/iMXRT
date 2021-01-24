@@ -57,7 +57,7 @@
 	#include "MIMXRT1021.h"
 	/* CPU specific feature definitions */
 	#include "MIMXRT1021_features.h"
-	
+
 #elif (defined(CPU_MIMXRT1024CAG4A) || defined(CPU_MIMXRT1024DAG5A))
 	#define MIMXRT1024_SERIES
 	/* CMSIS-style register definitions */
@@ -110,6 +110,59 @@
 	#include "MIMXRT106A.h"
 	/* CPU specific feature definitions */
 	#include "MIMXRT106A_features.h"
+
+#elif (defined(CPU_MIMXRT1171AVM8A) || defined(CPU_MIMXRT1171CVM8A) || defined(CPU_MIMXRT1171DVMAA))
+	#define MIMXRT1171_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT1171.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT1171_features.h"
+
+#elif (defined(CPU_MIMXRT1172AVM8A) || defined(CPU_MIMXRT1172CVM8A) || defined(CPU_MIMXRT1172DVMAA))
+	#define MIMXRT1172_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT1172.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT1172_features.h"
+
+#elif (defined(CPU_MIMXRT1173CVM8A_cm7))
+	#define MIMXRT1173_cm7_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT1173_cm7.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT1173_cm7_features.h"
+#elif (defined(CPU_MIMXRT1173CVM8A_cm4))
+	#define MIMXRT1173_cm4_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT1173_cm4.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT1173_cm4_features.h"
+
+#elif (defined(CPU_MIMXRT1175AVM8A_cm7) || defined(CPU_MIMXRT1175CVM8A_cm7) || defined(CPU_MIMXRT1175DVMAA_cm7))
+	#define MIMXRT1175_cm7_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT1175_cm7.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT1175_cm7_features.h"
+#elif (defined(CPU_MIMXRT1175AVM8A_cm4) || defined(CPU_MIMXRT1175CVM8A_cm4) || defined(CPU_MIMXRT1175DVMAA_cm4))
+	#define MIMXRT1175_cm4_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT1175_cm4.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT1175_cm4_features.h"
+
+#elif (defined(CPU_MIMXRT1176AVM8A_cm7) || defined(CPU_MIMXRT1176CVM8A_cm7) || defined(CPU_MIMXRT1176DVMAA_cm7))
+	#define MIMXRT1176_cm7_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT1176_cm7.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT1176_cm7_features.h"
+#elif (defined(CPU_MIMXRT1176AVM8A_cm4) || defined(CPU_MIMXRT1176CVM8A_cm4) || defined(CPU_MIMXRT1176DVMAA_cm4))
+	#define MIMXRT1176_cm4_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT1176_cm4.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT1176_cm4_features.h"
 
 #else
 	#error "No valid CPU defined!"

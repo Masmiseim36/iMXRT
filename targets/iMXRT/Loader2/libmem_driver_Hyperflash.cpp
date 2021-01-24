@@ -219,19 +219,39 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 				;
 			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
 		}
-	#elif (defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1051_SERIES) || \
-		  (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || (defined MIMXRT1064_SERIES)
+	#elif (defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
+		  (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
+		  (defined MIMXRT1064_SERIES)
 		// Set flexspi root clock to 166MHZ.
 		CLOCK_InitUsb1Pfd (kCLOCK_Pfd0, 26);        // Set PLL3 PFD0 clock 332MHZ.
 		CLOCK_SetMux      (kCLOCK_FlexspiMux, 0x3); // Choose PLL3 PFD0 clock as flexspi source clock.
 		CLOCK_SetDiv      (kCLOCK_FlexspiDiv, 3);   // flexspi clock 83M, DDR mode, internal clock 42M.
 	#elif (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
 		  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
-		// Set flexspi root clock to 100MHZ.
-		CLOCK_EnableOscRc400M ();
+		
+		clock_root_t FlexSPIClock = kCLOCK_Root_Flexspi1;
+		clock_lpcg_t FlexSPIClockGate = kCLOCK_Flexspi1;
+		switch (reinterpret_cast<uint32_t>(base))
+		{
+			case FLEXSPI_BASE:
+				FlexSPIClock = kCLOCK_Root_Flexspi1;
+				FlexSPIClockGate = kCLOCK_Flexspi1;
+				break;
+			case FLEXSPI2_BASE:
+				FlexSPIClock = kCLOCK_Root_Flexspi2;
+				FlexSPIClockGate = kCLOCK_Flexspi2;
+				break;
+			default:
+				return LibmemStaus_InvalidDevice;
+		}
+		CLOCK_SetRootClockDiv (FlexSPIClock, 2);
+		CLOCK_SetRootClockMux (FlexSPIClock, 0);
+		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
 
-		clock_root_config_t rootCfg = {false, 0, 0, 2, 3};	// Configure FlexSPI using RC400M divided by 4
-		CLOCK_SetRootClock (kCLOCK_Root_Flexspi1, &rootCfg);
+//		uint32_t FlexSPI_Clock_Hz = CLOCK_GetRootClockFreq (FlexSPIClock);
+//		uint32_t SourceClock_Hz   = FlexSPI_Clock_Hz;
+//		uint32_t BusClock_Hz      = CLOCK_GetRootClockFreq (kCLOCK_Root_Bus);
+//		uint32_t FlexSPI_ClockDiv = 6;
 	#else
 		#error "unknon controller family"
 	#endif

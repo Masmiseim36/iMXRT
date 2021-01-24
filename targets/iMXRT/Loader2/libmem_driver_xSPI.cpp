@@ -57,7 +57,7 @@ static flexspi_device_config_t deviceconfig =
 {
 	.flexspiRootClk       = 0, // SPI root clock (will be set up later)
 	.isSck2Enabled        = false,
-	.flashSize            = BOARD_FLASH_SIZE / 1024, // expressed in KByte
+	.flashSize            = BOARD_FLASH_SIZE / 1024, // expressed in KByte, will be reset after read the JEDEC Information
 	.CSIntervalUnit       = kFLEXSPI_CsIntervalUnit1SckCycle,
 	.CSInterval           = 2,
 	.CSHoldTime           = 3,
@@ -77,7 +77,7 @@ static flexspi_device_config_t deviceconfig =
 enum DummyCycles
 {
 	DummyCycles_Adesto   = 18,	// Number of dummy cycles after Read Command for Adesto-Flash
-	DummyCycles_Macronix = 12,	// Number of dummy cycles after Read Command for Macronix-Flash - Set 0x04 To the Config
+	DummyCycles_Macronix = 0x29//12,	// Number of dummy cycles after Read Command for Macronix-Flash - Set 0x04 To the Config
 };
 
 static const uint32_t LUT_SPI_Generic[CUSTOM_LUT_LENGTH] =
@@ -552,7 +552,7 @@ static const uint32_t LUT_OctaSPI_DDR_Macronix[CUSTOM_LUT_LENGTH] =
 
 	// (4) Page Program --> compare @LUT_CommandOffsets
 	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x12, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xED),
-	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_8PAD, 128),
+	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_8PAD, 4),
 	0,	// Dummy to fill a block of four
 	0,	// Dummy to fill a block of four
 
@@ -614,7 +614,7 @@ static const uint32_t LUT_OctaSPI_Macronix[CUSTOM_LUT_LENGTH] =
 
 	// (4) Page Program --> compare @LUT_CommandOffsets
 	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x12, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xED),
-	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_SDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_8PAD, 128),
+	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_SDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_8PAD, 4),
 	0,	// Dummy to fill a block of four
 	0,	// Dummy to fill a block of four
 
@@ -692,35 +692,6 @@ static const libmem_ext_driver_functions_t DriverFunctions_Extended =
 	libmem_CRC32
 };
 
-#if defined FSL_FEATURE_SOC_CCM_ANALOG_COUNT && FSL_FEATURE_SOC_CCM_ANALOG_COUNT > 0
-	void SetClockConfig (FLEXSPI_Type *base, uint32_t div)
-	{
-		switch ((uint32_t)base)
-		{
-			case FLEXSPI_BASE:
-				CLOCK_EnableClock(kCLOCK_FlexSpi);
-				CLOCK_SetMux     (kCLOCK_FlexspiMux, 0x2); // Choose PLL2 PFD2 clock as flexspi source clock.
-				CLOCK_SetDiv     (kCLOCK_FlexspiDiv, div-1);
-				break;
-			#ifdef FLEXSPI2
-			case FLEXSPI2_BASE:
-				CLOCK_EnableClock(kCLOCK_FlexSpi2);
-				CLOCK_SetMux     (kCLOCK_Flexspi2Mux, 0x0); // Choose PLL2 PFD2 clock as flexspi2 source clock.
-				CLOCK_SetDiv     (kCLOCK_Flexspi2Div, div-1);
-				break;
-			#endif
-			default:
-				break;
-		}
-	}
-//#else
-//	void SetClockConfig (FLEXSPI_Type *base, uint32_t div)
-//	{
-//		(void)base;
-//		BOARD_SetFlexspiClock (2, div);		// Use AUX0_PLL as clock source for the FlexSPI
-//	}
-#endif
-
 
 LibmemStatus_t Init_AdestoXiP (FLEXSPI_Type *base, enum eMemoryType MemType, const uint32_t **lut)
 {
@@ -729,6 +700,7 @@ LibmemStatus_t Init_AdestoXiP (FLEXSPI_Type *base, enum eMemoryType MemType, con
 	UnprotectAll_Adesto (base);
 
 	// Switch the configuration according to the configured memory-type
+	// Compare Status Register Byte 2 in the Adesto Datasheet
 	uint8_t Status = 0;
 	switch (MemType)
 	{
@@ -762,6 +734,11 @@ LibmemStatus_t Init_AdestoXiP (FLEXSPI_Type *base, enum eMemoryType MemType, con
 	if (stat != kStatus_Success)
 		return LibmemStaus_Error;
 
+	// Write to status/control register 3 to set the dummy clock cycles, compare table "Dummy Clock cycles and Maximum Operating Frequency"
+//	stat = WriteRegister (base, 3, 5, LUT_WriteStatusReg_Adesto); // 5 --> 18 dummy cycles
+//	if (stat != kStatus_Success)
+//		return LibmemStaus_Error;
+
 	// Write to status/control register 2 to switch to chosen memory-Type
 	stat = WriteRegister (base, 2, Status, LUT_WriteStatusReg_Adesto);
 	if (stat != kStatus_Success)
@@ -783,16 +760,16 @@ LibmemStatus_t Init_Macronix (FLEXSPI_Type *base, enum eMemoryType MemType, cons
 		case MemType_OctaSPI_DDR:
 			// Enter Octal-Mode with DDR.
 			// DDR is not working. Fall back to SDR
-//			Status = 2;
-//			*lut = LUT_OctaSPI_DDR_Macronix;
-//			break;
+			Status = 2;
+			*lut = LUT_OctaSPI_DDR_Macronix;
+			break;
 		case MemType_OctaSPI:
-			Status = 1;
+			Status = 0x1U;
 			*lut = LUT_OctaSPI_Macronix;
 			break;
 		case MemType_SPI:
 			// don't update the LUT, we are already in SPI-mode
-			Status = 0x00;
+			Status = 0x0U;
 			break;
 		default:
 			return LibmemStaus_Error;
@@ -804,11 +781,11 @@ LibmemStatus_t Init_Macronix (FLEXSPI_Type *base, enum eMemoryType MemType, cons
 	if (stat != kStatus_Success)
 		return LibmemStaus_Error;
 	// Write to status/control register 2 to set the Dummy-Cycles
-	stat = WriteRegister (base, 0x300, 12, LUT_WriteConfigReg_Macronix);
+	stat = WriteRegister (base, 0x300U, 8U, LUT_WriteConfigReg_Macronix);	// 8 --> 12 Cycles at 133 MHz
 	if (stat != kStatus_Success)
 		return LibmemStaus_Error;
 /*
-	// Set Output inpedance
+	// Set Output impedance
 	// send write-enable 
 	stat = WriteEnable (base, 0);
 	if (stat != kStatus_Success)
@@ -824,7 +801,7 @@ LibmemStatus_t Init_Macronix (FLEXSPI_Type *base, enum eMemoryType MemType, cons
 	if (stat != kStatus_Success)
 		return LibmemStaus_Error;
 	// Write to status/control register 2 to switch to chosen memory-Type
-	stat = WriteRegister (base, 0, Status, LUT_WriteConfigReg_Macronix);
+	stat = WriteRegister (base, 0x0U, Status, LUT_WriteConfigReg_Macronix);
 	if (stat != kStatus_Success)
 		return LibmemStaus_Error;
 
@@ -854,15 +831,37 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum eMemoryTyp
 		}
 		uint32_t FlexSPI_Clock_Hz = CLOCK_GetFlexspiClkFreq ();
 		uint32_t SourceClock_Hz = FlexSPI_Clock_Hz * FlexSPI_ClockDiv;
-	#elif ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1051_SERIES) || \
-		   (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || (defined MIMXRT1064_SERIES))
+	#elif ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
+		   (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
+		   (defined MIMXRT1064_SERIES))
+		const clock_usb_pll_config_t g_ccmConfigUsbPll = {.loopDivider = 0U, .src=0};
+		CLOCK_InitUsb1Pll(&g_ccmConfigUsbPll);
+
 		// Set up source clock
-		CLOCK_InitSysPfd (kCLOCK_Pfd2, 16);        // Set PLL2 PFD2 clock 594 MHZ.
+		CLOCK_InitSysPfd (kCLOCK_Pfd2, 24);        // Set PLL2 PFD2 clock 360 MHZ.
 		uint32_t SourceClock_Hz = CLOCK_GetSysPfdFreq (kCLOCK_Pfd2);
 
-		uint32_t FlexSPI_ClockDiv = 6;
+		uint32_t FlexSPI_ClockDiv = 3;
 		uint32_t FlexSPI_Clock_Hz = SourceClock_Hz / FlexSPI_ClockDiv;
-		SetClockConfig (base, FlexSPI_ClockDiv);	// flexspi clock 99 MHz.
+		clock_div_t FlexSPIDiv = kCLOCK_FlexspiDiv;
+		switch ((uint32_t)base)
+		{
+			case FLEXSPI_BASE:
+				CLOCK_EnableClock(kCLOCK_FlexSpi);
+				CLOCK_SetMux     (kCLOCK_FlexspiMux, 0x3); // Choose PLL3 PFD0 clock as flexspi source clock.
+				FlexSPIDiv = kCLOCK_FlexspiDiv;
+				break;
+			#ifdef FLEXSPI2
+			case FLEXSPI2_BASE:
+				CLOCK_EnableClock(kCLOCK_FlexSpi2);
+				CLOCK_SetMux     (kCLOCK_Flexspi2Mux, 0x3); // Choose PLL3 PFD0 clock as flexspi source clock.
+				FlexSPIDiv = kCLOCK_Flexspi2Div;
+				break;
+			#endif
+			default:
+				break;
+		}
+		CLOCK_SetDiv (FlexSPIDiv, FlexSPI_ClockDiv-1);	// flexspi clock 120M.
 	#elif (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
 		  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
 /*		clock_root_config_t rootCfg = {false, 0, 0, 7, 2-1};	// Configure FlexSPI using PLL3Out (-> 480 MHz) divided by 2
@@ -871,13 +870,32 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum eMemoryTyp
 
 //		CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi1, 4);	// Choose SysPll3Pfd0 clock as flexspi source clock. 396M
 //		CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi1, 5);	// flexspi clock 133M
-		CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi1, 2);
-		CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi1, 0);
 
-		uint32_t FlexSPI_Clock_Hz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi1);
-		uint32_t SourceClock_Hz   = FlexSPI_Clock_Hz;
-		uint32_t BusClock_Hz   = CLOCK_GetRootClockFreq (kCLOCK_Root_Bus);
-		uint32_t FlexSPI_ClockDiv = 6;
+		clock_root_t FlexSPIClock = kCLOCK_Root_Flexspi1;
+		clock_lpcg_t FlexSPIClockGate = kCLOCK_Flexspi1;
+		switch (reinterpret_cast<uint32_t>(base))
+		{
+			case FLEXSPI_BASE:
+				FlexSPIClock = kCLOCK_Root_Flexspi1;
+				FlexSPIClockGate = kCLOCK_Flexspi1;
+				break;
+			case FLEXSPI2_BASE:
+				FlexSPIClock = kCLOCK_Root_Flexspi2;
+				FlexSPIClockGate = kCLOCK_Flexspi2;
+				break;
+			default:
+				return LibmemStaus_InvalidDevice;
+		}
+//		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
+		CLOCK_SetRootClockDiv (FlexSPIClock, 4); // --> 396 MHz / 4 = ~100 MHz
+		CLOCK_SetRootClockMux (FlexSPIClock, 6); // ClockSource_SysPll2Pfd2 --> 396 MHz
+//		CLOCK_SetRootClockDiv (FlexSPIClock, 2); // 12 NHz
+//		CLOCK_SetRootClockMux (FlexSPIClock, 0); // OscRc48MDiv2 --> 24 MHz
+		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
+
+		uint32_t FlexSPI_Clock_Hz = CLOCK_GetRootClockFreq (FlexSPIClock);
+//		uint32_t SourceClock_Hz   = FlexSPI_Clock_Hz;
+//		uint32_t BusClock_Hz      = CLOCK_GetRootClockFreq (kCLOCK_Root_Bus);
 	#else
 		#error "unknon controller family"
 	#endif
@@ -904,7 +922,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum eMemoryTyp
 	// Get the JEDEC Informations
 	struct DeviceInfo Info {};
 	status_t status = ReadJEDEC (base, &Info);
-	if (status != kStatus_Success)
+	if (status != kStatus_Success || Info.ManufactureID == ManufactureID_UNDEF)
 	{
 		DebugPrint ("JEDEC read Error\r\n");
 		return LibmemStaus_InvalidDevice;
@@ -981,15 +999,19 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum eMemoryTyp
 	// Reconfigure the Interface according to the gathered Flash-Information and configuration
 	if (MemType == MemType_OctaSPI_DDR || MemType == MemType_QuadSPI_DDR)
 	{
-		FlexSPI_ClockDiv = 3;	// ~Double the Frequency in DDR-Mode
-		FlexSPI_Clock_Hz = SourceClock_Hz / FlexSPI_ClockDiv;
-		deviceconfig.flexspiRootClk = FlexSPI_Clock_Hz;
-
 		#if defined FSL_FEATURE_SOC_CCM_ANALOG_COUNT && FSL_FEATURE_SOC_CCM_ANALOG_COUNT > 0
-			SetClockConfig (base, FlexSPI_ClockDiv); // Divide source clock the source/root ratio // Divide source clock the source/root ratio --> 148,5 Mhz
+			CLOCK_SetDiv (FlexSPIDiv, FlexSPI_ClockDiv-1);
 		#else
-//			CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi1, 3);	// flexspi clock 133M
-//			FlexSPI_Clock_Hz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi1);
+			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 396 MHz / 2 = ~200 MHz
+			deviceconfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
+		#endif
+	}
+	else
+	{
+		#if defined FSL_FEATURE_SOC_CCM_ANALOG_COUNT && FSL_FEATURE_SOC_CCM_ANALOG_COUNT > 0
+		#else
+//			CLOCK_SetRootClockDiv (FlexSPIClock, 8);
+			deviceconfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
 		#endif
 	}
 

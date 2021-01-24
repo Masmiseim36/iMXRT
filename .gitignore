@@ -7,8 +7,10 @@ Loader_CM7 MIMXRT1011_Release
 Loader_CM7 MIMXRT1011_Debug
 Loader_CM7 MIMXRT1015_Release
 Loader_CM7 MIMXRT1015_Debug
-Loader_CM7 MIMXRT1020_Release
-Loader_CM7 MIMXRT1020_Debug
+Loader_CM7 MIMXRT1021_Release
+Loader_CM7 MIMXRT1021_Debug
+Loader_CM7 MIMXRT1024_Release
+Loader_CM7 MIMXRT1024_Debug
 Loader_CM7 MIMXRT1050_Release
 Loader_CM7 MIMXRT1050_Debug
 Loader_CM7 MIMXRT1060_Release
@@ -17,6 +19,8 @@ Loader_CM7 MIMXRT1064_Release
 Loader_CM7 MIMXRT1064_Debug
 Loader_CM7 MIMXRT1170_Release
 Loader_CM7 MIMXRT1170_Debug
+Loader_CM4 MIMXRT1170_Release
+Loader_CM4 MIMXRT1170_Debug
 SayHello THUMB Release
 SayHello THUMB Debug
 iMXRT Loader MIMXRT1011_QuadSPI_4KB_SEC Debug
@@ -43,7 +47,3 @@ DualCore_M4 THUMB Debug
 DualCore_M4 THUMB Release
 DualCore_M7 THUMB Debug
 DualCore_M7 THUMB Release
-Loader_CM4 MIMXRT1170_Debug
-Loader_CM4 MIMXRT1170_Release
-Loader_CM7 MIMXRT1170_Debug
-Loader_CM7 MIMXRT1170_Release

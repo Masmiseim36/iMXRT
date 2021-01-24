@@ -104,16 +104,17 @@ static inline void DMAMUX_DisableChannel(DMAMUX_Type *base, uint32_t channel)
  *
  * @param base DMAMUX peripheral base address.
  * @param channel DMAMUX channel number.
- * @param source Channel source, which is used to trigger the DMA transfer.
+ * @param src Channel source, which is used to trigger the DMA transfer.
  */
-static inline void DMAMUX_SetSource(DMAMUX_Type *base, uint32_t channel, uint32_t source)
+static inline void DMAMUX_SetSource(DMAMUX_Type *base, uint32_t channel, uint32_t src)
 {
+    (void)src;
     assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
 #if defined FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH && (FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH == 32U)
-    base->CHCFG[channel] = ((base->CHCFG[channel] & ~DMAMUX_CHCFG_SOURCE_MASK) | DMAMUX_CHCFG_SOURCE(source));
+    base->CHCFG[channel] = ((base->CHCFG[channel] & ~DMAMUX_CHCFG_SOURCE_MASK) | DMAMUX_CHCFG_SOURCE(src));
 #else
-    base->CHCFG[channel] = (uint8_t)((base->CHCFG[channel] & ~DMAMUX_CHCFG_SOURCE_MASK) | DMAMUX_CHCFG_SOURCE(source));
+    base->CHCFG[channel] = (uint8_t)((base->CHCFG[channel] & ~DMAMUX_CHCFG_SOURCE_MASK) | DMAMUX_CHCFG_SOURCE(src));
 #endif
 }
 

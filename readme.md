@@ -19,14 +19,15 @@ This package enhances the original package by
 
 The following Controllers are supported:
 
-- [iMXRT1010](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i.mx-rt-series/i.mx-rt1010-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1010)
-- [iMXRT1015](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i.mx-rt-series/i.mx-rt1015-crossover-processor-with-arm-cortex-m7-core:i.MX-RT1015)
-- [iMXRT1020](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i.mx-rt-series/i.mx-rt1020-crossover-processor-with-arm-cortex-m7-core:i.MX-RT1020)
-- [iMXRT1050](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i.mx-rt-series/i.mx-rt1050-crossover-processor-with-arm-cortex-m7-core:i.MX-RT1050)
-- [iMXRT1060](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i.mx-rt-series/i.mx-rt1060-crossover-processor-with-arm-cortex-m7-core:i.MX-RT1060)
-- [iMXRT1064](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i.mx-rt-series/i.mx-rt1064-crossover-processor-with-arm-cortex-m7-core:i.MX-RT1064)
+- [iMXRT1010](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1010-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1010)
+- [iMXRT1015](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1015-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1015)
+- [iMXRT1020](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1020-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1020)
+- [iMXRT1024](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1024-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1024)
+- [iMXRT1050](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1050-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1050)
+- [iMXRT1060](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1060-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1060)
+- [iMXRT1064](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1064-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1064)
 
-The Support for [iMXRT1170](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i.mx-rt-series/i.mx-rt1170-crossover-mcu-family-first-ghz-mcu-with-arm-cortex-m7-and-cortex-m4-cores:i.MX-RT1170) is in development.
+The Support for [iMXRT1170](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1170-crossover-mcu-family-first-ghz-mcu-with-arm-cortex-m7-and-cortex-m4-cores:i.MX-RT1170) is in development.
 
 ## Build and Install
 

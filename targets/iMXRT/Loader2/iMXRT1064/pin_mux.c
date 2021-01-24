@@ -96,6 +96,44 @@ void BOARD_InitOctaSPIPins (void)
 	BOARD_InitQuadSPIPins ();
 }
 
+void BOARD_PerformJEDECReset_FlexSPI1 (void)
+{
+	gpio_pin_config_t jreset_pin_config = 
+	{
+		kGPIO_DigitalOutput, 1, kGPIO_NoIntmode
+	};
+
+	// Configure the 3 pins used in JEDEC reset as GPIOs
+	IOMUXC_SetPinMux (IOMUXC_GPIO_SD_B1_06_GPIO3_IO06, 1);	// IOMUXC_GPIO_SD_B1_06_FLEXSPIA_SS0_B
+	IOMUXC_SetPinMux (IOMUXC_GPIO_SD_B1_08_GPIO3_IO08, 1);	// IOMUXC_GPIO_SD_B1_08_FLEXSPIA_DATA00
+	IOMUXC_SetPinMux (IOMUXC_GPIO_SD_B1_07_GPIO3_IO07, 1);	// IOMUXC_GPIO_SD_B1_07_FLEXSPIA_SCLK
+
+	// Set the direction of 3 pins used in JEDEC reset to output
+	GPIO_PinInit (GPIO3, 6, &jreset_pin_config); // CS
+	GPIO_PinInit (GPIO3, 8, &jreset_pin_config); // SI/IO0
+	GPIO_PinInit (GPIO3, 7, &jreset_pin_config); // SCK
+
+
+	// Perform a reset sequence:
+	// CS goes low 4 times with alternating values of SOUT
+	// SCK is drive low or high and must stay in one state
+	GPIO_WritePinOutput (GPIO3, 7, 0); // set SCK low
+	for (uint32_t i = 0; i < 4; i++)
+	{
+		// drive CS low
+		GPIO_WritePinOutput (GPIO3, 6, 0);
+		SDK_DelayAtLeastUs (1, SystemCoreClock);
+		// drive SI low or high: alternate its state every iteration
+		GPIO_WritePinOutput (GPIO3, 8, (i&1));
+		// drive CS high; SI state will be captured on the CS rising edge
+		GPIO_WritePinOutput (GPIO3, 6, 1);
+		SDK_DelayAtLeastUs (1, SystemCoreClock);
+	}
+
+	SDK_DelayAtLeastUs (110, SystemCoreClock);
+}
+
+
 
 /** BOARD_InitQuadSPI2Pins
 Set pin muxing and configure electrical properties for QSPI */
@@ -150,7 +188,7 @@ void BOARD_InitOctaSPI2Pins (void)
 	BOARD_InitQuadSPI2Pins ();
 }
 
-void BOARD_PerformJEDECReset (void)
+void BOARD_PerformJEDECReset_FlexSPI2 (void)
 {
 	gpio_pin_config_t jreset_pin_config = 
 	{
@@ -158,30 +196,30 @@ void BOARD_PerformJEDECReset (void)
 	};
 
 	// Configure the 3 pins used in JEDEC reset as GPIOs
-	IOMUXC_SetPinMux (IOMUXC_GPIO_SD_B1_06_GPIO3_IO06, 1);	// IOMUXC_GPIO_SD_B1_06_FLEXSPIA_SS0_B
-	IOMUXC_SetPinMux (IOMUXC_GPIO_SD_B1_08_GPIO3_IO08, 1);	// IOMUXC_GPIO_SD_B1_08_FLEXSPIA_DATA00
-	IOMUXC_SetPinMux (IOMUXC_GPIO_SD_B1_07_GPIO3_IO07, 1);	// IOMUXC_GPIO_SD_B1_07_FLEXSPIA_SCLK
+	IOMUXC_SetPinMux (IOMUXC_GPIO_EMC_24_GPIO4_IO24, 1);	// IOMUXC_GPIO_EMC_24_FLEXSPI2_A_SS0_B
+	IOMUXC_SetPinMux (IOMUXC_GPIO_EMC_26_GPIO4_IO26, 1);	// IOMUXC_GPIO_EMC_26_FLEXSPI2_A_DATA00
+	IOMUXC_SetPinMux (IOMUXC_GPIO_EMC_25_GPIO4_IO25, 1);	// IOMUXC_GPIO_EMC_25_FLEXSPI2_A_SCLK
 
 	// Set the direction of 3 pins used in JEDEC reset to output
-	GPIO_PinInit (GPIO3, 6, &jreset_pin_config); // CS
-	GPIO_PinInit (GPIO3, 8, &jreset_pin_config); // SI/IO0
-	GPIO_PinInit (GPIO3, 7, &jreset_pin_config); // SCK
+	GPIO_PinInit (GPIO4, 24, &jreset_pin_config); // CS
+	GPIO_PinInit (GPIO4, 26, &jreset_pin_config); // SI/IO0
+	GPIO_PinInit (GPIO4, 25, &jreset_pin_config); // SCK
 
 
 	// Perform a reset sequence:
 	// CS goes low 4 times with alternating values of SOUT
 	// SCK is drive low or high and must stay in one state
-	GPIO_WritePinOutput (GPIO3, 7, 0); // set SCK low
+	GPIO_WritePinOutput (GPIO4, 25, 0); // set SCK low
 	for (uint32_t i = 0; i < 4; i++)
 	{
 		// drive CS low
-		GPIO_WritePinOutput (GPIO3, 6, 0);
+		GPIO_WritePinOutput (GPIO4, 24, 0);
+		SDK_DelayAtLeastUs (1, SystemCoreClock);
 		// drive SI low or high: alternate its state every iteration
-		GPIO_WritePinOutput (GPIO3, 8, (i&1));
-		for (uint32_t j=0; j<100; j++);
+		GPIO_WritePinOutput (GPIO4, 26, (i&1));
 		// drive CS high; SI state will be captured on the CS rising edge
-		GPIO_WritePinOutput (GPIO3, 6, 1);
-		for (uint32_t j=0; j<100; j++);
+		GPIO_WritePinOutput (GPIO4, 24, 1);
+		SDK_DelayAtLeastUs (1, SystemCoreClock);
 	}
 
 	SDK_DelayAtLeastUs (110, SystemCoreClock);

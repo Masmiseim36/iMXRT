@@ -35,13 +35,21 @@
     linker_memory_map_file="../MemoryMap_MIMXRT1015.xml"
     macros="DeviceName=MIMXRT1015" />
   <configuration
-    Name="1020"
+    Name="1021"
     Target="MIMXRT1021DAF5A"
     c_preprocessor_definitions="CPU_MIMXRT1021DAF5A"
-    c_user_include_directories=".;./iMXRT1020/."
+    c_user_include_directories=".;./iMXRT1021/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
     macros="DeviceName=MIMXRT1021" />
+  <configuration
+    Name="1024"
+    Target="MIMXRT1024DAG5A"
+    c_preprocessor_definitions="CPU_MIMXRT1024DAG5A"
+    c_user_include_directories=".;./iMXRT1024/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
+    macros="DeviceName=MIMXRT1024" />
   <configuration
     Name="1050"
     Target="MIMXRT1052DVJ6B"
@@ -91,13 +99,21 @@
     build_output_file_name="Loader_iMXRT1015.elf"
     inherited_configurations="1015;Release" />
   <configuration
-    Name="MIMXRT1020_Debug"
-    build_output_file_name="Loader_iMXRT1020_Debug.elf"
-    inherited_configurations="1020;Debug" />
+    Name="MIMXRT1021_Debug"
+    build_output_file_name="Loader_iMXRT1021_Debug.elf"
+    inherited_configurations="1021;Debug" />
   <configuration
-    Name="MIMXRT1020_Release"
-    build_output_file_name="Loader_iMXRT1020.elf"
-    inherited_configurations="1020;Release" />
+    Name="MIMXRT1021_Release"
+    build_output_file_name="Loader_iMXRT1021.elf"
+    inherited_configurations="1021;Release" />
+  <configuration
+    Name="MIMXRT1024_Debug"
+    build_output_file_name="Loader_iMXRT1024_Debug.elf"
+    inherited_configurations="1024;Debug" />
+  <configuration
+    Name="MIMXRT1024_Release"
+    build_output_file_name="Loader_iMXRT1024.elf"
+    inherited_configurations="1024;Release" />
   <configuration
     Name="MIMXRT1050_Debug"
     build_output_file_name="Loader_iMXRT1050_Debug.elf"
@@ -149,7 +165,7 @@
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
       arm_target_loader_parameter="666"
-      batch_build_configurations="MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1020_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1170_Release"
+      batch_build_configurations="MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1170_Release"
       c_additional_options="-fno-signed-char;-Wno-narrowing;-Wall;-Wextra;-Wmisleading-indentation;-Wshadow;-Wdouble-promotion;-Wformat=2"
       c_preprocessor_definitions="__THUMB;FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ=0;SKIP_SYSCLK_INIT"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(PackagesDir)/libraries/libmem_drivers"
@@ -225,18 +241,34 @@
           <configuration Name="Common" file_type="Memory Map" />
         </file>
       </folder>
-      <folder Name="iMXRT1020">
+      <folder Name="iMXRT1021">
         <configuration Name="Common" build_exclude_from_build="Yes" />
-        <configuration Name="1020" build_exclude_from_build="No" />
-        <file file_name="iMXRT1020/fsl_clock.h" />
-        <file file_name="iMXRT1020/fsl_iomuxc.h" />
-        <file file_name="iMXRT1020/fsl_clock.c" />
-        <file file_name="iMXRT1020/clock_config.c" />
-        <file file_name="iMXRT1020/clock_config.h" />
-        <file file_name="iMXRT1020/pin_mux.c" />
-        <file file_name="iMXRT1020/board.h" />
-        <file file_name="iMXRT1020/fsl_gpio.c" />
-        <file file_name="iMXRT1020/fsl_gpio.h" />
+        <configuration Name="1021" build_exclude_from_build="No" />
+        <file file_name="iMXRT1021/fsl_clock.h" />
+        <file file_name="iMXRT1021/fsl_iomuxc.h" />
+        <file file_name="iMXRT1021/fsl_clock.c" />
+        <file file_name="iMXRT1021/clock_config.c" />
+        <file file_name="iMXRT1021/clock_config.h" />
+        <file file_name="iMXRT1021/pin_mux.c" />
+        <file file_name="iMXRT1021/board.h" />
+        <file file_name="iMXRT1021/fsl_gpio.c" />
+        <file file_name="iMXRT1021/fsl_gpio.h" />
+        <file file_name="../MemoryMap_MIMXRT102x.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
+      </folder>
+      <folder Name="iMXRT1024">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1024" build_exclude_from_build="No" />
+        <file file_name="iMXRT1024/fsl_clock.h" />
+        <file file_name="iMXRT1024/fsl_iomuxc.h" />
+        <file file_name="iMXRT1024/fsl_clock.c" />
+        <file file_name="iMXRT1024/clock_config.c" />
+        <file file_name="iMXRT1024/clock_config.h" />
+        <file file_name="iMXRT1024/pin_mux.c" />
+        <file file_name="iMXRT1024/board.h" />
+        <file file_name="iMXRT1024/fsl_gpio.c" />
+        <file file_name="iMXRT1024/fsl_gpio.h" />
         <file file_name="../MemoryMap_MIMXRT102x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
@@ -298,8 +330,6 @@
         <file file_name="iMXRT1170/clock_config.h" />
         <file file_name="iMXRT1170/clock_config.c" />
         <file file_name="iMXRT1170/fsl_anatop_ai.h" />
-        <file file_name="iMXRT1170/fsl_anatop.c" />
-        <file file_name="iMXRT1170/fsl_anatop.h" />
         <file file_name="iMXRT1170/fsl_anatop_ai.c" />
         <file file_name="iMXRT1170/pin_mux.c" />
         <file file_name="iMXRT1170/board.h" />
