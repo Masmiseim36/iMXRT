@@ -1,5 +1,5 @@
 <!DOCTYPE CrossStudio_Package_Description_File>
-<package name="iMXRT" author="Rowley Associates Ltd" cpu_manufacturer="NXP" cpu_family="iMXRT" version="4.4.2" crossstudio_versions="8:4.7-" dependencies="CMSIS" build_version="crossworks_v4" >
+<package name="iMXRT" author="Rowley Associates Ltd" cpu_manufacturer="NXP" cpu_family="iMXRT" version="4.4.3" crossstudio_versions="8:4.8-" dependencies="CMSIS" build_version="crossworks_v4" >
   <group title="System Solutions">
     <file title="iMXRT Loader Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader.hzp" />
     <file title="iMX RT Samples" file_name="$(SamplesDir)/iMXRT/iMXRT.hzp" />
@@ -47,6 +47,28 @@
     <category name="iMXRT1064">
       <cpu name="MIMXRT1064CVL5A" />
       <cpu name="MIMXRT1064DVL6A" />
+    </category>
+    <category name="iMXRT1070">
+      <cpu name="MIMXRT1171AVM8A" />
+      <cpu name="MIMXRT1171CVM8A" />
+      <cpu name="MIMXRT1171DVMAA" />
+      <cpu name="MIMXRT1172AVM8A" />
+      <cpu name="MIMXRT1172CVM8A" />
+      <cpu name="MIMXRT1172DVMAA" />
+      <cpu name="MIMXRT1173CVM8A_cm7" />
+      <cpu name="MIMXRT1173CVM8A_cm4" />
+      <cpu name="MIMXRT1175AVM8A_cm7" />
+      <cpu name="MIMXRT1175CVM8A_cm7" />
+      <cpu name="MIMXRT1175DVMAA_cm7" />
+      <cpu name="MIMXRT1175AVM8A_cm4" />
+      <cpu name="MIMXRT1175CVM8A_cm4" />
+      <cpu name="MIMXRT1175DVMAA_cm4" />
+      <cpu name="MIMXRT1176AVM8A_cm7" />
+      <cpu name="MIMXRT1176CVM8A_cm7" />
+      <cpu name="MIMXRT1176DVMAA_cm7" />
+      <cpu name="MIMXRT1176AVM8A_cm4" />
+      <cpu name="MIMXRT1176CVM8A_cm4" />
+      <cpu name="MIMXRT1176DVMAA_cm4" />
     </category>
   </targets>
   <documentation>
@@ -130,6 +152,7 @@
   </documentation>
   <history>
     <version name="4.4.2">
+      <description>Added Support for iMXRT117x</description>
       <description>FlexSPI-Configurations are also using TCM- and OCRAM-memory now</description>
       <description>Added SDRAM-Segment to Memory-Map</description>
       <description>Added support for Adesto EcoXiP Flash</description>

@@ -399,6 +399,18 @@ static const uint32_t LUT_OctaSPI_Adesto[CUSTOM_LUT_LENGTH] =
 	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_8PAD, 1,     kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 	0,	// Dummy to fill a block of four
 	0,	// Dummy to fill a block of four
+
+	// (9) Block Erase 32K --> compare @LUT_CommandOffsets
+	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x52,  kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_8PAD, 32),
+	0,	// Dummy to fill a block of four
+	0,	// Dummy to fill a block of four
+	0,	// Dummy to fill a block of four
+
+	// (10) Block Erase 64K --> compare @LUT_CommandOffsets
+	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xD8,  kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_8PAD, 32),
+	0,	// Dummy to fill a block of four
+	0,	// Dummy to fill a block of four
+	0,	// Dummy to fill a block of four
 };
 
 static const uint32_t LUT_QuadSPI_DDR_Adesto[CUSTOM_LUT_LENGTH] =
@@ -455,6 +467,18 @@ static const uint32_t LUT_QuadSPI_DDR_Adesto[CUSTOM_LUT_LENGTH] =
 	// (8) Write Status/Control Registers --> compare @LUT_CommandOffsets
 	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x71,  kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_4PAD, 8),
 	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_4PAD, 1,     kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
+	0,	// Dummy to fill a block of four
+	0,	// Dummy to fill a block of four
+
+	// (9) Block Erase 32K --> compare @LUT_CommandOffsets
+	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x52,  kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_4PAD, 32),
+	0,	// Dummy to fill a block of four
+	0,	// Dummy to fill a block of four
+	0,	// Dummy to fill a block of four
+
+	// (10) Block Erase 64K --> compare @LUT_CommandOffsets
+	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0xD8,  kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_4PAD, 32),
+	0,	// Dummy to fill a block of four
 	0,	// Dummy to fill a block of four
 	0,	// Dummy to fill a block of four
 };
@@ -519,6 +543,18 @@ static const uint32_t LUT_OctaSPI_DDR_Adesto[CUSTOM_LUT_LENGTH] =
 
 	// (5) Write Status/Control Registers
 //	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x71, kFLEXSPI_Command_WRITE_DDR, kFLEXSPI_8PAD, 4),
+
+	// (9) Block Erase 32K --> compare @LUT_CommandOffsets
+	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x52, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 32),
+	0,	// Dummy to fill a block of four
+	0,	// Dummy to fill a block of four
+	0,	// Dummy to fill a block of four
+
+	// (10) Block Erase 64K --> compare @LUT_CommandOffsets
+	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xD8, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 32),
+	0,	// Dummy to fill a block of four
+	0,	// Dummy to fill a block of four
+	0,	// Dummy to fill a block of four
 };
 
 

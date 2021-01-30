@@ -1,0 +1,17 @@
+<!DOCTYPE Board_Memory_Definition_File>
+<Root name="iMXRT" >
+	<!-- The ROM expects the 512-byte FlexSPI NOR configuration parameters to be present at offset 0x400 in Serial NOR flash.
+		Compare Chapter "10.6.1.2 FlexSPI Serial NOR Flash Boot Operation" in the reference manual -->
+	<MemorySegment name="BootOffset"  start="0x60000000" size="$(BootRomOffset:0x400)"     access="ReadOnly"/>
+	<MemorySegment name="FlexSPI2"    start="0x60000000" size="$(FlexSPI2SIZE:0x04000000)" access="ReadOnly"/>
+	<MemorySegment name="FlexSPI"     start="0x30000000" size="$(FlexSPISIZE:0x04000000)"  access="ReadOnly"/>
+   	<MemorySegment name="OCRAM_M4"    start="0x20200000" size="$(OCRAM_M4_SIZE:0x00040000)"/>
+	<MemorySegment name="OCRAM"       start="0x20240000" size="$(OCRAM_SIZE:0x00100000)"/> <!-- OCRAM combined -->
+	<MemorySegment name="OCRAM1"      start="0x20240000" size="$(OCRAM1_SIZE:0x00080000)"/> <!-- OCRAM1 -->
+	<MemorySegment name="OCRAM2"      start="0x202C0000" size="$(OCRAM2_SIZE:0x00080000)"/> <!-- OCRAM2 -->
+    <MemorySegment name="OCRAM_M7"    start="0x20360000" size="$(OCRAM_M7_SIZE:0x00080000)"/>
+	<MemorySegment name="DTCM"        start="0x20000000" size="$(DTCMSIZE:0x00040000)"/>
+	<MemorySegment name="ITCM"        start="0x00000000" size="$(ITCMSIZE:0x00040000)"/>
+	<MemorySegment name="SDRAM"       start="0x80000000" size="$(SDRAMSIZE:0x02000000)"/>
+</Root>
+
