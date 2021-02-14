@@ -50,56 +50,74 @@
 //
 // QSPI boot header
 //
-const flexspi_nor_config_t FlashBootHeader =
-{
-	.memConfig =
+#if IS_IMX_RT_1024
+	const flexspi_nor_config_t FlashBootHeader =
 	{
-		.tag              = FLEXSPI_CFG_BLK_TAG,
-		.version          = FLEXSPI_CFG_BLK_VERSION,
-		.readSampleClkSrc = kFlexSPIReadSampleClk_LoopbackFromDqsPad,
-		.csHoldTime       = 3U,
-		.csSetupTime      = 3U,
-		// Enable DDR mode, Wordaddassable, Safe configuration, Differential clock
-		.sflashPadType    = kSerialFlash_4Pads,
-		.serialClkFreq    = kFlexSpiSerialClk_100MHz,
-		.sflashA1Size     = 16U * 1024U * 1024U,
-		.lookupTable =
+		.memConfig =
 		{
-			// (0) Read Array
-			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0xEB, RADDR_SDR, FLEXSPI_4PAD, 0x18),
-			FLEXSPI_LUT_SEQ (DUMMY_SDR, FLEXSPI_4PAD, 0x06, READ_SDR,  FLEXSPI_4PAD, 0x04),
-			0,
-			0,
-
-			// (1) Read Status
-			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x05, RADDR_SDR, FLEXSPI_1PAD, 0x04),
-			0,
-			0,
-			0,
-
-			// (2) 
-			0,
-			0,
-			0,
-			0,
-
-			// (3) Write Enable  
-			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x06, STOP,      FLEXSPI_1PAD, 0),
-			0,
-			0,
-			0,
-
-			// (4) Write Status/Control Registers
-			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x01, WRITE_SDR, FLEXSPI_1PAD, 0x04),
-			0,
-			0,
-			0,
+			.tag              = FLEXSPI_CFG_BLK_TAG,
+			.version          = FLEXSPI_CFG_BLK_VERSION,
+			.readSampleClkSrc = kFlexSPIReadSampleClk_LoopbackInternally,
+			.csHoldTime       = 3U,
+			.csSetupTime      = 3U,
+			.sflashPadType    = kSerialFlash_4Pads,
+			.serialClkFreq    = kFlexSpiSerialClk_60MHz,
+			.sflashA1Size     = 4U * 1024U * 1024U,
+			.lookupTable =
+			{
+				// Read LUTs
+				FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0xEB, RADDR_SDR, FLEXSPI_4PAD, 0x18),
+				FLEXSPI_LUT_SEQ (DUMMY_SDR, FLEXSPI_4PAD, 0x06, READ_SDR,  FLEXSPI_4PAD, 0x04),
+			},
 		},
-	},
-	.pageSize           = 256U,
-	.sectorSize         = 4U * 1024U,
-	.blockSize          = 256U * 1024U,
-	.isUniformBlockSize = false,
+		.pageSize           = 256U,
+		.sectorSize         = 4U * 1024U,
+		.blockSize          = 64U * 1024U,
+		.isUniformBlockSize = false,
 	};
+#else
+	const flexspi_nor_config_t FlashBootHeader =
+	{
+		.memConfig =
+		{
+			.tag              = FLEXSPI_CFG_BLK_TAG,
+			.version          = FLEXSPI_CFG_BLK_VERSION,
+			.readSampleClkSrc = kFlexSPIReadSampleClk_LoopbackFromDqsPad,
+			.csHoldTime       = 3U,
+			.csSetupTime      = 3U,
+			// Enable DDR mode, Wordaddassable, Safe configuration, Differential clock
+			.sflashPadType    = kSerialFlash_4Pads,
+			.serialClkFreq    = kFlexSpiSerialClk_100MHz,
+			.sflashA1Size     = 16U * 1024U * 1024U,
+			.lookupTable =
+			{
+				// (0) Read Array
+				FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0xEB, RADDR_SDR, FLEXSPI_4PAD, 0x18),
+				FLEXSPI_LUT_SEQ (DUMMY_SDR, FLEXSPI_4PAD, 0x06, READ_SDR,  FLEXSPI_4PAD, 0x04),
+				0,
+				0,
+				// (1) Read Status
+				FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x05, RADDR_SDR, FLEXSPI_1PAD, 0x04),
+				0,
+				0,
+				0,
+				// (2) Write Enable  
+				FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x06, STOP,      FLEXSPI_1PAD, 0),
+				0,
+				0,
+				0,
+				// (3) Write Status/Control Registers
+				FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x01, WRITE_SDR, FLEXSPI_1PAD, 0x04),
+				0,
+				0,
+				0,
+			},
+		},
+		.pageSize           = 256U,
+		.sectorSize         = 4U * 1024U,
+		.blockSize          = 256U * 1024U,
+		.isUniformBlockSize = false,
+	};
+#endif
 
 #endif // XIP_BOOT_QSPI

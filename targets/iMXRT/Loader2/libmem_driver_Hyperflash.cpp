@@ -385,7 +385,7 @@ static status_t EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si
 	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
 	uint32_t SectorAddr = libmem_CalculateOffset (h, si->start);
 	if (SectorAddr == UINT32_MAX)
-		return LIBMEM_STATUS_ERROR;
+		return LIBMEM_STATUS_INVALID_RANGE;
 
 	DebugPrintf ("EraseSector at 0x%x, size: %d\r\n", SectorAddr, si->size);
 
@@ -422,7 +422,7 @@ static int ProgramPage (libmem_driver_handle_t *h, uint8_t *Dest, const uint8_t 
 	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
 	uint32_t DeviceAddress = libmem_CalculateOffset (h, Dest);
 	if (DeviceAddress == UINT32_MAX)
-		return LIBMEM_STATUS_ERROR;
+		return LIBMEM_STATUS_INVALID_RANGE;
 
 	DebugPrintf ("ProgramPage at 0x%X\r\n", DeviceAddress);
 

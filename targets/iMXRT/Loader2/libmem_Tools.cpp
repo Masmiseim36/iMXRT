@@ -52,9 +52,9 @@ uint8_t *libmem_GetBaseAddress (FLEXSPI_Type *base)
 
 uint8_t *libmem_GetAliasBaseAddress (FLEXSPI_Type *base)
 {
-	#if __CORTEX_M == 4
-	if (reinterpret_cast<uint32_t>(base) == FLEXSPI_BASE)
-		return reinterpret_cast<uint8_t *>(0x08000000);
+	#if defined FlexSPI1_ALIAS_BASE
+		if (reinterpret_cast<uint32_t>(base) == FLEXSPI1_BASE)
+			return reinterpret_cast<uint8_t *>(FlexSPI1_ALIAS_BASE);
 	#else
 		(void)base;
 	#endif

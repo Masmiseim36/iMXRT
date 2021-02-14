@@ -15,7 +15,7 @@ This package enhances the original package by
 - Enabling debugging in the external-SDRAM-memory
 - Added a loader (in Source code) which supports different Flash memory targets
 - Added sample code for booting from external Flash
-- Adding Support for iMXRT1010-Family
+- Adding Support for iMXRT1010 and iMXRT1024-Family
 
 The following Controllers are supported:
 
@@ -46,7 +46,7 @@ The Development-Environment instructs the Loader which Interface should be used.
 The following options are supported:
 
 ```C
-enum eMemoryType
+enum MemoryType
 {
     MemType_Invalid     = 0,
     MemType_Hyperflash  = 1,

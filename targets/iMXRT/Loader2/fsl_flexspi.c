@@ -66,6 +66,7 @@ typedef void (*flexspi_isr_t)(FLEXSPI_Type *base, flexspi_handle_t *handle);
 /*******************************************************************************
  * Prototypes
  ******************************************************************************/
+static void FLEXSPI_Memset(void *src, uint8_t value, size_t length);
 
 /*!
  * @brief Calculate flash A/B sample clock DLL.
@@ -106,6 +107,18 @@ static flexspi_isr_t s_flexspiIsr;
 /*******************************************************************************
  * Code
  ******************************************************************************/
+static void FLEXSPI_Memset(void *src, uint8_t value, size_t length)
+{
+    assert(src != NULL);
+    uint8_t *p = src;
+
+    /* Keyword volatile is to avoid compiler opitimizing this API into memset() in library. */
+    for (volatile uint32_t i = 0U; i < length; i++)
+    {
+        *p = value;
+        p++;
+    }
+}
 
 uint32_t FLEXSPI_GetInstance(FLEXSPI_Type *base)
 {
@@ -349,7 +362,7 @@ void FLEXSPI_Init(FLEXSPI_Type *base, const flexspi_config_t *config)
 void FLEXSPI_GetDefaultConfig(flexspi_config_t *config)
 {
     /* Initializes the configure structure to zero. */
-    (void)memset(config, 0, sizeof(*config));
+    FLEXSPI_Memset(config, 0, sizeof(*config));
 
     config->rxSampleClock          = kFLEXSPI_ReadSampleClkLoopbackInternally;
     config->enableSckFreeRunning   = false;
@@ -371,7 +384,7 @@ void FLEXSPI_GetDefaultConfig(flexspi_config_t *config)
     config->ahbConfig.ahbGrantTimeoutCycle = 0xFFU;
     config->ahbConfig.ahbBusTimeoutCycle   = 0xFFFFU;
     config->ahbConfig.resumeWaitCycle      = 0x20U;
-    (void)memset(config->ahbConfig.buffer, 0, sizeof(config->ahbConfig.buffer));
+    FLEXSPI_Memset(config->ahbConfig.buffer, 0, sizeof(config->ahbConfig.buffer));
     /* Use invalid master ID 0xF and buffer size 0 for the first several buffers. */
     for (uint8_t i = 0; i < ((uint8_t)FSL_FEATURE_FLEXSPI_AHB_BUFFER_COUNT - 2U); i++)
     {

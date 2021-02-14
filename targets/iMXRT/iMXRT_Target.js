@@ -10,7 +10,7 @@
  *                                                                           *
  *****************************************************************************/
 
-function Connect()
+function Connect ()
 {
 	var DeviceName = GetProjectPartName ();
 	TargetInterface.message ("## Connect to " + DeviceName);
@@ -19,6 +19,7 @@ function Connect()
 		case "MIMXRT1011":
 		case "MIMXRT1015":
 		case "MIMXRT1021":
+		case "MIMXRT1024":
 		case "MIMXRT1051":
 		case "MIMXRT1052":
 		case "MIMXRT1061":
@@ -26,77 +27,25 @@ function Connect()
 		case "MIMXRT1064":
 			// Do nothing
 			break;
+		case "MIMXRT1171_cm7":
+		case "MIMXRT1172_cm7":
+		case "MIMXRT1173_cm7":
+		case "MIMXRT1175_cm7":
+		case "MIMXRT1176_cm7":
+			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
+			break;
+		case "MIMXRT1173_cm4":
+		case "MIMXRT1175_cm4":
+		case "MIMXRT1176_cm4":
+			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
+			break;
 		default:
 			TargetInterface.message ("Connect - unknown Device: " + DeviceName);
 			break;
 	}
+
+	TargetInterface.message ("## Connect to " + DeviceName + " - done");
 }
-
-function Reset ()
-{
-	if (TargetInterface.implementation() == "crossworks_simulator")
-		return;
-
-	var DeviceName = GetProjectPartName ();
-	TargetInterface.message ("## Reset " + DeviceName);
-	switch (DeviceName)
-	{
-		case "MIMXRT1011":
-		case "MIMXRT1015":
-		case "MIMXRT1021":
-		case "MIMXRT1051":
-		case "MIMXRT1052":
-		case "MIMXRT1061":
-		case "MIMXRT1062":
-		case "MIMXRT1064":
-			TargetInterface.resetAndStop (1000);
-			DcDc_Init_10xx ();
-			break;
-		default:
-			TargetInterface.message ("Reset - unknown Device: " + DeviceName);
-			break;
-	}
-	TargetInterface.message ("## Reset " + DeviceName + " - done");
-}
-
-function DcDc_Init_10xx ()
-{
-	ocotp_base = 0x401F4000;
-	ocotp_fuse_bank0_base = ocotp_base + 0x400;
-	dcdc_base = 0x40080000;
-
-	dcdc_trim_loaded = 0;
-
-	reg = TargetInterface.peekWord(ocotp_fuse_bank0_base + 0x90);
-	if (reg & (1<<10))
-	{
-		// DCDC: REG0->VBG_TRM
-		trim_value = (reg & (0x1F << 11)) >> 11; 
-		reg = (TargetInterface.peekWord (dcdc_base + 0x4) & ~(0x1F << 24)) | (trim_value << 24);
-		TargetInterface.pokeWord(dcdc_base + 0x4, reg);
-		dcdc_trim_loaded = 1;
-	}
-
-	reg = TargetInterface.peekWord(ocotp_fuse_bank0_base + 0x80);
-	if (reg & (1<<30))
-	{
-		index = (reg & (3 << 28)) >> 28;
-		if (index < 4)
-		{
-			// DCDC: REG3->TRG 
-			reg = (TargetInterface.peekWord (dcdc_base + 0xC) & ~(0x1F)) | ((0xF + index));
-			TargetInterface.pokeWord(dcdc_base + 0xC, reg);
-			dcdc_trim_loaded = 1;
-		}
-	}
-
-	if (dcdc_trim_loaded)
-	{
-		// delay about 400us till dcdc is stable.
-		TargetInterface.delay (1);
-	}
-}
-
 
 // This function is used to return the controller type as a string
 // we use it also to do some initializations as this function is called right before
@@ -115,6 +64,72 @@ function MatchPartName (name)
     return false;
 
   return partName.substring (0, 6) == name.substring (0, 6);
+}
+
+function Reset ()
+{
+	if (TargetInterface.implementation() == "crossworks_simulator")
+		return;
+
+	var DeviceName = GetProjectPartName ();
+	TargetInterface.message ("## Reset " + DeviceName);
+	switch (DeviceName)
+	{
+		case "MIMXRT1011":
+		case "MIMXRT1015":
+		case "MIMXRT1021":
+		case "MIMXRT1024":
+		case "MIMXRT1051":
+		case "MIMXRT1052":
+		case "MIMXRT1061":
+		case "MIMXRT1062":
+		case "MIMXRT1064":
+			TargetInterface.resetAndStop (1000);
+			DcDc_Init_10xx ();
+			break;
+		default:
+			TargetInterface.message ("## Reset - unknown Device: " + DeviceName);
+			break;
+	}
+	TargetInterface.message ("## Reset " + DeviceName + " - done");
+}
+
+function DcDc_Init_10xx ()
+{
+	ocotp_base = 0x401F4000;
+	ocotp_fuse_bank0_base = ocotp_base + 0x400;
+	dcdc_base = 0x40080000;
+
+	dcdc_trim_loaded = 0;
+
+	reg = TargetInterface.peekUint32 (ocotp_fuse_bank0_base + 0x90);
+	if (reg & (1<<10))
+	{
+		// DCDC: REG0->VBG_TRM
+		trim_value = (reg & (0x1F << 11)) >> 11; 
+		reg = (TargetInterface.peekUint32 (dcdc_base + 0x4) & ~(0x1F << 24)) | (trim_value << 24);
+		TargetInterface.pokeUint32 (dcdc_base + 0x4, reg);
+		dcdc_trim_loaded = 1;
+	}
+
+	reg = TargetInterface.peekUint32 (ocotp_fuse_bank0_base + 0x80);
+	if (reg & (1<<30))
+	{
+		index = (reg & (3 << 28)) >> 28;
+		if (index < 4)
+		{
+			// DCDC: REG3->TRG 
+			reg = (TargetInterface.peekUint32 (dcdc_base + 0xC) & ~(0x1F)) | ((0xF + index));
+			TargetInterface.pokeUint32 (dcdc_base + 0xC, reg);
+			dcdc_trim_loaded = 1;
+		}
+	}
+
+	if (dcdc_trim_loaded)
+	{
+		// delay about 400us till dcdc is stable.
+		TargetInterface.delay (1);
+	}
 }
 
 function EnableTrace (traceInterfaceType)
@@ -162,6 +177,7 @@ function Clock_Init ()
 		case "MIMXRT1011":
 		case "MIMXRT1015":
 		case "MIMXRT1021":
+		case "MIMXRT1024":
 			Clock_Init_1021 ();
 			break;
 		case "MIMXRT1051":
@@ -195,7 +211,7 @@ function DisableMPU ()
 
 	var MPU = 0xE000E000 + 0x0D90;	// SCS_BASE + MPU offset
 	// Disable MPU which will be enabled by ROM to prevent code execution
-	reg = TargetInterface.peekUint32 (MPU + 0x04);			// MPU->CTRL
+	var reg = TargetInterface.peekUint32 (MPU + 0x04);		// MPU->CTRL
 	reg &= ~0x1;											// Disable Enable Flag
 	TargetInterface.pokeUint32 (MPU + 0x04, reg);
 }
@@ -293,6 +309,7 @@ function SDRAM_Init ()
 			TargetInterface.message ("SDRAM_Init: " + DeviceName - " has no memory interface");
 			break;
 		case "MIMXRT1021":
+		case "MIMXRT1024":
 		case "MIMXRT1051":
 		case "MIMXRT1052":
 		case "MIMXRT1061":
@@ -313,100 +330,116 @@ function SDRAM_Init_10xx ()
 	var DeviceName = GetProjectPartName ();
 
 	// Configure IOMUX for SDRAM
-	TargetInterface.pokeUint32 (0x401F8014, 0x00000000); // EMC_00
-	TargetInterface.pokeUint32 (0x401F8018, 0x00000000); // EMC_01
-	TargetInterface.pokeUint32 (0x401F801C, 0x00000000); // EMC_02
-	TargetInterface.pokeUint32 (0x401F8020, 0x00000000); // EMC_03
-	TargetInterface.pokeUint32 (0x401F8024, 0x00000000); // EMC_04
-	TargetInterface.pokeUint32 (0x401F8028, 0x00000000); // EMC_05
-	TargetInterface.pokeUint32 (0x401F802C, 0x00000000); // EMC_06
-	TargetInterface.pokeUint32 (0x401F8030, 0x00000000); // EMC_07
-	TargetInterface.pokeUint32 (0x401F8034, 0x00000000); // EMC_08
-	TargetInterface.pokeUint32 (0x401F8038, 0x00000000); // EMC_09
-	TargetInterface.pokeUint32 (0x401F803C, 0x00000000); // EMC_10
-	TargetInterface.pokeUint32 (0x401F8040, 0x00000000); // EMC_11
-	TargetInterface.pokeUint32 (0x401F8044, 0x00000000); // EMC_12
-	TargetInterface.pokeUint32 (0x401F8048, 0x00000000); // EMC_13
-	TargetInterface.pokeUint32 (0x401F804C, 0x00000000); // EMC_14
-	TargetInterface.pokeUint32 (0x401F8050, 0x00000000); // EMC_15
-	TargetInterface.pokeUint32 (0x401F8054, 0x00000000); // EMC_16
-	TargetInterface.pokeUint32 (0x401F8058, 0x00000000); // EMC_17
-	TargetInterface.pokeUint32 (0x401F805C, 0x00000000); // EMC_18
-	TargetInterface.pokeUint32 (0x401F8060, 0x00000000); // EMC_19
-	TargetInterface.pokeUint32 (0x401F8064, 0x00000000); // EMC_20
-	TargetInterface.pokeUint32 (0x401F8068, 0x00000000); // EMC_21
-	TargetInterface.pokeUint32 (0x401F806C, 0x00000000); // EMC_22
-	TargetInterface.pokeUint32 (0x401F8070, 0x00000000); // EMC_23
-	TargetInterface.pokeUint32 (0x401F8074, 0x00000000); // EMC_24
-	TargetInterface.pokeUint32 (0x401F8078, 0x00000000); // EMC_25
-	TargetInterface.pokeUint32 (0x401F807C, 0x00000000); // EMC_26
-	TargetInterface.pokeUint32 (0x401F8080, 0x00000000); // EMC_27
-	if (DeviceName == "MIMXRT1021")
-		TargetInterface.pokeUint32 (0x401F8084, 0x00000010); // EMC_28, DQS PIN, enable SION
+	var IOMUXC                = 0x401F8000;
+	var IOMUXC_SW_MUX_CTL_PAD = IOMUXC;
+	var IOMUXC_SW_PAD_CTL_PAD = IOMUXC;
+	var PAD_Settings          = 0;
+	if (DeviceName == "MIMXRT1021" || DeviceName == "MIMXRT1024")
+	{
+		var IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x14;
+		var IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x188;
+		var PAD_Settings          = 0x000000F1;
+	}
 	else
-		TargetInterface.pokeUint32 (0x401F8084, 0x00000000); // EMC_28
-	TargetInterface.pokeUint32 (0x401F8088, 0x00000000); // EMC_29
-	TargetInterface.pokeUint32 (0x401F808C, 0x00000000); // EMC_30
-	TargetInterface.pokeUint32 (0x401F8090, 0x00000000); // EMC_31
-	TargetInterface.pokeUint32 (0x401F8094, 0x00000000); // EMC_32
-	TargetInterface.pokeUint32 (0x401F8098, 0x00000000); // EMC_33
-	TargetInterface.pokeUint32 (0x401F809C, 0x00000000); // EMC_34
-	TargetInterface.pokeUint32 (0x401F80A0, 0x00000000); // EMC_35
-	TargetInterface.pokeUint32 (0x401F80A4, 0x00000000); // EMC_36
-	TargetInterface.pokeUint32 (0x401F80A8, 0x00000000); // EMC_37
-	TargetInterface.pokeUint32 (0x401F80AC, 0x00000000); // EMC_38
-	if (DeviceName == "MIMXRT1021")
-		TargetInterface.pokeUint32 (0x401F80B0, 0x00000000); // EMC_39, DQS PIN, enable SION
+	{
+		var IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x14;
+		var IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x204;
+		var PAD_Settings          = 0x000110F9;
+	}
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x00, 0x00000000); // EMC_00
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x04, 0x00000000); // EMC_01
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x08, 0x00000000); // EMC_02
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0C, 0x00000000); // EMC_03
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x10, 0x00000000); // EMC_04
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x14, 0x00000000); // EMC_05
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x18, 0x00000000); // EMC_06
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x1C, 0x00000000); // EMC_07
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x20, 0x00000000); // EMC_08
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x24, 0x00000000); // EMC_09
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x28, 0x00000000); // EMC_10
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x2C, 0x00000000); // EMC_11
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x30, 0x00000000); // EMC_12
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x34, 0x00000000); // EMC_13
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x38, 0x00000000); // EMC_14
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x3C, 0x00000000); // EMC_15
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x40, 0x00000000); // EMC_16
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x44, 0x00000000); // EMC_17
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x48, 0x00000000); // EMC_18
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x4C, 0x00000000); // EMC_19
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x50, 0x00000000); // EMC_20
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x54, 0x00000000); // EMC_21
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x58, 0x00000000); // EMC_22
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x5C, 0x00000000); // EMC_23
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x60, 0x00000000); // EMC_24
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x64, 0x00000000); // EMC_25
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x68, 0x00000000); // EMC_26
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x6C, 0x00000000); // EMC_27
+	if (DeviceName == "MIMXRT1021" || DeviceName == "MIMXRT1024")
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x70, 0x00000010); // EMC_28, DQS PIN, enable SION
 	else
-		TargetInterface.pokeUint32 (0x401F80B0, 0x00000010); // EMC_39
-	TargetInterface.pokeUint32 (0x401F80B4, 0x00000000); // EMC_40
-	TargetInterface.pokeUint32 (0x401F80B8, 0x00000000); // EMC_41
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x70, 0x00000000); // EMC_28
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x74, 0x00000000); // EMC_29
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x78, 0x00000000); // EMC_30
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x7C, 0x00000000); // EMC_31
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x80, 0x00000000); // EMC_32
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x84, 0x00000000); // EMC_33
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x88, 0x00000000); // EMC_34
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x8C, 0x00000000); // EMC_35
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x90, 0x00000000); // EMC_36
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x94, 0x00000000); // EMC_37
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x98, 0x00000000); // EMC_38
+	if (DeviceName == "MIMXRT1021" || DeviceName == "MIMXRT1024")
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x9C, 0x00000000); // EMC_39, DQS PIN, enable SION
+	else
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x9C, 0x00000010); // EMC_39
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0xA0, 0x00000000); // EMC_40
+	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0xA4, 0x00000000); // EMC_41
 
 	// PAD ctrl
 	// drive strength = 0x7 to increase drive strength
 	// otherwise the data7 bit may fail.
-	TargetInterface.pokeUint32 (0x401F8204, 0x000110F9); // EMC_00
-	TargetInterface.pokeUint32 (0x401F8208, 0x000110F9); // EMC_01
-	TargetInterface.pokeUint32 (0x401F820C, 0x000110F9); // EMC_02
-	TargetInterface.pokeUint32 (0x401F8210, 0x000110F9); // EMC_03
-	TargetInterface.pokeUint32 (0x401F8214, 0x000110F9); // EMC_04
-	TargetInterface.pokeUint32 (0x401F8218, 0x000110F9); // EMC_05
-	TargetInterface.pokeUint32 (0x401F821C, 0x000110F9); // EMC_06
-	TargetInterface.pokeUint32 (0x401F8220, 0x000110F9); // EMC_07
-	TargetInterface.pokeUint32 (0x401F8224, 0x000110F9); // EMC_08
-	TargetInterface.pokeUint32 (0x401F8228, 0x000110F9); // EMC_09
-	TargetInterface.pokeUint32 (0x401F822C, 0x000110F9); // EMC_10
-	TargetInterface.pokeUint32 (0x401F8230, 0x000110F9); // EMC_11
-	TargetInterface.pokeUint32 (0x401F8234, 0x000110F9); // EMC_12
-	TargetInterface.pokeUint32 (0x401F8238, 0x000110F9); // EMC_13
-	TargetInterface.pokeUint32 (0x401F823C, 0x000110F9); // EMC_14
-	TargetInterface.pokeUint32 (0x401F8240, 0x000110F9); // EMC_15
-	TargetInterface.pokeUint32 (0x401F8244, 0x000110F9); // EMC_16
-	TargetInterface.pokeUint32 (0x401F8248, 0x000110F9); // EMC_17
-	TargetInterface.pokeUint32 (0x401F824C, 0x000110F9); // EMC_18
-	TargetInterface.pokeUint32 (0x401F8250, 0x000110F9); // EMC_19
-	TargetInterface.pokeUint32 (0x401F8254, 0x000110F9); // EMC_20
-	TargetInterface.pokeUint32 (0x401F8258, 0x000110F9); // EMC_21
-	TargetInterface.pokeUint32 (0x401F825C, 0x000110F9); // EMC_22
-	TargetInterface.pokeUint32 (0x401F8260, 0x000110F9); // EMC_23
-	TargetInterface.pokeUint32 (0x401F8264, 0x000110F9); // EMC_24
-	TargetInterface.pokeUint32 (0x401F8268, 0x000110F9); // EMC_25
-	TargetInterface.pokeUint32 (0x401F826C, 0x000110F9); // EMC_26
-	TargetInterface.pokeUint32 (0x401F8270, 0x000110F9); // EMC_27
-	TargetInterface.pokeUint32 (0x401F8274, 0x000110F9); // EMC_28
-	TargetInterface.pokeUint32 (0x401F8278, 0x000110F9); // EMC_29
-	TargetInterface.pokeUint32 (0x401F827C, 0x000110F9); // EMC_30
-	TargetInterface.pokeUint32 (0x401F8280, 0x000110F9); // EMC_31
-	TargetInterface.pokeUint32 (0x401F8284, 0x000110F9); // EMC_32
-	TargetInterface.pokeUint32 (0x401F8288, 0x000110F9); // EMC_33
-	TargetInterface.pokeUint32 (0x401F828C, 0x000110F9); // EMC_34
-	TargetInterface.pokeUint32 (0x401F8290, 0x000110F9); // EMC_35
-	TargetInterface.pokeUint32 (0x401F8294, 0x000110F9); // EMC_36
-	TargetInterface.pokeUint32 (0x401F8298, 0x000110F9); // EMC_37
-	TargetInterface.pokeUint32 (0x401F829C, 0x000110F9); // EMC_38
-	TargetInterface.pokeUint32 (0x401F82A0, 0x000110F9); // EMC_39
-	TargetInterface.pokeUint32 (0x401F82A4, 0x000110F9); // EMC_40
-	TargetInterface.pokeUint32 (0x401F82A8, 0x000110F9); // EMC_41
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x00, PAD_Settings); // EMC_00
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x04, PAD_Settings); // EMC_01
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x08, PAD_Settings); // EMC_02
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0C, PAD_Settings); // EMC_03
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x10, PAD_Settings); // EMC_04
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x14, PAD_Settings); // EMC_05
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x18, PAD_Settings); // EMC_06
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x1C, PAD_Settings); // EMC_07
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x20, PAD_Settings); // EMC_08
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x24, PAD_Settings); // EMC_09
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x28, PAD_Settings); // EMC_10
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x2C, PAD_Settings); // EMC_11
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x30, PAD_Settings); // EMC_12
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x34, PAD_Settings); // EMC_13
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x38, PAD_Settings); // EMC_14
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x3C, PAD_Settings); // EMC_15
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x40, PAD_Settings); // EMC_16
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x44, PAD_Settings); // EMC_17
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x48, PAD_Settings); // EMC_18
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x4C, PAD_Settings); // EMC_19
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x50, PAD_Settings); // EMC_20
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x54, PAD_Settings); // EMC_21
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x58, PAD_Settings); // EMC_22
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x5C, PAD_Settings); // EMC_23
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x60, PAD_Settings); // EMC_24
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x64, PAD_Settings); // EMC_25
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x68, PAD_Settings); // EMC_26
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x6C, PAD_Settings); // EMC_27
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x70, PAD_Settings); // EMC_28
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x74, PAD_Settings); // EMC_29
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x78, PAD_Settings); // EMC_30
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x7C, PAD_Settings); // EMC_31
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x80, PAD_Settings); // EMC_32
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x84, PAD_Settings); // EMC_33
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x88, PAD_Settings); // EMC_34
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x8C, PAD_Settings); // EMC_35
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x90, PAD_Settings); // EMC_36
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x94, PAD_Settings); // EMC_37
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x98, PAD_Settings); // EMC_38
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x9C, PAD_Settings); // EMC_39
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0xA0, PAD_Settings); // EMC_40
+	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0xA4, PAD_Settings); // EMC_41
 
 	// Configure SDR Controller Registers
 	var SEMC = 0x402F0000;
@@ -459,7 +492,7 @@ function SDRAM_Init_10xx ()
 
 function AlterRegister (Addr, Clear, Set)
 {
-	var temp = TargetInterface.peekWord (Addr);
+	var temp = TargetInterface.peekUint32 (Addr);
 	temp &= ~Clear;
 	temp |= Set;
 	TargetInterface.pokeUint32 (Addr, temp);
@@ -483,6 +516,14 @@ function FLEXSPI_Init (FlexSPI)
 		case "MIMXRT1062":
 		case "MIMXRT1064":
 			break;					// do nothing
+		case "MIMXRT1171_cm7":
+		case "MIMXRT1172_cm7":
+		case "MIMXRT1173_cm7":
+		case "MIMXRT1175_cm7":
+		case "MIMXRT1176_cm7":
+			FlexSPI1 = 0x400CC000;
+			FlexSPI2 = 0x400D0000;
+			break;
 		default:
 			TargetInterface.message ("FLEXSPI_Init - unknown Device: " + DeviceName);
 			return;

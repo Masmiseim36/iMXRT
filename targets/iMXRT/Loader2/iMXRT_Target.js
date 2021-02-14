@@ -123,7 +123,7 @@ function MatchPartName (name)
 	return partName.substring (0, 6) == name.substring (0, 6);
 }
 
-function Reset()
+function Reset ()
 {
 	TargetInterface.resetAndStop(1000);
 	if (TargetInterface.implementation() == "crossworks_simulator")

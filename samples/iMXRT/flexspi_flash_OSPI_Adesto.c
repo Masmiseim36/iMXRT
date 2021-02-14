@@ -56,8 +56,8 @@
 	#error "Unknown Compiler"
 #endif
 
-#define DUMMY_CYCLES 18	/* Number of dummy cycles after Read Command for Adesto-Flash */
-#define CTRL_REG_BYTE3_VAL (((DUMMY_CYCLES - 8) >> 1) | 0x10)
+#define DUMMY_CYCLES 18U	/* Number of dummy cycles after Read Command for Adesto-Flash */
+#define CTRL_REG_BYTE3_VAL (((DUMMY_CYCLES - 8U) >> 1U) | 0x10U)
 
 const flexspi_nor_config_t FlashBootHeader =
 {
@@ -72,44 +72,115 @@ const flexspi_nor_config_t FlashBootHeader =
 		.deviceModeCfgEnable  = 1U,
 		// Sequence for changing device mode. In this sequence we write to status/control regs 2-3.
 		// This will switch EcoXiP to Octal-DDR mode and modify the number of dummy cycles used by it.
-		.deviceModeSeq        = {.seqId=14, .seqNum=1}, // index/size Status/Control Registers sequence
-		.deviceModeArg        = 0x88 | (CTRL_REG_BYTE3_VAL << 8), // values to be written to status/control regs 2-3
+		.deviceModeSeq        = {.seqId=7, .seqNum=1}, // index/size Status/Control Registers sequence
+		.deviceModeArg        = 0x88U | (CTRL_REG_BYTE3_VAL << 8U), // values to be written to status/control regs 2-3
 		// Enable DDR mode, Safe configuration
-		.controllerMiscOption = (1u << kFlexSpiMiscOffset_DdrModeEnable) | (1u << kFlexSpiMiscOffset_SafeConfigFreqEnable),
+		.controllerMiscOption = (1U << kFlexSpiMiscOffset_DdrModeEnable) | (1U << kFlexSpiMiscOffset_SafeConfigFreqEnable),
 		.deviceType           = kFlexSpiDeviceType_SerialNOR, // serial NOR
 		.sflashPadType        = kSerialFlash_8Pads,
 		.serialClkFreq        = kFlexSpiSerialClk_133MHz,
-		.lutCustomSeqEnable   = 0U, // Use pre-defined LUT sequence index and number
-		.sflashA1Size         = 8U * 1024U * 1024U,
+		.lutCustomSeqEnable   = 0, // Use pre-defined LUT sequence index and number
+		.sflashA1Size         = 8 * 1024U * 1024U,
 		.dataValidTime        = {[0] = 20}, //2ns from DQS to data
 		.busyOffset           = 0U, // busy bit in bit 0
 		.busyBitPolarity      = 0U, // busy bit is 1 when device is busy
 		.lookupTable =
 		{
 			// (0) Read
-			[ 0] = FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_8PAD, 0x0B, RADDR_DDR, FLEXSPI_8PAD, 0x20),
-			[ 1] = FLEXSPI_LUT_SEQ (DUMMY_DDR, FLEXSPI_8PAD,(DUMMY_CYCLES*2+1), READ_DDR, FLEXSPI_8PAD, 0x80),
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_8PAD, 0x0B,              RADDR_DDR, FLEXSPI_8PAD, 0x20),
+			FLEXSPI_LUT_SEQ (DUMMY_DDR, FLEXSPI_8PAD,(DUMMY_CYCLES*2+1), READ_DDR,  FLEXSPI_8PAD, 0x80),
+			0,
+			0,
 
 			// (1) Read Status (byte 1)
-			[ 4] = FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_8PAD, 0x05, DUMMY_DDR, FLEXSPI_8PAD, 0x08),
-			[ 5] = FLEXSPI_LUT_SEQ (READ_DDR,  FLEXSPI_8PAD, 0x01, STOP,      FLEXSPI_1PAD, 0x0),
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_8PAD, 0x05, DUMMY_DDR, FLEXSPI_8PAD, 0x10),
+			FLEXSPI_LUT_SEQ (READ_DDR,  FLEXSPI_8PAD, 0x01, STOP,      FLEXSPI_1PAD, 0x0),
+			0,
+			0,
+
+			// (2) 
+			0,
+			0,
+			0,
+			0,
 
 			// (3) Write Enable
-			[12] = FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x06, STOP,      FLEXSPI_1PAD, 0x0),
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x06, STOP,      FLEXSPI_1PAD, 0x0),
+			0,
+			0,
+			0,
 
-			// (4) Page Program
-			[16] = FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_8PAD, 0x02, RADDR_DDR, FLEXSPI_8PAD, 32),
-			[17] = FLEXSPI_LUT_SEQ (WRITE_SDR, FLEXSPI_8PAD, 128,  STOP,      FLEXSPI_1PAD, 0),
+			// (4) Enter OPI witjh DDR
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x71, CMD_SDR,   FLEXSPI_1PAD, 0x03),
+			FLEXSPI_LUT_SEQ (WRITE_SDR, FLEXSPI_1PAD, 0x88, STOP,      FLEXSPI_1PAD, 0x0),
+			0,
+			0,
 
-			// (5) Write Status Register Byte 1
-			[20] = FLEXSPI_LUT_SEQ(CMD_SDR,   FLEXSPI_1PAD, 0x01, WRITE_SDR, FLEXSPI_1PAD, 1),
+			// (5) Block Erase 4K
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_4PAD, 0x20, RADDR_DDR, FLEXSPI_4PAD, 32),
+			0,
+			0,
+			0,
 
-			// (6) Write Status Register Byte 2
-			[24] = FLEXSPI_LUT_SEQ(CMD_SDR,   FLEXSPI_1PAD, 0x31, WRITE_SDR, FLEXSPI_1PAD, 1),
+			// (6) 
+			0,
+			0,
+			0,
+			0,
 
-			// (14) Write Status/Control Registers (this specifc sequence will writes 2 bytes to status/control regs 2-3)
-			[56] = FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x71, CMD_SDR,   FLEXSPI_1PAD, 0x02),
-			[57] = FLEXSPI_LUT_SEQ (WRITE_SDR, FLEXSPI_1PAD, 0x02, STOP,      FLEXSPI_1PAD, 0x0),
+			// (7) Write Status/Control Registers (this specifc sequence will writes 2 bytes to status/control regs 2-3)
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x71, CMD_SDR,   FLEXSPI_1PAD, 0x02),
+			FLEXSPI_LUT_SEQ (WRITE_SDR, FLEXSPI_1PAD, 0x02, STOP,      FLEXSPI_1PAD, 0x0),
+			0,
+			0,
+
+			// (8) Erase Block 32K
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_4PAD, 0x52, RADDR_DDR, FLEXSPI_4PAD, 32),
+			0,
+			0,
+			0,
+
+			// (9) Page Program
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_8PAD, 0x02, RADDR_DDR, FLEXSPI_8PAD, 32),
+			FLEXSPI_LUT_SEQ (WRITE_SDR, FLEXSPI_8PAD, 128,  STOP,      FLEXSPI_1PAD, 0),
+			0,
+			0,
+
+			// (10) 
+			0,
+			0,
+			0,
+			0,
+
+			// (11) Chip Erase
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_4PAD, 0x60,  STOP,     FLEXSPI_1PAD, 0),
+			0,
+			0,
+			0,
+
+			// (12) 
+			0,
+			0,
+			0,
+			0,
+
+			// (13) 
+			0,
+			0,
+			0,
+			0,
+
+			// (14) 
+			0,
+			0,
+			0,
+			0,
+
+			// (15) Read JEDEC-ID
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_1PAD, 0x9F, READ_SDR,  FLEXSPI_1PAD, 24),
+			FLEXSPI_LUT_SEQ (STOP,      FLEXSPI_1PAD, 0,    STOP,      FLEXSPI_1PAD, 0),
+			0,
+			0
 		},
 	},
 	.pageSize           = 256U,

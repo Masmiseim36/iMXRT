@@ -253,7 +253,7 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
     status_t status = kStatus_Success;
     uint32_t temp;
     uint16_t sbr, sbrTemp;
-    uint8_t osr, osrTemp;
+    uint_fast8_t osr, osrTemp;
     uint32_t tempDiff, calculatedBaud, baudDiff;
 
     /* This LPUART instantiation uses a slightly different baud rate calculation

@@ -65,8 +65,8 @@ static flexspi_device_config_t deviceconfig =
 	.dataValidTime        = 0,
 	.columnspace          = 0, // we don't use colums
 	.enableWordAddress    = 0,
-	.AWRSeqIndex          = 0,
-	.AWRSeqNumber         = 0,
+	.AWRSeqIndex          = LUT_ProgramPage,
+	.AWRSeqNumber         = 1,
 	.ARDSeqIndex          = LUT_ReadArray,
 	.ARDSeqNumber         = 1,
 	.AHBWriteWaitUnit     = kFLEXSPI_AhbWriteWaitUnit2AhbCycle,
@@ -912,7 +912,8 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum eMemoryTyp
 	config.ahbConfig.enableAHBBufferable  = true;
 	config.ahbConfig.enableReadAddressOpt = true;
 	config.ahbConfig.enableAHBCachable    = true;
-	config.rxSampleClock = kFLEXSPI_ReadSampleClkLoopbackFromDqsPad;	// To achieve high speeds - always use DQS
+	config.rxSampleClock                  = kFLEXSPI_ReadSampleClkLoopbackFromDqsPad;// To achieve high speeds - always use DQS
+
 	FLEXSPI_Init           (base, &config);
 	FLEXSPI_SetFlashConfig (base, &deviceconfig, kFLEXSPI_PortA1);        // Configure flash settings according to serial flash feature.
 	FLEXSPI_UpdateLUT      (base, 0, LUT_SPI_Generic, CUSTOM_LUT_LENGTH); // Update LUT table

@@ -108,7 +108,6 @@ static inline void DMAMUX_DisableChannel(DMAMUX_Type *base, uint32_t channel)
  */
 static inline void DMAMUX_SetSource(DMAMUX_Type *base, uint32_t channel, uint32_t src)
 {
-    (void)src;
     assert(channel < (uint32_t)FSL_FEATURE_DMAMUX_MODULE_CHANNEL);
 
 #if defined FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH && (FSL_FEATURE_DMAMUX_CHCFG_REGISTER_WIDTH == 32U)

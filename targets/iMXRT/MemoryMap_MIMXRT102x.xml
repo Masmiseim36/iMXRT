@@ -2,7 +2,7 @@
 <Root name="iMXRT" >
 	<!-- The ROM expects the 512-byte FlexSPI NOR configuration parameters to be present at offset 0x0 in Serial NOR flash.
 		Compare Chapter "8.6.1.2 FlexSPI Serial NOR Flash Boot Operation" in the reference manual of the iMXRT1021 
-		respectively in hapter "9.6.1.2 FlexSPI Serial NOR Flash Boot Operation" in the reference manual of the iMXRT1024  -->
+		respectively in chapter "9.6.1.2 FlexSPI Serial NOR Flash Boot Operation" in the reference manual of the iMXRT1024  -->
 	<MemorySegment name="BootOffset"  start="0x60000000" size="$(BootRomOffset:0x0)" access="ReadOnly"/>
 	<MemorySegment name="FlexSPI"     start="0x60000000" size="$(FlexSPISIZE:0x04000000)" access="ReadOnly"/>
 	<MemorySegment name="OCRAM"       start="0x20200000" size="$(OCRAMSIZE:0x00020000)"/>

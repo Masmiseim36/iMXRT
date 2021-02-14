@@ -94,8 +94,6 @@
         <file file_name="iMXRT1170/clock_config.h" />
         <file file_name="iMXRT1170/clock_config.c" />
         <file file_name="iMXRT1170/fsl_anatop_ai.h" />
-        <file file_name="iMXRT1170/fsl_anatop.c" />
-        <file file_name="iMXRT1170/fsl_anatop.h" />
         <file file_name="iMXRT1170/fsl_anatop_ai.c" />
         <file file_name="iMXRT1170/pin_mux.c" />
         <file file_name="iMXRT1170/board.h" />

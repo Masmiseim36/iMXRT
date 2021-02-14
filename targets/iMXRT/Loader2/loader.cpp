@@ -150,7 +150,7 @@ int main (uint32_t flags, uint32_t param)
 				sprintf (ErrorString, "No valid Interface selected. Parameter: 0x%X\r\n", param);
 				DebugPrint (ErrorString);
 				libmem_rpc_loader_exit (LIBMEM_STATUS_NO_DRIVER, ErrorString);
-				return LIBMEM_STATUS_ERROR;
+				return LIBMEM_STATUS_INVALID_DEVICE;
 			}
 
 		}
