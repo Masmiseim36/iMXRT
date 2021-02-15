@@ -358,6 +358,8 @@ Erase the whole-Flash-memory
 @return static status_t Status of the Operation - kStatus_Success when successfully */
 [[maybe_unused]] static status_t EraseChip (FLEXSPI_Type *base)
 {
+	DebugPrintf ("EraseChip\r\n");
+
 	status_t status = WriteEnable (base, 0);
 	if (status != kStatus_Success)
 		return status;
@@ -370,7 +372,7 @@ Erase the whole-Flash-memory
 	flashXfer.seqIndex      = LUT_EraseChip;
 	status = FLEXSPI_TransferBlocking (base, &flashXfer);
 	if (status != kStatus_Success)
-		return status;
+		return LIBMEM_STATUS_ERROR;
 
 	return WaitBusBusy (base);
 }
@@ -382,6 +384,9 @@ Erase a sector of the Flash-Memory
 @return static int LIBMEM_STATUS_SUCCESS when the erase operation was successfully, otherwise LIBMEM_STATUS_ERROR */
 static status_t EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 {
+	if (IsSectorEmpty (reinterpret_cast<uint32_t *>(si->start)))
+		return LIBMEM_STATUS_SUCCESS;
+
 	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
 	uint32_t SectorAddr = libmem_CalculateOffset (h, si->start);
 	if (SectorAddr == UINT32_MAX)

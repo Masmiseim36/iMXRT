@@ -71,6 +71,15 @@ extern "C"
 	const char * Libmem_GetErrorString      (int Error);
 	uint_least32_t CalculateCapacity_KBytes (enum Capacity c);
 
+	inline bool IsSectorEmpty (const uint32_t *const start)
+	{
+		for (uint32_t i=0; i<4096/sizeof(uint32_t); i++)
+			if (start[i] != 0xFFFFFFFFU)
+				return false;
+
+		return true;
+	}
+
 	class LibmemDriver: public libmem_driver_handle_t
 	{
 	private:

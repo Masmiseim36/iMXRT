@@ -354,5 +354,9 @@
       <file file_name="DebugPrint_USART.cpp" />
       <file file_name="board_generic.h" />
     </folder>
+    <folder Name="libmem">
+      <file file_name="$(StudioDir)/include/libmem.h" />
+      <file file_name="$(StudioDir)/include/libmem_loader.h" />
+    </folder>
   </project>
 </solution>
