@@ -265,7 +265,15 @@ void BOARD_BootClockRUN(void)
 #endif
 
 #if !defined(SKIP_FBB_ENABLE) || (!SKIP_FBB_ENABLE)
-    PMU_EnableBodyBias(ANADIG_PMU, kPMU_FBB_CM7, true);
+    /* Check if FBB need to be enabled in OverDrive(OD) mode */
+    if(((OCOTP->FUSEN[7].FUSE & 0x10U) >> 4U) != 1)
+    {
+        PMU_EnableBodyBias(ANADIG_PMU, kPMU_FBB_CM7, true);
+    }
+    else
+    {
+        PMU_EnableBodyBias(ANADIG_PMU, kPMU_FBB_CM7, false);
+    }
 #endif
 
 #if defined(BYPASS_LDO_LPSR) && BYPASS_LDO_LPSR
