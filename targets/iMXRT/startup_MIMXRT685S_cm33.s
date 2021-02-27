@@ -211,24 +211,22 @@ l1:
 	ldr r1, [r0]
 	orrs r1, r1, #(0xf << 20)
 	str r1, [r0]
-#ifndef __NO_RUNFAST_MODE
-	nop
-	nop
-	nop  
-	vmrs r0, fpscr
-	orrs r0, r0, #(0x3 << 24) // FZ and DN
-	vmsr fpscr, r0
-	// clear the CONTROL.FPCA bit
-	mov r0, #0
-	msr control, r0 
-	// FPDSCR similarly
-	movw r1, 0xEF3C
-	movt r1, 0xE000
-	ldr r0, [r1]
-	orrs r0, r0, #(0x3 << 24) // FZ and DN
-	str r0, [r1] << 24) // FZ and DN
-	str r0, [r1]
-#endif
+	#ifndef __NO_RUNFAST_MODE
+		isb
+		dsb
+		vmrs r0, fpscr
+		orrs r0, r0, #(0x3 << 24) // FZ and DN
+		vmsr fpscr, r0
+		// clear the CONTROL.FPCA bit
+		mov r0, #0
+		msr control, r0
+		// FPDSCR similarly
+		movw r1, 0xEF3C
+		movt r1, 0xE000
+		ldr r0, [r1]
+		orrs r0, r0, #(0x3 << 24) // FZ and DN
+		str r0, [r1]
+	#endif
 #endif
 
   /* Configure vector table offset register */

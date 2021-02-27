@@ -15,12 +15,30 @@
  *
  * The CPU macro should be declared in the project or makefile.
  */
-#if (defined(CPU_MIMXRT595SFFOA_cm33))
+#if (defined(CPU_MIMXRT533SFAWC) || defined(CPU_MIMXRT533SFFOC))
+	#define MIMXRT533S_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT533S.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT533S_features.h"
+#elif (defined(CPU_MIMXRT555SFAWC) || defined(CPU_MIMXRT555SFFOC))
+	#define MIMXRT555S_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT555S.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT555S_features.h"
+#elif (defined(CPU_MIMXRT595SFAWC_cm33) || defined(CPU_MIMXRT595SFFOC_cm33))
 	#define MIMXRT595S_cm33_SERIES
 	/* CMSIS-style register definitions */
 	#include "MIMXRT595S_cm33.h"
 	/* CPU specific feature definitions */
 	#include "MIMXRT595S_cm33_features.h"
+#elif (defined(CPU_MIMXRT595SFAWC_dsp) || defined(CPU_MIMXRT595SFFOC_dsp))
+	#define MIMXRT595S_dsp_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT595S_dsp.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT595S_dsp_features.h"
 
 #elif (defined(CPU_MIMXRT633SFAWBR) || defined(CPU_MIMXRT633SFFOB) || defined(CPU_MIMXRT633SFVKB))
 	#define MIMXRT633S_SERIES

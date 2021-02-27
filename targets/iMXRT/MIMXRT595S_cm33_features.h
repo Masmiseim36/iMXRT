@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 2.0, 2019-07-22
-**     Build:               b190910
+**     Version:             rev. 4.0, 2020-05-18
+**     Build:               b201228
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2019 NXP
+**     Copyright 2016-2020 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -20,6 +20,10 @@
 **         Initial version.
 **     - rev. 2.0 (2019-07-22)
 **         Base on rev 0.7 RM.
+**     - rev. 3.0 (2020-03-16)
+**         Base on Rev.A RM.
+**     - rev. 4.0 (2020-05-18)
+**         Base on Rev.B RM.
 **
 ** ###################################################################
 */
@@ -99,8 +103,6 @@
 #define FSL_FEATURE_SOC_POWERQUAD_COUNT (1)
 /* @brief PUF availability on the SoC. */
 #define FSL_FEATURE_SOC_PUF_COUNT (1)
-/* @brief ROMC availability on the SoC. */
-#define FSL_FEATURE_SOC_ROMC_COUNT (1)
 /* @brief RSTCTL0 availability on the SoC. */
 #define FSL_FEATURE_SOC_RSTCTL0_COUNT (1)
 /* @brief RSTCTL1 availability on the SoC. */
@@ -163,10 +165,24 @@
 #define FSL_FEATURE_LPADC_FIFO_COUNT (2)
 /* @brief Does not support two simultanious single ended conversions (bitfield TCTRL[FIFO_SEL_B]). */
 #define FSL_FEATURE_LPADC_HAS_NO_TCTRL_FIFO_SEL_B (1)
+/* @brief Has subsequent trigger priority (bitfield CFG[TPRICTRL]). */
+#define FSL_FEATURE_LPADC_HAS_CFG_SUBSEQUENT_PRIORITY (1)
 /* @brief Has differential mode (bitfield CMDLn[DIFF]). */
 #define FSL_FEATURE_LPADC_HAS_CMDL_DIFF (1)
 /* @brief Has channel scale (bitfield CMDLn[CSCALE]). */
 #define FSL_FEATURE_LPADC_HAS_CMDL_CSCALE (1)
+/* @brief Has conversion type select (bitfield CMDLn[CTYPE]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_CTYPE (0)
+/* @brief Has conversion resolution select  (bitfield CMDLn[MODE]). */
+#define FSL_FEATURE_LPADC_HAS_CMDL_MODE (0)
+/* @brief Has Wait for trigger assertion before execution (bitfield CMDHn[WAIT_TRIG]). */
+#define FSL_FEATURE_LPADC_HAS_CMDH_WAIT_TRIG (1)
+/* @brief Has offset calibration (bitfield CTRL[CALOFS]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CALOFS (0)
+/* @brief Has gain calibration (bitfield CTRL[CAL_REQ]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CAL_REQ (0)
+/* @brief Has calibration average (bitfield CTRL[CAL_AVGS]). */
+#define FSL_FEATURE_LPADC_HAS_CTRL_CAL_AVGS (0)
 /* @brief Has internal clock (bitfield CFG[ADCKEN]). */
 #define FSL_FEATURE_LPADC_HAS_CFG_ADCKEN (0)
 /* @brief Enable support for low voltage reference on option 1 reference (bitfield CFG[VREF1RNG]). */
@@ -220,9 +236,77 @@
 #define FSL_FEATURE_DMIC_CHANNEL_HAS_SIGNEXTEND (1)
 /* @brief DMIC has no IOCFG register */
 #define FSL_FEATURE_DMIC_HAS_NO_IOCFG (1)
+/* @brief DMIC has decimator reset function */
+#define FSL_FEATURE_DMIC_HAS_DECIMATOR_RESET_FUNC (1)
+/* @brief DMIC has global channel synchronization function */
+#define FSL_FEATURE_DMIC_HAS_GLOBAL_SYNC_FUNC (1)
 
 /* FLEXCOMM module features */
 
+/* @brief FLEXCOMM0 USART INDEX 0 */
+#define FSL_FEATURE_FLEXCOMM0_USART_INDEX  (0)
+/* @brief FLEXCOMM0 SPI INDEX 0 */
+#define FSL_FEATURE_FLEXCOMM0_SPI_INDEX  (0)
+/* @brief FLEXCOMM0 I2C INDEX 0 */
+#define FSL_FEATURE_FLEXCOMM0_I2C_INDEX  (0)
+/* @brief FLEXCOMM0 I2S INDEX 0 */
+#define FSL_FEATURE_FLEXCOMM0_I2S_INDEX  (0)
+/* @brief FLEXCOMM1 USART INDEX 1 */
+#define FSL_FEATURE_FLEXCOMM1_USART_INDEX  (1)
+/* @brief FLEXCOMM1 SPI INDEX 1 */
+#define FSL_FEATURE_FLEXCOMM1_SPI_INDEX  (1)
+/* @brief FLEXCOMM1 I2C INDEX 1 */
+#define FSL_FEATURE_FLEXCOMM1_I2C_INDEX  (1)
+/* @brief FLEXCOMM1 I2S INDEX 1 */
+#define FSL_FEATURE_FLEXCOMM1_I2S_INDEX  (1)
+/* @brief FLEXCOMM2 USART INDEX 2 */
+#define FSL_FEATURE_FLEXCOMM2_USART_INDEX  (2)
+/* @brief FLEXCOMM2 SPI INDEX 2 */
+#define FSL_FEATURE_FLEXCOMM2_SPI_INDEX  (2)
+/* @brief FLEXCOMM2 I2C INDEX 2 */
+#define FSL_FEATURE_FLEXCOMM2_I2C_INDEX  (2)
+/* @brief FLEXCOMM2 I2S INDEX 2 */
+#define FSL_FEATURE_FLEXCOMM2_I2S_INDEX  (2)
+/* @brief FLEXCOMM3 USART INDEX 3 */
+#define FSL_FEATURE_FLEXCOMM3_USART_INDEX  (3)
+/* @brief FLEXCOMM3 SPI INDEX 3 */
+#define FSL_FEATURE_FLEXCOMM3_SPI_INDEX  (3)
+/* @brief FLEXCOMM3 I2C INDEX 3 */
+#define FSL_FEATURE_FLEXCOMM3_I2C_INDEX  (3)
+/* @brief FLEXCOMM3 I2S INDEX 3 */
+#define FSL_FEATURE_FLEXCOMM3_I2S_INDEX  (3)
+/* @brief FLEXCOMM4 USART INDEX 4 */
+#define FSL_FEATURE_FLEXCOMM4_USART_INDEX  (4)
+/* @brief FLEXCOMM4 SPI INDEX 4 */
+#define FSL_FEATURE_FLEXCOMM4_SPI_INDEX  (4)
+/* @brief FLEXCOMM4 I2C INDEX 4 */
+#define FSL_FEATURE_FLEXCOMM4_I2C_INDEX  (4)
+/* @brief FLEXCOMM4 I2S INDEX 4 */
+#define FSL_FEATURE_FLEXCOMM4_I2S_INDEX  (4)
+/* @brief FLEXCOMM5 USART INDEX 5 */
+#define FSL_FEATURE_FLEXCOMM5_USART_INDEX  (5)
+/* @brief FLEXCOMM5 SPI INDEX 5 */
+#define FSL_FEATURE_FLEXCOMM5_SPI_INDEX  (5)
+/* @brief FLEXCOMM5 I2C INDEX 5 */
+#define FSL_FEATURE_FLEXCOMM5_I2C_INDEX  (5)
+/* @brief FLEXCOMM5 I2S INDEX 5 */
+#define FSL_FEATURE_FLEXCOMM5_I2S_INDEX  (5)
+/* @brief FLEXCOMM6 USART INDEX 6 */
+#define FSL_FEATURE_FLEXCOMM6_USART_INDEX  (6)
+/* @brief FLEXCOMM6 SPI INDEX 6 */
+#define FSL_FEATURE_FLEXCOMM6_SPI_INDEX  (6)
+/* @brief FLEXCOMM6 I2C INDEX 6 */
+#define FSL_FEATURE_FLEXCOMM6_I2C_INDEX  (6)
+/* @brief FLEXCOMM6 I2S INDEX 6 */
+#define FSL_FEATURE_FLEXCOMM6_I2S_INDEX  (6)
+/* @brief FLEXCOMM7 USART INDEX 7 */
+#define FSL_FEATURE_FLEXCOMM7_USART_INDEX  (7)
+/* @brief FLEXCOMM7 SPI INDEX 7 */
+#define FSL_FEATURE_FLEXCOMM7_SPI_INDEX  (7)
+/* @brief FLEXCOMM7 I2C INDEX 7 */
+#define FSL_FEATURE_FLEXCOMM7_I2C_INDEX  (7)
+/* @brief FLEXCOMM7 I2S INDEX 7 */
+#define FSL_FEATURE_FLEXCOMM7_I2S_INDEX  (7)
 /* @brief I2S has DMIC interconnection */
 #define FSL_FEATURE_FLEXCOMM_INSTANCE_I2S_HAS_DMIC_INTERCONNECTIONn(x) \
     (((x) == FLEXCOMM0) ? (1) : \
@@ -242,6 +326,60 @@
     (((x) == FLEXCOMM11) ? (0) : \
     (((x) == FLEXCOMM12) ? (0) : \
     (((x) == FLEXCOMM13) ? (0) : (-1))))))))))))))))))
+/* @brief FLEXCOMM14 SPI(HS_SPI) INDEX 14 */
+#define FSL_FEATURE_FLEXCOMM14_SPI_INDEX  (14)
+/* @brief FLEXCOMM15 I2C INDEX 15 */
+#define FSL_FEATURE_FLEXCOMM15_I2C_INDEX  (15)
+/* @brief FLEXCOMM16 SPI(HS_SPI) INDEX 16 */
+#define FSL_FEATURE_FLEXCOMM16_SPI_INDEX  (16)
+/* @brief FLEXCOMM8 USART INDEX 8 */
+#define FSL_FEATURE_FLEXCOMM8_USART_INDEX  (8)
+/* @brief FLEXCOMM9 USART INDEX 9 */
+#define FSL_FEATURE_FLEXCOMM9_USART_INDEX  (9)
+/* @brief FLEXCOMM10 USART INDEX 10 */
+#define FSL_FEATURE_FLEXCOMM10_USART_INDEX  (10)
+/* @brief FLEXCOMM11 USART INDEX 11 */
+#define FSL_FEATURE_FLEXCOMM11_USART_INDEX  (11)
+/* @brief FLEXCOMM12 USART INDEX 12 */
+#define FSL_FEATURE_FLEXCOMM12_USART_INDEX  (12)
+/* @brief FLEXCOMM13 USART INDEX 13 */
+#define FSL_FEATURE_FLEXCOMM13_USART_INDEX  (13)
+/* @brief FLEXCOMM8 SPI INDEX 8 */
+#define FSL_FEATURE_FLEXCOMM8_SPI_INDEX  (8)
+/* @brief FLEXCOMM9 SPI INDEX 9 */
+#define FSL_FEATURE_FLEXCOMM9_SPI_INDEX  (9)
+/* @brief FLEXCOMM10 SPI INDEX 10 */
+#define FSL_FEATURE_FLEXCOMM10_SPI_INDEX  (10)
+/* @brief FLEXCOMM11 SPI INDEX 11 */
+#define FSL_FEATURE_FLEXCOMM11_SPI_INDEX  (11)
+/* @brief FLEXCOMM12 SPI INDEX 12 */
+#define FSL_FEATURE_FLEXCOMM12_SPI_INDEX  (12)
+/* @brief FLEXCOMM13 SPI INDEX 13 */
+#define FSL_FEATURE_FLEXCOMM13_SPI_INDEX  (13)
+/* @brief FLEXCOMM8 I2C INDEX 8 */
+#define FSL_FEATURE_FLEXCOMM8_I2C_INDEX  (8)
+/* @brief FLEXCOMM9 I2C INDEX 9 */
+#define FSL_FEATURE_FLEXCOMM9_I2C_INDEX  (9)
+/* @brief FLEXCOMM10 I2C INDEX 10 */
+#define FSL_FEATURE_FLEXCOMM10_I2C_INDEX  (10)
+/* @brief FLEXCOMM11 I2C INDEX 11 */
+#define FSL_FEATURE_FLEXCOMM11_I2C_INDEX  (11)
+/* @brief FLEXCOMM12 I2C INDEX 12 */
+#define FSL_FEATURE_FLEXCOMM12_I2C_INDEX  (12)
+/* @brief FLEXCOMM13 I2C INDEX 13 */
+#define FSL_FEATURE_FLEXCOMM13_I2C_INDEX  (13)
+/* @brief FLEXCOMM8 I2S INDEX 8 */
+#define FSL_FEATURE_FLEXCOMM8_I2S_INDEX  (8)
+/* @brief FLEXCOMM9 I2S INDEX 9 */
+#define FSL_FEATURE_FLEXCOMM9_I2S_INDEX  (9)
+/* @brief FLEXCOMM10 I2S INDEX 10 */
+#define FSL_FEATURE_FLEXCOMM10_I2S_INDEX  (10)
+/* @brief FLEXCOMM11 I2S INDEX 11 */
+#define FSL_FEATURE_FLEXCOMM11_I2S_INDEX  (11)
+/* @brief FLEXCOMM12 I2S INDEX 12 */
+#define FSL_FEATURE_FLEXCOMM12_I2S_INDEX  (12)
+/* @brief FLEXCOMM13 I2S INDEX 13 */
+#define FSL_FEATURE_FLEXCOMM13_I2S_INDEX  (13)
 
 /* FLEXIO module features */
 
@@ -264,7 +402,7 @@
 /* @brief Supports paralle width (FLEXIO_SHIFTCFGn[PWIDTH]) */
 #define FSL_FEATURE_FLEXIO_HAS_PARALLEL_WIDTH (1)
 /* @brief Reset value of the FLEXIO_VERID register */
-#define FSL_FEATURE_FLEXIO_VERID_RESET_VALUE (0x2000003)
+#define FSL_FEATURE_FLEXIO_VERID_RESET_VALUE (0x2010003)
 /* @brief Reset value of the FLEXIO_PARAM register */
 #define FSL_FEATURE_FLEXIO_PARAM_RESET_VALUE (0x10100808)
 
@@ -278,6 +416,10 @@
 #define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ARDFEN (1)
 /* @brief FlexSPI has no MCR0 ATDFEN bit */
 #define FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_ATDFEN (1)
+/* @brief FlexSPI DMA needs multiple DES to transfer */
+#define FSL_FEATURE_FLEXSPI_DMA_MULTIPLE_DES (1)
+/* @brief FlexSPI uses min DQS delay */
+#define FSL_FEATURE_FLEXSPI_DQS_DELAY_MIN (1)
 
 /* GPIO module features */
 
@@ -286,8 +428,8 @@
 
 /* HASHCRYPT module features */
 
-/* @brief the address of alias offset */
-#define FSL_FEATURE_HASHCRYPT_ALIAS_OFFSET (0x20000000)
+/* @brief hashcrypt has reload feature */
+#define FSL_FEATURE_HASHCRYPT_HAS_RELOAD_FEATURE (1)
 
 /* I2S module features */
 
@@ -344,6 +486,12 @@
 
 /* @brief OTFAD has Security Violation Mode (SVM) */
 #define FSL_FEATURE_OTFAD_HAS_SVM_MODE (0)
+/* @brief OTFAD has Key Blob Processing */
+#define FSL_FEATURE_OTFAD_HAS_KEYBLOB_PROCESSING (0)
+/* @brief OTFAD has interrupt request enable */
+#define FSL_FEATURE_OTFAD_HAS_HAS_IRQ_ENABLE (0)
+/* @brief OTFAD has Force Error */
+#define FSL_FEATURE_OTFAD_HAS_FORCE_ERR (0)
 
 /* PINT module features */
 
@@ -357,10 +505,12 @@
 
 /* PUF module features */
 
-/* @brief Number of PUF key slots available on device. */
-#define FSL_FEATURE_PUF_HAS_KEYSLOTS (2)
-/* @brief  */
+/* @brief PUF need to setup SRAM manually */
 #define FSL_FEATURE_PUF_PWR_HAS_MANUAL_SLEEP_CONTROL (1)
+/* @brief PUF has SHIFT_STATUS register. */
+#define FSL_FEATURE_PUF_HAS_SHIFT_STATUS (0)
+/* @brief PUF has IDXBLK_SHIFT register. */
+#define FSL_FEATURE_PUF_HAS_IDXBLK_SHIFT (0)
 
 /* RTC module features */
 
@@ -417,12 +567,16 @@
 /* @brief USBHSH version */
 #define FSL_FEATURE_USBHSH_VERSION (300)
 /* @brief USBHSH has packet turnaround time-out register */
-#define FSL_FEATURE_USBHSH_HAS_TURNAROUND_TIMEOUT (1)
+#define FSL_FEATURE_USBHSH_HAS_TURNAROUND_TIMEOUT (0)
 
 /* USBPHY module features */
 
 /* @brief USBPHY contain DCD analog module */
 #define FSL_FEATURE_USBPHY_HAS_DCD_ANALOG (1)
+/* @brief USBPHY has register TRIM_OVERRIDE_EN */
+#define FSL_FEATURE_USBPHY_HAS_TRIM_OVERRIDE_EN (1)
+/* @brief USBPHY is 28FDSOI */
+#define FSL_FEATURE_USBPHY_28FDSOI (0)
 
 /* USDHC module features */
 
@@ -438,6 +592,16 @@
 #define FSL_FEATURE_USDHC_HAS_RESET (1)
 /* @brief USDHC has no bitfield WTMK_LVL[WR_BRST_LEN] and WTMK_LVL[RD_BRST_LEN] */
 #define FSL_FEATURE_USDHC_HAS_NO_RW_BURST_LEN (0)
+/* @brief If USDHC instance support 8 bit width */
+#define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_8_BIT_WIDTHn(x) (1)
+/* @brief If USDHC instance support HS400 mode */
+#define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_HS400_MODEn(x) \
+    (((x) == USDHC0) ? (1) : \
+    (((x) == USDHC1) ? (0) : (-1)))
+/* @brief If USDHC instance support 1v8 signal */
+#define FSL_FEATURE_USDHC_INSTANCE_SUPPORT_1V8_SIGNALn(x) (1)
+/* @brief Has no retuning time counter (HOST_CTRL_CAP[TIME_COUNT_RETURNING]) */
+#define FSL_FEATURE_USDHC_REGISTER_HOST_CTRL_CAP_HAS_NO_RETUNING_TIME_COUNTER (0)
 
 /* UTICK module features */
 
@@ -446,6 +610,8 @@
 
 /* WWDT module features */
 
+/* @brief WWDT does not support oscillator lock. */
+#define FSL_FEATURE_WWDT_HAS_NO_OSCILLATOR_LOCK (0)
 /* @brief WWDT does not support power down configure. */
 #define FSL_FEATURE_WWDT_HAS_NO_PDCFG (1)
 

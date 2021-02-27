@@ -204,13 +204,21 @@
           <file file_name="targets/iMXRT/MemoryMap_MIMXRT600.xml" />
         </folder>
         <folder Name="5xx">
+          <file file_name="targets/iMXRT/XML/MIMXRT533S_Registers.xml" />
+          <file file_name="targets/iMXRT/XML/MIMXRT555S_Registers.xml" />
+          <file file_name="targets/iMXRT/XML/MIMXRT595S_cm33_Registers.xml" />
           <file file_name="targets/iMXRT/MIMXRT533S.h" />
+          <file file_name="targets/iMXRT/MIMXRT533S_features.h" />
           <file file_name="targets/iMXRT/MIMXRT555S.h" />
+          <file file_name="targets/iMXRT/MIMXRT555S_features.h" />
           <file file_name="targets/iMXRT/MIMXRT595S_cm33.h" />
           <file file_name="targets/iMXRT/MIMXRT595S_cm33_features.h" />
-          <file file_name="targets/iMXRT/startup_MIMXRT595S_cm33.s" />
-          <file file_name="targets/iMXRT/system_MIMXRT595S_cm33.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT533S.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT533S.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT555S.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT555S.h" />
           <file file_name="targets/iMXRT/system_MIMXRT595S_cm33.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT595S_cm33.h" />
         </folder>
       </folder>
     </folder>
