@@ -243,7 +243,10 @@
 	#endif
 #else
 	#warning " MPU for ARMv8 Architecture not supported"
-	// ToDo
+	void BOARD_ConfigMPU (void)
+	{
+		// ToDo
+	}
 #endif
 
 

@@ -1,5 +1,5 @@
 <!DOCTYPE CrossStudio_Project_File>
-<solution Name="Loader_CM33" target="8" version="2">
+<solution Name="iMXRT Loader CM33" target="8" version="2">
   <configuration
     Name="Debug"
     c_preprocessor_definitions="DEBUG=1"
@@ -53,8 +53,10 @@
       cpp_only_additional_options="-Woverloaded-virtual;-Wnon-virtual-dtor"
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
       debug_startup_completion_point="main"
+      debug_type_file="$(StudioDir)/bin/libc++.xml"
       gcc_c_language_standard="c11"
-      gcc_cplusplus_language_standard="gnu++14"
+      gcc_cplusplus_language_standard="c++14"
+      libcxx="Yes (No Exceptions)"
       linker_additional_files="$(StudioDir)/lib/libmem$(LibExt)$(LIB);$(StudioDir)/lib/libmem_loader$(LibExt)$(LIB)"
       linker_keep_symbols="libmem_crc32"
       linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
@@ -87,6 +89,24 @@
       </file>
       <file file_name="fsl_cache.h" />
       <file file_name="pin_mux.h" />
+      <folder Name="iMXRT500">
+        <file file_name="iMXRT500/board.h" />
+        <file file_name="iMXRT500/clock_config.c" />
+        <file file_name="iMXRT500/clock_config.h" />
+        <file file_name="iMXRT500/fsl_clock.c" />
+        <file file_name="iMXRT500/fsl_clock.h" />
+        <file file_name="iMXRT500/fsl_dma.c" />
+        <file file_name="iMXRT500/fsl_dma.h" />
+        <file file_name="iMXRT500/fsl_gpio.c" />
+        <file file_name="iMXRT500/fsl_gpio.h" />
+        <file file_name="iMXRT500/fsl_iopctl.h" />
+        <file file_name="iMXRT500/fsl_power.c" />
+        <file file_name="iMXRT500/fsl_power.h" />
+        <file file_name="iMXRT500/fsl_reset.c" />
+        <file file_name="iMXRT500/fsl_reset.h" />
+        <file file_name="iMXRT500/pin_mux.c" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+      </folder>
       <folder Name="iMXRT600">
         <file file_name="iMXRT600/board.h" />
         <file file_name="iMXRT600/clock_config.c" />
@@ -116,16 +136,26 @@
     </folder>
     <folder Name="Source">
       <file file_name="loader.cpp" />
-      <file file_name="libmem_driver_Hyperflash.cpp" />
-      <file file_name="libmem_driver_Hyperflash.h" />
-      <file file_name="libmem_Tools.cpp" />
-      <file file_name="libmem_Tools.h" />
-      <file file_name="libmem_driver_xSPI.cpp" />
-      <file file_name="libmem_driver_xSPI.h" />
-      <file file_name="DebugPrint.h" />
       <file file_name="board.cpp" />
+      <file file_name="libmem_driver_Hyperflash.h" />
+      <file file_name="libmem_driver_Hyperflash.cpp" />
+      <file file_name="libmem_Tools.h" />
+      <file file_name="libmem_Tools.cpp" />
+      <file file_name="libmem_driver_xSPI.h" />
+      <file file_name="libmem_driver_xSPI.cpp" />
+      <file file_name="DebugPrint.h" />
+      <file file_name="DebugPrint.cpp" />
       <file file_name="DebugPrint_USART.cpp" />
       <file file_name="board_generic.h" />
+      <file file_name="libmem_LUT_Adesto.h" />
+      <file file_name="libmem_LUT_Generic.h" />
+      <file file_name="libmem_LUT_Macronix.h" />
+      <file file_name="libmem_LUT_Adesto.cpp" />
+      <file file_name="libmem_LUT_Macronix.cpp" />
+    </folder>
+    <folder Name="libmem">
+      <file file_name="$(StudioDir)/include/libmem.h" />
+      <file file_name="$(StudioDir)/include/libmem_loader.h" />
     </folder>
   </project>
 </solution>

@@ -235,6 +235,7 @@
     </folder>
   </project>
   <import file_name="targets/iMXRT/Loader/Loader.hzp" />
-  <import file_name="targets/iMXRT/Loader2/Loader.hzp" />
+  <import file_name="targets/iMXRT/Loader2/Loader_CM4.hzp" />
+  <import file_name="targets/iMXRT/Loader2/Loader_CM7.hzp" />
   <import file_name="samples/iMXRT/iMXRT.hzp" />
 </solution>

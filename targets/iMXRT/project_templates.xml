@@ -1,5 +1,5 @@
 <projects>
-	<project cpu_manufacturer="NXP" cpu_name="iMXRT_CM7" name="iMXRT_CM7 Executable" description="An executable for a generic iMXRT-CM7 processor." type="Executable" template_name="iMXRT_EXE">
+	<project cpu_manufacturer="NXP" cpu_name="iMXRT_CM7" name="iMXRT_CM7 Executable" description="An executable for a generic iMXRT-CM7 processor." type="Executable" template_name="iMXRT_CM7_EXE">
 		<configuration name="THUMB Debug" />
 		<configuration name="THUMB Release" />
 		<property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />

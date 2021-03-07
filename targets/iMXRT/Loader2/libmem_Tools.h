@@ -105,7 +105,7 @@ extern "C"
 	};
 
 
-	enum eMemoryType
+	enum MemoryType
 	{
 		MemType_Invalid     = 0,
 		MemType_Hyperflash  = 1,

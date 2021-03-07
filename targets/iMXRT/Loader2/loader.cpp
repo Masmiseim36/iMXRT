@@ -37,11 +37,11 @@ extern "C"
 #include "DebugPrint.h"
 
 
-enum LibmemStatus Init_Libmem (enum eMemoryType, FLEXSPI_Type *base);
+enum LibmemStatus Init_Libmem (enum MemoryType, FLEXSPI_Type *base);
 void InitOctaSPIPins (FLEXSPI_Type *base);
 void InitQuadSPIPins (FLEXSPI_Type *base);
 
-void ExecuteTest (uint32_t *MemPointer)
+void ExecuteTest (const uint32_t *MemPointer)
 {
 	static uint32_t buffer[512];
 	memset (buffer, 0, sizeof(buffer));
@@ -53,6 +53,7 @@ void ExecuteTest (uint32_t *MemPointer)
 	LibmemStatus_t res = static_cast<LibmemStatus_t>(libmem_erase ((uint8_t *)MemPointer, sizeof(buffer), &erase_start, &erase_size));
 	if (res != LIBMEM_STATUS_SUCCESS)
 		DebugPrintf ("Error '%s' occurred\r\n", Libmem_GetErrorString (res));
+	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
 	// Check if everything is erased
 	uint32_t ErrorCounter = 0;
@@ -71,12 +72,19 @@ void ExecuteTest (uint32_t *MemPointer)
 		DebugPrint ("Writing failed\r\n");
 }
 
+
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmain"
 int main (uint32_t flags, uint32_t param)
 {
+#pragma GCC diagnostic pop
 	BOARD_ConfigMPU     ();
 	BOARD_BootClockGate ();
 	BOARD_BootClockRUN  ();
-	#if defined FSL_FEATURE_SOC_CCM_ANALOG_COUNT && FSL_FEATURE_SOC_CCM_ANALOG_COUNT > 0
+	#if ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
+		 (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
+		 (defined MIMXRT1064_SERIES))
 		const clock_usb_pll_config_t ConfigUsbPll = {.loopDivider = 0U, .src = 0U};
 		CLOCK_InitUsb1Pll   (&ConfigUsbPll);
 	#endif
@@ -117,6 +125,7 @@ int main (uint32_t flags, uint32_t param)
 			ExecuteTest ((uint32_t *)(FLASH_START_ADDRESS + 0x40000));		// Testcode
 
 		#if defined FLEXSPI2
+			BOARD_PerformJEDECReset (FLEXSPI2);
 			BOARD_InitQuadSPI2Pins ();
 			res = Libmem_InitializeDriver_xSPI (FLEXSPI2, MemType_QuadSPI);
 			if (res != LibmemStaus_Success)
@@ -135,9 +144,9 @@ int main (uint32_t flags, uint32_t param)
 		{
 			DebugPrintf ("libmem Parameter: 0x%X\r\n", param);
 			// Register iMX-RT internal FLASH driver
-			LibmemStatus_t res1 = Init_Libmem ((enum eMemoryType)(param & 0x0F), FLEXSPI);
+			LibmemStatus_t res1 = Init_Libmem ((enum MemoryType)(param & 0x0F), FLEXSPI);
 			#if defined FLEXSPI2
-				LibmemStatus_t res2 = Init_Libmem ((enum eMemoryType)((param & 0xF0) >> 4), FLEXSPI2);
+				LibmemStatus_t res2 = Init_Libmem ((enum MemoryType)((param & 0xF0) >> 4), FLEXSPI2);
 			#endif
 			if (res1 == LibmemStatus_InvalidMemoryType 
 			#if defined FLEXSPI2
@@ -170,7 +179,6 @@ int main (uint32_t flags, uint32_t param)
 			extern uint8_t __DTCM_segment_end__;
 			res = static_cast<LibmemStatus_t>(libmem_rpc_loader_start (&__DTCM_segment_used_end__, &__DTCM_segment_end__ - 1));
 		#else
-			extern uint8_t __SRAM_segment_start__;
 			extern uint8_t __SRAM_segment_used_end__;
 			extern uint8_t __SRAM_segment_end__;
 			res = static_cast<LibmemStatus_t>(libmem_rpc_loader_start (&__SRAM_segment_used_end__, &__SRAM_segment_end__ - 1));
@@ -200,7 +208,7 @@ int main (uint32_t flags, uint32_t param)
 
 
 
-enum LibmemStatus Init_Libmem (enum eMemoryType MemType, FLEXSPI_Type *base)
+enum LibmemStatus Init_Libmem (enum MemoryType MemType, FLEXSPI_Type *base)
 {
 	enum LibmemStatus status;
 	uint32_t Trials = 0;

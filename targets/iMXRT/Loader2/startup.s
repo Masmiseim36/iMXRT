@@ -32,8 +32,12 @@
  * __NO_SYSTEM_INIT
  *
  *   If defined, the SystemInit() function will NOT be called. By default SystemInit()
- *   is called after reset to enable the clocks and memories to be initialised 
+ *   is called after reset to enable the clocks and memories to be initialised
  *   prior to any C startup initialisation.
+ *
+ * VECTORS_IN_RAM
+ *
+ *   If defined then the exception vectors are copied from Flash to RAM
  *
  * __NO_FPU
  *
@@ -78,7 +82,7 @@
   .global reset_handler
 
   .section .vectors, "ax"
-  .code 16 
+  .code 16
   .global _vectors
 _vectors:
    .long   __stack_end__
@@ -87,38 +91,38 @@ _vectors:
 #else
   .word reset_wait
 #endif /* STARTUP_FROM_RESET */
-ISR_HANDLER NMI_Handler
-ISR_HANDLER HardFault_Handler
-ISR_HANDLER MemManage_Handler
-ISR_HANDLER BusFault_Handler
-ISR_HANDLER UsageFault_Handler
+ISR_HANDLER NMI_Handler                // NMI Handler
+ISR_HANDLER HardFault_Handler          // Hard Fault Handler
+ISR_HANDLER MemManage_Handler          // MPU Fault Handler
+ISR_HANDLER BusFault_Handler           // Bus Fault Handler
+ISR_HANDLER UsageFault_Handler         // Usage Fault Handler
 ISR_RESERVED
 ISR_RESERVED
 ISR_RESERVED
 ISR_RESERVED
-ISR_HANDLER SVC_Handler
-ISR_HANDLER DebugMon_Handler
+ISR_HANDLER SVC_Handler                // SVCall Handler
+ISR_HANDLER DebugMon_Handler           // Debug Monitor Handler
 ISR_RESERVED
-ISR_HANDLER PendSV_Handler
-ISR_HANDLER SysTick_Handler
+ISR_HANDLER PendSV_Handler             // PendSV Handler
+ISR_HANDLER SysTick_Handler            // SysTick Handler
   // External Interrupts
-ISR_HANDLER2 DMA0_DMA16 
-ISR_HANDLER2 DMA1_DMA17 
-ISR_HANDLER2 DMA2_DMA18 
-ISR_HANDLER2 DMA3_DMA19 
-ISR_HANDLER2 DMA4_DMA20 
-ISR_HANDLER2 DMA5_DMA21 
-ISR_HANDLER2 DMA6_DMA22 
-ISR_HANDLER2 DMA7_DMA23 
-ISR_HANDLER2 DMA8_DMA24 
-ISR_HANDLER2 DMA9_DMA25 
-ISR_HANDLER2 DMA10_DMA26
-ISR_HANDLER2 DMA11_DMA27
-ISR_HANDLER2 DMA12_DMA28
-ISR_HANDLER2 DMA13_DMA29
-ISR_HANDLER2 DMA14_DMA30
-ISR_HANDLER2 DMA15_DMA31
-ISR_HANDLER2 DMA_ERROR  
+ISR_HANDLER2 DMA0_DMA16                // DMA0_DMA16_IRQHandler           - DMA channel 0/16 transfer complete
+ISR_HANDLER2 DMA1_DMA17                // DMA1_DMA17_IRQHandler           - DMA channel 1/17 transfer complete
+ISR_HANDLER2 DMA2_DMA18                // DMA2_DMA18_IRQHandler           - DMA channel 2/18 transfer complete
+ISR_HANDLER2 DMA3_DMA19                // DMA3_DMA19_IRQHandler           - DMA channel 3/19 transfer complete
+ISR_HANDLER2 DMA4_DMA20                // DMA4_DMA20_IRQHandler           - DMA channel 4/20 transfer complete
+ISR_HANDLER2 DMA5_DMA21                // DMA5_DMA21_IRQHandler           - DMA channel 5/21 transfer complete
+ISR_HANDLER2 DMA6_DMA22                // DMA6_DMA22_IRQHandler           - DMA channel 6/22 transfer complete
+ISR_HANDLER2 DMA7_DMA23                // DMA7_DMA23_IRQHandler           - DMA channel 7/23 transfer complete
+ISR_HANDLER2 DMA8_DMA24                // DMA8_DMA24_IRQHandler           - DMA channel 8/24 transfer complete
+ISR_HANDLER2 DMA9_DMA25                // DMA9_DMA25_IRQHandler           - DMA channel 9/25 transfer complete
+ISR_HANDLER2 DMA10_DMA26               // DMA10_DMA26_IRQHandler          - DMA channel 10/26 transfer complete
+ISR_HANDLER2 DMA11_DMA27               // DMA11_DMA27_IRQHandler          - DMA channel 11/27 transfer complete
+ISR_HANDLER2 DMA12_DMA28               // DMA12_DMA28_IRQHandler          - DMA channel 12/28 transfer complete
+ISR_HANDLER2 DMA13_DMA29               // DMA13_DMA29_IRQHandler          - DMA channel 13/29 transfer complete
+ISR_HANDLER2 DMA14_DMA30               // DMA14_DMA30_IRQHandler          - DMA channel 14/30 transfer complete
+ISR_HANDLER2 DMA15_DMA31               // DMA15_DMA31_IRQHandler          - DMA channel 15/31 transfer complete
+ISR_HANDLER2 DMA_ERROR                 // DMA_ERROR_IRQHandler            - DMA error interrupt channels 0-15 / 16-31
 ISR_HANDLER2 CTI0_ERROR 
 ISR_HANDLER2 CTI1_ERROR 
 ISR_HANDLER2 CORE
@@ -346,6 +350,12 @@ ISR_RESERVED
   .section .vectors, "ax"
 _vectors_end:
 
+#if defined VECTORS_IN_RAM && defined XIP_EXTERNAL_FLASH
+  .section .vectors_ram, "ax"
+_vectors_ram:
+  .space _vectors_end-_vectors, 0
+#endif
+
   .section .init, "ax"
   .thumb_func
 
@@ -353,9 +363,24 @@ reset_handler:
   mov r8, r0
   mov r9, r1
 #ifndef __NO_SYSTEM_INIT
-  ldr r2, =__stack_end__
-  mov sp, r2
+  ldr r0, =__stack_end__
+  mov sp, r0
   bl SystemInit
+#endif
+
+#if defined VECTORS_IN_RAM && defined XIP_EXTERNAL_FLASH
+  ldr r0, =__vectors_load_start__
+  ldr r1, =__vectors_load_end__
+  ldr r2, =_vectors_ram
+l0:
+  cmp r0, r1
+  beq l1
+  ldr r3, [r0]
+  str r3, [r2]
+  adds r0, r0, #4
+  adds r2, r2, #4
+  b l0
+l1:
 #endif
 
 #if !defined(__NO_FPU) && !defined(__SOFTFP__)
@@ -373,7 +398,7 @@ reset_handler:
   vmsr fpscr, r0
   // clear the CONTROL.FPCA bit
   mov r0, #0
-  msr control, r0 
+  msr control, r0
   // FPDSCR similarly
   movw r1, 0xEF3C
   movt r1, 0xE000
@@ -385,7 +410,11 @@ reset_handler:
 
   /* Configure vector table offset register */
   ldr r0, =0xE000ED08
+#if defined VECTORS_IN_RAM && defined XIP_EXTERNAL_FLASH
+  ldr r1, =_vectors_ram
+#else
   ldr r1, =_vectors
+#endif
   str r1, [r0]
 
   b _start

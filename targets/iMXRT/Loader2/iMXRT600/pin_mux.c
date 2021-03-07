@@ -286,7 +286,7 @@ void BOARD_InitOctaSPIPins (void)
     BOARD_InitQuadSPIPins ();
 }
 
-void BOARD_PerformJEDECReset (void)
+void BOARD_PerformJEDECReset_FlexSPI1 (void)
 {
 	const uint32_t GpioConfig = IOPCTL_PIO_FUNC0 |				/* Pin is configured as PIO2_12 */
                                 IOPCTL_PIO_PUPD_DI |			/* Disable pull-up / pull-down function */
@@ -307,7 +307,7 @@ void BOARD_PerformJEDECReset (void)
 	IOPCTL_PinMuxSet(IOPCTL, 1U, 29U, GpioConfig);	// CLK
 
 	// Set the direction of 3 pins used in JEDEC reset to output
-    gpio_pin_config_t jreset_pin_config = {kGPIO_DigitalOutput, 1};
+	gpio_pin_config_t jreset_pin_config = {kGPIO_DigitalOutput, 1};
 	GPIO_PinInit (GPIO, 2U, 19U, &jreset_pin_config); // CS
 	GPIO_PinInit (GPIO, 1U, 11U, &jreset_pin_config); // SI/IO0
 	GPIO_PinInit (GPIO, 1U, 29U, &jreset_pin_config); // SCK
@@ -320,12 +320,12 @@ void BOARD_PerformJEDECReset (void)
 	{
 		// drive CS low
 		GPIO_PinWrite (GPIO, 2U, 19U, 0);
+		SDK_DelayAtLeastUs (1, SystemCoreClock);
 		// drive SI low or high: alternate its state every iteration
 		GPIO_PinWrite (GPIO, 1U, 11U, (i&1));
-        for (int j=0; j<100; j++);
 		// drive CS high; SI state will be captured on the CS rising edge
 		GPIO_PinWrite (GPIO, 2U, 19U, 1);
-		for (int j=0; j<100; j++);
+		SDK_DelayAtLeastUs (1, SystemCoreClock);
 	}
 	SDK_DelayAtLeastUs (110, SystemCoreClock);
 }

@@ -28,7 +28,8 @@ OF SUCH DAMAGE. */
 #include "fsl_clock.h"
 
 
-#if defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0 && defined LPUART_BASE_PTRS
+#if defined LPUART_BASE_PTRS
+#if defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0
 	static LPUART_Type * const uart [] = LPUART_BASE_PTRS;
 
 	#include "fsl_lpuart.h"
@@ -41,13 +42,16 @@ OF SUCH DAMAGE. */
 	{
 		BOARD_InitUARTPins ();
 
-		#if defined FSL_FEATURE_SOC_CCM_ANALOG_COUNT && FSL_FEATURE_SOC_CCM_ANALOG_COUNT > 0
+		#if ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
+			 (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
+			 (defined MIMXRT1064_SERIES))
 			uint32_t ClockFrequency = 0;
 			if (CLOCK_GetMux (kCLOCK_UartMux) == 0) // --> PLL3 div6 80M
 				ClockFrequency = (CLOCK_GetPllFreq (kCLOCK_PllUsb1) / 6U) / (CLOCK_GetDiv(kCLOCK_UartDiv) + 1U);
 			else
 				ClockFrequency = CLOCK_GetOscFreq() / (CLOCK_GetDiv(kCLOCK_UartDiv) + 1U);
-		#else
+		#elif (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
+			  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
 			// Configure Lpuartx using SysPll2
 			static const clock_root_t RootClocks [] = {static_cast<clock_root_t>(0x7F), kCLOCK_Root_Lpuart1, kCLOCK_Root_Lpuart2, kCLOCK_Root_Lpuart3, kCLOCK_Root_Lpuart4, kCLOCK_Root_Lpuart5, kCLOCK_Root_Lpuart6, kCLOCK_Root_Lpuart7, kCLOCK_Root_Lpuart8, kCLOCK_Root_Lpuart9, kCLOCK_Root_Lpuart10, kCLOCK_Root_Lpuart11, kCLOCK_Root_Lpuart12};
 			static const clock_ip_name_t clocks [] = LPUART_CLOCKS;
@@ -59,6 +63,8 @@ OF SUCH DAMAGE. */
 			CLOCK_ControlGate  (clocks[BOARD_DEBUG_UART_INSTANCE], kCLOCK_On);
 
 			uint32_t ClockFrequency = CLOCK_GetRootClockFreq (RootClocks[BOARD_DEBUG_UART_INSTANCE]);
+		#else
+			#error "unknon controller family"
 		#endif
 
 		lpuart_config_t config;
@@ -109,4 +115,5 @@ OF SUCH DAMAGE. */
 	{
 		(void)Message;
 	}
-#endif
+#endif // defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0
+#endif // defined LPUART_BASE_PTRS

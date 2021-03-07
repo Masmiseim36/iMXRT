@@ -43,7 +43,7 @@ OF SUCH DAMAGE. */
 		BOARD_InitUARTPins ();
 		const clock_frg_clk_config_t ClockConfig = 
 		{
-			0, kCLOCK_FrgPllDiv, 255, 0
+			0, _clock_frg_clk_config::kCLOCK_FrgPllDiv, 255, 0
 		};
 
 		CLOCK_SetFRGClock (&ClockConfig);
@@ -66,7 +66,7 @@ OF SUCH DAMAGE. */
 	@return void */
 	void DebugPrint (const char *Message)
 	{
-		USART_WriteBlocking (uart[DEBUG_CONSOLE_UART_INDEX], Message, strlen(Message));
+		USART_WriteBlocking (uart[DEBUG_CONSOLE_UART_INDEX], reinterpret_cast<const uint8_t *>(Message), strlen(Message));
 	}
 	/** DebugPrintf:
 	Send a formated Message to the UART
@@ -81,8 +81,8 @@ OF SUCH DAMAGE. */
 		int Length = vsnprintf (Buffer, sizeof(Buffer), Message, ArgPtr);
 		va_end(ArgPtr);
 
-		if (Length > 0 && Length <= sizeof(Buffer))
-			USART_WriteBlocking (uart[DEBUG_CONSOLE_UART_INDEX], Buffer, Length);
+		if (Length > 0 && Length <= (int)sizeof(Buffer))
+			USART_WriteBlocking (uart[DEBUG_CONSOLE_UART_INDEX], reinterpret_cast<const uint8_t *>(Buffer), Length);
 	}
 #else // defined ENABLE_DEBUG_PRINT && ENABLE_DEBUG_PRINT != 0
 	bool ConfigUart (void)

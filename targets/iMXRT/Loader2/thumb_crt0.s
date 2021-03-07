@@ -1,6 +1,6 @@
 // Rowley CrossWorks, runtime support.
 //
-//  Copyright (c) 2001-2019 Rowley Associates Limited.
+//  Copyright (c) 2001-2021 Rowley Associates Limited.
 //
 // This file may be distributed under the terms of the License Agreement
 // provided with this software.
@@ -206,6 +206,7 @@ _start:
   bl memory_set
 #endif /* #ifdef INITIALIZE_TCM_SECTIONS */
 
+#if !defined(__HEAP_SIZE__) || (__HEAP_SIZE__)
   /* Initialize the heap */
   ldr r0, = __heap_start__
   ldr r1, = __heap_end__
@@ -216,11 +217,15 @@ _start:
   str r2, [r0]
   str r1, [r0, #4] 
 1:
+#endif
 
 #ifdef INITIALIZE_USER_SECTIONS
   ldr r2, =InitializeUserMemorySections
   blx r2
 #endif
+
+  .type start, function
+start:
 
   /* Call constructors */
   ldr r0, =__ctors_start__
@@ -241,8 +246,6 @@ ctor_end:
   mov lr, r0
   mov r12, sp
 
-  .type start, function
-start:
   /* Jump to application entry point */
 #ifdef FULL_LIBRARY
   movs r0, #ARGSSPACE
@@ -271,7 +274,7 @@ dtor_loop:
   cmp r0, r1
   beq dtor_end
   ldr r2, [r0]
-  add r0, #4
+  adds r0, #4
   push {r0-r1}
   blx r2
   pop {r0-r1}
@@ -330,9 +333,9 @@ memory_set:
   .section .text.\helper_name, "ax", %progbits
   .balign 2
   .global \helper_name
-  .weak \helper_name  
-\helper_name:
+  .weak \helper_name
   .thumb_func
+\helper_name:
 .endm
 
 .macro JUMPTO name
@@ -353,6 +356,8 @@ HELPER __aeabi_read_tp
 HELPER abort
   b .
 HELPER __assert
+  b .
+HELPER __assert_func
   b .
 HELPER __aeabi_assert
   b .
@@ -388,12 +393,17 @@ HELPER __seek
 1:
   ldr r0, =-1
   pop {r4, pc}
+HELPER remove
+  JUMPTO debug_remove
+HELPER rename
+  JUMPTO debug_rename
+
   // char __user_locale_name_buffer[];
   .section .bss.__user_locale_name_buffer, "aw", %nobits
   .global __user_locale_name_buffer
   .weak __user_locale_name_buffer
   __user_locale_name_buffer:
-  .word 0x0
+  .space 0x4
 
 #ifdef FULL_LIBRARY
   .bss

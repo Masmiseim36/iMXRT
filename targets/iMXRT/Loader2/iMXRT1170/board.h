@@ -20,7 +20,7 @@
 /*! @brief The board name */
 #define BOARD_NAME "MIMXRT1170-EVK"
 #ifndef DEBUG_CONSOLE_UART_INDEX
-	#define DEBUG_CONSOLE_UART_INDEX 6	/* iMXRT1170-EVK */
+	#define DEBUG_CONSOLE_UART_INDEX 1	/* iMXRT1170-EVK */
 #endif
 
 /* The UART to use for debug messages. */
