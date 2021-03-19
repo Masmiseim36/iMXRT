@@ -34,10 +34,10 @@ OF SUCH DAMAGE. */
 
 	#include "fsl_usart.h"
 
-	/** ConfigUart:
-	Configure a UART to use it to print debug-messages
-	@param  void
-	@return bool @true if successfully */
+	/*! ConfigUart:
+	\brief Configure a UART to use it to print debug-messages
+	\param  void
+	\return bool @true if successfully */
 	bool ConfigUart (void)
 	{
 		BOARD_InitUARTPins ();
@@ -60,19 +60,19 @@ OF SUCH DAMAGE. */
 		return status == kStatus_Success;
 	}
 
-	/** DebugPrint:
-	Send a message to the UART
-	@param Message The zero terminated string to send
-	@return void */
+	/*! DebugPrint:
+	\brief Send a message to the UART
+	\param Message The zero terminated string to send
+	\return void */
 	void DebugPrint (const char *Message)
 	{
 		USART_WriteBlocking (uart[DEBUG_CONSOLE_UART_INDEX], reinterpret_cast<const uint8_t *>(Message), strlen(Message));
 	}
-	/** DebugPrintf:
-	Send a formated Message to the UART
-	@param Message The zero terminated string to send including formating information
-	@param  ... Sequence of additional arguments used to replace a format specifier
-	@return void */
+	/*! DebugPrintf:
+	\brief Send a formated Message to the UART
+	\param Message The zero terminated string to send including formating information
+	\param  ... Sequence of additional arguments used to replace a format specifier
+	\return void */
 	void DebugPrintf (const char *Message, ...)
 	{
 		static char Buffer [128];

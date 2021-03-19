@@ -48,9 +48,8 @@ extern "C"
 		CUSTOM_LUT_LENGTH    = 64
 	};
 
-	/** enum Capacity:
-	Device Size = 2^n in number of bytes.
-	@author Markus Klein*/
+	/*! Capacity:
+	\brief Device Size = 2^n in number of bytes. */
 	enum Capacity
 	{
 		Capacity_UNDEF    = 0x00,
@@ -138,16 +137,15 @@ extern "C"
 
 
 
-	/** enum ManufactureID:
-	The manufacturer’s identification code is defined by one or more eight (8) bit fields, each
+	/*! enum ManufactureID:
+	\brief The manufacturer’s identification code is defined by one or more eight (8) bit fields, each
 	consisting of seven (7) data bits plus one (1) odd parity bit. The manufacturer’s identification
 	code is assigned, maintained and updated by the JEDEC office. It is a
 	single field, limiting the possible number of vendors to 128. To expand the maximum number of
 	identification codes, a continuation scheme has been defined. The code 7F
 	indicates that the manufacturer’s code is beyond the limit of this field and the next sequential
 	manufacturer’s identification field is used.  Multiple continuation fields are permitted and when
-	used, shall comprise of the identification code.
-	@author Markus Klein*/
+	used, shall comprise of the identification code. */
 	enum SerialFlash_ManufactureID
 	{
 		ManufactureID_UNDEF                        = 0x00,

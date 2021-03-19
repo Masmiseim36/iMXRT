@@ -112,7 +112,7 @@ public:
 	}
 
 	/*! WriteEnable:
-	Send write-enable command
+	\brief Send write-enable command
 	\param baseAddr The base-address of the command
 	\return status_t */
 	status_t WriteEnable (uint32_t baseAddr)
@@ -120,10 +120,10 @@ public:
 		return this->SendCommand (baseAddr, LUT_WriteEnable);
 	}
 
-	/** WaitBusBusy:
-	Wait until the Write/erase operation is finished and the Flash is not busy anymore
-	@param base The Flex-SPI-base to use
-	@return status_t kStatus_Success if the operation was successfully */
+	/*! WaitBusBusy:
+	\brief Wait until the Write/erase operation is finished and the Flash is not busy anymore
+	\param base The Flex-SPI-base to use
+	\return status_t kStatus_Success if the operation was successfully */
 	status_t WaitBusBusy (void)
 	{
 		// Wait status ready.

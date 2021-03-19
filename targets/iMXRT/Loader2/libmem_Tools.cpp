@@ -26,11 +26,11 @@ OF SUCH DAMAGE. */
 uint32_t LibmemDriver::NextFree = 0;
 LibmemDriver LibmemDriver::Drivers[4];
 
-/** libmem_CalculateOffset:
-Recalculate the Address a of a memory-mapped Flash-memory from absolute addressing to memory-Local-Addressing
-@param base the FlexSPI-Interface which is be used
-@param Addr The Address to be converted
-@return uint32_t */
+/*! libmem_CalculateOffset:
+\brief Recalculate the Address a of a memory-mapped Flash-memory from absolute addressing to memory-Local-Addressing
+\param base the FlexSPI-Interface which is be used
+\param Addr The Address to be converted
+\return uint32_t */
 uint32_t libmem_CalculateOffset (libmem_driver_handle_t *handle, uint8_t *Addr)
 {
 	return Addr - handle->start;
@@ -63,10 +63,10 @@ uint8_t *libmem_GetAliasBaseAddress (FLEXSPI_Type *base)
 }
 
 
-/** Libmem_GetErrorString:
-Return an Error String for printing to the user
-@param Error Error-ID to be converted to a string
-@return const char* const */
+/*! Libmem_GetErrorString:
+\brief Return an Error String for printing to the user
+\param Error Error-ID to be converted to a string
+\return const char* const */
 const char * Libmem_GetErrorString (int Error)
 {
 	switch (Error)
@@ -122,7 +122,11 @@ const char * Libmem_GetErrorString (int Error)
 }
 
 
-uint_least32_t CalculateCapacity_KBytes (enum Capacity c)
+/*! CalculateCapacity_KBytes:
+\brief Calculates the capacity in Byes
+\param C The Capacity in 2^n number of bytes
+\return uint_least32_t The capacity in bytes */
+uint_least32_t CalculateCapacity_KBytes (Capacity c)
 {
 	uint_least32_t size = 1 << ((uint_least32_t)c);
 	return size / 1024;

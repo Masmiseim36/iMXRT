@@ -100,12 +100,12 @@ static const libmem_ext_driver_functions_t DriverFunctions_Extended =
 
 
 
-/** Libmem_InitializeDriver_xSPI:
-Initialize the FlexSPI Interface for using as a SPI-Interface
-@param FlashHandle The handle which should be initialized
-@param base The Flex-SPI-base to use
-@param MemType The Type of SPI-Interface to use if possible
-@return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
+/*! Libmem_InitializeDriver_xSPI:
+\brief Initialize the FlexSPI Interface for using as a SPI-Interface
+\param FlashHandle The handle which should be initialized
+\param base The Flex-SPI-base to use
+\param MemType The Type of SPI-Interface to use if possible
+\return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
 LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType MemType)
 {
 	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || defined (MIMXRT595S_cm33_SERIES)
@@ -336,11 +336,11 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 }
 
 
-/** ReadJEDEC
-Read the JEDEC Device informations
-@param base The Flex-SPI-base to use
-@param Info The read Device informations from the flash memory
-@return status_t Status of the Operation - kStatus_Success when successfully */
+/*! ReadJEDEC
+\brief Read the JEDEC Device informations
+\param base The Flex-SPI-base to use
+\param Info The read Device informations from the flash memory
+\return status_t Status of the Operation - kStatus_Success when successfully */
 static status_t ReadJEDEC (FLEXSPI_Type *base, struct DeviceInfo *Info)
 {
 	uint8_t Identification[16] = { 0U };
@@ -411,11 +411,11 @@ static status_t ReadJEDEC (FLEXSPI_Type *base, struct DeviceInfo *Info)
 	return status;
 }
 
-/** WriteEnable:
-Send write-enable command
-@param base The Flex-SPI-base to use
-@param baseAddr The base-address of the command
-@return static status_t */
+/*! WriteEnable:
+\brief Send write-enable command
+\param base The Flex-SPI-base to use
+\param baseAddr The base-address of the command
+\return static status_t */
 static status_t WriteEnable (FLEXSPI_Type *base, uint32_t baseAddr)
 {
 	flexspi_transfer_t flashXfer;
@@ -447,10 +447,10 @@ static status_t EnterQuadSPIMode (FLEXSPI_Type *base, uint32_t baseAddr, enum LU
 }
 
 
-/** WaitBusBusy:
+/*! WaitBusBusy:
 Wait until the Write/erase operation is finished and the Flash is not busy anymore
-@param base The Flex-SPI-base to use
-@return status_t kStatus_Success if the operation was successfully */
+\param base The Flex-SPI-base to use
+\return status_t kStatus_Success if the operation was successfully */
 static status_t WaitBusBusy (FLEXSPI_Type *base)
 {
 	// Wait status ready.
@@ -511,10 +511,10 @@ static status_t WriteRegister (FLEXSPI_Type *base, uint32_t Address, uint8_t val
 }
 
 
-/** EraseChip:
+/*! EraseChip:
 Erase the whole-Flash-memory
-@param base The FlexSPI-Interface where the Flash is located which should be erased
-@return static status_t Status of the Operation - kStatus_Success when successfully */
+\param base The FlexSPI-Interface where the Flash is located which should be erased
+\return static status_t Status of the Operation - kStatus_Success when successfully */
 [[maybe_unused]] static status_t EraseChip (FLEXSPI_Type *base)
 {
 	DebugPrint ("EraseChip\r\n");
@@ -538,11 +538,11 @@ Erase the whole-Flash-memory
 	return WaitBusBusy (base);
 }
 
-/** EraseSector:
+/*! EraseSector:
 Erase a sector of the Flash-Memory
-@param h Handle to the Flash-Driver
-@param si Information about the sector which should be erased
-@return static int LibmemStaus_Success when the erase operation was successfully, otherwise LibmemStaus_Error */
+\param h Handle to the Flash-Driver
+\param si Information about the sector which should be erased
+\return static int LibmemStaus_Success when the erase operation was successfully, otherwise LibmemStaus_Error */
 static int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 {
 	if (IsSectorEmpty (reinterpret_cast<uint32_t *>(si->start)))
@@ -580,12 +580,12 @@ static int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 	return LibmemStaus_Success;
 }
 
-/** ProgramPage:
+/*! ProgramPage:
 Write Data to a Flash-Page
-@param h Handle to the Flash-Driver
-@param Destination Address to write the Data to. This Address is in the Address-Range of the Controller
-@param Source Address of the Array with the Data to write
-@return static int LibmemStaus_Success when the write operation was successfully, otherwise LibmemStaus_Error */
+\param h Handle to the Flash-Driver
+\param Destination Address to write the Data to. This Address is in the Address-Range of the Controller
+\param Source Address of the Array with the Data to write
+\return static int LibmemStaus_Success when the write operation was successfully, otherwise LibmemStaus_Error */
 static int ProgramPage (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr)
 {
 	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
@@ -620,49 +620,49 @@ static int ProgramPage (libmem_driver_handle_t *h, uint8_t *dest_addr, const uin
 	return LibmemStaus_Success;
 }
 
-/** libmem_ProgramPage:
+/*! libmem_ProgramPage:
 The LIBMEM driver's write function.
-@param h    A pointer to the handle of the LIBMEM driver.
-@param dest A pointer to the memory address in memory range handled by driver to write data to.
-@param src  pointer to the memory address to read data from.
-@param size The number of bytes to write.
-@return int The LIBMEM status result */
+\param h    A pointer to the handle of the LIBMEM driver.
+\param dest A pointer to the memory address in memory range handled by driver to write data to.
+\param src  pointer to the memory address to read data from.
+\param size The number of bytes to write.
+\return int The LIBMEM status result */
 static int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
 {
 	return libmem_driver_paged_write (h, dest, src, size, &paged_write_ctrlblk);
 }
 
-/** libmem_EraseSector:
+/*! libmem_EraseSector:
 The LIBMEM driver's erase function
-@param h           A pointer to the handle of the LIBMEM driver.
-@param start       A pointer to the initial memory address in memory range handled by driver to erase.
-@param size        The number of bytes to erase.
-@param erase_start A pointer to a location in memory to store a pointer to the start of the memory range that has actually been erased or nullptr if not required.
-@param erase_size  A pointer to a location in memory to store the size in bytes of the memory range that has actually been erased or nullptr if not required.
-@return int        The LIBMEM status result */
+\param h           A pointer to the handle of the LIBMEM driver.
+\param start       A pointer to the initial memory address in memory range handled by driver to erase.
+\param size        The number of bytes to erase.
+\param erase_start A pointer to a location in memory to store a pointer to the start of the memory range that has actually been erased or nullptr if not required.
+\param erase_size  A pointer to a location in memory to store the size in bytes of the memory range that has actually been erased or nullptr if not required.
+\return int        The LIBMEM status result */
 static int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size)
 {
 	DebugPrintf ("libmem_EraseSector at 0x%x - size: %d\r\n", start, size);
 	return libmem_foreach_sector_in_range (h, start, size, EraseSector, erase_start, erase_size);
 }
 
-/** libmem_Flush:
+/*! libmem_Flush:
 The LIBMEM driver's flush function.
-@param h    A pointer to the handle of the LIBMEM driver. 
-@return int The LIBMEM status result */
+\param h    A pointer to the handle of the LIBMEM driver. 
+\return int The LIBMEM status result */
 static int libmem_Flush (libmem_driver_handle_t *h)
 {
 	int res = libmem_driver_paged_write_flush (h, &paged_write_ctrlblk);
 	return res;
 }
 
-/** libmem_Read:
+/*! libmem_Read:
 The LIBMEM driver's read extended function.
-@param h    A pointer to the handle of the LIBMEM driver.
-@param dest A pointer to the initial memory address to write data to.
-@param src  A pointer to the initial memory address in the memory range handled by the driver to read data from.
-@param size The number of bytes to write.
-@return int The LIBMEM status result */
+\param h    A pointer to the handle of the LIBMEM driver.
+\param dest A pointer to the initial memory address to write data to.
+\param src  A pointer to the initial memory address in the memory range handled by the driver to read data from.
+\param size The number of bytes to write.
+\return int The LIBMEM status result */
 static int libmem_Read (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
 {
 	(void)h;
@@ -673,13 +673,13 @@ static int libmem_Read (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t 
 	return LibmemStaus_Success;
 }
 
-/** libmem_CRC32:
+/*! libmem_CRC32:
 The LIBMEM driver's crc32 extended function.
-@param h     A pointer to the handle of the LIBMEM driver.
-@param start A pointer to the start of the address range.
-@param size  The size of the address range in bytes.
-@param crc   The initial CRC-32 value.
-@return uint32_t The computed CRC-32 value. */
+\param h     A pointer to the handle of the LIBMEM driver.
+\param start A pointer to the start of the address range.
+\param size  The size of the address range in bytes.
+\param crc   The initial CRC-32 value.
+\return uint32_t The computed CRC-32 value. */
 static uint32_t libmem_CRC32 (libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc)
 {
 	(void)h;
