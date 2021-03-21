@@ -27,6 +27,7 @@ OF SUCH DAMAGE. */
 #include "fsl_common.h"
 #include "fsl_clock.h"
 #include "DebugPrint.h"
+#include <array>
 
 static libmem_driver_paged_write_ctrlblk_t PagedWrite_CtrlBlk;
 
@@ -66,8 +67,8 @@ static flexspi_device_config_t deviceconfig =
 	.enableWriteMask      = false
 };
 
-/*! customLUT:  */
-static const uint32_t customLUT[CUSTOM_LUT_LENGTH] =
+/*! LUT_HyperFlash:  */
+constexpr std::array <uint32_t, 64> LUT_HyperFlash =
 {
 	// (0) Read Data --> compare @FlashCommands
 	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0xA0, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 0x18),
@@ -270,21 +271,21 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 	FLEXSPI_Init (base, &config);
 
 	FLEXSPI_SetFlashConfig (base, &deviceconfig, kFLEXSPI_PortA1);  // Configure flash settings according to serial flash feature.
-	FLEXSPI_UpdateLUT      (base, 0, customLUT, CUSTOM_LUT_LENGTH); // Update LUT table.
+	FLEXSPI_UpdateLUT      (base, 0, &LUT_HyperFlash.front(), LUT_HyperFlash.size()); // Update LUT table.
 	FLEXSPI_SoftwareReset  (base);                                  // Do software reset.
 //	EraseChip (base);
 
 	static uint8_t write_buffer[HYPERFLASH_PAGE_SIZE];
 	libmem_driver_handle_t *FlashHandle = LibmemDriver::GetDriver ();
 //	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, &DriverFunctions_Extended);
-	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, NULL);
+	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, nullptr);
 	FlashHandle->user_data = (uint32_t)base;
 
 	uint8_t *AliasAddress = libmem_GetAliasBaseAddress (base);
 	if (AliasAddress != nullptr)
 	{
 		FlashHandle = LibmemDriver::GetDriver ();
-		libmem_register_driver (FlashHandle, AliasAddress, BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, NULL);
+		libmem_register_driver (FlashHandle, AliasAddress, BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, nullptr);
 		FlashHandle->user_data = (uint32_t)base;
 	}
 	return static_cast<LibmemStatus_t>(libmem_driver_paged_write_init (&PagedWrite_CtrlBlk, write_buffer, HYPERFLASH_PAGE_SIZE, ProgramPage, 4, 0));
@@ -483,8 +484,8 @@ static int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const u
 \param h           A pointer to the handle of the LIBMEM driver.
 \param start       A pointer to the initial memory address in memory range handled by driver to erase.
 \param size        The number of bytes to erase.
-\param erase_start A pointer to a location in memory to store a pointer to the start of the memory range that has actually been erased or NULL if not required.
-\param erase_size  A pointer to a location in memory to store the size in bytes of the memory range that has actually been erased or NULL if not required.
+\param erase_start A pointer to a location in memory to store a pointer to the start of the memory range that has actually been erased or nullptr if not required.
+\param erase_size  A pointer to a location in memory to store the size in bytes of the memory range that has actually been erased or nullptr if not required.
 \return int        The LIBMEM status result */
 static int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size)
 {

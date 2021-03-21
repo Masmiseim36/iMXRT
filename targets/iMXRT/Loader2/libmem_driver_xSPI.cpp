@@ -45,7 +45,7 @@ static flexspi_device_config_t deviceconfig =
 	.CSHoldTime           = 3,
 	.CSSetupTime          = 3,
 	.dataValidTime        = 0,
-	.columnspace          = 0, // we don't use colums
+	.columnspace          = 0, // we don't use columns
 	.enableWordAddress    = 0,
 	.AWRSeqIndex          = 0, // LUT_ProgramPage,
 	.AWRSeqNumber         = 0, // 1
@@ -156,13 +156,6 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 		CLOCK_SetDiv (FlexSPIDiv, FlexSPI_ClockDiv-1);	// flexspi clock 120M.
 	#elif (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
 		  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
-/*		clock_root_config_t rootCfg = {false, 0, 0, 7, 2-1};	// Configure FlexSPI using PLL3Out (-> 480 MHz) divided by 2
-		CLOCK_SetRootClock (kCLOCK_Root_Flexspi1, &rootCfg);
-		CLOCK_ControlGate (kCLOCK_Root_Flexspi1, CCM_LPCG_DIRECT_ON_MASK);*/
-
-//		CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi1, 4);	// Choose SysPll3Pfd0 clock as flexspi source clock. 396M
-//		CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi1, 5);	// flexspi clock 133M
-
 		clock_root_t FlexSPIClock = kCLOCK_Root_Flexspi1;
 		clock_lpcg_t FlexSPIClockGate = kCLOCK_Flexspi1;
 		switch (reinterpret_cast<uint32_t>(base))
@@ -181,13 +174,9 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 //		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
 		CLOCK_SetRootClockDiv (FlexSPIClock, 8); // --> 396 MHz / 4 = ~100 MHz
 		CLOCK_SetRootClockMux (FlexSPIClock, 6); // ClockSource_SysPll2Pfd2 --> 396 MHz
-//		CLOCK_SetRootClockDiv (FlexSPIClock, 2); // 12 NHz
-//		CLOCK_SetRootClockMux (FlexSPIClock, 0); // OscRc48MDiv2 --> 24 MHz
 		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
 
 		uint32_t FlexSPI_Clock_Hz = CLOCK_GetRootClockFreq (FlexSPIClock);
-//		uint32_t SourceClock_Hz   = FlexSPI_Clock_Hz;
-//		uint32_t BusClock_Hz      = CLOCK_GetRootClockFreq (kCLOCK_Root_Bus);
 	#else
 		#error "unknon controller family"
 	#endif
@@ -208,7 +197,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 
 	FLEXSPI_Init           (base, &config);
 	FLEXSPI_SetFlashConfig (base, &deviceconfig, kFLEXSPI_PortA1);        // Configure flash settings according to serial flash feature.
-	FLEXSPI_UpdateLUT      (base, 0, &Generic::LUT_SPI.front(), CUSTOM_LUT_LENGTH); // Update LUT table
+	FLEXSPI_UpdateLUT      (base, 0, &Generic::LUT_SPI.front(), Generic::LUT_SPI.size()); // Update LUT table
 	FLEXSPI_SoftwareReset  (base);                                        // Do software reset.
 
 
@@ -310,7 +299,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 
 	if (lut != nullptr)
 		// Update the LUT
-		FLEXSPI_UpdateLUT (base, 0, &lut->front(), CUSTOM_LUT_LENGTH);
+		FLEXSPI_UpdateLUT (base, 0, &lut->front(), lut->size());
 
 	FLEXSPI_SoftwareReset (base);
 	status_t stat = WaitBusBusy (base);

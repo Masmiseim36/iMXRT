@@ -45,7 +45,6 @@ extern "C"
 		#if defined FLEXSPI2
 		FLASH2_START_ADDRESS = FlexSPI2_AMBA_BASE,
 		#endif
-		CUSTOM_LUT_LENGTH    = 64
 	};
 
 	/*! Capacity:

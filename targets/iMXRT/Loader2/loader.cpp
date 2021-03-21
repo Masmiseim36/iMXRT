@@ -193,7 +193,7 @@ int main (uint32_t flags, uint32_t param)
 		DebugPrint ("RPC loader finished successfully\r\n");
 		for (int i=0; i<1024*1024;i++)
 			;
-		libmem_rpc_loader_exit (res, NULL);
+		libmem_rpc_loader_exit (res, nullptr);
 	}
 	else
 	{
