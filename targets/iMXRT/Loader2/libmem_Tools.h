@@ -24,6 +24,7 @@ OF SUCH DAMAGE. */
 
 #include "fsl_device_registers.h"
 #include "libmem.h"
+#include <array>
 
 #ifdef __cplusplus
 extern "C"
@@ -77,6 +78,8 @@ extern "C"
 
 		return true;
 	}
+
+	typedef std::array <uint32_t, sizeof(FLEXSPI_Type::LUT)/sizeof(FLEXSPI_Type::LUT[0])> FlexSPI_LUT;
 
 	class LibmemDriver: public libmem_driver_handle_t
 	{

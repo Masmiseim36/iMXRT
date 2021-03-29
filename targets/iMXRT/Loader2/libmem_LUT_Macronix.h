@@ -33,7 +33,7 @@ namespace Macronix
 	constexpr uint32_t DummyCycles   = 0x29;//12;	// Number of dummy cycles after Read Command for Macronix-Flash - Set 0x04 To the Config
 	
 	// LUT for Macronix Quad SPI
-	constexpr std::array <uint32_t, 64> LUT_QuadSPI
+	constexpr FlexSPI_LUT LUT_QuadSPI
 	{
 		// (0) Read Array --> compare @LUT_CommandOffsets
 		// Read with 4READ
@@ -104,7 +104,7 @@ namespace Macronix
 
 	// LookUp Table for Macronix MX25UM Octa-Flash devices in Octa configuration with DDR
 	// Reading seems to be broken
-	constexpr std::array <uint32_t, 64> LUT_OctaSPI_DDR
+	constexpr FlexSPI_LUT LUT_OctaSPI_DDR
 	{
 		// (0) Read Array	- Octa IO DT Read --> compare @LUT_CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xEE, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x11),
@@ -166,7 +166,7 @@ namespace Macronix
 		0,	// Dummy to fill a block of four
 	};
 	// LookUp Table for Macronix MX25UM Octa-Flash devices in Octa configuration without DDR
-	constexpr std::array <uint32_t, 64> LUT_OctaSPI
+	constexpr FlexSPI_LUT LUT_OctaSPI
 	{
 		// (0) Read Array	- Octa Read --> compare @LUT_CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xEC, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x13),

@@ -62,7 +62,7 @@ namespace Adesto
 		0x00,	// SPI
 	};
 
-	static constexpr std::array <const std::array <uint32_t, 64> *, 7> LUT
+	static constexpr std::array <const FlexSPI_LUT *, 7> LUT
 	{
 		nullptr,					// unused
 		nullptr,					// unused

@@ -68,7 +68,7 @@ static flexspi_device_config_t deviceconfig =
 };
 
 /*! LUT_HyperFlash:  */
-constexpr std::array <uint32_t, 64> LUT_HyperFlash =
+constexpr FlexSPI_LUT LUT_HyperFlash =
 {
 	// (0) Read Data --> compare @FlashCommands
 	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,       kFLEXSPI_8PAD, 0xA0, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 0x18),

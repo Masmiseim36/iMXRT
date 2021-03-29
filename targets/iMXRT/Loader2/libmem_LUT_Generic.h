@@ -27,7 +27,7 @@ OF SUCH DAMAGE. */
 
 namespace Generic
 {
-	constexpr std::array <uint32_t, 64> LUT_SPI
+	constexpr FlexSPI_LUT LUT_SPI
 	{
 		// (0) Read Array --> compare @LUT_CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,        kFLEXSPI_1PAD, 0x0B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 32),
@@ -118,7 +118,7 @@ namespace Generic
 
 
 	// LUT for Atmel / Winbond
-	constexpr std::array <uint32_t, 64> LUT_QuadSPI
+	constexpr FlexSPI_LUT LUT_QuadSPI
 	{
 		// (0) Read Array --> compare @LUT_CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xEB, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 0x18),
@@ -179,7 +179,7 @@ namespace Generic
 namespace ISSI
 {
 	// LUT for ISSI
-	constexpr std::array <uint32_t, 64> LUT_QuadSPI
+	constexpr FlexSPI_LUT LUT_QuadSPI
 	{
 		// (0) Read Array --> compare @LUT_CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xEB, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 0x18),

@@ -57,7 +57,7 @@ namespace Macronix
 		else
 		{
 			uint8_t Status = 0;
-			const std::array <uint32_t, 64> *lut = nullptr;
+			const FlexSPI_LUT *lut = nullptr;
 			switch (MemType)
 			{
 				case MemType_OctaSPI_DDR:

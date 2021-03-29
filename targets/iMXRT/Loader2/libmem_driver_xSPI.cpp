@@ -211,7 +211,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 	}
 
 	// Check for the Manufacture-ID and adapt the Configuration
-	const std::array <uint32_t, 64> *lut = nullptr;
+	const FlexSPI_LUT *lut = nullptr;
 	LibmemStatus_t res = LibmemStaus_Success;
 	if (Info.ManufactureID == ManufactureID_AdestoTechnologies)
 	{

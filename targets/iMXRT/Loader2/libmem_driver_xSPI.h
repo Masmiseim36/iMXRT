@@ -54,7 +54,7 @@ enum LUT_CommandOffsets
 class FlexSPI_Helper: public FLEXSPI_Type
 {
 public:
-	void UpdateLUT (uint32_t index, const std::array<uint32_t, 64> &lut)
+	void UpdateLUT (uint32_t index, const FlexSPI_LUT &lut)
 	{
 		::FLEXSPI_UpdateLUT (this, index, &lut.front(), lut.size ());
 	}

@@ -32,7 +32,7 @@ namespace Adesto
 
 	constexpr uint32_t DummyCycles   = 18;	// Number of dummy cycles after Read Command
 	
-	constexpr std::array <uint32_t, 64> LUT_OctaSPI
+	constexpr FlexSPI_LUT LUT_OctaSPI
 	{
 		// (0) Read Array --> compare @LUT_CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,          kFLEXSPI_8PAD, 0x0B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_8PAD, 32),
@@ -126,7 +126,7 @@ namespace Adesto
 		0,	// Dummy to fill a block of four
 	};
 
-	constexpr std::array <uint32_t, 64> LUT_QuadSPI_DDR
+	constexpr FlexSPI_LUT LUT_QuadSPI_DDR
 	{
 		// (0) Read Array --> compare @LUT_CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x0B,  kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_4PAD, 32),
@@ -197,7 +197,7 @@ namespace Adesto
 	};
 
 
-	constexpr std::array <uint32_t, 64> LUT_OctaSPI_DDR
+	constexpr FlexSPI_LUT LUT_OctaSPI_DDR
 	{
 		// (0) Read Array --> compare @LUT_CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x0B, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 32),
@@ -270,7 +270,7 @@ namespace Adesto
 		0,	// Dummy to fill a block of four
 	};
 	
-	static constexpr std::array <uint32_t, 64> LUT_QuadSPI
+	static constexpr FlexSPI_LUT LUT_QuadSPI
 	{
 		// (0) Read Array --> compare @LUT_CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x0B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 32),
