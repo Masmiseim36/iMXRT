@@ -70,17 +70,24 @@ extern "C"
 	const char * Libmem_GetErrorString      (int Error);
 	uint_least32_t CalculateCapacity_KBytes (enum Capacity c);
 
-	inline bool IsSectorEmpty (const uint32_t *const start)
+	/*! IsSectorEmpty:
+	\brief Check if the sector is erased (all bytes at 0xFF)
+	\param start Address of the sector to check */
+	inline bool IsSectorEmpty (const uint32_t *const start, const uint32_t SectorSize = 4096)
 	{
-		for (uint32_t i=0; i<4096/sizeof(uint32_t); i++)
+		for (uint32_t i=0; i<SectorSize/sizeof(uint32_t); i++)
 			if (start[i] != 0xFFFFFFFFU)
 				return false;
 
 		return true;
 	}
 
+	/*! FlexSPI_LUT:
+	\brief Type for the LUT information used for different Flash types */
 	typedef std::array <uint32_t, sizeof(FLEXSPI_Type::LUT)/sizeof(FLEXSPI_Type::LUT[0])> FlexSPI_LUT;
 
+	/*! LibmemDriver:
+	\brief Factory for libmem drivers */
 	class LibmemDriver: public libmem_driver_handle_t
 	{
 	private:
@@ -105,7 +112,8 @@ extern "C"
 		}
 	};
 
-
+	/*! MemoryType:
+	\brief Supported Memory/Interface types */
 	enum MemoryType
 	{
 		MemType_Invalid     = 0,
@@ -117,7 +125,8 @@ extern "C"
 		MemType_SPI         = 6,
 	};
 
-
+	/*! LibmemStatus:
+	\brief Libmem Status */
 	typedef enum LibmemStatus
 	{
 		LibmemStaus_Success          = (int)LIBMEM_STATUS_SUCCESS,
@@ -1180,9 +1189,9 @@ extern "C"
 
 	struct DeviceInfo
 	{
-		enum SerialFlash_ManufactureID ManufactureID; // Unique manufacturer ID
-		uint8_t                        Type;          // Device specific type, defined by manufacturer
-		enum Capacity                  Capacity;      // Flash capacity in Bits
+		SerialFlash_ManufactureID ManufactureID; // Unique manufacturer ID
+		uint8_t                   Type;          // Device specific type, defined by manufacturer
+		Capacity                  Capacity;      // Flash capacity in Bits
 	};
 
 

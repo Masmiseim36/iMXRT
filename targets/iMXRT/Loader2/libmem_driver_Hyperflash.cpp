@@ -31,6 +31,8 @@ OF SUCH DAMAGE. */
 
 static libmem_driver_paged_write_ctrlblk_t PagedWrite_CtrlBlk;
 
+static constexpr uint32_t SectorSize = 256 * 1024;
+
 
 /*! enum FlashCommands:
 */
@@ -385,7 +387,7 @@ status_t WaitBusBusy (FLEXSPI_Type *base)
 \return static int LIBMEM_STATUS_SUCCESS when the erase operation was successfully, otherwise LIBMEM_STATUS_ERROR */
 static status_t EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 {
-	if (IsSectorEmpty (reinterpret_cast<uint32_t *>(si->start)))
+	if (IsSectorEmpty (reinterpret_cast<uint32_t *>(si->start), SectorSize))
 		return LIBMEM_STATUS_SUCCESS;
 
 	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;

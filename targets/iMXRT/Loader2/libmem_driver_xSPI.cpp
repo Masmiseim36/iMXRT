@@ -60,7 +60,7 @@ static flexspi_device_config_t deviceconfig =
 // Define the structure of the Flash (Sector Count and Size)
 static libmem_geometry_t geometry[] =
 { // count - size
-	{0x2000, 0x1000},
+	{0x2000, 4096},
 	{0, 0} 
 };
 
