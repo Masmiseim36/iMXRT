@@ -172,7 +172,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 				return LibmemStaus_InvalidDevice;
 		}
 //		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
-		CLOCK_SetRootClockDiv (FlexSPIClock, 8); // --> 396 MHz / 4 = ~100 MHz
+		CLOCK_SetRootClockDiv (FlexSPIClock, 4); // --> 396 MHz / 4 = ~100 MHz
 		CLOCK_SetRootClockMux (FlexSPIClock, 6); // ClockSource_SysPll2Pfd2 --> 396 MHz
 		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
 
