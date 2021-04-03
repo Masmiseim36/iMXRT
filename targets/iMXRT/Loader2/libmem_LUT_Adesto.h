@@ -201,7 +201,7 @@ namespace Adesto
 	{
 		// (0) Read Array --> compare @LUT_CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x0B, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 32),
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD,   45, kFLEXSPI_Command_READ_DDR,  kFLEXSPI_8PAD, 128),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, (DummyCycles*2+1), kFLEXSPI_Command_READ_DDR,  kFLEXSPI_8PAD, 128),
 	//	[2]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_JUMP_ON_CS,  kFLEXSPI_8PAD, 0,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four

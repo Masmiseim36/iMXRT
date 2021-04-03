@@ -73,6 +73,8 @@ namespace Adesto
 		&Generic::LUT_SPI,			// SPI
 	};
 
+	static constexpr uint8_t CtrlReg_Byte3Value (((DummyCycles - 8U) >> 1U) | 0x10U);
+
 	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info)
 	{
 		(void)Info;
@@ -88,20 +90,16 @@ namespace Adesto
 		if (stat != kStatus_Success)
 			return LibmemStaus_Error;
 
-		// Write to status/control register 3 to set the dummy clock cycles, compare table "Dummy Clock cycles and Maximum Operating Frequency"
-	//	stat = WriteRegister (base, 3, 5, LUT_WriteStatusReg_Adesto); // 5 --> 18 dummy cycles
-	//	if (stat != kStatus_Success)
-	//		return LibmemStaus_Error;
-
 		// Write to status/control register 2 to switch to chosen memory-Type
-		stat = flexSPI.WriteRegister (2, StatusReg2[MemType], LUT_WriteStatusReg_Adesto);
+		uint32_t Value = 0x00U | (StatusReg2[MemType] << 8U) | (CtrlReg_Byte3Value << 16U);
+		stat = flexSPI.WriteRegister (1, Value, LUT_WriteStatusReg_Adesto, 3);
 		if (stat != kStatus_Success)
 			return LibmemStaus_Error;
 
-		stat = flexSPI.SendCommand (0, LUT_EnterQPI);
+/*		stat = flexSPI.SendCommand (0, LUT_EnterQPI);
 		if (stat != kStatus_Success)
 			return LibmemStaus_Error;
-
+*/
 		flexSPI.UpdateLUT (0, *LUT[MemType]);
 
 		return LibmemStaus_Success;

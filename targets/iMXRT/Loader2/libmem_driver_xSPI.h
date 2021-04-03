@@ -64,19 +64,17 @@ public:
 		::FLEXSPI_SoftwareReset (this);
 	}
 
-	status_t WriteRegister (uint32_t Address, uint8_t value, enum LUT_CommandOffsets cmd)
+	status_t WriteRegister (uint32_t Address, uint32_t value, enum LUT_CommandOffsets cmd, size_t size  = 1)
 	{
-		uint32_t Buffer = value;
-
 		flexspi_transfer_t flashXfer
 		{
-			Address,			// deviceAddress	- Operation device address.
-			kFLEXSPI_PortA1,	// port				- Operation port
-			kFLEXSPI_Write,		// cmdType			- Execution command type.
-			cmd,				// seqIndex			- Sequence ID for command.
-			1,					// SeqNumber		- Sequence number for command.
-			&Buffer,			// data				- Data buffer.
-			1					// dataSize			- Data size in bytes.
+			Address,					// deviceAddress	- Operation device address.
+			kFLEXSPI_PortA1,			// port				- Operation port
+			kFLEXSPI_Write,				// cmdType			- Execution command type.
+			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
+			1,							// SeqNumber		- Sequence number for command.
+			&value,						// data				- Data buffer.
+			size						// dataSize			- Data size in bytes.
 		};
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
 	}
@@ -85,13 +83,13 @@ public:
 	{
 		flexspi_transfer_t flashXfer
 		{
-			Address,			// deviceAddress	- Operation device address.
-			kFLEXSPI_PortA1,	// port				- Operation port
-			kFLEXSPI_Read,		// cmdType			- Execution command type.
-			cmd,				// seqIndex			- Sequence ID for command.
-			1,					// SeqNumber		- Sequence number for command.
-			&value,				// data				- Data buffer.
-			1					// dataSize			- Data size in bytes.
+			Address,					// deviceAddress	- Operation device address.
+			kFLEXSPI_PortA1,			// port				- Operation port
+			kFLEXSPI_Read,		        // cmdType			- Execution command type.
+			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
+			1,					        // SeqNumber		- Sequence number for command.
+			&value,				        // data				- Data buffer.
+			1					        // dataSize			- Data size in bytes.
 		};
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
 	}
@@ -100,13 +98,13 @@ public:
 	{
 		flexspi_transfer_t flashXfer
 		{
-			Address,			// deviceAddress	- Operation device address.
-			kFLEXSPI_PortA1,	// port				- Operation port
-			kFLEXSPI_Command,	// cmdType			- Execution command type.
-			cmd,				// seqIndex			- Sequence ID for command.
-			1,					// SeqNumber		- Sequence number for command.
-			nullptr,			// data				- Data buffer.
-			0					// dataSize			- Data size in bytes.
+			Address,					// deviceAddress	- Operation device address.
+			kFLEXSPI_PortA1,			// port				- Operation port
+			kFLEXSPI_Command,	        // cmdType			- Execution command type.
+			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
+			1,					        // SeqNumber		- Sequence number for command.
+			nullptr,			        // data				- Data buffer.
+			0					        // dataSize			- Data size in bytes.
 		};
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
 	}

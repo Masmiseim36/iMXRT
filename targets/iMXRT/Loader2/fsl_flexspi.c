@@ -29,14 +29,10 @@ enum
 
 enum
 {
-    kFLEXSPI_FlashASampleClockSlaveDelayLocked =
-        FLEXSPI_STS2_ASLVLOCK_MASK, /* Flash A sample clock slave delay line locked. */
-    kFLEXSPI_FlashASampleClockRefDelayLocked =
-        FLEXSPI_STS2_AREFLOCK_MASK, /* Flash A sample clock reference delay line locked. */
-    kFLEXSPI_FlashBSampleClockSlaveDelayLocked =
-        FLEXSPI_STS2_BSLVLOCK_MASK, /* Flash B sample clock slave delay line locked. */
-    kFLEXSPI_FlashBSampleClockRefDelayLocked =
-        FLEXSPI_STS2_BREFLOCK_MASK, /* Flash B sample clock reference delay line locked. */
+    kFLEXSPI_FlashASampleClockSlaveDelayLocked = FLEXSPI_STS2_ASLVLOCK_MASK, /* Flash A sample clock slave delay line locked. */
+    kFLEXSPI_FlashASampleClockRefDelayLocked   = FLEXSPI_STS2_AREFLOCK_MASK, /* Flash A sample clock reference delay line locked. */
+    kFLEXSPI_FlashBSampleClockSlaveDelayLocked = FLEXSPI_STS2_BSLVLOCK_MASK, /* Flash B sample clock slave delay line locked. */
+    kFLEXSPI_FlashBSampleClockRefDelayLocked   = FLEXSPI_STS2_BREFLOCK_MASK, /* Flash B sample clock reference delay line locked. */
 };
 
 /*! @brief Common sets of flags used by the driver, _flexspi_flag_constants. */
@@ -447,8 +443,7 @@ void FLEXSPI_UpdateDllValue(FLEXSPI_Type *base, flexspi_device_config_t *config,
     /* According to ERR011377, need to delay at least 100 NOPs to ensure the DLL is locked. */
     statusValue =
         (index == 0U) ?
-            ((uint32_t)kFLEXSPI_FlashASampleClockSlaveDelayLocked |
-             (uint32_t)kFLEXSPI_FlashASampleClockRefDelayLocked) :
+            ((uint32_t)kFLEXSPI_FlashASampleClockSlaveDelayLocked | (uint32_t)kFLEXSPI_FlashASampleClockRefDelayLocked) :
             ((uint32_t)kFLEXSPI_FlashBSampleClockSlaveDelayLocked | (uint32_t)kFLEXSPI_FlashBSampleClockRefDelayLocked);
 
     if (0U != (configValue & FLEXSPI_DLLCR_DLLEN_MASK))

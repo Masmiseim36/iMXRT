@@ -422,7 +422,7 @@ static status_t EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si
 /*! ProgramPage:
 \brief Write Data to a Flash-Page
 \param h Handle to the Flash-Driver
-\param Dest Adress to write the Data to. This Address is in the Address-Range of the Controller
+\param Dest Address to write the Data to. This Address is in the Address-Range of the Controller
 \param Source Address of the Array with the Data to write
 \return static int LIBMEM_STATUS_SUCCESS when the write operation was successfully, otherwise LIBMEM_STATUS_ERROR */
 static int ProgramPage (libmem_driver_handle_t *h, uint8_t *Dest, const uint8_t *Source)

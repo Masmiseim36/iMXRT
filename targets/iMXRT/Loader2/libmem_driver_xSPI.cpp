@@ -44,7 +44,7 @@ static flexspi_device_config_t deviceconfig =
 	.CSInterval           = 2,
 	.CSHoldTime           = 3,
 	.CSSetupTime          = 3,
-	.dataValidTime        = 0,
+	.dataValidTime        = 2,
 	.columnspace          = 0, // we don't use columns
 	.enableWordAddress    = 0,
 	.AWRSeqIndex          = 0, // LUT_ProgramPage,
@@ -110,19 +110,19 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 {
 	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || defined (MIMXRT595S_cm33_SERIES)
 		uint32_t src = 2;		// Use AUX0_PLL as clock source for the FlexSPI
-		uint32_t FlexSPI_ClockDiv = 4;	// with a divider of four
-		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (FlexSPI_ClockDiv - 1))
+		uint32_t ClockDiv = 4;	// with a divider of four
+		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (ClockDiv - 1))
 		{
 			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
 			CLKCTL0->FLEXSPIFCLKSEL = CLKCTL0_FLEXSPIFCLKSEL_SEL(src);			// Update flexspi clock.
 			CLKCTL0->FLEXSPIFCLKDIV |= CLKCTL0_FLEXSPIFCLKDIV_RESET_MASK;		// Reset the divider counter
-			CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV(FlexSPI_ClockDiv - 1);
+			CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV(ClockDiv - 1);
 			while ((CLKCTL0->FLEXSPIFCLKDIV) & CLKCTL0_FLEXSPIFCLKDIV_REQFLAG_MASK)
 				;
 			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
 		}
-		uint32_t FlexSPI_Clock_Hz = CLOCK_GetFlexspiClkFreq ();
-		uint32_t SourceClock_Hz = FlexSPI_Clock_Hz * FlexSPI_ClockDiv;
+		uint32_t ClockHz = CLOCK_GetFlexspiClkFreq ();
+		//uint32_t SourceClock_Hz = ClockHz * ClockDiv;
 	#elif ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
 		   (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
 		   (defined MIMXRT1064_SERIES))
@@ -130,11 +130,11 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 		CLOCK_InitUsb1Pll(&g_ccmConfigUsbPll);
 
 		// Set up source clock
-		CLOCK_InitSysPfd (kCLOCK_Pfd2, 24);        // Set PLL2 PFD2 clock 360 MHZ.
+		CLOCK_InitSysPfd (kCLOCK_Pfd2, 24);        // Set PLL2 PFD2 clock 360 MHZ. PLL2 --> SysPLL --> PLL528
 		uint32_t SourceClock_Hz = CLOCK_GetSysPfdFreq (kCLOCK_Pfd2);
 
-		uint32_t FlexSPI_ClockDiv = 3;
-		uint32_t FlexSPI_Clock_Hz = SourceClock_Hz / FlexSPI_ClockDiv;
+		uint32_t ClockDiv = 3;
+		uint32_t ClockHz = SourceClock_Hz / ClockDiv;
 		clock_div_t FlexSPIDiv = kCLOCK_FlexspiDiv;
 		switch ((uint32_t)base)
 		{
@@ -153,7 +153,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 			default:
 				break;
 		}
-		CLOCK_SetDiv (FlexSPIDiv, FlexSPI_ClockDiv-1);	// flexspi clock 120M.
+		CLOCK_SetDiv (FlexSPIDiv, ClockDiv-1);	// flexspi clock 120M.
 	#elif (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
 		  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
 		clock_root_t FlexSPIClock = kCLOCK_Root_Flexspi1;
@@ -173,14 +173,14 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 		}
 //		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
 		CLOCK_SetRootClockDiv (FlexSPIClock, 4); // --> 396 MHz / 4 = ~100 MHz
-		CLOCK_SetRootClockMux (FlexSPIClock, 6); // ClockSource_SysPll2Pfd2 --> 396 MHz
+		CLOCK_SetRootClockMux (FlexSPIClock, 6); // ClockSource_SysPll2Pfd2 --> 396 MHz  -  SYSPLL2=528 MHz
 		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
 
-		uint32_t FlexSPI_Clock_Hz = CLOCK_GetRootClockFreq (FlexSPIClock);
+		uint32_t ClockHz = CLOCK_GetRootClockFreq (FlexSPIClock);
 	#else
 		#error "unknon controller family"
 	#endif
-	deviceconfig.flexspiRootClk = FlexSPI_Clock_Hz;
+	deviceconfig.flexspiRootClk = ClockHz;
 
 	// Get FLEXSPI default settings and configure the FlexSPI.
 	flexspi_config_t config {};
@@ -269,33 +269,35 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 	if (res != LibmemStaus_Success)
 		return res;
 
+	// Reconfigure the Interface according to the gathered Flash-Information and configuration
+	if (MemType == MemType_OctaSPI_DDR || MemType == MemType_QuadSPI_DDR)
+	{
+		#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || defined (MIMXRT595S_cm33_SERIES)
+			ClockDiv--;
+		#elif ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
+			   (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
+			   (defined MIMXRT1064_SERIES))
+			ClockDiv--;
+			CLOCK_SetDiv (FlexSPIDiv, ClockDiv);
+			deviceconfig.flexspiRootClk = SourceClock_Hz / ClockDiv;
+			deviceconfig.flexspiRootClk = ClockHz;
+		#elif (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
+			  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
+			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 396 MHz / 2 = ~200 MHz
+//			CLOCK_SetRootClockMux (FlexSPIClock, 5); // ClockSource_SysPll2 --> 528 MHz
+//			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 525 MHz / 2 = ~264 MHz
+			deviceconfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
+		#else
+			#error "unknon controller family"
+		#endif
+	}
+
 	// Use the size information from the JEDEC-Information to configure the Interface
 	uint32_t FlashSize = CalculateCapacity_KBytes (Info.Capacity);
 	deviceconfig.flashSize = FlashSize;
 	geometry[0].count = FlashSize / (4096 / 1024);
 	FlashSize *= 1024;	// Convert kBytes to bytes
 	FLEXSPI_SetFlashConfig (base, &deviceconfig, kFLEXSPI_PortA1);	// Configure flash settings according to serial flash feature.
-
-	// Reconfigure the Interface according to the gathered Flash-Information and configuration
-	if (MemType == MemType_OctaSPI_DDR || MemType == MemType_QuadSPI_DDR)
-	{
-		#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || defined (MIMXRT595S_cm33_SERIES)
-			FlexSPI_ClockDiv--;
-		#elif ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
-			   (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
-			   (defined MIMXRT1064_SERIES))
-			FlexSPI_ClockDiv--;
-			CLOCK_SetDiv (FlexSPIDiv, FlexSPI_ClockDiv);
-			FlexSPI_Clock_Hz = SourceClock_Hz / FlexSPI_ClockDiv;
-			deviceconfig.flexspiRootClk = FlexSPI_Clock_Hz;
-		#elif (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
-			  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
-			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 396 MHz / 2 = ~200 MHz
-			deviceconfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
-		#else
-			#error "unknon controller family"
-		#endif
-	}
 
 	if (lut != nullptr)
 		// Update the LUT
