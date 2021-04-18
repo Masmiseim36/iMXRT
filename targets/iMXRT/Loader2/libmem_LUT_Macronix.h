@@ -28,9 +28,12 @@ OF SUCH DAMAGE. */
 
 namespace Macronix
 {
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info);
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info, flexspi_config_t &config);
+	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &Info);
 
-	constexpr uint32_t DummyCycles   = 0x29;//12;	// Number of dummy cycles after Read Command for Macronix-Flash - Set 0x04 To the Config
+
+
+	constexpr uint32_t DummyCycles   = 12;	// Number of dummy cycles after Read Command for Macronix-Flash - Set 0x04 To the Config
 	
 	// LUT for Macronix Quad SPI
 	constexpr FlexSPI_LUT LUT_QuadSPI
@@ -108,7 +111,7 @@ namespace Macronix
 	{
 		// (0) Read Array	- Octa IO DT Read --> compare @LUT_CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xEE, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x11),
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, DummyCycles),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32,   kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, 4),
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 128,  kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0),
 		0,	// Dummy to fill a block of four
 
@@ -118,10 +121,10 @@ namespace Macronix
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x00, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x00),
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD,   40, kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 1),
 
-		// (2) free
-		0,	// Dummy to fill a block of four
-		0,	// Dummy to fill a block of four
-		0,	// Dummy to fill a block of four
+		// (2) Read ID --> compare @LUT_CommandOffsets
+		FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DDR,          kFLEXSPI_8PAD, 0x9F, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x60),
+		FLEXSPI_LUT_SEQ(kFLEXSPI_Command_RADDR_DDR,    kFLEXSPI_8PAD, 0x20, kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, 0x16),
+		FLEXSPI_LUT_SEQ(kFLEXSPI_Command_READ_DDR,     kFLEXSPI_8PAD, 0x04, kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0x0),
 		0,	// Dummy to fill a block of four
 
 		// (3) Write Enable --> compare @LUT_CommandOffsets

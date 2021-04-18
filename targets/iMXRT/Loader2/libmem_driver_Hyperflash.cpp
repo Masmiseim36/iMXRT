@@ -209,7 +209,8 @@ static const libmem_ext_driver_functions_t DriverFunctions_Extended =
 \return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
 LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 {
-	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || defined(MIMXRT595S_cm33_SERIES)
+	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || \
+		 defined(MIMXRT533S_SERIES) || defined (MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES)
 		uint32_t src = 2;		// Use AUX0_PLL as clock source for the FlexSPI
 		uint32_t divider = 4;	// with a divider of four
 		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (divider - 1))

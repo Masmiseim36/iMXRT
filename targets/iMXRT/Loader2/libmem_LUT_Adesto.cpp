@@ -75,7 +75,7 @@ namespace Adesto
 
 	static constexpr uint8_t CtrlReg_Byte3Value (((DummyCycles - 8U) >> 1U) | 0x10U);
 
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info, flexspi_config_t &config)
 	{
 		(void)Info;
 		if (MemType == MemType_Invalid || MemType == MemType_Hyperflash)
@@ -91,7 +91,7 @@ namespace Adesto
 			return LibmemStaus_Error;
 
 		// Write to status/control register 2 to switch to chosen memory-Type
-		uint32_t Value = 0x00U | (StatusReg2[MemType] << 8U) | (CtrlReg_Byte3Value << 16U);
+		uint32_t Value = 0x00U | (static_cast<uint32_t>(StatusReg2[MemType]) << 8U) | (static_cast<uint32_t>(CtrlReg_Byte3Value) << 16U);
 		stat = flexSPI.WriteRegister (1, Value, LUT_WriteStatusReg_Adesto, 3);
 		if (stat != kStatus_Success)
 			return LibmemStaus_Error;
@@ -101,6 +101,8 @@ namespace Adesto
 			return LibmemStaus_Error;
 */
 		flexSPI.UpdateLUT (0, *LUT[MemType]);
+
+		config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;// To achieve high speeds - always use DQS
 
 		return LibmemStaus_Success;
 	}

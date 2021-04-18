@@ -23,7 +23,6 @@ extern "C"
 {
 	#include <libmem.h>
 	#include <libmem_loader.h>
-	#include <libmem_flm_driver.h>
 }
 #include <stdio.h>
 
@@ -37,9 +36,9 @@ extern "C"
 #include "DebugPrint.h"
 
 
-enum LibmemStatus Init_Libmem (enum MemoryType, FLEXSPI_Type *base);
-void InitOctaSPIPins (FLEXSPI_Type *base);
-void InitQuadSPIPins (FLEXSPI_Type *base);
+enum LibmemStatus Init_Libmem (enum MemoryType, FlexSPI_Helper *base);
+void InitOctaSPIPins (FlexSPI_Helper *base);
+void InitQuadSPIPins (FlexSPI_Helper *base);
 
 void ExecuteTest (const uint32_t *MemPointer)
 {
@@ -122,7 +121,9 @@ int main (uint32_t flags, uint32_t param)
 			res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_OctaSPI_DDR);
 		}
 		if (res == LibmemStaus_Success)
+		{
 			ExecuteTest ((uint32_t *)(FLASH_START_ADDRESS + 0x40000));		// Testcode
+		}
 
 		#if defined FLEXSPI2
 			BOARD_PerformJEDECReset (FLEXSPI2);
@@ -144,9 +145,9 @@ int main (uint32_t flags, uint32_t param)
 		{
 			DebugPrintf ("libmem Parameter: 0x%X\r\n", param);
 			// Register iMX-RT internal FLASH driver
-			LibmemStatus_t res1 = Init_Libmem ((enum MemoryType)(param & 0x0F), FLEXSPI);
+			LibmemStatus_t res1 = Init_Libmem ((enum MemoryType)(param & 0x0F), static_cast<FlexSPI_Helper *>(FLEXSPI));
 			#if defined FLEXSPI2
-				LibmemStatus_t res2 = Init_Libmem ((enum MemoryType)((param & 0xF0) >> 4), FLEXSPI2);
+				LibmemStatus_t res2 = Init_Libmem ((enum MemoryType)((param & 0xF0) >> 4), static_cast<FlexSPI_Helper *>(FLEXSPI2));
 			#endif
 			if (res1 == LibmemStatus_InvalidMemoryType 
 			#if defined FLEXSPI2
@@ -179,9 +180,9 @@ int main (uint32_t flags, uint32_t param)
 			extern uint8_t __DTCM_segment_end__;
 			res = static_cast<LibmemStatus_t>(libmem_rpc_loader_start (&__DTCM_segment_used_end__, &__DTCM_segment_end__ - 1));
 		#else
-			extern uint8_t __SRAM_segment_used_end__;
-			extern uint8_t __SRAM_segment_end__;
-			res = static_cast<LibmemStatus_t>(libmem_rpc_loader_start (&__SRAM_segment_used_end__, &__SRAM_segment_end__ - 1));
+			extern uint8_t __SRAM_data_segment_used_end__;
+			extern uint8_t __SRAM_data_segment_end__;
+			res = static_cast<LibmemStatus_t>(libmem_rpc_loader_start (&__SRAM_data_segment_used_end__, &__SRAM_data_segment_end__ - 1));
 		#endif
 	}
 	else
@@ -208,7 +209,7 @@ int main (uint32_t flags, uint32_t param)
 
 
 
-enum LibmemStatus Init_Libmem (enum MemoryType MemType, FLEXSPI_Type *base)
+enum LibmemStatus Init_Libmem (MemoryType MemType, FlexSPI_Helper *base)
 {
 	enum LibmemStatus status;
 	uint32_t Trials = 0;
@@ -292,9 +293,9 @@ enum LibmemStatus Init_Libmem (enum MemoryType MemType, FLEXSPI_Type *base)
 	return status;
 }
 
-void InitOctaSPIPins (FLEXSPI_Type *base)
+void InitOctaSPIPins (FlexSPI_Helper *base)
 {
-	switch ((uint32_t)base)
+	switch (base->GetBaseAddr())
 	{
 		case FLEXSPI_BASE:
 			BOARD_InitOctaSPIPins ();
@@ -309,9 +310,9 @@ void InitOctaSPIPins (FLEXSPI_Type *base)
 	}
 }
 
-void InitQuadSPIPins (FLEXSPI_Type *base)
+void InitQuadSPIPins (FlexSPI_Helper *base)
 {
-	switch ((uint32_t)base)
+	switch (base->GetBaseAddr())
 	{
 		case FLEXSPI_BASE:
 			BOARD_InitQuadSPIPins ();

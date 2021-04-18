@@ -37,7 +37,7 @@
 	<group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="TCM" >
 		<groupEntry name="SRAM">
 			<property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/ram_placement.xml" />
-			<property name="linker_section_placement_macros" value="RAM_NAME=SRAM" />
+			<property name="linker_section_placement_macros" value="RAM_NAME=SRAM_data" />
 			<property name="arm_target_loader_applicable_loaders" value=""/>
 			<property name="arm_target_loader_default_loader" value=""/>
 			<property name="target_reset_script" value="Reset()" />

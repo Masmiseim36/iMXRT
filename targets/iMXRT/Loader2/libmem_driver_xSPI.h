@@ -56,7 +56,12 @@ class FlexSPI_Helper: public FLEXSPI_Type
 public:
 	void UpdateLUT (uint32_t index, const FlexSPI_LUT &lut)
 	{
-		::FLEXSPI_UpdateLUT (this, index, &lut.front(), lut.size ());
+		::FLEXSPI_UpdateLUT (this, index, &lut.front()+index, lut.size()-index);
+	}
+
+	void UpdateLUT (uint32_t index, const FlexSPI_LUT &lut, size_t size)
+	{
+		::FLEXSPI_UpdateLUT (this, index, &lut.front()+index, size);
 	}
 
 	void SoftwareReset (void)
@@ -64,12 +69,25 @@ public:
 		::FLEXSPI_SoftwareReset (this);
 	}
 
+	uint32_t GetBaseAddr (void)
+	{
+		return reinterpret_cast<uint32_t>(this);
+	}
+
+	static constexpr flexspi_port_t port =
+	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || \
+		 defined(MIMXRT533S_SERIES) || defined (MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES)
+		kFLEXSPI_PortB1;
+	#else
+		kFLEXSPI_PortA1;
+	#endif
+
 	status_t WriteRegister (uint32_t Address, uint32_t value, enum LUT_CommandOffsets cmd, size_t size  = 1)
 	{
 		flexspi_transfer_t flashXfer
 		{
 			Address,					// deviceAddress	- Operation device address.
-			kFLEXSPI_PortA1,			// port				- Operation port
+			port,						// port				- Operation port
 			kFLEXSPI_Write,				// cmdType			- Execution command type.
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
@@ -84,7 +102,7 @@ public:
 		flexspi_transfer_t flashXfer
 		{
 			Address,					// deviceAddress	- Operation device address.
-			kFLEXSPI_PortA1,			// port				- Operation port
+			port,						// port				- Operation port
 			kFLEXSPI_Read,		        // cmdType			- Execution command type.
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
 			1,					        // SeqNumber		- Sequence number for command.
@@ -99,7 +117,7 @@ public:
 		flexspi_transfer_t flashXfer
 		{
 			Address,					// deviceAddress	- Operation device address.
-			kFLEXSPI_PortA1,			// port				- Operation port
+			port,						// port				- Operation port
 			kFLEXSPI_Command,	        // cmdType			- Execution command type.
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
 			1,					        // SeqNumber		- Sequence number for command.
@@ -143,7 +161,10 @@ public:
 	}
 };
 
-
-LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType MemType);
+LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryType MemType);
+inline LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType MemType)
+{
+	return Libmem_InitializeDriver_xSPI (static_cast<FlexSPI_Helper *>(base), MemType);
+}
 
 #endif	// _LIBMEM_DRIVER_QCTA_SPI_H_

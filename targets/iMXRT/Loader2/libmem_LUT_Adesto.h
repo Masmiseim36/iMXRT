@@ -28,7 +28,7 @@ OF SUCH DAMAGE. */
 
 namespace Adesto
 {
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info);
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info, flexspi_config_t &config);
 
 	constexpr uint32_t DummyCycles   = 18;	// Number of dummy cycles after Read Command
 	

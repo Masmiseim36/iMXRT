@@ -60,7 +60,7 @@
       linker_additional_files="$(StudioDir)/lib/libmem$(LibExt)$(LIB);$(StudioDir)/lib/libmem_loader$(LibExt)$(LIB)"
       linker_keep_symbols="libmem_crc32"
       linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
-      linker_section_placement_macros="RAM_NAME=SRAM"
+      linker_section_placement_macros="RAM_NAME=SRAM_data"
       project_directory=""
       project_type="Executable"
       property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml"

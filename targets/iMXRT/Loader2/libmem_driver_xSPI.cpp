@@ -27,6 +27,9 @@ OF SUCH DAMAGE. */
 #include "fsl_common.h"
 #include "fsl_clock.h"
 #include "DebugPrint.h"
+#if __has_include("fsl_power.h")
+	#include "fsl_power.h"
+#endif
 
 #include "libmem_LUT_Generic.h"
 #include "libmem_LUT_Adesto.h"
@@ -56,7 +59,6 @@ static flexspi_device_config_t deviceconfig =
 	.enableWriteMask      = false,
 };
 
-
 // Define the structure of the Flash (Sector Count and Size)
 static libmem_geometry_t geometry[] =
 { // count - size
@@ -64,12 +66,9 @@ static libmem_geometry_t geometry[] =
 	{0, 0} 
 };
 
-static status_t ReadJEDEC           (FLEXSPI_Type *base, struct DeviceInfo *Info);
-static status_t EnterQuadSPIMode    (FLEXSPI_Type *base, uint32_t baseAddr, enum LUT_CommandOffsets LutOffset);
-static status_t WriteEnable         (FLEXSPI_Type *base, uint32_t baseAddr);
-static status_t WaitBusBusy         (FLEXSPI_Type *base);
-static status_t WriteRegister       (FLEXSPI_Type *base, uint32_t Address, uint8_t value, enum LUT_CommandOffsets cmd);
-static status_t EraseChip           (FLEXSPI_Type *base);
+static status_t ReadJEDEC           (FlexSPI_Helper *base, struct DeviceInfo *Info);
+static status_t WaitBusBusy         (FlexSPI_Helper *base);
+static status_t EraseChip           (FlexSPI_Helper *base);
 static int EraseSector              (libmem_driver_handle_t *h, libmem_sector_info_t *si);
 static int ProgramPage              (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr);
 
@@ -106,20 +105,27 @@ static const libmem_ext_driver_functions_t DriverFunctions_Extended =
 \param base The Flex-SPI-base to use
 \param MemType The Type of SPI-Interface to use if possible
 \return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
-LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType MemType)
+LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryType MemType)
 {
-	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || defined (MIMXRT595S_cm33_SERIES)
-		uint32_t src = 2;		// Use AUX0_PLL as clock source for the FlexSPI
-		uint32_t ClockDiv = 4;	// with a divider of four
+	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || \
+		 defined(MIMXRT533S_SERIES) || defined (MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES)
+		constexpr uint32_t src = 2;	// Use AUX0_PLL as clock source for the FlexSPI
+		uint32_t ClockDiv = 4;		// with a divider of four
 		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (ClockDiv - 1))
 		{
-			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
+			#if !defined(FSL_SDK_DRIVER_QUICK_ACCESS_ENABLE)
+				POWER_DisablePD(kPDRUNCFG_APD_FLEXSPI_SRAM);
+				POWER_DisablePD(kPDRUNCFG_PPD_FLEXSPI_SRAM);
+				POWER_ApplyPD();
+			#endif
+
+//			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
 			CLKCTL0->FLEXSPIFCLKSEL = CLKCTL0_FLEXSPIFCLKSEL_SEL(src);			// Update flexspi clock.
 			CLKCTL0->FLEXSPIFCLKDIV |= CLKCTL0_FLEXSPIFCLKDIV_RESET_MASK;		// Reset the divider counter
 			CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV(ClockDiv - 1);
 			while ((CLKCTL0->FLEXSPIFCLKDIV) & CLKCTL0_FLEXSPIFCLKDIV_REQFLAG_MASK)
 				;
-			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
+//			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
 		}
 		uint32_t ClockHz = CLOCK_GetFlexspiClkFreq ();
 		//uint32_t SourceClock_Hz = ClockHz * ClockDiv;
@@ -136,7 +142,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 		uint32_t ClockDiv = 3;
 		uint32_t ClockHz = SourceClock_Hz / ClockDiv;
 		clock_div_t FlexSPIDiv = kCLOCK_FlexspiDiv;
-		switch ((uint32_t)base)
+		switch (base->GetBaseAddr())
 		{
 			case FLEXSPI_BASE:
 				CLOCK_EnableClock(kCLOCK_FlexSpi);
@@ -158,7 +164,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 		  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
 		clock_root_t FlexSPIClock = kCLOCK_Root_Flexspi1;
 		clock_lpcg_t FlexSPIClockGate = kCLOCK_Flexspi1;
-		switch (reinterpret_cast<uint32_t>(base))
+		switch (base->GetBaseAddr())
 		{
 			case FLEXSPI_BASE:
 				FlexSPIClock = kCLOCK_Root_Flexspi1;
@@ -191,12 +197,11 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 	config.enableCombination              = (MemType == MemType_OctaSPI_DDR || MemType == MemType_OctaSPI);	// Only true when using Octa-Mode
 	config.ahbConfig.enableAHBPrefetch    = true;	// Enable AHB prefetching
 	config.ahbConfig.enableAHBBufferable  = true;
-	config.ahbConfig.enableReadAddressOpt = true;
 	config.ahbConfig.enableAHBCachable    = true;
-	config.rxSampleClock                  = kFLEXSPI_ReadSampleClkLoopbackFromDqsPad; // To achieve high speeds - always use DQS
+	config.rxSampleClock                  = kFLEXSPI_ReadSampleClkLoopbackInternally; // kFLEXSPI_ReadSampleClkLoopbackFromDqsPad; // To achieve high speeds - always use DQS
 
 	FLEXSPI_Init           (base, &config);
-	FLEXSPI_SetFlashConfig (base, &deviceconfig, kFLEXSPI_PortA1);        // Configure flash settings according to serial flash feature.
+	FLEXSPI_SetFlashConfig (base, &deviceconfig, FlexSPI_Helper::port);        // Configure flash settings according to serial flash feature.
 	FLEXSPI_UpdateLUT      (base, 0, &Generic::LUT_SPI.front(), Generic::LUT_SPI.size()); // Update LUT table
 	FLEXSPI_SoftwareReset  (base);                                        // Do software reset.
 
@@ -206,8 +211,12 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 	status_t status = ReadJEDEC (base, &Info);
 	if (status != kStatus_Success || Info.ManufactureID == ManufactureID_UNDEF)
 	{
-		DebugPrint ("JEDEC read Error\r\n");
-		return LibmemStaus_InvalidDevice;
+		status = Macronix::TryDetect (*base, Info);
+		if (status != kStatus_Success || Info.ManufactureID == ManufactureID_UNDEF)
+		{
+			DebugPrint ("JEDEC read Error\r\n");
+			return LibmemStaus_InvalidDevice;
+		}
 	}
 
 	// Check for the Manufacture-ID and adapt the Configuration
@@ -215,18 +224,18 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 	LibmemStatus_t res = LibmemStaus_Success;
 	if (Info.ManufactureID == ManufactureID_AdestoTechnologies)
 	{
-		res = Adesto::Initialize (*static_cast <FlexSPI_Helper *>(base), MemType, Info);
+		res = Adesto::Initialize (*base, MemType, Info, config);
 	}
 	else if (Info.ManufactureID == ManufactureID_Atmel)
 	{
 		DebugPrint ("Found Atmel Flash\r\n");
 		if (Info.Type == 0xA8)
 		{
-			res = Adesto::Initialize (*static_cast <FlexSPI_Helper *>(base), MemType, Info);
+			res = Adesto::Initialize (*base, MemType, Info, config);
 		}
 		else
 		{
-			status_t stat = EnterQuadSPIMode (base, 0, LUT_EnterQPI_Atmel);
+			status_t stat = base->SendCommand (0, LUT_EnterQPI_Atmel); // Enter QuadSPI Mode
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
 			lut = &Generic::LUT_QuadSPI;
@@ -236,12 +245,12 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 	{
 		DebugPrint ("Found Nexcom Flash\r\n");
 		// send write-enable 
-		status_t stat = WriteEnable (base, 0);
+		status_t stat = base->WriteEnable (0);
 		if (stat != kStatus_Success)
 			return LibmemStaus_Error;
 
 		// Write to status/control register 2 to switch to enter quad-Mode
-		stat = WriteRegister (base, 0, 2, LUT_WriteConfigReg_Winbond);
+		stat = base->WriteRegister (0, 2, LUT_WriteConfigReg_Winbond);
 		if (stat != kStatus_Success)
 			return LibmemStaus_Error;
 
@@ -249,12 +258,12 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 	}
 	else if (Info.ManufactureID == ManufactureID_Macronix)
 	{
-		res = Macronix::Initialize (*static_cast <FlexSPI_Helper *>(base), MemType, Info);
+		res = Macronix::Initialize (*base, MemType, Info, config);
 	}
 	else if (Info.ManufactureID == ManufactureID_Lucent)
 	{
 		DebugPrint ("Found Lucent Flash\r\n");
-		status_t stat = EnterQuadSPIMode (base, 0, LUT_EnterQPI_ISSI);
+		status_t stat = base->SendCommand (0, LUT_EnterQPI_ISSI); // Enter QuadSPI Mode
 		if (stat != kStatus_Success)
 			return LibmemStaus_Error;
 
@@ -272,7 +281,9 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 	// Reconfigure the Interface according to the gathered Flash-Information and configuration
 	if (MemType == MemType_OctaSPI_DDR || MemType == MemType_QuadSPI_DDR)
 	{
-		#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || defined (MIMXRT595S_cm33_SERIES)
+		FLEXSPI_Init (base, &config);
+		#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || \
+			 defined(MIMXRT533S_SERIES) || defined (MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES)
 			ClockDiv--;
 		#elif ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
 			   (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
@@ -283,9 +294,8 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 			deviceconfig.flexspiRootClk = ClockHz;
 		#elif (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
 			  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
-			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 396 MHz / 2 = ~200 MHz
-//			CLOCK_SetRootClockMux (FlexSPIClock, 5); // ClockSource_SysPll2 --> 528 MHz
-//			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 525 MHz / 2 = ~264 MHz
+			CLOCK_SetRootClockMux (FlexSPIClock, 5); // ClockSource_SysPll2 --> 528 MHz
+			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 525 MHz / 2 = ~264 MHz
 			deviceconfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
 		#else
 			#error "unknon controller family"
@@ -297,7 +307,10 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 	deviceconfig.flashSize = FlashSize;
 	geometry[0].count = FlashSize / (4096 / 1024);
 	FlashSize *= 1024;	// Convert kBytes to bytes
-	FLEXSPI_SetFlashConfig (base, &deviceconfig, kFLEXSPI_PortA1);	// Configure flash settings according to serial flash feature.
+
+	// changing the clock sourece requires reinit
+//	FLEXSPI_Init (base, &config);
+	FLEXSPI_SetFlashConfig (base, &deviceconfig, FlexSPI_Helper::port);	// Configure flash settings according to serial flash feature.
 
 	if (lut != nullptr)
 		// Update the LUT
@@ -332,13 +345,13 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType
 \param base The Flex-SPI-base to use
 \param Info The read Device informations from the flash memory
 \return status_t Status of the Operation - kStatus_Success when successfully */
-static status_t ReadJEDEC (FLEXSPI_Type *base, struct DeviceInfo *Info)
+static status_t ReadJEDEC (FlexSPI_Helper *base, struct DeviceInfo *Info)
 {
 	uint8_t Identification[16] = { 0U };
 
 	flexspi_transfer_t flashXfer;
 	flashXfer.deviceAddress = 0;
-	flashXfer.port          = kFLEXSPI_PortA1;
+	flashXfer.port          = FlexSPI_Helper::port;
 	flashXfer.cmdType       = kFLEXSPI_Read;
 	flashXfer.SeqNumber     = 1;
 	flashXfer.seqIndex      = LUT_ReadJEDEC_ID;
@@ -349,8 +362,17 @@ static status_t ReadJEDEC (FLEXSPI_Type *base, struct DeviceInfo *Info)
 	if (status != kStatus_Success)
 		return status;
 
+	// Sanity Check of the data, first byte must not be zero or 0xFF
 	if (Identification[0] == 0 || Identification[0] == 0xFF)
 		return kStatus_Fail;	// got no ID-Code: No Flash available
+	
+	// Check if all Data are identical
+	size_t Index = sizeof(Identification)/sizeof(Identification[0]);
+	while (--Index>0 && Identification[0]==Identification[Index])
+		;
+	if (Index == 0)
+		return kStatus_Fail;	// Data is all identical. Got some transfer error
+
 
 	int i=0;
 	for (; i<8; i++)
@@ -402,47 +424,12 @@ static status_t ReadJEDEC (FLEXSPI_Type *base, struct DeviceInfo *Info)
 	return status;
 }
 
-/*! WriteEnable:
-\brief Send write-enable command
-\param base The Flex-SPI-base to use
-\param baseAddr The base-address of the command
-\return static status_t */
-static status_t WriteEnable (FLEXSPI_Type *base, uint32_t baseAddr)
-{
-	flexspi_transfer_t flashXfer;
-
-	// Write enable
-	flashXfer.deviceAddress = baseAddr;
-	flashXfer.port          = kFLEXSPI_PortA1;
-	flashXfer.cmdType       = kFLEXSPI_Command;
-	flashXfer.SeqNumber     = 1;
-	flashXfer.seqIndex      = LUT_WriteEnable;
-	status_t status = FLEXSPI_TransferBlocking (base, &flashXfer);
-
-	return status;
-}
-
-static status_t EnterQuadSPIMode (FLEXSPI_Type *base, uint32_t baseAddr, enum LUT_CommandOffsets LutOffset)
-{
-	flexspi_transfer_t flashXfer;
-
-	// Write enable
-	flashXfer.deviceAddress = baseAddr;
-	flashXfer.port          = kFLEXSPI_PortA1;
-	flashXfer.cmdType       = kFLEXSPI_Command;
-	flashXfer.SeqNumber     = 1;
-	flashXfer.seqIndex      = LutOffset;
-	status_t status = FLEXSPI_TransferBlocking (base, &flashXfer);
-
-	return status;
-}
-
 
 /*! WaitBusBusy:
 Wait until the Write/erase operation is finished and the Flash is not busy anymore
 \param base The Flex-SPI-base to use
 \return status_t kStatus_Success if the operation was successfully */
-static status_t WaitBusBusy (FLEXSPI_Type *base)
+static status_t WaitBusBusy (FlexSPI_Helper *base)
 {
 	// Wait status ready.
 	bool isBusy;
@@ -451,7 +438,7 @@ static status_t WaitBusBusy (FLEXSPI_Type *base)
 
 	flexspi_transfer_t flashXfer;
 	flashXfer.deviceAddress = 0;
-	flashXfer.port          = kFLEXSPI_PortA1;
+	flashXfer.port          = FlexSPI_Helper::port;
 	flashXfer.cmdType       = kFLEXSPI_Read;
 	flashXfer.SeqNumber     = 1;
 	flashXfer.seqIndex      = LUT_ReadStatus;
@@ -472,26 +459,10 @@ static status_t WaitBusBusy (FLEXSPI_Type *base)
 	return status;
 }
 
-
-static status_t WriteRegister (FLEXSPI_Type *base, uint32_t Address, uint8_t value, enum LUT_CommandOffsets cmd)
-{
-	uint32_t Buffer = value;
-
-	flexspi_transfer_t flashXfer;
-	flashXfer.port          = kFLEXSPI_PortA1;
-	flashXfer.cmdType       = kFLEXSPI_Write;
-	flashXfer.SeqNumber     = 1;
-	flashXfer.seqIndex      = cmd;
-	flashXfer.deviceAddress = Address;
-	flashXfer.data          = &Buffer;
-	flashXfer.dataSize      = 1;
-	return FLEXSPI_TransferBlocking (base, &flashXfer);
-}
-
-[[maybe_unused]] static status_t ReadStatusRegister (FLEXSPI_Type *base, uint8_t Address, uint8_t *value)
+[[maybe_unused]] static status_t ReadStatusRegister (FlexSPI_Helper *base, uint8_t Address, uint8_t *value)
 {
 	flexspi_transfer_t flashXfer;
-	flashXfer.port          = kFLEXSPI_PortA1;
+	flashXfer.port          = FlexSPI_Helper::port;
 	flashXfer.cmdType       = kFLEXSPI_Read;
 	flashXfer.SeqNumber     = 1;
 	flashXfer.seqIndex      = LUT_ReadStatus;
@@ -506,16 +477,16 @@ static status_t WriteRegister (FLEXSPI_Type *base, uint32_t Address, uint8_t val
 Erase the whole-Flash-memory
 \param base The FlexSPI-Interface where the Flash is located which should be erased
 \return static status_t Status of the Operation - kStatus_Success when successfully */
-[[maybe_unused]] static status_t EraseChip (FLEXSPI_Type *base)
+[[maybe_unused]] static status_t EraseChip (FlexSPI_Helper *base)
 {
 	DebugPrint ("EraseChip\r\n");
 
-	status_t stat = WriteEnable (base, 0);
+	status_t stat = base->WriteEnable (0);
 	if (stat != kStatus_Success)
 		return stat;
 
 	flexspi_transfer_t flashXfer;
-	flashXfer.port          = kFLEXSPI_PortA1;
+	flashXfer.port          = FlexSPI_Helper::port;
 	flashXfer.SeqNumber     = 1;
 	flashXfer.cmdType       = kFLEXSPI_Command;
 	flashXfer.seqIndex      = LUT_EraseChip;
@@ -542,20 +513,20 @@ static int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 		return LIBMEM_STATUS_SUCCESS;
 	}
 
-	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
+	FlexSPI_Helper *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
 	uint32_t SectorAddr = libmem_CalculateOffset (h, si->start);
 	if (SectorAddr == UINT32_MAX)
 		return LibmemStaus_Error;
 
 	DebugPrintf ("EraseSector at 0x%x, size: %d\r\n", SectorAddr, si->size);
 
-	status_t status = WriteEnable (base, SectorAddr);
+	status_t status = base->WriteEnable (SectorAddr);
 	if (status != kStatus_Success)
 		return LibmemStaus_Error;
 
 	flexspi_transfer_t flashXfer;
 	flashXfer.deviceAddress = SectorAddr;
-	flashXfer.port          = kFLEXSPI_PortA1;
+	flashXfer.port          = FlexSPI_Helper::port;
 	flashXfer.cmdType       = kFLEXSPI_Command;
 	flashXfer.SeqNumber     = 1;
 	flashXfer.seqIndex      = LUT_EraseSector;
@@ -579,7 +550,7 @@ Write Data to a Flash-Page
 \return static int LibmemStaus_Success when the write operation was successfully, otherwise LibmemStaus_Error */
 static int ProgramPage (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr)
 {
-	FLEXSPI_Type *base = (FLEXSPI_Type *)h->user_data;
+	FlexSPI_Helper *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
 	uint32_t DeviceAddress = libmem_CalculateOffset (h, dest_addr);
 	if (DeviceAddress == UINT32_MAX)
 		return LibmemStaus_Error;
@@ -587,14 +558,14 @@ static int ProgramPage (libmem_driver_handle_t *h, uint8_t *dest_addr, const uin
 	DebugPrintf ("ProgramPage at 0x%X\r\n", DeviceAddress);
 
 	// Write enable
-	status_t status = WriteEnable (base, DeviceAddress);
+	status_t status = base->WriteEnable (DeviceAddress);
 	if (status != kStatus_Success)
 		return LibmemStaus_Error;
 
 	// Prepare page program command
 	flexspi_transfer_t flashXfer;
 	flashXfer.deviceAddress = DeviceAddress;
-	flashXfer.port          = kFLEXSPI_PortA1;
+	flashXfer.port          = FlexSPI_Helper::port;
 	flashXfer.cmdType       = kFLEXSPI_Write;
 	flashXfer.SeqNumber     = 1;
 	flashXfer.seqIndex      = LUT_ProgramPage;

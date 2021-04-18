@@ -25,7 +25,48 @@ OF SUCH DAMAGE. */
 
 namespace Macronix
 {
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info)
+	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &Info)
+	{
+		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
+//		FLEXSPI_SoftwareReset  (&flexSPI);
+
+		uint8_t Identification[16] = { 0U };
+
+		flexspi_transfer_t flashXfer;
+		flashXfer.deviceAddress = 0;
+		flashXfer.port          = FlexSPI_Helper::port;
+		flashXfer.cmdType       = kFLEXSPI_Read;
+		flashXfer.SeqNumber     = 1;
+		flashXfer.seqIndex      = LUT_ReadJEDEC_ID;
+		flashXfer.data          = (uint32_t *)Identification;
+		flashXfer.dataSize      = sizeof(Identification);
+
+		status_t status = FLEXSPI_TransferBlocking (&flexSPI, &flashXfer);
+		if (status != kStatus_Success)
+			return status;
+
+		if (Identification[0] == 0 || Identification[0] == 0xFF)
+			return kStatus_Fail;	// got no ID-Code: No Flash available
+
+		int i=0;
+		for (; i<8; i++)
+		{
+			if (Identification[i] != ManufactureID_NEXT_MARKER)
+				break;
+		}
+
+		Info.ManufactureID = (SerialFlash_ManufactureID)(((i+1)<<8) | Identification[i]);
+		Info.Type          = Identification[i+1];
+//		Info.Capacity      = (Capacity)Identification[i+3];
+		Info.Capacity      = (Capacity)(Identification[i+3] & 0x1F);
+
+
+		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, Generic::LUT_SPI, 4);
+
+		return status;
+	}
+
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info, [[maybe_unused]] flexspi_config_t &config)
 	{
 		(void)Info;
 		if (MemType == MemType_Invalid || MemType == MemType_Hyperflash)
@@ -76,13 +117,13 @@ namespace Macronix
 
 			// SET Dummy Cycles
 			// send write-enable 
-			status_t stat = flexSPI.WriteEnable (0);
+/*			status_t stat = flexSPI.WriteEnable (0);
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
 			// Write to status/control register 2 to set the Dummy-Cycles
 			stat = flexSPI.WriteRegister (0x300U, 8U, LUT_WriteConfigReg_Macronix);	// 8 --> 12 Cycles at 133 MHz
 			if (stat != kStatus_Success)
-				return LibmemStaus_Error;
+				return LibmemStaus_Error; */
 		/*
 			// Set Output impedance
 			// send write-enable 
@@ -96,7 +137,7 @@ namespace Macronix
 
 			// Switch to OSPI-Mode
 			// send write-enable 
-			stat = flexSPI.WriteEnable (0);
+			status_t stat = flexSPI.WriteEnable (0);
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
 			// Write to status/control register 2 to switch to chosen memory-Type

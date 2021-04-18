@@ -111,6 +111,7 @@ function Connect ()
 	{
 		case "MIMXRT633":
 		case "MIMXRT685_cm33":
+		TargetInterface.setDeviceTypeProperty ("CORTEX-M33");
 			break;
 		case "MIMXRT1011":
 		case "MIMXRT1015":
@@ -149,6 +150,9 @@ function Connect ()
 // writing the code to the controller
 function GetPartName ()
 {
+	if (TargetInterface.implementation() == "j-link")
+		return;
+
 	var DeviceName = GetProjectPartName ();
 	TargetInterface.message ("## get part name of " + DeviceName);
 
@@ -327,6 +331,13 @@ function Reset ()
 {
 	if (TargetInterface.implementation() == "crossworks_simulator")
 		return;
+
+	if (TargetInterface.implementation() == "j-link")
+	{
+//		TargetInterface.resetAndStop (1000);
+		TargetInterface.stop ();
+		return;
+	}
 
 	var DeviceName = GetProjectPartName ();
 	TargetInterface.message ("## Reset " + DeviceName);

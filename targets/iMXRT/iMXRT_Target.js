@@ -131,12 +131,28 @@ function Connect ()
 		case "MIMXRT1176_cm7":
 			TargetInterface.setDeviceTypeProperty ("CORTEX-M7");
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000e000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0001000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0002000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0000000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0041000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0042000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0043000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0044000); // Not in ROM Table. Compare ERR050708
 			break;
 		case "MIMXRT1173_cm4":
 		case "MIMXRT1175_cm4":
 		case "MIMXRT1176_cm4":
 			TargetInterface.setDeviceTypeProperty ("CORTEX-M4");
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000e000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0001000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0002000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0000000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0041000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0042000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0043000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0044000); // Not in ROM Table. Compare ERR050708
 			break;
 		default:
 			TargetInterface.message ("Connect - unknown Device: " + DeviceName);
@@ -355,13 +371,13 @@ function Reset ()
 			TargetInterface.pokeUint32 (SRC_CTRL_M4CORE, 2);
 			Reset_11xx_M7 ();
 			TargetInterface.pokeUint32 (SRC_SCR, 0x1);				// SRC->SCR Enable CM4 -> cm4 core reset is released
-			TargetInterface.stop ();
+				TargetInterface.stop ();
 			break;
 		case "MIMXRT1173_cm4":
 		case "MIMXRT1175_cm4":
 		case "MIMXRT1176_cm4":
 			Reset_11xx_M4 ();
-			TargetInterface.stop ();
+				TargetInterface.stop ();
 			break;
 		default:
 			TargetInterface.message ("## Reset - unknown Device: " + DeviceName);
