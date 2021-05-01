@@ -102,10 +102,10 @@ int main (uint32_t flags, uint32_t param)
 		// some test Code, because the Loader can not be debuged while using it in real scenarios
 //		#if defined CPU_MIMXRT1015CAF4A || defined CPU_MIMXRT1021DAF5A || defined CPU_MIMXRT1062DVJ6A || defined CPU_MIMXRT1064DVL6A
 //			BOARD_InitQuadSPIPins (); 
-//			enum LibmemStatus res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_QuadSPI);	// Register iMX-RT internal FLASH driver
+//			LibmemStatus res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_QuadSPI);	// Register iMX-RT internal FLASH driver
 //		#else
 //			BOARD_InitOctaSPIPins ();
-//			enum LibmemStatus res = Libmem_InitializeDriver_Hyperflash (FLEXSPI);	// Register iMX-RT internal FLASH driver
+//			LibmemStatus res = Libmem_InitializeDriver_Hyperflash (FLEXSPI);	// Register iMX-RT internal FLASH driver
 //		#endif
 
 		BOARD_PerformJEDECReset (FLEXSPI);

@@ -173,7 +173,7 @@ static int WriteEnable    (FLEXSPI_Type *base, uint32_t baseAddr);
 static status_t EraseChip (FLEXSPI_Type *base);
 
 static int EraseSector        (libmem_driver_handle_t *h, libmem_sector_info_t *si);
-static int ProgramPage        (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr);
+static int ProgramPage        (libmem_driver_handle_t *h, uint8_t *Dest, const uint8_t *Source);
 static int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
 static int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size);
 static int libmem_Flush       (libmem_driver_handle_t *h);
@@ -185,17 +185,17 @@ static uint32_t libmem_CRC32  (libmem_driver_handle_t *h, const uint8_t *start, 
 static const libmem_driver_functions_t DriverFunctions =
 {
 	libmem_ProgramPage,
-	0,
+	nullptr,
 	libmem_EraseSector,
-	0,
-	0,
+	nullptr,
+	nullptr,
 	libmem_Flush
 };
 
 /*! DriverFunctionsExt:  */
 static const libmem_ext_driver_functions_t DriverFunctions_Extended =
 {
-	0,
+	nullptr,
 	libmem_Read,
 	libmem_CRC32
 };
@@ -280,15 +280,15 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 
 	static uint8_t write_buffer[HYPERFLASH_PAGE_SIZE];
 	libmem_driver_handle_t *FlashHandle = LibmemDriver::GetDriver ();
-//	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, &DriverFunctions_Extended);
-	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, nullptr);
+//	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, nullptr, &DriverFunctions, &DriverFunctions_Extended);
+	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, nullptr, &DriverFunctions, nullptr);
 	FlashHandle->user_data = (uint32_t)base;
 
 	uint8_t *AliasAddress = libmem_GetAliasBaseAddress (base);
 	if (AliasAddress != nullptr)
 	{
 		FlashHandle = LibmemDriver::GetDriver ();
-		libmem_register_driver (FlashHandle, AliasAddress, BOARD_FLASH_SIZE, geometry, 0, &DriverFunctions, nullptr);
+		libmem_register_driver (FlashHandle, AliasAddress, BOARD_FLASH_SIZE, geometry, nullptr, &DriverFunctions, nullptr);
 		FlashHandle->user_data = (uint32_t)base;
 	}
 	return static_cast<LibmemStatus_t>(libmem_driver_paged_write_init (&PagedWrite_CtrlBlk, write_buffer, HYPERFLASH_PAGE_SIZE, ProgramPage, 4, 0));
@@ -320,9 +320,9 @@ static status_t WriteEnable (FLEXSPI_Type *base, uint32_t baseAddr)
 status_t WaitBusBusy (FLEXSPI_Type *base)
 {
 	// Wait status ready.	
-	uint32_t readValue;
-	status_t status;
-	flexspi_transfer_t flashXfer;
+	uint32_t readValue{};
+	status_t status{};
+	flexspi_transfer_t flashXfer{};
 
 	flashXfer.deviceAddress = 0;
 	flashXfer.port      = kFLEXSPI_PortA1;

@@ -1,6 +1,10 @@
 <!DOCTYPE CrossStudio_Project_File>
 <solution Name="iMXRT Loader CM4" target="8" version="2">
   <configuration
+    Name="Common"
+    c_preprocessor_undefinitions="__STDCPP_THREADS__"
+    clang_tidy_checks_cpp="*;-llvm*;-fuchsia*;-modernize-use-trailing-return-type;-*braces-around-statements;-*magic-numbers;-cppcoreguidelines-pro-bounds-constant-array-index;-google-readability-namespace-comments" />
+  <configuration
     Name="Debug"
     c_preprocessor_definitions="DEBUG=1"
     gcc_debugging_level="Level 3"

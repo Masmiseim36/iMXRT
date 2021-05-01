@@ -1,0 +1,13 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+[*.{h,hpp,c,cpp}]
+indent_style = tab
+indent_size = 4
+
+[*.js]
+indent_style = tab
+indent_size = 4
+
+[*.xml]
+indent_style = tab
+indent_size = 4

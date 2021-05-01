@@ -49,7 +49,7 @@ static flexspi_device_config_t deviceconfig =
 	.CSSetupTime          = 3,
 	.dataValidTime        = 2,
 	.columnspace          = 0, // we don't use columns
-	.enableWordAddress    = 0,
+	.enableWordAddress    = false,
 	.AWRSeqIndex          = 0, // LUT_ProgramPage,
 	.AWRSeqNumber         = 0, // 1
 	.ARDSeqIndex          = LUT_ReadArray,
@@ -83,16 +83,16 @@ static uint32_t libmem_CRC32  (libmem_driver_handle_t *h, const uint8_t *start, 
 static const libmem_driver_functions_t DriverFunctions =
 {
 	libmem_ProgramPage,
-	0,
+	nullptr,
 	libmem_EraseSector,
-	0,
-	0,
+	nullptr,
+	nullptr,
 	libmem_Flush
 };
 
 static const libmem_ext_driver_functions_t DriverFunctions_Extended =
 {
-	0,
+	nullptr,
 	libmem_Read,
 	libmem_CRC32
 };
@@ -324,15 +324,15 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 
 	static uint8_t write_buffer[QSPIFLASH_PAGE_SIZE];
 	libmem_driver_handle_t *FlashHandle = LibmemDriver::GetDriver ();
-//	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), FlashSize, geometry, 0, &DriverFunctions, &DriverFunctions_Extended);
-	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), FlashSize, geometry, 0, &DriverFunctions, nullptr);
+//	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), FlashSize, geometry, nullptr, &DriverFunctions, &DriverFunctions_Extended);
+	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), FlashSize, geometry, nullptr, &DriverFunctions, nullptr);
 	FlashHandle->user_data = (uint32_t)base;
 
 	uint8_t *AliasAddress = libmem_GetAliasBaseAddress (base);
 	if (AliasAddress != nullptr)
 	{
 		FlashHandle = LibmemDriver::GetDriver ();
-		libmem_register_driver (FlashHandle, AliasAddress, FlashSize, geometry, 0, &DriverFunctions, nullptr);
+		libmem_register_driver (FlashHandle, AliasAddress, FlashSize, geometry, nullptr, &DriverFunctions, nullptr);
 		FlashHandle->user_data = (uint32_t)base;
 		DebugPrint ("### Add Driver for Alias\r\n");
 	}
@@ -381,13 +381,13 @@ static status_t ReadJEDEC (FlexSPI_Helper *base, struct DeviceInfo *Info)
 			break;
 	}
 
-	Info->ManufactureID = (enum SerialFlash_ManufactureID)(((i+1)<<8) | Identification[i]);
+	Info->ManufactureID = (enum SerialFlash_ManufactureID)(((i+1)<<8U) | Identification[i]);
 	Info->Type          = Identification[i+1];
 	Info->Capacity      = (enum Capacity)Identification[i+2];
 	switch (Info->ManufactureID)
 	{
 		case ManufactureID_AdestoTechnologies:
-			switch (Info->Type & 0x1F)
+			switch (Info->Type & 0x1FU)
 			{
 				case 0x06:
 					Info->Capacity = Capacity_16MBit;
@@ -432,9 +432,9 @@ Wait until the Write/erase operation is finished and the Flash is not busy anymo
 static status_t WaitBusBusy (FlexSPI_Helper *base)
 {
 	// Wait status ready.
-	bool isBusy;
-	uint32_t readValue;
-	status_t status;
+	bool isBusy=false;
+	uint32_t readValue{};
+	status_t status{};
 
 	flexspi_transfer_t flashXfer;
 	flashXfer.deviceAddress = 0;

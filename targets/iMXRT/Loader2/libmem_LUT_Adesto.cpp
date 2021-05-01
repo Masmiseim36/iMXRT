@@ -42,16 +42,16 @@ namespace Adesto
 
 
 	
-	static_assert (MemType_Invalid     == 0);
-	static_assert (MemType_Hyperflash  == 1);
-	static_assert (MemType_OctaSPI_DDR == 2);
-	static_assert (MemType_OctaSPI     == 3);
-	static_assert (MemType_QuadSPI_DDR == 4);
-	static_assert (MemType_QuadSPI     == 5);
-	static_assert (MemType_SPI         == 6);
+	static_assert (MemType_Invalid     == 0, "Invalid MemType definition for MemType_Invalid");
+	static_assert (MemType_Hyperflash  == 1, "Invalid MemType definition for MemType_Hyperflash");
+	static_assert (MemType_OctaSPI_DDR == 2, "Invalid MemType definition for MemType_OctaSPI_DDR");
+	static_assert (MemType_OctaSPI     == 3, "Invalid MemType definition for MemType_OctaSPI");
+	static_assert (MemType_QuadSPI_DDR == 4, "Invalid MemType definition for MemType_QuadSPI_DDR");
+	static_assert (MemType_QuadSPI     == 5, "Invalid MemType definition for MemType_QuadSPI");
+	static_assert (MemType_SPI         == 6, "Invalid MemType definition for MemType_SPI");
 
 	// Compare Status Register Byte 2 in the Adesto Datasheet - chapter "11.2 Status Register Byte 2"
-	static constexpr uint8_t StatusReg2 []
+	static constexpr std::array <uint32_t, 7> StatusReg2
 	{
 		0x00,	// unused
 		0x00,	// unused
@@ -75,7 +75,7 @@ namespace Adesto
 
 	static constexpr uint8_t CtrlReg_Byte3Value (((DummyCycles - 8U) >> 1U) | 0x10U);
 
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info, flexspi_config_t &config)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, const MemoryType MemType, DeviceInfo &Info, flexspi_config_t &config)
 	{
 		(void)Info;
 		if (MemType == MemType_Invalid || MemType == MemType_Hyperflash)

@@ -128,6 +128,6 @@ const char * Libmem_GetErrorString (int Error)
 \return uint_least32_t The capacity in bytes */
 uint_least32_t CalculateCapacity_KBytes (Capacity c)
 {
-	uint_least32_t size = 1 << ((uint_least32_t)c);
+	uint_least32_t size = 1U << (static_cast<uint_least32_t>(c));
 	return size / 1024;
 }

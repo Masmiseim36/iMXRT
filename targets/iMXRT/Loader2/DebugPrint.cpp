@@ -20,9 +20,9 @@ IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE. */
 
 
-#include <stdint.h>
-#include <stdarg.h>
-#include <stdio.h>
+#include <cstdint>
+#include <cstdarg>
+#include <cstdio>
 #include "DebugPrint.h"
 #include "pin_mux.h"
 #include "fsl_clock.h"
