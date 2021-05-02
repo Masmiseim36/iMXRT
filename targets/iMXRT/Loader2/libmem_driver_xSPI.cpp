@@ -347,7 +347,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 \return status_t Status of the Operation - kStatus_Success when successfully */
 static status_t ReadJEDEC (FlexSPI_Helper *base, struct DeviceInfo *Info)
 {
-	uint8_t Identification[16] = { 0U };
+	uint8_t Identification[16] {0U};
 
 	flexspi_transfer_t flashXfer;
 	flashXfer.deviceAddress = 0;

@@ -28,9 +28,8 @@ namespace Macronix
 	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &Info)
 	{
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
-//		FLEXSPI_SoftwareReset  (&flexSPI);
 
-		uint8_t Identification[16] = { 0U };
+		uint8_t Identification[16] {0U};
 
 		flexspi_transfer_t flashXfer;
 		flashXfer.deviceAddress = 0;

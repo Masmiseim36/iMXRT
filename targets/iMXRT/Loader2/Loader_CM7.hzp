@@ -5,8 +5,10 @@
     Platform="ARM"
     arm_instruction_set="Thumb"
     arm_library_instruction_set="Thumb"
+    clang_tidy_checks_cpp="*;-llvm*;-fuchsia*;-modernize-use-trailing-return-type;-*braces-around-statements;-*magic-numbers;-cppcoreguidelines-pro-bounds-constant-array-index;-google-readability-namespace-comments"
     c_additional_options="-fno-signed-char;-Wno-narrowing;-Wall;-Wextra;-Wmisleading-indentation;-Wshadow;-Wdouble-promotion;-Wformat=2"
     c_preprocessor_definitions="__THUMB;STARTUP_FROM_RESET=1;DISABLE_WDOG=1"
+    c_preprocessor_undefinitions="__STDCPP_THREADS__"
     cpp_only_additional_options="-Woverloaded-virtual;-Wnon-virtual-dtor" />
   <configuration
     Name="Debug"
