@@ -40,9 +40,31 @@ enum LibmemStatus Init_Libmem (enum MemoryType, FlexSPI_Helper *base);
 void InitOctaSPIPins (FlexSPI_Helper *base);
 void InitQuadSPIPins (FlexSPI_Helper *base);
 
-void ExecuteTest (const uint32_t *MemPointer)
+uint32_t Compare (const uint32_t *MemPointer, uint32_t Comp, size_t size)
 {
-	static uint32_t buffer[512];
+	uint32_t ErrorCounter = 0;
+	for (size_t i=0; i<size/sizeof(uint32_t); i++)
+	{
+		if (MemPointer[i] != Comp)
+			ErrorCounter++;
+	}
+	return ErrorCounter;
+}
+
+uint32_t Compare (const uint32_t *MemPointer, uint32_t *pComp, size_t size)
+{
+	uint32_t ErrorCounter = 0;
+	for (size_t i=0; i<size/sizeof(uint32_t); i++)
+	{
+		if (MemPointer[i] != pComp[i])
+			ErrorCounter++;
+	}
+	return ErrorCounter;
+}
+
+void ExecuteTest (uint32_t *MemPointer)
+{
+	static uint32_t buffer[4096];
 	memset (buffer, 0, sizeof(buffer));
 	for (size_t i=0; i<sizeof(buffer)/sizeof(buffer[0]); i++)
 		buffer[i] = (uint32_t)(((uint32_t *)buffer) + i);
@@ -55,20 +77,16 @@ void ExecuteTest (const uint32_t *MemPointer)
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
 	// Check if everything is erased
-	uint32_t ErrorCounter = 0;
-	for (size_t i=0; i<erase_size/sizeof(uint32_t); i++)
-	{
-		if (MemPointer[i] != 0xFFFFFFFF)
-			ErrorCounter++;
-	}
+	uint32_t ErrorCounter = Compare (MemPointer, 0xFFFFFFFF, erase_size);
 	if (ErrorCounter > 0)
-		DebugPrintf ("Invalid memory-chunks on erase: %d", ErrorCounter);
+		DebugPrintf ("Invalid memory-chunks on erase: %d\r\n", ErrorCounter);
 
 	res = static_cast<LibmemStatus_t>(libmem_write ((uint8_t *)MemPointer, (uint8_t *)buffer, sizeof(buffer)));
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
-	if (memcmp (MemPointer, buffer, sizeof (buffer)) != 0)
-		DebugPrint ("Writing failed\r\n");
+	ErrorCounter = Compare (MemPointer, buffer, sizeof (buffer));
+	if (ErrorCounter > 0)
+		DebugPrintf ("Invalid memory-chunks on write %d\r\n", ErrorCounter);
 }
 
 
@@ -99,7 +117,7 @@ int main (uint32_t flags, uint32_t param)
 	#ifdef DEBUG
 		(void)flags;
 		(void)param;
-		// some test Code, because the Loader can not be debuged while using it in real scenarios
+		// some test Code, because the Loader can not be debugged while using it in real scenarios
 //		#if defined CPU_MIMXRT1015CAF4A || defined CPU_MIMXRT1021DAF5A || defined CPU_MIMXRT1062DVJ6A || defined CPU_MIMXRT1064DVL6A
 //			BOARD_InitQuadSPIPins (); 
 //			LibmemStatus res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_QuadSPI);	// Register iMX-RT internal FLASH driver

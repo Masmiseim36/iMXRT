@@ -27,75 +27,75 @@
   <configuration
     Name="1011"
     Target="MIMXRT1011xxx5A"
+    arm_fpu_type="FPv5-SP-D16"
     c_preprocessor_definitions="CPU_MIMXRT1011DAE5A"
     c_user_include_directories=".;./iMXRT1011/."
+    hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT1015.xml"
-    macros="DeviceName=MIMXRT1011" 
-    arm_fpu_type="FPv5-SP-D16"
-    hidden="Yes"/>
+    macros="DeviceName=MIMXRT1011" />
   <configuration
     Name="1015"
     Target="MIMXRT1015CAF4A"
+    arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1015CAF4A"
     c_user_include_directories=".;./iMXRT1015/."
+    hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT1015.xml"
-    macros="DeviceName=MIMXRT1015"
-    arm_fpu_type="FPv5-D16"
-    hidden="Yes"/>
+    macros="DeviceName=MIMXRT1015" />
   <configuration
     Name="1021"
     Target="MIMXRT1021DAF5A"
+    arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1021DAF5A"
     c_user_include_directories=".;./iMXRT1021/."
+    hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
-    macros="DeviceName=MIMXRT1021"
-    arm_fpu_type="FPv5-D16"
-    hidden="Yes"/>
+    macros="DeviceName=MIMXRT1021" />
   <configuration
     Name="1024"
     Target="MIMXRT1024DAG5A"
+    arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1024DAG5A"
     c_user_include_directories=".;./iMXRT1024/."
+    hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
-    macros="DeviceName=MIMXRT1024"
-    arm_fpu_type="FPv5-D16"
-    hidden="Yes"/>
+    macros="DeviceName=MIMXRT1024" />
   <configuration
     Name="1050"
     Target="MIMXRT1052DVJ6B"
+    arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1052DVJ6B"
     c_user_include_directories=".;./iMXRT1050/."
+    hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT105x.xml"
-    macros="DeviceName=MIMXRT1052"
-    arm_fpu_type="FPv5-D16"
-    hidden="Yes"/>
+    macros="DeviceName=MIMXRT1052" />
   <configuration
     Name="1060"
     Target="MIMXRT1062DVJ6A"
+    arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1062DVJ6A"
     c_user_include_directories=".;./iMXRT1060/."
+    hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
-    macros="DeviceName=MIMXRT1062"
-    arm_fpu_type="FPv5-D16"
-    hidden="Yes"/>
+    macros="DeviceName=MIMXRT1062" />
   <configuration
     Name="1064"
     Target="MIMXRT1064DVL6A"
+    arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1064DVL6A"
     c_user_include_directories=".;./iMXRT1064/."
+    hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
-    macros="DeviceName=MIMXRT1064"
-    arm_fpu_type="FPv5-D16"
-    hidden="Yes"/>
+    macros="DeviceName=MIMXRT1064" />
   <configuration
     Name="1170"
     Target="MIMXRT1176DVMAA_cm7"
+    arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1176DVMAA_cm7"
     c_user_include_directories=".;./iMXRT1170/."
+    hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT117x_cm7.xml"
-    macros="DeviceName=MIMXRT1176_cm7;Family=iMXRT1170"
-    arm_fpu_type="FPv5-D16"
-    hidden="Yes"/>
+    macros="DeviceName=MIMXRT1176_cm7;Family=iMXRT1170" />
   <configuration
     Name="MIMXRT1011_Debug"
     build_output_file_name="Loader_iMXRT1011_Debug.elf"

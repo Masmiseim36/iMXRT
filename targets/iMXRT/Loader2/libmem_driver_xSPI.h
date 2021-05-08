@@ -143,9 +143,9 @@ public:
 	status_t WaitBusBusy (void)
 	{
 		// Wait status ready.
-		bool isBusy;
-		uint32_t readValue;
-		status_t status;
+		bool isBusy{false};
+		uint32_t readValue{};
+		status_t status{};
 
 		do
 		{

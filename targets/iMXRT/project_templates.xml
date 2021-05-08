@@ -98,7 +98,7 @@
 		<property name="arm_fpu_type" value="FPv5-SP-D16" />
 		<property name="arm_v8M_has_cmse" value="Yes" />
 		<property name="arm_v8M_has_dsp" value="Yes" />
-		<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x00020000;0x00060000;RAM;0x00080000;0x00180000;RAM;0x00200000;0x00280000;RAM;0x40140000;0x00004000" />
+		<property name="arm_simulator_memory_simulation_parameter" value="ROM;0x08000000;0x08000000;RAM;0x00000000;0x00480000;RAM;0x10000000;0x00480000;RAM;0x20000000;0x00480000;RAM;0x30000000;0x00480000" />
 		<property name="debug_startup_completion_point" value="main" />
 		<property name="target_connect_script" value="Connect()" />
 		<property name="target_get_partname_script" value="GetPartName()" />

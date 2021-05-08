@@ -1,6 +1,7 @@
 *.hzs
 *.hzq
 *.map
+*Debug.elf
 Loader_CM33 MIMXRT600_Release
 Loader_CM33 MIMXRT600_Debug
 Loader_CM7 MIMXRT1011_Release

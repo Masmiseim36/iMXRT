@@ -47,7 +47,7 @@
       arm_fpu_type="FPv5-SP-D16"
       arm_linker_heap_size="1024"
       arm_linker_stack_size="2048"
-      arm_simulator_memory_simulation_parameter="RAM;0x1FFE0000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20240000;0x00080000;ROM;0x30000000;0x04000000"
+      arm_simulator_memory_simulation_parameter="ROM;0x08000000;0x08000000;RAM;0x00000000;0x00480000;RAM;0x10000000;0x00480000;RAM;0x20000000;0x00480000;RAM;0x30000000;0x00480000"
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
       arm_target_loader_reset_after_download="No"
