@@ -106,7 +106,13 @@ function OnTargetStop_11xx_M4 ()
 function Connect ()
 {
 	var DeviceName = GetProjectPartName ();
+	if (TargetInterface.implementation() == "j-link")
+	{
+		TargetInterface.message ("## Connect to " + DeviceName + " with j-link");
+		return;
+	}
 	TargetInterface.message ("## Connect to " + DeviceName);
+
 	switch (DeviceName)
 	{
 		case "MIMXRT633":
@@ -122,7 +128,7 @@ function Connect ()
 		case "MIMXRT1062":
 		case "MIMXRT1064":
 			// Do nothing
-//			TargetInterface.setNSRST();
+//			TargetInterface.setNSRST(0);
 			break;
 		case "MIMXRT1165_cm7":
 		case "MIMXRT1166_cm7":
@@ -133,6 +139,10 @@ function Connect ()
 		case "MIMXRT1176_cm7":
 			TargetInterface.setDeviceTypeProperty ("CORTEX-M7");
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FD000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FE000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FF000);
+
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000E000);
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0001000);
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0002000);
@@ -149,6 +159,10 @@ function Connect ()
 		case "MIMXRT1176_cm4":
 			TargetInterface.setDeviceTypeProperty ("CORTEX-M4");
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FD000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FE000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FF000);
+
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000E000);
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0001000);
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0002000);
@@ -175,6 +189,12 @@ function GetPartName ()
 	TargetInterface.message ("## get part name of " + DeviceName);
 
 	var PART = "";
+
+	if (TargetInterface.implementation() == "j-link")
+	{
+		TargetInterface.message ("## get part name of " + DeviceName + " with J-Link done");
+		return PART;
+	}
 
 	switch (DeviceName)
 	{

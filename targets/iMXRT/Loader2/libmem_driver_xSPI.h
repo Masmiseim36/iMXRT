@@ -41,6 +41,7 @@ enum LUT_CommandOffsets
 
 	LUT_EnterQPI        = 7,
 	LUT_ReturnSPI       = 7,
+	LUT_WriteStatusReg  = 8,
 	LUT_EnterQPI_Atmel  = 10,
 	LUT_EnterQPI_ISSI   = 12,
 

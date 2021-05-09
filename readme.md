@@ -65,9 +65,13 @@ The lowest Nibble of the parameter is used to configure the first FlexSPI-Interf
 * Adesto
   * AT25SF128A-SHB-T
   * ATXP032
+* CYPRESS
+  * S26KS512SDPBHI020
+* Macronix
+  * MX25L6433F
+  * MX25UW6345G
+  * MX25UM51345G
 * ISSI
   * IS25LP064A-JBLE
   * IS25WP064A-JBLE
   * IS25WP128-JBLE
-* CYPRESS
-  * S26KS512SDPBHI020

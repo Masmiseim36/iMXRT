@@ -72,30 +72,13 @@ namespace Macronix
 			return LibmemStaus_Error;
 
 		DebugPrint ("Found Macronix Flash\r\n");
-		if (MemType == MemType_QuadSPI)
+		if (MemType == MemType_SPI)
+		{
+			flexSPI.UpdateLUT (0, LUT_SPI);
+		}
+		else if (MemType == MemType_QuadSPI)
 		{
 			flexSPI.UpdateLUT (0, LUT_QuadSPI);
-	
-	/*		uint32_t StateReg = 0;
-			status_t stat = flexSPI.ReadStatusRegister (0, StateReg);
-			if (stat != kStatus_Success)
-				return LibmemStaus_Error;
-
-			StateReg |= (1U<<6U);	// Enable Quad Mode (Status Register)
-			StateReg |= (1U<<6U) << 8U; // Set 10 dummy cycle on 4READ (Configuration Register)
-	
-			stat = flexSPI.WriteEnable (0);
-			if (stat != kStatus_Success)
-				return LibmemStaus_Error;
-
-			// Write to status register 1 / control register to enable QuadSPI
-			stat = flexSPI.WriteRegister (0U, StateReg, 8, 2);
-			if (stat != kStatus_Success)
-				return LibmemStaus_Error; */
-	/*
-			stat = flexSPI.ReadStatusRegister (0, &StateReg);
-			if (stat != kStatus_Success)
-				return LibmemStaus_Error;*/
 		}
 		else
 		{

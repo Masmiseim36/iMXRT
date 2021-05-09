@@ -31,16 +31,10 @@ namespace Macronix
 	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info, flexspi_config_t &config, flexspi_device_config_t &DeviceConfig);
 	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &Info);
 	
-	// LUT for Macronix Quad SPI
-	constexpr FlexSPI_LUT LUT_QuadSPI
+	// LUT for Macronix SPI
+	constexpr FlexSPI_LUT LUT_SPI
 	{
 		// (0) Read Array --> compare @LUT_CommandOffsets
-		// Read with 4READ
-	//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xEB, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 24),
-	//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_1PAD, 0x06, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 0x04),
-		// Read with QREAD
-	//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x6B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 24),
-	//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_1PAD, 0x08, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 128),
 		// Read with normal read
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x03, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 24),
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_SDR,  kFLEXSPI_1PAD, 128,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
@@ -66,12 +60,72 @@ namespace Macronix
 		0,	// Dummy to fill a block of four
 
 		// (4) Page Program --> compare @LUT_CommandOffsets
-		// quad page program (4pp)
-	//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x38, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 24),
-	//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR, kFLEXSPI_4PAD, 128,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 		// normal page program
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x02, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 24),
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR, kFLEXSPI_1PAD, 128,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (5) Block Erase 4K / Sector Erase --> compare @LUT_CommandOffsets
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x20, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 24),
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (6) Chip Erase --> compare @LUT_CommandOffsets
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xC7, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),	
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (7) free
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		
+		// (8) Write Status/Control Registers --> compare @LUT_CommandOffsets
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x01, kFLEXSPI_Command_WRITE_SDR, kFLEXSPI_1PAD, 0x04),
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+	};
+
+	// LUT for Macronix Quad SPI
+	constexpr FlexSPI_LUT LUT_QuadSPI
+	{
+		// (0) Read Array --> compare @LUT_CommandOffsets
+		// Read with 4READ
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xEB, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 24),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD,   6, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 0x08),
+		// Read with QREAD
+	//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x6B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 24),
+	//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_1PAD, 0x08, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 128),
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		
+		// (1) Read Status --> compare @LUT_CommandOffsets
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x05, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_1PAD, 0x04),
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (2) Read ID --> compare @LUT_CommandOffsets
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x9F, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_1PAD, 24),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (3) Write Enable --> compare @LUT_CommandOffsets
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x06, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (4) Page Program --> compare @LUT_CommandOffsets
+		// quad page program (4pp)
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x38, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 24),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR, kFLEXSPI_4PAD, 255,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 
