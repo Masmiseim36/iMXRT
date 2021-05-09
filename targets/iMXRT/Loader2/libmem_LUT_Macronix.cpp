@@ -75,21 +75,24 @@ namespace Macronix
 		if (MemType == MemType_QuadSPI)
 		{
 	/*
-			uint8_t StateReg = 0;
-			status_t stat = ReadStatusRegister (base, 0, &StateReg);
-			if (stat != kStatus_Success)
-				return LibmemStaus_Error; */
-	/*
-			status_t stat = WriteEnable (base, 0);
+			uint32_t StateReg = 0;
+			status_t stat = flexSPI.ReadStatusRegister (0, StateReg);
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
 
-			// Write to status register 1 to enable QuadSPI
-			stat = WriteRegister (base, 0U, 0x40U, LUT_WriteConfigReg1_Macronix);
+			StateReg |= (1U<<6U);	// Enable Quad Mode (Status Register)
+			StateReg |= (1U<<6U) << 8U; // Set 10 dummy cycle on 4READ (Configuration Register)
+	
+			stat = flexSPI.WriteEnable (0);
+			if (stat != kStatus_Success)
+				return LibmemStaus_Error;
+
+			// Write to status register 1 / control register to enable QuadSPI
+			stat = flexSPI.WriteRegister (0U, StateReg, LUT_WriteConfigReg1_Macronix, 2);
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error; */
 	/*
-			stat = ReadStatusRegister (base, 0, &StateReg);
+			stat = flexSPI.ReadStatusRegister (0, &StateReg);
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;*/
 			flexSPI.UpdateLUT (0, LUT_QuadSPI);

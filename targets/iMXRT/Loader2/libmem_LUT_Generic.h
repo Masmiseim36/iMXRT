@@ -109,7 +109,7 @@ namespace Generic
 		0,	// Dummy to fill a block of four
 
 		// (13) Write Configuration Register 1 (Macronix) --> compare @LUT_CommandOffsets
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x01,kFLEXSPI_Command_WRITE_SDR,  kFLEXSPI_1PAD, 1),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x01,kFLEXSPI_Command_WRITE_SDR,  kFLEXSPI_1PAD, 8),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four

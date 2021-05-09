@@ -430,20 +430,6 @@ static status_t ReadJEDEC (FlexSPI_Helper *base, struct DeviceInfo *Info)
 }
 
 
-[[maybe_unused]] static status_t ReadStatusRegister (FlexSPI_Helper *base, uint8_t Address, uint8_t *value)
-{
-	flexspi_transfer_t flashXfer;
-	flashXfer.port          = FlexSPI_Helper::port;
-	flashXfer.cmdType       = kFLEXSPI_Read;
-	flashXfer.SeqNumber     = 1;
-	flashXfer.seqIndex      = LUT_ReadStatus;
-	flashXfer.deviceAddress = Address;
-	flashXfer.data          = (uint32_t *)value;
-	flashXfer.dataSize      = 1;
-	return FLEXSPI_TransferBlocking (base, &flashXfer);
-}
-
-
 /*! EraseChip:
 Erase the whole-Flash-memory
 \param base The FlexSPI-Interface where the Flash is located which should be erased

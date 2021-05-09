@@ -103,11 +103,26 @@ public:
 		{
 			Address,					// deviceAddress	- Operation device address.
 			port,						// port				- Operation port
-			kFLEXSPI_Read,		        // cmdType			- Execution command type.
+			kFLEXSPI_Read,				// cmdType			- Execution command type.
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
-			1,					        // SeqNumber		- Sequence number for command.
-			&value,				        // data				- Data buffer.
-			1					        // dataSize			- Data size in bytes.
+			1,							// SeqNumber		- Sequence number for command.
+			&value,						// data				- Data buffer.
+			1							// dataSize			- Data size in bytes.
+		};
+		return FLEXSPI_TransferBlocking (this, &flashXfer);
+	}
+
+	status_t ReadStatusRegister (uint32_t Address, uint32_t &value)
+	{
+		flexspi_transfer_t flashXfer
+		{
+			Address,					// deviceAddress	- Operation device address.
+			port,						// port				- Operation port
+			kFLEXSPI_Read,				// cmdType			- Execution command type.
+			LUT_ReadStatus,				// seqIndex			- Sequence ID for command.
+			1,							// SeqNumber		- Sequence number for command.
+			&value,						// data				- Data buffer.
+			1							// dataSize			- Data size in bytes.
 		};
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
 	}
@@ -118,11 +133,11 @@ public:
 		{
 			Address,					// deviceAddress	- Operation device address.
 			port,						// port				- Operation port
-			kFLEXSPI_Command,	        // cmdType			- Execution command type.
+			kFLEXSPI_Command,			// cmdType			- Execution command type.
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
-			1,					        // SeqNumber		- Sequence number for command.
-			nullptr,			        // data				- Data buffer.
-			0					        // dataSize			- Data size in bytes.
+			1,							// SeqNumber		- Sequence number for command.
+			nullptr,					// data				- Data buffer.
+			0							// dataSize			- Data size in bytes.
 		};
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
 	}
