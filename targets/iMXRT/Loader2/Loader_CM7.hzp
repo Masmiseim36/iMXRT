@@ -174,7 +174,6 @@
       arm_simulator_memory_simulation_parameter="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000"
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
-      arm_target_loader_parameter="666"
       arm_target_loader_reset_after_download="No"
       batch_build_configurations="MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1170_Release"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(PackagesDir)/libraries/libmem_drivers"
@@ -193,8 +192,8 @@
       property_groups_file_path="$(ProjectDir)/../propertyGroups.xml"
       target_connect_script="Connect()"
       target_get_partname_script="GetPartName()"
-      target_reset_script="Reset()"
-      target_script_file="iMXRT_Target.js" />
+      target_reset_script="Reset_Loader()"
+      target_script_file="$(ProjectDir)/../iMXRT_Target.js" />
     <folder Name="System Files">
       <file file_name="thumb_crt0.s" />
       <file file_name="../system_$(DeviceName).h" />
@@ -203,7 +202,7 @@
       <file file_name="../$(DeviceName)_features.h" />
       <file file_name="../fsl_device_registers.h" />
       <file file_name="startup.s" />
-      <file file_name="iMXRT_Target.js">
+      <file file_name="$(ProjectDir)/../iMXRT_Target.js">
         <configuration Name="Common" file_type="Target Script" />
       </file>
       <configuration Name="Common" gcc_c_language_standard="gnu11" />

@@ -38,7 +38,7 @@ OF SUCH DAMAGE. */
 static libmem_driver_paged_write_ctrlblk_t paged_write_ctrlblk;
 
 
-static flexspi_device_config_t deviceconfig =
+static flexspi_device_config_t DeviceConfig =
 {
 	.flexspiRootClk       = 0, // SPI root clock (will be set up later)
 	.isSck2Enabled        = false,
@@ -180,7 +180,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			default:
 				return LibmemStaus_InvalidDevice;
 		}
-//		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
+		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
 		CLOCK_SetRootClockDiv (FlexSPIClock, 4); // --> 396 MHz / 4 = ~100 MHz
 		CLOCK_SetRootClockMux (FlexSPIClock, 6); // ClockSource_SysPll2Pfd2 --> 396 MHz  -  SYSPLL2=528 MHz
 		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
@@ -189,7 +189,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	#else
 		#error "unknon controller family"
 	#endif
-	deviceconfig.flexspiRootClk = ClockHz;
+	DeviceConfig.flexspiRootClk = ClockHz;
 
 	// Get FLEXSPI default settings and configure the FlexSPI.
 	flexspi_config_t config {};
@@ -205,7 +205,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	config.rxSampleClock                  = kFLEXSPI_ReadSampleClkLoopbackInternally;
 
 	FLEXSPI_Init           (base, &config);
-	FLEXSPI_SetFlashConfig (base, &deviceconfig, FlexSPI_Helper::port);        // Configure flash settings according to serial flash feature.
+	FLEXSPI_SetFlashConfig (base, &DeviceConfig, FlexSPI_Helper::port);   // Configure flash settings according to serial flash feature.
 	FLEXSPI_UpdateLUT      (base, 0, &Generic::LUT_SPI.front(), Generic::LUT_SPI.size()); // Update LUT table
 	FLEXSPI_SoftwareReset  (base);                                        // Do software reset.
 
@@ -228,14 +228,14 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	LibmemStatus_t res = LibmemStaus_Success;
 	if (Info.ManufactureID == ManufactureID_AdestoTechnologies)
 	{
-		res = Adesto::Initialize (*base, MemType, Info, config);
+		res = Adesto::Initialize (*base, MemType, Info, config, DeviceConfig);
 	}
 	else if (Info.ManufactureID == ManufactureID_Atmel)
 	{
 		DebugPrint ("Found Atmel Flash\r\n");
 		if (Info.Type == 0xA8)
 		{
-			res = Adesto::Initialize (*base, MemType, Info, config);
+			res = Adesto::Initialize (*base, MemType, Info, config, DeviceConfig);
 		}
 		else
 		{
@@ -295,13 +295,17 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			   (defined MIMXRT1064_SERIES))
 			ClockDiv = 2;
 			CLOCK_SetDiv (FlexSPIDiv, ClockDiv-1);	// flexspi clock divide by two --> 240 Mz.
-			deviceconfig.flexspiRootClk = SourceClock_Hz / ClockDiv;
-			deviceconfig.flexspiRootClk = ClockHz;
-		#elif (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
-			  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
+			DeviceConfig.flexspiRootClk = SourceClock_Hz / ClockDiv;
+			DeviceConfig.flexspiRootClk = ClockHz;
+		#elif (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || \
+			  (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1176_cm7_SERIES) || \
+			  (defined MIMXRT1173_cm4_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm4_SERIES)
+/*			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
 			CLOCK_SetRootClockMux (FlexSPIClock, 5); // ClockSource_SysPll2 --> 528 MHz
 			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 525 MHz / 2 = ~264 MHz
-			deviceconfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
+			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On); */
+			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 396 MHz / 2 = ~200 MHz
+			DeviceConfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
 		#else
 			#error "unknon controller family"
 		#endif
@@ -309,13 +313,13 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 
 	// Use the size information from the JEDEC-Information to configure the Interface
 	uint32_t FlashSize = CalculateCapacity_KBytes (Info.Capacity);
-	deviceconfig.flashSize = FlashSize;
+	DeviceConfig.flashSize = FlashSize;
 	geometry[0].count = FlashSize / (4096 / 1024);
 	FlashSize *= 1024;	// Convert kBytes to bytes
 
 	// changing the clock sourece requires reinit
 //	FLEXSPI_Init (base, &config);
-	FLEXSPI_SetFlashConfig (base, &deviceconfig, FlexSPI_Helper::port);	// Configure flash settings according to serial flash feature.
+	FLEXSPI_SetFlashConfig (base, &DeviceConfig, FlexSPI_Helper::port);	// Configure flash settings according to serial flash feature.
 
 	if (lut != nullptr)
 		// Update the LUT
@@ -571,14 +575,7 @@ The LIBMEM driver's flush function.
 \return int The LIBMEM status result */
 static int libmem_Flush (libmem_driver_handle_t *h)
 {
-	int res = libmem_driver_paged_write_flush (h, &paged_write_ctrlblk);
-	if (res == LIBMEM_STATUS_SUCCESS)
-	{
-		FlexSPI_Helper *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
-		return base->WaitBusBusy ();
-	}
-
-	return res;
+	return libmem_driver_paged_write_flush (h, &paged_write_ctrlblk);
 }
 
 /*! libmem_Read:

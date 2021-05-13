@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Original work Copyright (c) 2016 Rowley Associates Limited.               *
- * Modified work Copyright (C) 2021 Markus Klein                             *
+ * Modified work Copyright (C) 2019-2021 Markus Klein                        *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
@@ -72,7 +72,7 @@ function OnTargetStop_11xx_M4 ()
 	var CCM_LPCG_LmemDirect = TargetInterface.peekUint32 (CCM_LPCG_LMEM);
 	if (CCM_LPCG_LmemDirect == 0)
 	{
-		TargetInterface.message ("## OnTargetStop_11xx_M4 - cACHE IS CLOCKGATED");
+		TargetInterface.message ("## OnTargetStop_11xx_M4 - cache is clockgated");
 		return;	// cache is clock gate, so no need to clear it
 	}
 
@@ -131,7 +131,7 @@ function Connect ()
 		case "MIMXRT1176_cm7":
 			TargetInterface.setDeviceTypeProperty ("CORTEX-M7");
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000e000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000E000);
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0001000);
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0002000);
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0000000);
@@ -145,7 +145,7 @@ function Connect ()
 		case "MIMXRT1176_cm4":
 			TargetInterface.setDeviceTypeProperty ("CORTEX-M4");
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000e000);
+			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000E000);
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0001000);
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0002000);
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0000000);
@@ -169,6 +169,8 @@ function GetPartName ()
 {
 	var DeviceName = GetProjectPartName ();
 	TargetInterface.message ("## get part name of " + DeviceName);
+
+	var PART = "";
 
 	switch (DeviceName)
 	{
@@ -214,6 +216,11 @@ function GetPartName ()
 			break;
 		case "MIMXRT1171_cm7":
 		case "MIMXRT1172_cm7":
+			// ToDo: read the chip silicon version
+/*			var MiscDifproc = TargetInterface.peekUint32 (0x40C84800); // ANADIG_MISC-->MISC_DIFPROG (Chip Silicon Version Register)
+			MiscDifproc &= 0x00FFFF00;
+			MiscDifproc >>= 8;
+			PART = "MIMXRT" + MiscDifproc.toString(16)); */
 			break;
 		case "MIMXRT1173_cm7":
 		case "MIMXRT1175_cm7":
@@ -232,7 +239,6 @@ function GetPartName ()
 
 	TargetInterface.message ("## get part name of " + DeviceName + " done");
 
-	var PART = "";
 	return PART;
 }
 
@@ -244,6 +250,34 @@ function MatchPartName (name)
 		return false;
 
 	return partName.substring (0, 6) == name.substring (0, 6);
+}
+
+function Release_11xx_M4 ()
+{
+	// Setup some spin code into an area of D-TCM (0x2021FF00)
+	TargetInterface.pokeUint32 (0x2021FF00, 0xE7FEE7FE); // 0x2021FF00 OCRAM -->0x2001FF00 DTCM
+	TargetInterface.pokeUint32 (0x2021FF04, 0x2021FF01);
+	// Set top/bottom 16 bits of RAM address into CM4 VTOR iomuxc_lpsr_GPR0/1
+	TargetInterface.pokeUint32 (IOMUXC_LPSR_GPR0, 0xFF00);
+	TargetInterface.pokeUint32 (IOMUXC_LPSR_GPR1, 0x2021);
+
+	// Set m4_clk_root to OSC_RC_400M / 2: CLOCK_ROOT1 = mux(2), div(1)
+	TargetInterface.pokeUint32 (CCM_CLOCK_ROOT_M4_CONTROL, 0x201);
+
+	// Save current reset SRMR and prevent M4 SW reset affecting the system
+	var srmr = TargetInterface.peekUint32 (SRC_SRMR);
+	TargetInterface.pokeUint32 (SRC_SRMR, 0x00000C00);
+	TargetInterface.pokeUint32 (SRC_CTRL_M4CORE, 0x1);
+	TargetInterface.pokeUint32 (SRC_SRMR, srmr);
+
+	// Release M4 if needed
+	var scr = TargetInterface.peekUint32 (SRC_SCR);
+	if ((scr & 0x1) == 0)
+	{
+		// Releasing M4
+		scr |= 1;
+		TargetInterface.pokeUint32 (SRC_SCR, scr);
+	}
 }
 
 function Reset_11xx_M4 ()
@@ -331,14 +365,22 @@ function Reset_11xx_M7 ()
 		reg = TargetInterface.peekUint32 (SRC_STAT_MEGA);
 		reg &= 0x1;
 	}
-	TargetInterface.delay (10);
-	TargetInterface.message ("## Reset_11xx_M7 Step 3");/* */
+	TargetInterface.delay (10); /* */
 }
 
 function Reset ()
 {
 	if (TargetInterface.implementation() == "crossworks_simulator")
 		return;
+
+	FlexRAM_Restore ();
+
+	if (TargetInterface.implementation() == "j-link")
+	{
+//		TargetInterface.resetAndStop (1000);
+		TargetInterface.stop ();
+		return;
+	}
 
 	var DeviceName = GetProjectPartName ();
 	TargetInterface.message ("## Reset " + DeviceName);
@@ -362,21 +404,25 @@ function Reset ()
 		case "MIMXRT1171_cm7":
 		case "MIMXRT1172_cm7":
 			TargetInterface.resetAndStop (1000);
-			Reset_11xx_M7 ();
+			Clock_Restore_117x ();
+			if (!TargetInterface.isStopped ())
+				TargetInterface.stop ();
 			break;
 		case "MIMXRT1173_cm7":
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
 			TargetInterface.resetAndStop (1000);
-			TargetInterface.pokeUint32 (SRC_CTRL_M4CORE, 2);
-			Reset_11xx_M7 ();
-			TargetInterface.pokeUint32 (SRC_SCR, 0x1);				// SRC->SCR Enable CM4 -> cm4 core reset is released
+			Release_11xx_M4 ();
+			Clock_Restore_117x ();
+			if (!TargetInterface.isStopped ())
 				TargetInterface.stop ();
 			break;
 		case "MIMXRT1173_cm4":
 		case "MIMXRT1175_cm4":
 		case "MIMXRT1176_cm4":
-			Reset_11xx_M4 ();
+			Clock_Restore_117x ();
+//			TargetInterface.stop ();
+			if (!TargetInterface.isStopped ())
 				TargetInterface.stop ();
 			break;
 		default:
@@ -432,7 +478,7 @@ function EnableTrace (traceInterfaceType)
 function GetProjectPartName ()
 {
 	var TargetFullName = TargetInterface.getProjectProperty ("Target");
-	var TargetShort
+	var TargetShort;
 	if (TargetFullName.charAt(9) > '9')
 		TargetShort = TargetFullName.substring (0, 9);	// Three digits number in the target name
 	else
@@ -454,6 +500,76 @@ function GetProjectPartName ()
 	}
 
 	return TargetShort;
+}
+
+function FlexRAM_Restore ()
+{
+	var IOMUXC_GPR       = 0x400AC000;
+	var IOMUXC_GPR_GPR16 = IOMUXC_GPR + 0x40;
+	var IOMUXC_GPR_GPR17 = IOMUXC_GPR + 0x44;
+	var DeviceName = GetProjectPartName ();
+
+	switch (DeviceName)
+	{
+		case "MIMXRT1011":
+		case "MIMXRT1015":
+			TargetInterface.pokeUint32 (IOMUXC_GPR_GPR17, 0xE5);		// 64 KByte OCRAM - 32 kByte ITCM - 32 kByte DTCM
+			break;
+		case "MIMXRT1021":
+		case "MIMXRT1024":
+			TargetInterface.pokeUint32 (IOMUXC_GPR_GPR17, 0x5FA5);		// 128 KByte OCRAM - 64 kByte ITCM - 64 kByte DTCM
+			break;
+		case "MIMXRT1051":
+		case "MIMXRT1052":
+		case "MIMXRT1061":
+		case "MIMXRT1062":
+		case "MIMXRT1064":
+			TargetInterface.pokeUint32 (IOMUXC_GPR_GPR17, 0x55AFFA55);	// 256 KByte OCRAM - 128 kByte ITCM - 128 kByte DTCM
+			break;
+		case "MIMXRT1171_cm7":
+		case "MIMXRT1172_cm7":
+		case "MIMXRT1173_cm7":
+		case "MIMXRT1175_cm7":
+		case "MIMXRT1176_cm7":
+			IOMUXC_GPR           = 0x400E4000;
+			IOMUXC_GPR_GPR16     = IOMUXC_GPR + 0x40;
+			IOMUXC_GPR_GPR17     = IOMUXC_GPR + 0x44;
+			var IOMUXC_GPR_GPR18 = IOMUXC_GPR + 0x48;
+
+			TargetInterface.pokeUint32 (IOMUXC_GPR_GPR17, 0xFFAA);		// 0 KByte OCRAM - 256 kByte ITCM - 256 kByte DTCM
+			TargetInterface.pokeUint32 (IOMUXC_GPR_GPR18, 0xFFAA);
+			break;
+		default:
+			TargetInterface.message ("FlexRAM_Restore - unknown Device: " + DeviceName);
+			return;
+	}
+
+	var gpr16 = TargetInterface.peekUint32 (IOMUXC_GPR_GPR16);
+	gpr16 |= (1 << 2);	// Set FLEXRAM_BANK_CFG_SEL Flag to use FLEXRAM_BANK_CFG config
+	TargetInterface.pokeUint32 (IOMUXC_GPR_GPR16, gpr16);
+}
+
+function ClockGate_EnableAll_10xx ()
+{
+	// Enable all clocks
+	TargetInterface.pokeUint32 (0x400FC068, 0xffffffff);	// CCM->CCGR0
+	TargetInterface.pokeUint32 (0x400FC06C, 0xffffffff);	// CCM->CCGR1
+	TargetInterface.pokeUint32 (0x400FC070, 0xffffffff);	// CCM->CCGR2
+	TargetInterface.pokeUint32 (0x400FC074, 0xffffffff);	// CCM->CCGR3
+	TargetInterface.pokeUint32 (0x400FC078, 0xffffffff);	// CCM->CCGR4
+	TargetInterface.pokeUint32 (0x400FC07C, 0xffffffff);	// CCM->CCGR5
+	TargetInterface.pokeUint32 (0x400FC080, 0xffffffff);	// CCM->CCGR6
+}
+
+function DisableMPU ()
+{
+	TargetInterface.message ("### DisableMPU");
+
+	var MPU = 0xE000E000 + 0x0D90;	// SCS_BASE + MPU offset
+	// Disable MPU which will be enabled by ROM to prevent code execution
+	var reg = TargetInterface.peekUint32 (MPU + 0x04);		// MPU->CTRL
+	reg &= ~0x1;											// Disable Enable Flag
+	TargetInterface.pokeUint32 (MPU + 0x04, reg);
 }
 
 function Clock_Init ()
@@ -487,29 +603,6 @@ function Clock_Init ()
 			TargetInterface.message ("Clock_Init - unknown Device: " + DeviceName);
 			break;
 	}
-}
-
-function ClockGate_EnableAll_10xx ()
-{
-	// Enable all clocks
-	TargetInterface.pokeUint32 (0x400FC068, 0xffffffff);	// CCM->CCGR0
-	TargetInterface.pokeUint32 (0x400FC06C, 0xffffffff);	// CCM->CCGR1
-	TargetInterface.pokeUint32 (0x400FC070, 0xffffffff);	// CCM->CCGR2
-	TargetInterface.pokeUint32 (0x400FC074, 0xffffffff);	// CCM->CCGR3
-	TargetInterface.pokeUint32 (0x400FC078, 0xffffffff);	// CCM->CCGR4
-	TargetInterface.pokeUint32 (0x400FC07C, 0xffffffff);	// CCM->CCGR5
-	TargetInterface.pokeUint32 (0x400FC080, 0xffffffff);	// CCM->CCGR6
-}
-
-function DisableMPU ()
-{
-	TargetInterface.message ("### DisableMPU");
-
-	var MPU = 0xE000E000 + 0x0D90;	// SCS_BASE + MPU offset
-	// Disable MPU which will be enabled by ROM to prevent code execution
-	var reg = TargetInterface.peekUint32 (MPU + 0x04);		// MPU->CTRL
-	reg &= ~0x1;											// Disable Enable Flag
-	TargetInterface.pokeUint32 (MPU + 0x04, reg);
 }
 
 function Clock_Init_1021 () 
@@ -1168,4 +1261,13 @@ function FLEXSPI_Init (FlexSPI)
 	TargetInterface.pokeMultUint32 (FlexSPI_FLSHCR0, [0x0, 0x0, 0x0, 0x0]);
 
 	AlterRegister                  (FlexSPI_MCR0,  0, 1);	// Perform a SW-Reset
+}
+
+
+function Reset_Loader ()
+{
+	Reset ();
+	TargetInterface.message ("## Reset_Loader");
+	TargetInterface.setRegister ("r0", 1);
+	TargetInterface.setRegister ("r1", 1);
 }

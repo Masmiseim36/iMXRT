@@ -2,10 +2,10 @@
 <solution Name="iMXRT Loader CM33" target="8" version="2">
   <configuration
     Name="Common"
-    clang_tidy_checks_cpp="*;-llvm*;-fuchsia*;-modernize-use-trailing-return-type;-*braces-around-statements;-*magic-numbers;-cppcoreguidelines-pro-bounds-constant-array-index;-google-readability-namespace-comments"
     c_additional_options="-fno-signed-char;-Wno-narrowing;-Wall;-Wextra;-Wmisleading-indentation;-Wshadow;-Wdouble-promotion;-Wformat=2"
     c_preprocessor_definitions="__THUMB;STARTUP_FROM_RESET=1;DISABLE_WDOG=1"
     c_preprocessor_undefinitions="__STDCPP_THREADS__"
+    clang_tidy_checks_cpp="*;-llvm*;-fuchsia*;-modernize-use-trailing-return-type;-*braces-around-statements;-*magic-numbers;-cppcoreguidelines-pro-bounds-constant-array-index;-google-readability-namespace-comments"
     cpp_only_additional_options="-Woverloaded-virtual;-Wnon-virtual-dtor" />
   <configuration
     Name="Debug"
@@ -44,7 +44,9 @@
       Placement="SRAM"
       arm_architecture="v8M_Mainline"
       arm_core_type="Cortex-M33"
+      arm_fp_abi="Hard"
       arm_fpu_type="FPv5-SP-D16"
+      arm_library_optimization="Small"
       arm_linker_heap_size="1024"
       arm_linker_stack_size="2048"
       arm_simulator_memory_simulation_parameter="ROM;0x08000000;0x08000000;RAM;0x00000000;0x00480000;RAM;0x10000000;0x00480000;RAM;0x20000000;0x00480000;RAM;0x30000000;0x00480000"
@@ -56,7 +58,7 @@
       batch_build_configurations="MIMXRT600_Release"
       c_additional_options="-fno-signed-char;-Wno-narrowing;-Wall;-Wextra;-Wmisleading-indentation;-Wshadow;-Wdouble-promotion;-Wformat=2"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
-      c_user_include_directories=". ;./.."
+      c_user_include_directories=".;./.."
       cpp_only_additional_options="-Woverloaded-virtual;-Wnon-virtual-dtor"
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
       debug_startup_completion_point="main"
@@ -73,20 +75,20 @@
       property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml"
       target_connect_script="Connect()"
       target_get_partname_script="GetPartName()"
-      target_reset_script="Reset()"
-      target_script_file="$(ProjectDir)/iMXRT_Target.js" />
-    <configuration
-      Name="Flash"
-      arm_target_flash_loader_file_path="../Loader2/Loader_$(Family)_M33.elf" />
+      target_reset_script="Reset_Loader()"
+      target_script_file="$(ProjectDir)/../iMXRT_Target.js" />
     <folder Name="System Files">
-      <file file_name="$(StudioDir)/source/thumb_crt0.s" />
-      <file file_name="../startup_$(DeviceName).s" />
+      <file file_name="thumb_crt0.s" />
       <file file_name="../system_$(DeviceName).h" />
       <file file_name="../system_$(DeviceName).c" />
       <file file_name="../$(DeviceName).h" />
       <file file_name="../$(DeviceName)_features.h" />
       <file file_name="../fsl_device_registers.h" />
-      <file file_name="iMXRT_Target.js" />
+      <file file_name="startup.s" />
+      <file file_name="$(ProjectDir)/../iMXRT_Target.js">
+        <configuration Name="Common" file_type="Target Script" />
+      </file>
+      <configuration Name="Common" gcc_c_language_standard="gnu11" />
     </folder>
     <folder Name="drivers">
       <file file_name="fsl_common.c" />

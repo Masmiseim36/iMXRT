@@ -32,16 +32,16 @@ for file in *; do
 		# core: M0, M4, M7,
 		
 		# For Cortex M4 / M7
-#		echo "C:\Program Files\Rowley CrossWorks for ARM 4.7\bin\svd2mm.exe" -pp -core 7 -mpu -fpu -pp -nvic 4 -irq-start 0 -irq-table $filename $file $filename$extension
-#		"C:\Program Files\Rowley CrossWorks for ARM 4.7\bin\svd2mm.exe" -pp -core 7 -mpu -fpu -pp -nvic 4 -irq-start 0 -irq-table $filename $file $filename$extension
+		echo "C:\Program Files\Rowley CrossWorks for ARM 4.8\bin\svd2mm.exe" -pp -core 7 -mpu -fpu -pp -nvic 4 -irq-start 0 -irq-table $filename $file $filename$extension
+		"C:\Program Files\Rowley CrossWorks for ARM 4.8\bin\svd2mm.exe" -pp -core 7 -mpu -fpu -pp -nvic 4 -irq-start 0 -irq-table $filename $file $filename$extension
 
 		# For Cortex M33
-		echo "C:\Program Files\Rowley CrossWorks for ARM 4.7\bin\svd2mm.exe" -pp -core 33 -mpu -fpu -pp -nvic 3 -irq-start 0 -irq-table $filename $file $filename$extension
-		"C:\Program Files\Rowley CrossWorks for ARM 4.7\bin\svd2mm.exe" -pp -core 33 -mpu -fpu -pp -nvic 3 -irq-start 0 -irq-table $filename $file $filename$extension
+#		echo "C:\Program Files\Rowley CrossWorks for ARM 4.8\bin\svd2mm.exe" -pp -core 33 -mpu -fpu -pp -nvic 3 -irq-start 0 -irq-table $filename $file $filename$extension
+#		"C:\Program Files\Rowley CrossWorks for ARM 4.8\bin\svd2mm.exe" -pp -core 33 -mpu -fpu -pp -nvic 3 -irq-start 0 -irq-table $filename $file $filename$extension
 		
 		# For Cortex M0
-#		echo "C:\Program Files\Rowley CrossWorks for ARM 4.7\bin\svd2mm.exe" -pp -core 0 -pp -nvic 2 -irq-start 0 -irq-table $filename $file $filename$extension
-#		"C:\Program Files\Rowley CrossWorks for ARM 4.7\bin\svd2mm.exe" -pp -core 0 -pp -nvic 2 -irq-start 0 -irq-table $filename $file $filename$extension
+#		echo "C:\Program Files\Rowley CrossWorks for ARM 4.8\bin\svd2mm.exe" -pp -core 0 -pp -nvic 2 -irq-start 0 -irq-table $filename $file $filename$extension
+#		"C:\Program Files\Rowley CrossWorks for ARM 4.8\bin\svd2mm.exe" -pp -core 0 -pp -nvic 2 -irq-start 0 -irq-table $filename $file $filename$extension
 	fi 
 done
 

@@ -312,7 +312,7 @@
 		</groupEntry>
 		<groupEntry name="FlexSPI (HYPER)">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
-			<property name="linker_section_placement_macros" value="" />
+			<property name="linker_section_placement_macros" value="FLASH_NAME=FlexSPI" />
 			<property name="arm_target_loader_applicable_loaders" value="Flash" />
 			<property name="arm_target_loader_default_loader" value="Flash" />
 			<property name="arm_target_loader_parameter" value="1" configuration="Flash" />
@@ -327,7 +327,7 @@
 		</groupEntry>
 		<groupEntry name="FlexSPI (OctaSPI)">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
-			<property name="linker_section_placement_macros" value="" />
+			<property name="linker_section_placement_macros" value="FLASH_NAME=FlexSPI" />
 			<property name="arm_target_loader_applicable_loaders" value="Flash" />
 			<property name="arm_target_loader_default_loader" value="Flash" />
 			<property name="arm_target_loader_parameter" value="2" configuration="Flash" />
@@ -341,7 +341,7 @@
 		</groupEntry>
 		<groupEntry name="FlexSPI (QuadSPI)">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
-			<property name="linker_section_placement_macros" value="" />
+			<property name="linker_section_placement_macros" value="FLASH_NAME=FlexSPI" />
 			<property name="arm_target_loader_applicable_loaders" value="Flash" />
 			<property name="arm_target_loader_default_loader" value="Flash" />
 			<property name="arm_target_loader_parameter" value="5" configuration="Flash" />
@@ -356,7 +356,7 @@
 
 		<groupEntry name="FlexSPI2 (HYPER)">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
-			<property name="linker_section_placement_macros" value="" />
+			<property name="linker_section_placement_macros" value="FLASH_NAME=FlexSPI2" />
 			<property name="arm_target_loader_applicable_loaders" value="Flash" />
 			<property name="arm_target_loader_default_loader" value="Flash" />
 			<property name="arm_target_loader_parameter" value="16" configuration="Flash" />
@@ -370,7 +370,7 @@
 		</groupEntry>
 		<groupEntry name="FlexSPI2 (OctaSPI)">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
-			<property name="linker_section_placement_macros" value="" />
+			<property name="linker_section_placement_macros" value="FLASH_NAME=FlexSPI2" />
 			<property name="arm_target_loader_applicable_loaders" value="Flash" />
 			<property name="arm_target_loader_default_loader" value="Flash" />
 			<property name="arm_target_loader_parameter" value="32" configuration="Flash" />
