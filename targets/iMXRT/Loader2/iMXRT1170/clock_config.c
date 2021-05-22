@@ -50,6 +50,29 @@ void BOARD_InitBootClocks(void)
     BOARD_BootClockRUN();
 }
 
+#if defined(XIP_BOOT_HEADER_ENABLE) && (XIP_BOOT_HEADER_ENABLE == 1)
+#if defined(XIP_BOOT_HEADER_DCD_ENABLE) && (XIP_BOOT_HEADER_DCD_ENABLE == 1)
+/* This function should not run from SDRAM since it will change SEMC configuration. */
+AT_QUICKACCESS_SECTION_CODE(void UpdateSemcClock(void));
+void UpdateSemcClock(void)
+{
+    /* Enable self-refresh mode and update semc clock root to 200MHz. */
+    SEMC->IPCMD = 0xA55A000D;
+    while ((SEMC->INTR & 0x3) == 0)
+        ;
+    SEMC->INTR                                = 0x3;
+    SEMC->DCCR                                = 0x0B;
+    /*
+    * Currently we are using SEMC parameter which fit both 166MHz and 200MHz, only
+    * need to change the SEMC clock root here. If customer is using their own DCD and
+    * want to switch from 166MHz to 200MHz, extra SEMC configuration might need to be
+    * adjusted here to fine tune the SDRAM performance
+    */
+    CCM->CLOCK_ROOT[kCLOCK_Root_Semc].CONTROL = 0x602;
+}
+#endif
+#endif
+
 /*******************************************************************************
  ********************** Configuration BOARD_BootClockRUN ***********************
  ******************************************************************************/
@@ -77,7 +100,7 @@ outputs:
 - {id: CSI2_UI_CLK_ROOT.outFreq, value: 24 MHz}
 - {id: CSI_CLK_ROOT.outFreq, value: 24 MHz}
 - {id: CSSYS_CLK_ROOT.outFreq, value: 24 MHz}
-- {id: CSTRACE_CLK_ROOT.outFreq, value: 24 MHz}
+- {id: CSTRACE_CLK_ROOT.outFreq, value: 132 MHz}
 - {id: ELCDIF_CLK_ROOT.outFreq, value: 24 MHz}
 - {id: EMV1_CLK_ROOT.outFreq, value: 24 MHz}
 - {id: EMV2_CLK_ROOT.outFreq, value: 24 MHz}
@@ -211,6 +234,8 @@ settings:
 - {id: CCM.CLOCK_ROOT3.MUX.sel, value: ANADIG_PLL.SYS_PLL3_CLK}
 - {id: CCM.CLOCK_ROOT4.DIV.scale, value: '3'}
 - {id: CCM.CLOCK_ROOT4.MUX.sel, value: ANADIG_PLL.SYS_PLL2_PFD1_CLK}
+- {id: CCM.CLOCK_ROOT6.DIV.scale, value: '4', locked: true}
+- {id: CCM.CLOCK_ROOT6.MUX.sel, value: ANADIG_PLL.SYS_PLL2_CLK}
 - {id: CCM.CLOCK_ROOT68.DIV.scale, value: '2'}
 - {id: CCM.CLOCK_ROOT68.MUX.sel, value: ANADIG_PLL.PLL_VIDEO_CLK}
 - {id: CCM.CLOCK_ROOT8.DIV.scale, value: '240'}
@@ -233,7 +258,7 @@ settings:
 const clock_arm_pll_config_t armPllConfig_BOARD_BootClockRUN =
     {
         .postDivider = kCLOCK_PllPostDiv2,        /* Post divider, 0 - DIV by 2, 1 - DIV by 4, 2 - DIV by 8, 3 - DIV by 1 */
-        .loopDivider = 166,                       /* PLL Loop divider, Fout = Fin * 41.5 */
+        .loopDivider = 166,                       /* PLL Loop divider, Fout = Fin * ( loopDivider / ( 2 * postDivider ) ) */
     };
 
 const clock_sys_pll2_config_t sysPll2Config_BOARD_BootClockRUN =
@@ -335,6 +360,9 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetRootClock(kCLOCK_Root_Bus_Lpsr, &rootCfg);
 #endif
 
+    /*
+    * if DCD is used, please make sure the clock source of SEMC is not changed in the following PLL/PFD configuration code.
+    */
     /* Init Arm Pll. */
     CLOCK_InitArmPll(&armPllConfig_BOARD_BootClockRUN);
 
@@ -383,7 +411,7 @@ void BOARD_BootClockRUN(void)
     /* Init Video Pll. */
     CLOCK_InitVideoPll(&videoPllConfig_BOARD_BootClockRUN);
 
-    /* Moduel clock root configurations. */
+    /* Module clock root configurations. */
     /* Configure M7 using ARM_PLL_CLK */
 #if __CORTEX_M == 7
     rootCfg.mux = kCLOCK_M7_ClockRoot_MuxArmPllOut;
@@ -419,14 +447,20 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetRootClock(kCLOCK_Root_Semc, &rootCfg);
 #endif
 
+#if defined(XIP_BOOT_HEADER_ENABLE) && (XIP_BOOT_HEADER_ENABLE == 1)
+#if defined(XIP_BOOT_HEADER_DCD_ENABLE) && (XIP_BOOT_HEADER_DCD_ENABLE == 1)
+    UpdateSemcClock();
+#endif
+#endif
+
     /* Configure CSSYS using OSC_RC_48M_DIV2 */
     rootCfg.mux = kCLOCK_CSSYS_ClockRoot_MuxOscRc48MDiv2;
     rootCfg.div = 1;
     CLOCK_SetRootClock(kCLOCK_Root_Cssys, &rootCfg);
 
-    /* Configure CSTRACE using OSC_RC_48M_DIV2 */
-    rootCfg.mux = kCLOCK_CSTRACE_ClockRoot_MuxOscRc48MDiv2;
-    rootCfg.div = 1;
+    /* Configure CSTRACE using SYS_PLL2_CLK */
+    rootCfg.mux = kCLOCK_CSTRACE_ClockRoot_MuxSysPll2Out;
+    rootCfg.div = 4;
     CLOCK_SetRootClock(kCLOCK_Root_Cstrace, &rootCfg);
 
     /* Configure M4_SYSTICK using OSC_RC_48M_DIV2 */

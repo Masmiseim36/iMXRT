@@ -190,11 +190,11 @@ ISR_HANDLER2 SAI3_TX                              // SAI3_TX_IRQHandler         
 ISR_HANDLER2 SAI4_RX                              // SAI4_RX_IRQHandler                 - SAI4 interrupt
 ISR_HANDLER2 SAI4_TX                              // SAI4_TX_IRQHandler                 - SAI4 interrupt
 ISR_HANDLER2 SPDIF                                // SPDIF_IRQHandler                   - SPDIF interrupt
-ISR_HANDLER2 ANATOP_TEMP_INT                      // ANATOP_TEMP_INT_IRQHandler         - ANATOP interrupt
-ISR_HANDLER2 ANATOP_TEMP_LOW_HIGH                 // ANATOP_TEMP_LOW_HIGH_IRQHandler    - ANATOP interrupt
-ISR_HANDLER2 ANATOP_TEMP_PANIC                    // ANATOP_TEMP_PANIC_IRQHandler       - ANATOP interrupt
-ISR_HANDLER2 ANATOP_LP8_BROWNOUT                  // ANATOP_LP8_BROWNOUT_IRQHandler     - ANATOP interrupt
-ISR_HANDLER2 ANATOP_LP0_BROWNOUT                  // ANATOP_LP0_BROWNOUT_IRQHandler     - ANATOP interrupt
+ISR_HANDLER2 TMPSNS_INT                           // TMPSNS_INT_IRQHandler              - TMPSNS interrupt
+ISR_HANDLER2 TMPSNS_LOW_HIGH                      // TMPSNS_LOW_HIGH_IRQHandler         - TMPSNS low high interrupt
+ISR_HANDLER2 TMPSNS_PANIC                         // TMPSNS_PANIC_IRQHandler            - TMPSNS panic interrupt
+ISR_HANDLER2 LPSR_LP8_BROWNOUT                    // LPSR_LP8_BROWNOUT_IRQHandler       - LPSR 1p8 brownout interrupt
+ISR_HANDLER2 LPSR_LP0_BROWNOUT                    // LPSR_LP0_BROWNOUT_IRQHandler       - LPSR 1p0 brownout interrupt
 ISR_HANDLER2 ADC1                                 // ADC1_IRQHandler                    - ADC1 interrupt
 ISR_HANDLER2 ADC2                                 // ADC2_IRQHandler                    - ADC2 interrupt
 ISR_HANDLER2 USBPHY1                              // USBPHY1_IRQHandler                 - USBPHY1 interrupt
@@ -246,8 +246,8 @@ ISR_HANDLER2 USB_OTG2                             // USB_OTG2_IRQHandler        
 ISR_HANDLER2 USB_OTG1                             // USB_OTG1_IRQHandler                - USBO2 USB OTG1
 ISR_HANDLER2 ENET                                 // ENET_IRQHandler                    - ENET interrupt
 ISR_HANDLER2 ENET_1588_Timer                      // ENET_1588_Timer_IRQHandler         - ENET_1588_Timer interrupt
-ISR_HANDLER2 ENET_MAC0_Tx_Rx_Done_0               // ENET_MAC0_Tx_Rx_Done_0_IRQHandler  - ENET 1G MAC0 transmit/receive done 0
-ISR_HANDLER2 ENET_MAC0_Tx_Rx_Done_1               // ENET_MAC0_Tx_Rx_Done_1_IRQHandler  - ENET 1G MAC0 transmit/receive done 1
+ISR_HANDLER2 ENET_1G_MAC0_Tx_Rx_1                 // ENET_1G_MAC0_Tx_Rx_1_IRQHandler    - ENET 1G MAC0 transmit/receive 1
+ISR_HANDLER2 ENET_1G_MAC0_Tx_Rx_2                 // ENET_1G_MAC0_Tx_Rx_2_IRQHandler    - ENET 1G MAC0 transmit/receive 2
 ISR_HANDLER2 ENET_1G                              // ENET_1G_IRQHandler                 - ENET 1G interrupt
 ISR_HANDLER2 ENET_1G_1588_Timer                   // ENET_1G_1588_Timer_IRQHandler      - ENET_1G_1588_Timer interrupt
 ISR_HANDLER2 XBAR1_IRQ_0_1                        // XBAR1_IRQ_0_1_IRQHandler           - XBAR1 interrupt

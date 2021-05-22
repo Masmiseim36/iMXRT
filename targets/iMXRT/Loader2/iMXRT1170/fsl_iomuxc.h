@@ -1,6 +1,6 @@
 /*
  * Copyright 2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2020 NXP
+ * Copyright 2016-2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -1672,9 +1672,9 @@ static inline void IOMUXC_SetPinConfig(uint32_t muxRegister,
                                        uint32_t configValue)
 {
     (void)muxRegister;
-	(void)muxMode;
-	(void)inputRegister;
-	(void)inputDaisy;
+    (void)muxMode;
+    (void)inputRegister;
+    (void)inputDaisy;
 
     if (configRegister != 0UL)
     {
