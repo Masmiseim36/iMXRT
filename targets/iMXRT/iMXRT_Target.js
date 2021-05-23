@@ -531,6 +531,11 @@ function FlexRAM_Restore ()
 		case "MIMXRT1173_cm7":
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
+			var FLEXRAM              = 0x40028000;
+			var FLEXRAM_FLEXRAM_CTRL = FLEXRAM + 0x108;
+			// disable FLEXRAM-ECC (enabled by fuse or ROM) and restore the factory defaults (0)
+			TargetInterface.pokeUint32 (FLEXRAM_FLEXRAM_CTRL, 0);
+
 			IOMUXC_GPR           = 0x400E4000;
 			IOMUXC_GPR_GPR16     = IOMUXC_GPR + 0x40;
 			IOMUXC_GPR_GPR17     = IOMUXC_GPR + 0x44;

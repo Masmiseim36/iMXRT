@@ -40,6 +40,10 @@
  *
  *   If defined then the exception vectors are copied from Flash to RAM
  *
+ * DISABLE_ECC_ON_STARTUP
+ *
+ *   If defined then the ECC functionality is disabled on start-up
+ *
  * __NO_FPU
  *
  *   If defined do NOT turn on the FPU
@@ -362,6 +366,13 @@ _vectors_ram:
 
 reset_handler:
 
+#ifdef DISABLE_ECC_ON_STARTUP
+  // disable FLEXRAM-ECC (enabled by fuse or ROM) and restore the factory default
+  // stack memory is not initalized for ECC at this point, temp. disable ECC is required to avoid ECC errors
+  ldr r0, =0x40028000+0x108
+  ldr r1, =0
+  str r1, [r0]
+#endif
 #ifndef __NO_SYSTEM_INIT
   ldr r0, =__stack_end__
   mov sp, r0
