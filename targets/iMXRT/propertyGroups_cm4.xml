@@ -1,6 +1,28 @@
 <!DOCTYPE CrossStudio_Group_Values>
 <propertyGroups>
-	<group short="Target Processor" group="Build Options" long="Select one Controller (CM4)" name="Target" default="MIMXRT1175DVMAA_cm4" >  
+	<group short="Target Processor" group="Build Options" long="Select one Controller (CM4)" name="Target" default="MIMXRT1175DVMAA_cm4" >
+		<groupEntry name="MIMXRT1165CVM5A_cm4" aka="MIMXRT1165xxx5A_cm4" family="iMXRT1160">
+			<property name="macros" value="DeviceName=MIMXRT1165_cm4;Family=iMXRT1160" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT116x_cm4.xml" />
+			<cdefine name="CPU_MIMXRT1165CVM5A_cm4"/>
+		</groupEntry>
+		<groupEntry name="MIMXRT1165DVM6A_cm4" aka="MIMXRT1165xxx6A_cm4" family="iMXRT1160">
+			<property name="macros" value="DeviceName=MIMXRT1165_cm4;Family=iMXRT1160" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT116x_cm4.xml" />
+			<cdefine name="CPU_MIMXRT1165DVM6A_cm4"/>
+		</groupEntry>
+		<groupEntry name="MIMXRT1166CVM5A_cm4" aka="MIMXRT1166xxx5A_cm4" family="iMXRT1160">
+			<property name="macros" value="DeviceName=MIMXRT1166_cm4;Family=iMXRT1160" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT116x_cm4.xml" />
+			<cdefine name="CPU_MIMXRT1166CVM5A_cm4"/>
+		</groupEntry>
+		<groupEntry name="MIMXRT1166DVM6A_cm4" aka="MIMXRT1166xxx6A_cm4" family="iMXRT1160">
+			<property name="macros" value="DeviceName=MIMXRT1166_cm4;Family=iMXRT1160" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT116x_cm4.xml" />
+			<cdefine name="CPU_MIMXRT1166DVM6A_cm4"/>
+		</groupEntry>
+
+
 		<groupEntry name="MIMXRT1173CVM8A_cm4" aka="MIMXRT1173xxx8A_cm4" family="iMXRT1170">
 			<property name="macros" value="DeviceName=MIMXRT1173_cm4;Family=iMXRT1170" />
 			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT117x_cm4.xml" />

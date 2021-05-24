@@ -47,6 +47,8 @@
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1050.elf" />
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1060.elf" />
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1064.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1160.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1160_M4.elf" />
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1170.elf" />
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1170_M4.elf" />
       </folder>
@@ -61,6 +63,38 @@
       <file file_name="targets/iMXRT/propertyGroups_cm4.xml" />
       <file file_name="targets/iMXRT/propertyGroups_cm33.xml" />
       <folder Name="Device">
+        <folder Name="5xx">
+          <file file_name="targets/iMXRT/XML/MIMXRT533S_Registers.xml" />
+          <file file_name="targets/iMXRT/XML/MIMXRT555S_Registers.xml" />
+          <file file_name="targets/iMXRT/XML/MIMXRT595S_cm33_Registers.xml" />
+          <file file_name="targets/iMXRT/MIMXRT533S.h" />
+          <file file_name="targets/iMXRT/MIMXRT533S_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT555S.h" />
+          <file file_name="targets/iMXRT/MIMXRT555S_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT595S_cm33.h" />
+          <file file_name="targets/iMXRT/MIMXRT595S_cm33_features.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT533S.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT533S.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT555S.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT555S.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT595S_cm33.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT595S_cm33.h" />
+        </folder>
+        <folder Name="63x">
+          <file file_name="targets/iMXRT/MIMXRT633S.h" />
+          <file file_name="targets/iMXRT/MIMXRT633S_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT685S_cm33.h" />
+          <file file_name="targets/iMXRT/MIMXRT685S_cm33_features.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT633S.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT633S.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT685S_cm33.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT685S_cm33.h" />
+          <file file_name="targets/iMXRT/XML/MIMXRT633S_Registers.xml" />
+          <file file_name="targets/iMXRT/XML/MIMXRT685S_cm33_Registers.xml" />
+          <file file_name="targets/iMXRT/startup_MIMXRT633S.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT685S_cm33.s" />
+          <file file_name="targets/iMXRT/MemoryMap_MIMXRT600.xml" />
+        </folder>
         <folder Name="101x">
           <file file_name="targets/iMXRT/MIMXRT1011.h" />
           <file file_name="targets/iMXRT/MIMXRT1011_features.h" />
@@ -136,6 +170,32 @@
           <file file_name="targets/iMXRT/XML/MIMXRT106A_Registers.xml" />
           <file file_name="targets/iMXRT/startup_MIMXRT106A.s" />
         </folder>
+        <folder Name="116x">
+          <file file_name="targets/iMXRT/XML/MIMXRT1165_cm4_Registers.xml" />
+          <file file_name="targets/iMXRT/XML/MIMXRT1165_cm7_Registers.xml" />
+          <file file_name="targets/iMXRT/MIMXRT1165_cm4.h" />
+          <file file_name="targets/iMXRT/MIMXRT1165_cm4_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT1165_cm7.h" />
+          <file file_name="targets/iMXRT/MIMXRT1165_cm7_features.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1165_cm4.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1165_cm4.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1165_cm7.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1165_cm7.h" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1165_cm4.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1165_cm7.s" />
+          <file file_name="targets/iMXRT/XML/MIMXRT1166_cm4_Registers.xml" />
+          <file file_name="targets/iMXRT/XML/MIMXRT1166_cm7_Registers.xml" />
+          <file file_name="targets/iMXRT/MIMXRT1166_cm4.h" />
+          <file file_name="targets/iMXRT/MIMXRT1166_cm4_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT1166_cm7.h" />
+          <file file_name="targets/iMXRT/MIMXRT1166_cm7_features.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1166_cm4.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1166_cm4.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1166_cm7.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1166_cm7.h" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1166_cm4.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1166_cm7.s" />
+        </folder>
         <folder Name="117x">
           <file file_name="targets/iMXRT/MIMXRT1171.h" />
           <file file_name="targets/iMXRT/MIMXRT1171_features.h" />
@@ -187,38 +247,6 @@
           <file file_name="targets/iMXRT/system_MIMXRT1176_cm7.h" />
           <file file_name="targets/iMXRT/MemoryMap_MIMXRT117x_cm4.xml" />
           <file file_name="targets/iMXRT/MemoryMap_MIMXRT117x_cm7.xml" />
-        </folder>
-        <folder Name="63x">
-          <file file_name="targets/iMXRT/MIMXRT633S.h" />
-          <file file_name="targets/iMXRT/MIMXRT633S_features.h" />
-          <file file_name="targets/iMXRT/MIMXRT685S_cm33.h" />
-          <file file_name="targets/iMXRT/MIMXRT685S_cm33_features.h" />
-          <file file_name="targets/iMXRT/system_MIMXRT633S.c" />
-          <file file_name="targets/iMXRT/system_MIMXRT633S.h" />
-          <file file_name="targets/iMXRT/system_MIMXRT685S_cm33.c" />
-          <file file_name="targets/iMXRT/system_MIMXRT685S_cm33.h" />
-          <file file_name="targets/iMXRT/XML/MIMXRT633S_Registers.xml" />
-          <file file_name="targets/iMXRT/XML/MIMXRT685S_cm33_Registers.xml" />
-          <file file_name="targets/iMXRT/startup_MIMXRT633S.s" />
-          <file file_name="targets/iMXRT/startup_MIMXRT685S_cm33.s" />
-          <file file_name="targets/iMXRT/MemoryMap_MIMXRT600.xml" />
-        </folder>
-        <folder Name="5xx">
-          <file file_name="targets/iMXRT/XML/MIMXRT533S_Registers.xml" />
-          <file file_name="targets/iMXRT/XML/MIMXRT555S_Registers.xml" />
-          <file file_name="targets/iMXRT/XML/MIMXRT595S_cm33_Registers.xml" />
-          <file file_name="targets/iMXRT/MIMXRT533S.h" />
-          <file file_name="targets/iMXRT/MIMXRT533S_features.h" />
-          <file file_name="targets/iMXRT/MIMXRT555S.h" />
-          <file file_name="targets/iMXRT/MIMXRT555S_features.h" />
-          <file file_name="targets/iMXRT/MIMXRT595S_cm33.h" />
-          <file file_name="targets/iMXRT/MIMXRT595S_cm33_features.h" />
-          <file file_name="targets/iMXRT/system_MIMXRT533S.c" />
-          <file file_name="targets/iMXRT/system_MIMXRT533S.h" />
-          <file file_name="targets/iMXRT/system_MIMXRT555S.c" />
-          <file file_name="targets/iMXRT/system_MIMXRT555S.h" />
-          <file file_name="targets/iMXRT/system_MIMXRT595S_cm33.c" />
-          <file file_name="targets/iMXRT/system_MIMXRT595S_cm33.h" />
         </folder>
       </folder>
     </folder>

@@ -329,27 +329,27 @@ ISR_HANDLER2 XECC_SEMC_INT                        // XECC_SEMC_INT_IRQHandler   
 ISR_HANDLER2 XECC_SEMC_FATAL_INT                  // XECC_SEMC_FATAL_INT_IRQHandler     - XECC fatal int
 ISR_HANDLER2 ENET_QOS                             // ENET_QOS_IRQHandler                - ENET_QOS interrupt
 ISR_HANDLER2 ENET_QOS_PMT                         // ENET_QOS_PMT_IRQHandler            - ENET_QOS_PMT interrupt
-ISR_RESERVED                                      // DefaultISR                         -  234
-ISR_RESERVED                                      // DefaultISR                         -  235
-ISR_RESERVED                                      // DefaultISR                         -  236
-ISR_RESERVED                                      // DefaultISR                         -  237
-ISR_RESERVED                                      // DefaultISR                         -  238
-ISR_RESERVED                                      // DefaultISR                         -  239
-ISR_RESERVED                                      // DefaultISR                         -  240
-ISR_RESERVED                                      // DefaultISR                         -  241
-ISR_RESERVED                                      // DefaultISR                         -  242
-ISR_RESERVED                                      // DefaultISR                         -  243
-ISR_RESERVED                                      // DefaultISR                         -  244
-ISR_RESERVED                                      // DefaultISR                         -  245
-ISR_RESERVED                                      // DefaultISR                         -  246
-ISR_RESERVED                                      // DefaultISR                         -  247
-ISR_RESERVED                                      // DefaultISR                         -  248
-ISR_RESERVED                                      // DefaultISR                         -  249
-ISR_RESERVED                                      // DefaultISR                         -  250
-ISR_RESERVED                                      // DefaultISR                         -  251
-ISR_RESERVED                                      // DefaultISR                         -  252
-ISR_RESERVED                                      // DefaultISR                         -  253
-ISR_RESERVED                                      // DefaultISR                         -  254
+ISR_RESERVED                                      // DefaultISR                         - 234
+ISR_RESERVED                                      // DefaultISR                         - 235
+ISR_RESERVED                                      // DefaultISR                         - 236
+ISR_RESERVED                                      // DefaultISR                         - 237
+ISR_RESERVED                                      // DefaultISR                         - 238
+ISR_RESERVED                                      // DefaultISR                         - 239
+ISR_RESERVED                                      // DefaultISR                         - 240
+ISR_RESERVED                                      // DefaultISR                         - 241
+ISR_RESERVED                                      // DefaultISR                         - 242
+ISR_RESERVED                                      // DefaultISR                         - 243
+ISR_RESERVED                                      // DefaultISR                         - 244
+ISR_RESERVED                                      // DefaultISR                         - 245
+ISR_RESERVED                                      // DefaultISR                         - 246
+ISR_RESERVED                                      // DefaultISR                         - 247
+ISR_RESERVED                                      // DefaultISR                         - 248
+ISR_RESERVED                                      // DefaultISR                         - 249
+ISR_RESERVED                                      // DefaultISR                         - 250
+ISR_RESERVED                                      // DefaultISR                         - 251
+ISR_RESERVED                                      // DefaultISR                         - 252
+ISR_RESERVED                                      // DefaultISR                         - 253
+ISR_RESERVED                                      // DefaultISR                         - 254
 .long 0xFFFFFFFF                                  // Reserved for user TRIM value
 
   .section .vectors, "ax"

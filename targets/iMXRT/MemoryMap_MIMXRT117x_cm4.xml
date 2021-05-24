@@ -5,7 +5,6 @@
 	<MemorySegment name="BootOffset"    start="0x60000000" size="$(BootRomOffset:0x400)"     access="ReadOnly"/>
 	<MemorySegment name="FlexSPI2"      start="0x60000000" size="$(FlexSPI2SIZE:0x04000000)" access="ReadOnly"/>
 	<MemorySegment name="FlexSPI"       start="0x08000000" size="$(FlexSPISIZE:0x04000000)"  access="ReadOnly"/>  <!-- FlexSPI alias for M4 -->
-	<MemorySegment name="FlexSPI_alias" start="0x08000000" size="$(FlexSPISIZE:0x04000000)"  access="ReadOnly"/>
 	<MemorySegment name="OCRAM_M4"      start="0x20200000" size="$(OCRAM_M4_SIZE:0x00040000)"/>
 	<MemorySegment name="OCRAM"         start="0x20240000" size="$(OCRAM_SIZE:0x00100000)"/>  <!-- OCRAM combined -->
 	<MemorySegment name="OCRAM1"        start="0x20240000" size="$(OCRAM1_SIZE:0x00080000)"/> <!-- OCRAM1 -->

@@ -25,13 +25,29 @@
     gcc_optimization_level="Level 1"
     hidden="Yes" />
   <configuration
+    Name="1160"
+    Target="MIMXRT1166CVM5A_cm4"
+    c_preprocessor_definitions="CPU_MIMXRT1166CVM5A_cm4"
+    c_user_include_directories=".;./iMXRT1160/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT116x_cm4.xml"
+    macros="DeviceName=MIMXRT1166_cm4;Family=iMXRT1160" />
+  <configuration
     Name="1170"
     Target="MIMXRT1176DVMAA_cm4"
     c_preprocessor_definitions="CPU_MIMXRT1176DVMAA_cm4"
     c_user_include_directories=".;./iMXRT1170/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT117x_cm4.xml"
-    macros="DeviceName=MIMXRT1176_cm4" />
+    macros="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170" />
+  <configuration
+    Name="MIMXRT1160_Debug"
+    build_output_file_name="Loader_iMXRT1160_M4_Debug.elf"
+    inherited_configurations="1160;Debug" />
+  <configuration
+    Name="MIMXRT1160_Release"
+    build_output_file_name="Loader_iMXRT1160_M4.elf"
+    inherited_configurations="1160;Release" />
   <configuration
     Name="MIMXRT1170_Debug"
     build_output_file_name="Loader_iMXRT1170_M4_Debug.elf"
@@ -55,7 +71,7 @@
       arm_simulator_memory_simulation_parameter="ROM;0x08000000;0x04000000;RAM;0x1FFE0000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20240000;0x00080000;ROM;0x30000000;0x04000000"
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
-      batch_build_configurations="MIMXRT1170_Release"
+      batch_build_configurations="MIMXRT1160_Release;MIMXRT1170_Release"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(PackagesDir)/libraries/libmem_drivers"
       c_user_include_directories=".;./.."
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
@@ -97,25 +113,49 @@
       <file file_name="pin_mux.h" />
       <file file_name="fsl_lpuart.c" />
       <file file_name="fsl_lpuart.h" />
+      <folder Name="iMXRT1160">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1160" build_exclude_from_build="No" />
+        <file file_name="iMXRT1160/board.h" />
+        <file file_name="iMXRT1160/clock_config.h" />
+        <file file_name="iMXRT1160/clock_config.c" />
+        <file file_name="iMXRT1160/fsl_anatop_ai.h" />
+        <file file_name="iMXRT1160/fsl_anatop_ai.c" />
+        <file file_name="iMXRT1160/fsl_clock.h" />
+        <file file_name="iMXRT1160/fsl_clock.c" />
+        <file file_name="iMXRT1160/fsl_dcdc.h" />
+        <file file_name="iMXRT1160/fsl_dcdc.c" />
+        <file file_name="iMXRT1160/fsl_gpio.h" />
+        <file file_name="iMXRT1160/fsl_gpio.c" />
+        <file file_name="iMXRT1160/fsl_iomuxc.h" />
+        <file file_name="iMXRT1160/fsl_pmu.h" />
+        <file file_name="iMXRT1160/fsl_pmu.c" />
+        <file file_name="iMXRT1160/pin_mux.c" />
+        <file file_name="iMXRT1160/cm4/fsl_cache.h" />
+        <file file_name="iMXRT1160/cm4/fsl_cache.c" />
+        <file file_name="../MemoryMap_MIMXRT116x_cm7.xml" />
+      </folder>
       <folder Name="iMXRT1170">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="1170" build_exclude_from_build="No" />
-        <file file_name="iMXRT1170/fsl_clock.c" />
-        <file file_name="iMXRT1170/fsl_clock.h" />
-        <file file_name="iMXRT1170/fsl_iomuxc.h" />
-        <file file_name="iMXRT1170/clock_config.h" />
-        <file file_name="iMXRT1170/clock_config.c" />
+        <file file_name="iMXRT1170/board.h" />
         <file file_name="iMXRT1170/fsl_anatop_ai.h" />
         <file file_name="iMXRT1170/fsl_anatop_ai.c" />
-        <file file_name="iMXRT1170/pin_mux.c" />
-        <file file_name="iMXRT1170/board.h" />
-        <file file_name="iMXRT1170/fsl_gpio.c" />
+        <file file_name="iMXRT1170/clock_config.h" />
+        <file file_name="iMXRT1170/clock_config.c" />
+        <file file_name="iMXRT1170/fsl_clock.h" />
+        <file file_name="iMXRT1170/fsl_clock.c" />
         <file file_name="iMXRT1170/fsl_gpio.h" />
-        <file file_name="iMXRT1170/fsl_pmu.c" />
+        <file file_name="iMXRT1170/fsl_gpio.c" />
+        <file file_name="iMXRT1170/fsl_iomuxc.h" />
+        <file file_name="iMXRT1170/pin_mux.c" />
         <file file_name="iMXRT1170/fsl_pmu.h" />
-        <file file_name="iMXRT1170/cm4/fsl_cache.c" />
+        <file file_name="iMXRT1170/fsl_pmu.c" />
         <file file_name="iMXRT1170/cm4/fsl_cache.h" />
-        <file file_name="../MemoryMap_MIMXRT117x_cm4.xml" />
+        <file file_name="iMXRT1170/cm4/fsl_cache.c" />
+        <file file_name="../MemoryMap_MIMXRT117x_cm4.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
       </folder>
     </folder>
     <folder Name="Source">

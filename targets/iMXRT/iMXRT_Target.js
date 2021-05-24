@@ -124,6 +124,8 @@ function Connect ()
 			// Do nothing
 //			TargetInterface.setNSRST();
 			break;
+		case "MIMXRT1165_cm7":
+		case "MIMXRT1166_cm7":
 		case "MIMXRT1171_cm7":
 		case "MIMXRT1172_cm7":
 		case "MIMXRT1173_cm7":
@@ -140,6 +142,8 @@ function Connect ()
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0043000);
 			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0044000); // Not in ROM Table. Compare ERR050708
 			break;
+		case "MIMXRT1165_cm4":
+		case "MIMXRT1166_cm4":
 		case "MIMXRT1173_cm4":
 		case "MIMXRT1175_cm4":
 		case "MIMXRT1176_cm4":
@@ -222,12 +226,16 @@ function GetPartName ()
 			MiscDifproc >>= 8;
 			PART = "MIMXRT" + MiscDifproc.toString(16)); */
 			break;
+		case "MIMXRT1165_cm7":
+		case "MIMXRT1166_cm7":
 		case "MIMXRT1173_cm7":
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
 			TargetInterface.pokeUint32 (SRC_SCR, 0x1);			// SRC->SCR Enable CM4 -> cm4 core reset is released
 			TargetInterface.pokeUint32 (SRC_SRM, 0xF << 10);	// Disable system reset caused by sysrstreq from each core
 			break;
+		case "MIMXRT1165_cm4":
+		case "MIMXRT1166_cm4":
 		case "MIMXRT1173_cm4":
 		case "MIMXRT1175_cm4":
 		case "MIMXRT1176_cm4":
@@ -295,7 +303,7 @@ function Reset_11xx_M4 ()
 
 	// Vector reset
 	TargetInterface.pokeUint32 (0xE000ED0C, 0x5FA0001);
-    TargetInterface.delay (10);
+	TargetInterface.delay (10);
 }
 
 function Reset_11xx_M7 ()
@@ -408,6 +416,8 @@ function Reset ()
 			if (!TargetInterface.isStopped ())
 				TargetInterface.stop ();
 			break;
+		case "MIMXRT1165_cm7":
+		case "MIMXRT1166_cm7":
 		case "MIMXRT1173_cm7":
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
@@ -417,6 +427,8 @@ function Reset ()
 			if (!TargetInterface.isStopped ())
 				TargetInterface.stop ();
 			break;
+		case "MIMXRT1165_cm4":
+		case "MIMXRT1166_cm4":
 		case "MIMXRT1173_cm4":
 		case "MIMXRT1175_cm4":
 		case "MIMXRT1176_cm4":
@@ -526,6 +538,8 @@ function FlexRAM_Restore ()
 		case "MIMXRT1064":
 			TargetInterface.pokeUint32 (IOMUXC_GPR_GPR17, 0x55AFFA55);	// 256 KByte OCRAM - 128 kByte ITCM - 128 kByte DTCM
 			break;
+		case "MIMXRT1165_cm7":
+		case "MIMXRT1166_cm7":
 		case "MIMXRT1171_cm7":
 		case "MIMXRT1172_cm7":
 		case "MIMXRT1173_cm7":
@@ -597,6 +611,8 @@ function Clock_Init ()
 		case "MIMXRT1064":
 			Clock_Init_105x ();
 			break;
+		case "MIMXRT1165_cm7":
+		case "MIMXRT1166_cm7":
 		case "MIMXRT1171_cm7":
 		case "MIMXRT1172_cm7":
 		case "MIMXRT1173_cm7":
@@ -679,96 +695,78 @@ function Clock_Init_105x ()
 
 function Clock_Init_117x () 
 {
-	////////// Enable PLL LDO //////////
-	// ANADIG_MISC_VDDSOC_AI_CTRL
-	var val = TargetInterface.peekUint32 (0x40C84820);  // ANADIG_MISC->VDDSOC_AI_CTRL
-	val &= ~(0x10000 | 0xFF); 
-	TargetInterface.pokeUint32 (0x40C84820, val);
-
-	// ANADIG_MISC_VDDSOC_AI_WDATA 
-	TargetInterface.pokeUint32 (0x40C84830, 0x105);     // ANADIG_MISC->VDDSOC_AI_WDATA
-
-	// ANADIG_PMU_PMU_LDO_PLL
-	val = TargetInterface.peekUint32 (0x40C84500);      // ANADIG_PMU->PMU_LDO_PLL
-	val ^= 0x10000;
-	TargetInterface.pokeUint32 (0x40C84500, val);
-
-
 	////////// Initialize System PLL2 //////////
-	// ANADIG_PLL_PLL_528_CTRL
-	val = TargetInterface.peekUint32 (0x40C84240);      // ANADIG_PLL->PLL_528_CTRL
+	val = TargetInterface.peekUint32 (0x40C84240);			// ANADIG_PLL->PLL_528_CTRL
 	if (val & 0x800000)
 	{
 		// SysPll2 has been initialized
 		val &= ~0x40000000;
-		TargetInterface.pokeUint32 (0x40C84240, val);   // ANADIG_PLL->PLL_528_CTRL
+		TargetInterface.pokeUint32 (0x40C84240, val);		// ANADIG_PLL->PLL_528_CTRL
 		TargetInterface.message ("syspll2 has been initialized already");
 		return;
 	}
 
-	val = TargetInterface.peekUint32 (0x40C84270);      // ANADIG_PLL->PLL_528_PFD
+	val = TargetInterface.peekUint32 (0x40C84270);			// ANADIG_PLL->PLL_528_PFD
 	val |= 0x80808080;
 	TargetInterface.pokeUint32 (0x40C84270, val);
 
-	val = TargetInterface.peekUint32 (0x40C84240);      // ANADIG_PLL->PPLL_528_CTRL
+	val = TargetInterface.peekUint32 (0x40C84240);			// ANADIG_PLL->PPLL_528_CTRL
 	val &= ~(0x802000);
 	val |= 0x40000000;
-	TargetInterface.pokeUint32 (0x40C84240, val);       // ANADIG_PLL->PLL_528_CTRL
+	TargetInterface.pokeUint32 (0x40C84240, val);			// ANADIG_PLL->PLL_528_CTRL
 
-	TargetInterface.pokeUint32 (0x40C84280, 0);         // ANADIG_PLL->PLL_528_MFN
-	TargetInterface.pokeUint32 (0x40C84290, 22);        // ANADIG_PLL->PLL_528_MFI
-	TargetInterface.pokeUint32 (0x40C842A0, 0x0FFFFFFF);// ANADIG_PLL->PLL_528_MFD
+	TargetInterface.pokeUint32 (0x40C84280, 0);				// ANADIG_PLL->PLL_528_MFN
+	TargetInterface.pokeUint32 (0x40C84290, 22);			// ANADIG_PLL->PLL_528_MFI
+	TargetInterface.pokeUint32 (0x40C842A0, 0x0FFFFFFF);	// ANADIG_PLL->PLL_528_MFD
 
-	// ANADIG_PLL_PLL_528_CTRL
-	TargetInterface.pokeUint32 (0x40C84240, 0x8 | 0x40000000);
+	TargetInterface.pokeUint32 (0x40C84240, 0x8 | 0x40000000); // ANADIG_PLL->PLL_528_CTRL
 	TargetInterface.delay (30);
 
-	// ANADIG_PLL_PLL_528_CTRL
-	val = TargetInterface.peekUint32 (0x40C84240);      // ANADIG_PLL->PLL_528_CTRL
+	val = TargetInterface.peekUint32 (0x40C84240);			// ANADIG_PLL_PLL_528_CTRL
 	val |= 0x800000 | 0x800;
-	TargetInterface.pokeUint32 (0x40C84240, val);       // ANADIG_PLL->PLL_528_CTRL
+	TargetInterface.pokeUint32 (0x40C84240, val);			// ANADIG_PLL->PLL_528_CTRL
 	TargetInterface.delay (250);
 
-	val = TargetInterface.peekUint32 (0x40C84240);      // ANADIG_PLL->PLL_528_CTRL
+	val = TargetInterface.peekUint32 (0x40C84240);			// ANADIG_PLL->PLL_528_CTRL
 	val &= ~0x800;
-	TargetInterface.pokeUint32 (0x40C84240, val);       // ANADIG_PLL->PLL_528_CTRL
+	TargetInterface.pokeUint32 (0x40C84240, val);			// ANADIG_PLL->PLL_528_CTRL
 
 	do
 	{
-		val = TargetInterface.peekUint32 (0x40C84240);  // ANADIG_PLL->PLL_528_CTRL
+		val = TargetInterface.peekUint32 (0x40C84240);		// ANADIG_PLL->PLL_528_CTRL
 	} while ((val & 0x20000000) == 0);
 
 	val |= 0x2000;
-	TargetInterface.pokeUint32 (0x40C84240, val);       // ANADIG_PLL->PLL_528_CTRL
+	TargetInterface.pokeUint32 (0x40C84240, val);			// ANADIG_PLL->PLL_528_CTRL
 
 	val &= ~0x40000000;
-	TargetInterface.pokeUint32 (0x40C84240, val);       // ANADIG_PLL->PLL_528_CTRL
+	TargetInterface.pokeUint32 (0x40C84240, val);			// ANADIG_PLL->PLL_528_CTRL
 
 
 	////////// Initialize System PLL2 PFD1 //////////
-	val = TargetInterface.peekUint32 (0x40C84270);      // ANADIG_PLL->PLL_528_PFD
+	val = TargetInterface.peekUint32 (0x40C84270);			// ANADIG_PLL->PLL_528_PFD
 	if (((val & 0x8000) != 0) || (((val & 0x3F00) >> 8) != 16))
 	{
 		var stable = val & 0x4000;
 
 		val |= 0x8000;
-		TargetInterface.pokeUint32 (0x40C84270, val);   // ANADIG_PLL->PLL_528_PFD
+		TargetInterface.pokeUint32 (0x40C84270, val);		// ANADIG_PLL->PLL_528_PFD
 
-		val = TargetInterface.peekUint32 (0x40C84270);  // ANADIG_PLL->PLL_528_PFD
+		val = TargetInterface.peekUint32 (0x40C84270);		// ANADIG_PLL->PLL_528_PFD
 		val &= ~0x3F00;
 		val |= 16 << 8;
-		TargetInterface.pokeUint32 (0x40C84270, val);   // ANADIG_PLL->PLL_528_PFD
+		TargetInterface.pokeUint32 (0x40C84270, val);		// ANADIG_PLL->PLL_528_PFD
 
-		val = TargetInterface.peekUint32 (0x40C84250);  // ANADIG_PLL->PLL_528_UPDATE
+		val = TargetInterface.peekUint32 (0x40C84250);		// ANADIG_PLL->PLL_528_UPDATE
 		val ^= 0x4;
-		TargetInterface.pokeUint32 (0x40C84250, val);   // ANADIG_PLL->PLL_528_UPDATE
+		TargetInterface.pokeUint32 (0x40C84250, val);		// ANADIG_PLL->PLL_528_UPDATE
 
-		val = TargetInterface.peekUint32 (0x40C84270);  // ANADIG_PLL->PLL_528_PFD
+		val = TargetInterface.peekUint32 (0x40C84270);		// ANADIG_PLL->PLL_528_PFD
 		val &= ~0x8000;
-		TargetInterface.pokeUint32 (0x40C84270, val);   // ANADIG_PLL->PLL_528_PFD
+		TargetInterface.pokeUint32 (0x40C84270, val);		// ANADIG_PLL->PLL_528_PFD
 		do
 		{
-			val = TargetInterface.peekUint32 (0x40C84270) & 0x4000;      // ANADIG_PLL->PLL_528_PFD
+			val = TargetInterface.peekUint32 (0x40C84270) & 0x4000;	  // ANADIG_PLL->PLL_528_PFD
 		} while (val == stable);
 	}
 	else
@@ -830,6 +828,8 @@ function SDRAM_Init ()
 		case "MIMXRT1064":
 			SDRAM_Init_10xx ();
 			break;
+		case "MIMXRT1165_cm7":
+		case "MIMXRT1166_cm7":
 		case "MIMXRT1171_cm7":
 		case "MIMXRT1172_cm7":
 		case "MIMXRT1173_cm7":
@@ -1205,6 +1205,8 @@ function FLEXSPI_Init (FlexSPI)
 		case "MIMXRT1062":
 		case "MIMXRT1064":
 			break;					// do nothing
+		case "MIMXRT1165_cm7":
+		case "MIMXRT1166_cm7":
 		case "MIMXRT1171_cm7":
 		case "MIMXRT1172_cm7":
 		case "MIMXRT1173_cm7":
