@@ -47,7 +47,6 @@ enum LUT_CommandOffsets
 	LUT_WriteStatusReg_Adesto    = 8,
 	LUT_WriteConfigReg_Macronix  = 9,
 	LUT_WriteConfigReg_Winbond   = 11,
-	LUT_WriteConfigReg1_Macronix = 13,
 };
 
 

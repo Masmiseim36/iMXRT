@@ -38,7 +38,7 @@ OF SUCH DAMAGE. */
 static libmem_driver_paged_write_ctrlblk_t paged_write_ctrlblk;
 
 
-static flexspi_device_config_t DeviceConfig =
+static flexspi_device_config_t DeviceConfig
 {
 	.flexspiRootClk       = 0, // SPI root clock (will be set up later)
 	.isSck2Enabled        = false,
@@ -60,7 +60,7 @@ static flexspi_device_config_t DeviceConfig =
 };
 
 // Define the structure of the Flash (Sector Count and Size)
-static libmem_geometry_t geometry[] =
+static libmem_geometry_t geometry[]
 { // count - size
 	{0x2000, 4096},
 	{0, 0} 
@@ -79,7 +79,7 @@ static int libmem_Read        (libmem_driver_handle_t *h, uint8_t *dest, const u
 static uint32_t libmem_CRC32  (libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc);
 
 
-static const libmem_driver_functions_t DriverFunctions =
+static const libmem_driver_functions_t DriverFunctions
 {
 	libmem_ProgramPage,
 	nullptr,
@@ -89,7 +89,7 @@ static const libmem_driver_functions_t DriverFunctions =
 	libmem_Flush
 };
 
-static const libmem_ext_driver_functions_t DriverFunctions_Extended =
+static const libmem_ext_driver_functions_t DriverFunctions_Extended
 {
 	nullptr,
 	libmem_Read,
@@ -265,7 +265,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	}
 	else if (Info.ManufactureID == ManufactureID_Macronix)
 	{
-		res = Macronix::Initialize (*base, MemType, Info, config);
+		res = Macronix::Initialize (*base, MemType, Info, config, DeviceConfig);
 	}
 	else if (Info.ManufactureID == ManufactureID_Lucent)
 	{
@@ -289,7 +289,6 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	// Reconfigure the Interface according to the gathered Flash-Information and configuration
 	if (MemType == MemType_OctaSPI_DDR || MemType == MemType_QuadSPI_DDR)
 	{
-		FLEXSPI_Init (base, &config);
 		#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || \
 			 defined(MIMXRT533S_SERIES) || defined (MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES)
 			ClockDiv--;
@@ -313,6 +312,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 		#else
 			#error "unknon controller family"
 		#endif
+		FLEXSPI_Init (base, &config);
 	}
 
 	// Use the size information from the JEDEC-Information to configure the Interface
@@ -450,15 +450,7 @@ Erase the whole-Flash-memory
 	if (stat != kStatus_Success)
 		return stat;
 
-	flexspi_transfer_t flashXfer;
-	flashXfer.port          = FlexSPI_Helper::port;
-	flashXfer.SeqNumber     = 1;
-	flashXfer.cmdType       = kFLEXSPI_Command;
-	flashXfer.seqIndex      = LUT_EraseChip;
-	flashXfer.deviceAddress = 0;
-	//flashXfer.data = &flash_status;
-	//flashXfer.dataSize = 1;
-	stat = FLEXSPI_TransferBlocking (base, &flashXfer);
+	stat = base->SendCommand (0, LUT_EraseChip);
 	if (stat != kStatus_Success)
 		return LIBMEM_STATUS_ERROR;
 
@@ -489,14 +481,7 @@ static int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 	if (status != kStatus_Success)
 		return LibmemStaus_Error;
 
-	flexspi_transfer_t flashXfer;
-	flashXfer.deviceAddress = SectorAddr;
-	flashXfer.port          = FlexSPI_Helper::port;
-	flashXfer.cmdType       = kFLEXSPI_Command;
-	flashXfer.SeqNumber     = 1;
-	flashXfer.seqIndex      = LUT_EraseSector;
-	status = FLEXSPI_TransferBlocking (base, &flashXfer);
-
+	status = base->SendCommand (SectorAddr, LUT_EraseSector);
 	if (status != kStatus_Success)
 		return LibmemStaus_Error;
 
@@ -528,14 +513,16 @@ static int ProgramPage (libmem_driver_handle_t *h, uint8_t *dest_addr, const uin
 		return LibmemStaus_Error;
 
 	// Prepare page program command
-	flexspi_transfer_t flashXfer;
-	flashXfer.deviceAddress = DeviceAddress;
-	flashXfer.port          = FlexSPI_Helper::port;
-	flashXfer.cmdType       = kFLEXSPI_Write;
-	flashXfer.SeqNumber     = 1;
-	flashXfer.seqIndex      = LUT_ProgramPage;
-	flashXfer.data          = (uint32_t *)src_addr;
-	flashXfer.dataSize      = QSPIFLASH_PAGE_SIZE;
+	flexspi_transfer_t flashXfer
+	{
+		DeviceAddress,				// deviceAddress	- Operation device address.
+		FlexSPI_Helper::port,		// port				- Operation port
+		kFLEXSPI_Write,				// cmdType			- Execution command type.
+		LUT_ProgramPage,			// seqIndex			- Sequence ID for command.
+		1,							// SeqNumber		- Sequence number for command.
+		(uint32_t *)src_addr,		// data				- Data buffer.
+		QSPIFLASH_PAGE_SIZE			// dataSize			- Data size in bytes.
+	};
 	status = FLEXSPI_TransferBlocking (base, &flashXfer);
 	if (status != kStatus_Success)
 		return LibmemStaus_Error;
@@ -544,6 +531,13 @@ static int ProgramPage (libmem_driver_handle_t *h, uint8_t *dest_addr, const uin
 	if (status != kStatus_Success)
 		return LibmemStaus_Error;
 
+	// Do software reset or clear AHB buffer directly depending on the device capabilities
+	#if defined(FSL_FEATURE_SOC_OTFAD_COUNT) && defined(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK) && defined(FLEXSPI_AHBCR_CLRAHBTXBUF_MASK)
+		base->AHBCR |= FLEXSPI_AHBCR_CLRAHBRXBUF_MASK | FLEXSPI_AHBCR_CLRAHBTXBUF_MASK;
+		base->AHBCR &= ~(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK | FLEXSPI_AHBCR_CLRAHBTXBUF_MASK);
+	#else
+		FLEXSPI_SoftwareReset (base);
+	#endif
 	return LibmemStaus_Success;
 }
 
@@ -570,7 +564,12 @@ The LIBMEM driver's erase function
 static int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size)
 {
 	DebugPrintf ("libmem_EraseSector at 0x%x - size: %d\r\n", start, size);
-	return libmem_foreach_sector_in_range (h, start, size, EraseSector, erase_start, erase_size);
+	int ret = libmem_foreach_sector_in_range (h, start, size, EraseSector, erase_start, erase_size);
+
+	FlexSPI_Helper *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
+	FLEXSPI_SoftwareReset (base);
+
+	return ret;
 }
 
 /*! libmem_Flush:

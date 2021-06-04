@@ -65,7 +65,7 @@ namespace Macronix
 		return status;
 	}
 
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info, [[maybe_unused]] flexspi_config_t &config)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info, [[maybe_unused]] flexspi_config_t &config,  [[maybe_unused]]flexspi_device_config_t &DeviceConfig)
 	{
 		(void)Info;
 		if (MemType == MemType_Invalid || MemType == MemType_Hyperflash)
@@ -74,8 +74,9 @@ namespace Macronix
 		DebugPrint ("Found Macronix Flash\r\n");
 		if (MemType == MemType_QuadSPI)
 		{
-	/*
-			uint32_t StateReg = 0;
+			flexSPI.UpdateLUT (0, LUT_QuadSPI);
+	
+	/*		uint32_t StateReg = 0;
 			status_t stat = flexSPI.ReadStatusRegister (0, StateReg);
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
@@ -88,14 +89,13 @@ namespace Macronix
 				return LibmemStaus_Error;
 
 			// Write to status register 1 / control register to enable QuadSPI
-			stat = flexSPI.WriteRegister (0U, StateReg, LUT_WriteConfigReg1_Macronix, 2);
+			stat = flexSPI.WriteRegister (0U, StateReg, 8, 2);
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error; */
 	/*
 			stat = flexSPI.ReadStatusRegister (0, &StateReg);
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;*/
-			flexSPI.UpdateLUT (0, LUT_QuadSPI);
 		}
 		else
 		{
@@ -117,37 +117,27 @@ namespace Macronix
 					return LibmemStaus_Error;
 			}
 
-			// SET Dummy Cycles
-			// send write-enable 
-/*			status_t stat = flexSPI.WriteEnable (0);
-			if (stat != kStatus_Success)
-				return LibmemStaus_Error;
-			// Write to status/control register 2 to set the Dummy-Cycles
-			stat = flexSPI.WriteRegister (0x300U, 8U, LUT_WriteConfigReg_Macronix);	// 8 --> 12 Cycles at 133 MHz
-			if (stat != kStatus_Success)
-				return LibmemStaus_Error; */
-		/*
-			// Set Output impedance
-			// send write-enable 
-			stat = WriteEnable (base, 0);
-			if (stat != kStatus_Success)
-				return LibmemStaus_Error;
-			// Write to status/control register 1 to switch to chosen memory-Type
-			stat = WriteRegister (base, 0, 2, LUT_WriteConfigReg1_Macronix);	// 2 --> 52 Ohm. Compare "Output Driver Strength Table in the Reference manual"
-			if (stat != kStatus_Success)
-				return LibmemStaus_Error;*/
-
 			// Switch to OSPI-Mode
-			// send write-enable 
-			status_t stat = flexSPI.WriteEnable (0);
+			// Write to status/control register 2 to set Dummy Cycles to 12
+			status_t stat = flexSPI.WriteEnable (0);	// send write-enable 
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
-			// Write to status/control register 2 to switch to chosen memory-Type
+			stat = flexSPI.WriteRegister (0x0300U, 0x04, LUT_WriteConfigReg_Macronix);
+			if (stat != kStatus_Success)
+				return LibmemStaus_Error;
+
+			// Write to status/control register 2 to switch to chosen interface-Type
+			stat = flexSPI.WriteEnable (0);	// send write-enable 
+			if (stat != kStatus_Success)
+				return LibmemStaus_Error;
 			stat = flexSPI.WriteRegister (0x0U, Status, LUT_WriteConfigReg_Macronix);
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
 
 			flexSPI.UpdateLUT (0, *lut);
+
+//			config.ahbConfig.enableReadAddressOpt = false;
+			config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;// To achieve high speeds - always use DQS
 		}
 
 		return LibmemStaus_Success;
