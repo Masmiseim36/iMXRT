@@ -53,7 +53,7 @@ function OnTargetStop_11xx_M4 ()
 	var DeviceName = GetProjectPartName ();
 	if (DeviceName.slice(-4) == "_cm7")
 	{
-		TargetInterface.message ("## Target " + DeviceName + " has been caled on the M7 Core");
+		TargetInterface.message ("## Target " + DeviceName + " has been called on the M7 Core");
 		return;
 	}
 	else
@@ -92,7 +92,7 @@ function OnTargetStop_11xx_M4 ()
 	{
 		psccr = TargetInterface.peekUint32 (LMEM_PSCCR);
 	}
-	while (pscr & LMEM_PSCCR_GO_MASK  != 0);	// Wait until the cache command completes
+	while ((pscr & LMEM_PSCCR_GO_MASK) != 0);	// Wait until the cache command completes
 
 	// As a precaution clear the bits to avoid inadvertently re-running this command.
 	psccr &= ~(LMEM_PSCCR_PUSHW0_MASK | LMEM_PSCCR_PUSHW1_MASK);
@@ -202,7 +202,7 @@ function GetPartName ()
 			TargetInterface.setDebugRegister (0x02000004, 0x07);	// Write DM START_DBG_SESSION to REQUEST register
 			do
 			{
-				eg = TargetInterface.getDebugRegister (0x02000008);
+				reg = TargetInterface.getDebugRegister (0x02000008);
 				TargetInterface.message ("GetPartName - REQUEST: 0x" + reg.toString(16));
 			}
 			while (reg != 0);
@@ -284,6 +284,33 @@ function Release_11xx_M4 ()
 	{
 		// Releasing M4
 		scr |= 1;
+		TargetInterface.pokeUint32 (SRC_SCR, scr);
+	}
+}
+
+function Release_11xx_M7 ()
+{
+	// Setup some spin code into an area of OCRAM1 (0x2024FF00)
+	TargetInterface.pokeUint32 (0x2024FF00, 0xE7FEE7FE);
+	TargetInterface.pokeUint32 (0x2024FF04, 0x2024FF01);
+	// Set addr >> 7 into CM7 VTOR iomuxc_lpsr_GPR26
+	TargetInterface.pokeUint32 (IOMUXC_LPSR_GPR26, 0x4049FE);
+
+	// Set m7_clk_root to OSC_RC_48M / 2: CLOCK_ROOT0 = mux(0), div(1)
+	TargetInterface.pokeUint32 (CCM_CLOCK_ROOT_M7_CONTROL, 0x001);
+
+	// Save current reset SRMR and prevent M7 SW reset affecting the system
+	var srmr = TargetInterface.peekUint32 (SRC_SRMR);
+	TargetInterface.pokeUint32 (SRC_SRMR, 0x00003000);
+	TargetInterface.pokeUint32 (SRC_CTRL_M7CORE, 0x1);
+	TargetInterface.pokeUint32 (SRC_SRMR, srmr);
+
+	// Release M7 if needed
+	var scr = TargetInterface.peekUint32 (SRC_SCR);
+	if ((scr & 0x2) == 0)
+	{
+		// Releasing M7
+		scr |= 2;
 		TargetInterface.pokeUint32 (SRC_SCR, scr);
 	}
 }
@@ -381,12 +408,11 @@ function Reset ()
 	if (TargetInterface.implementation() == "crossworks_simulator")
 		return;
 
-	FlexRAM_Restore ();
-
 	if (TargetInterface.implementation() == "j-link")
 	{
 //		TargetInterface.resetAndStop (1000);
 		TargetInterface.stop ();
+		FlexRAM_Restore ();
 		return;
 	}
 
@@ -441,22 +467,24 @@ function Reset ()
 			TargetInterface.message ("## Reset - unknown Device: " + DeviceName);
 			break;
 	}
+
+	FlexRAM_Restore ();
 	TargetInterface.message ("## Reset " + DeviceName + " - done");
 }
 
 function DcDc_Init_10xx ()
 {
-	ocotp_base = 0x401F4000;
-	ocotp_fuse_bank0_base = ocotp_base + 0x400;
-	dcdc_base = 0x40080000;
+	var ocotp_base = 0x401F4000;
+	var ocotp_fuse_bank0_base = ocotp_base + 0x400;
+	var dcdc_base = 0x40080000;
 
-	dcdc_trim_loaded = 0;
+	var dcdc_trim_loaded = 0;
 
-	reg = TargetInterface.peekUint32 (ocotp_fuse_bank0_base + 0x90);
+	var reg = TargetInterface.peekUint32 (ocotp_fuse_bank0_base + 0x90);
 	if (reg & (1<<10))
 	{
 		// DCDC: REG0->VBG_TRM
-		trim_value = (reg & (0x1F << 11)) >> 11; 
+		var trim_value = (reg & (0x1F << 11)) >> 11; 
 		reg = (TargetInterface.peekUint32 (dcdc_base + 0x4) & ~(0x1F << 24)) | (trim_value << 24);
 		TargetInterface.pokeUint32 (dcdc_base + 0x4, reg);
 		dcdc_trim_loaded = 1;
@@ -465,7 +493,7 @@ function DcDc_Init_10xx ()
 	reg = TargetInterface.peekUint32 (ocotp_fuse_bank0_base + 0x80);
 	if (reg & (1<<30))
 	{
-		index = (reg & (3 << 28)) >> 28;
+		var index = (reg & (3 << 28)) >> 28;
 		if (index < 4)
 		{
 			// DCDC: REG3->TRG 
@@ -557,6 +585,13 @@ function FlexRAM_Restore ()
 
 			TargetInterface.pokeUint32 (IOMUXC_GPR_GPR17, 0xFFAA);		// 0 KByte OCRAM - 256 kByte ITCM - 256 kByte DTCM
 			TargetInterface.pokeUint32 (IOMUXC_GPR_GPR18, 0xFFAA);
+			break;
+		case "MIMXRT1165_cm4":
+		case "MIMXRT1166_cm4":
+		case "MIMXRT1173_cm4":
+		case "MIMXRT1175_cm4":
+		case "MIMXRT1176_cm4":
+			// Ignore the M4-Core which has no FlexRAM
 			break;
 		default:
 			TargetInterface.message ("FlexRAM_Restore - unknown Device: " + DeviceName);
@@ -696,7 +731,7 @@ function Clock_Init_105x ()
 function Clock_Init_117x () 
 {
 	////////// Initialize System PLL2 //////////
-	val = TargetInterface.peekUint32 (0x40C84240);			// ANADIG_PLL->PLL_528_CTRL
+	var val = TargetInterface.peekUint32 (0x40C84240);			// ANADIG_PLL->PLL_528_CTRL
 	if (val & 0x800000)
 	{
 		// SysPll2 has been initialized
@@ -786,7 +821,7 @@ function Clock_Init_117x ()
 
 function Clock_Restore_117x () 
 {
-	var reg = 0x40CC0000;	// CCM
+	var reg = CCM_CLOCK_ROOT_M7_CONTROL;	// CCM
 	var i = 0;
 	while (i < 80)
 	{
