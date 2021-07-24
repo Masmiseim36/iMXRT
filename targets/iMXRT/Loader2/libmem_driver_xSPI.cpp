@@ -198,7 +198,9 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 
 	// Need to set the combination-enable option. This options combines 8 data lines from FlexSPI channel A with
 	// 4 data lines from FlexSPI channel B to form an 8-line bus for octal. On this SoC this is the only way to enable octal.
-	config.enableCombination              = (MemType == MemType_OctaSPI_DDR || MemType == MemType_OctaSPI);	// Only true when using Octa-Mode
+	#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
+		config.enableCombination          = (MemType == MemType_OctaSPI_DDR || MemType == MemType_OctaSPI);	// Only true when using Octa-Mode
+	#endif
 	config.ahbConfig.enableAHBPrefetch    = true;	// Enable AHB prefetching
 	config.ahbConfig.enableAHBBufferable  = true;
 	config.ahbConfig.enableReadAddressOpt = true;

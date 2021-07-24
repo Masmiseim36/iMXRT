@@ -93,6 +93,8 @@
     <folder Name="drivers">
       <file file_name="fsl_common.c" />
       <file file_name="fsl_common.h" />
+      <file file_name="fsl_common_arm.c" />
+      <file file_name="fsl_common_arm.h" />
       <file file_name="fsl_cache.c">
         <configuration Name="Common" build_exclude_from_build="Yes" />
       </file>

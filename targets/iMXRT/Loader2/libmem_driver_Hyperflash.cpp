@@ -271,7 +271,9 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 	config.ahbConfig.enableAHBCachable    = true;
 	config.enableSckBDiffOpt              = true;	// enable diff clock and DQS
 	config.rxSampleClock                  = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;
-	config.enableCombination              = true;
+	#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
+		config.enableCombination          = true;
+	#endif
 	FLEXSPI_Init (base, &config);
 
 	FLEXSPI_SetFlashConfig (base, &deviceconfig, kFLEXSPI_PortA1);  // Configure flash settings according to serial flash feature.

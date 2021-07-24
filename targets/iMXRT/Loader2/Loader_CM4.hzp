@@ -106,6 +106,8 @@
     <folder Name="drivers">
       <file file_name="fsl_common.c" />
       <file file_name="fsl_common.h" />
+      <file file_name="fsl_common_arm.c" />
+      <file file_name="fsl_common_arm.h" />
       <file file_name="fsl_flexspi.c" />
       <file file_name="fsl_flexspi.h" />
       <file file_name="fsl_dmamux.c" />
