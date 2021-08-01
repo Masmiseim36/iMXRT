@@ -14,7 +14,7 @@
 // Register description of the iMXRT1170
 var SRC              = 0x40C04000;
 var SRC_SCR          = SRC;
-var SRC_SRMR         = SRC + 0x4
+var SRC_SRMR         = SRC + 0x4;
 var SRC_CTRL_MEGA    = SRC + 0x204;
 var SRC_STAT_MEGA    = SRC + 0x210;
 var SRC_CTRL_DISPLAY = SRC + 0x224;
@@ -78,7 +78,7 @@ function OnTargetStop_11xx_M4 ()
 
 	// Check if the cache is enabled
 	var psccr = TargetInterface.peekUint32 (LMEM_PSCCR);
-	psccr = psccr & LMEM_PSCCR_ENCACHE_MASK
+	psccr = psccr & LMEM_PSCCR_ENCACHE_MASK;
 	if (psccr == 0)
 	{
 		TargetInterface.message ("## OnTargetStop_11xx_M4 - cache is disabled");
@@ -251,8 +251,9 @@ function GetPartName ()
 		case "MIMXRT1173_cm7":
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
-			TargetInterface.pokeUint32 (SRC_SCR, 0x1);			// SRC->SCR Enable CM4 -> cm4 core reset is released
-			TargetInterface.pokeUint32 (SRC_SRM, 0xF << 10);	// Disable system reset caused by sysrstreq from each core
+			TargetInterface.pokeUint32 (SRC_SCR, 0x1);			// Enable CM4 -> cm4 core reset is released
+			// Disable system reset caused by sysrstreq from each core:
+			TargetInterface.pokeUint32 (SRC_SRMR, 0xF << 10);	// Set M7REQ_RESET_MODE and M4REQ_RESET_MODE to "do not reset anything":
 			break;
 		case "MIMXRT1165_cm4":
 		case "MIMXRT1166_cm4":
@@ -911,15 +912,15 @@ function SDRAM_Init_10xx ()
 	var PAD_Settings          = 0;
 	if (DeviceName == "MIMXRT1021" || DeviceName == "MIMXRT1024")
 	{
-		var IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x14;
-		var IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x188;
-		var PAD_Settings          = 0x000000F1;
+		IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x14;
+		IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x188;
+		PAD_Settings          = 0x000000F1;
 	}
 	else
 	{
-		var IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x14;
-		var IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x204;
-		var PAD_Settings          = 0x000110F9;
+		IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x14;
+		IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x204;
+		PAD_Settings          = 0x000110F9;
 	}
 	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x00, 0x00000000); // EMC_00
 	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x04, 0x00000000); // EMC_01
