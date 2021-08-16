@@ -189,11 +189,23 @@
 			<property name="arm_fpu_type" value="FPv5-D16" />
 			<cdefine name="CPU_MIMXRT1064CVL5A"/>
 		</groupEntry>
+		<groupEntry name="MIMXRT1064CVJ5A" aka="MIMXRT1064xxx5A" family="iMXRT1064">
+			<property name="macros" value="DeviceName=MIMXRT1064;Family=iMXRT1064" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1064CVJ5A"/>
+		</groupEntry>
 		<groupEntry name="MIMXRT1064DVL6A" aka="MIMXRT1064xxx6A" family="iMXRT1064">
 			<property name="macros" value="DeviceName=MIMXRT1064;Family=iMXRT1064" />
 			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
 			<cdefine name="CPU_MIMXRT1064DVL6A"/>
+		</groupEntry>
+		<groupEntry name="MIMXRT1064DVJ6A" aka="MIMXRT1064xxx6A" family="iMXRT1064">
+			<property name="macros" value="DeviceName=MIMXRT1064;Family=iMXRT1064" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1064DVJ6A"/>
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1165CVM5A_cm7" aka="MIMXRT1165xxx5A_cm7" family="iMXRT1160">

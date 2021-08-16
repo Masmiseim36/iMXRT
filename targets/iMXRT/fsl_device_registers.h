@@ -115,7 +115,8 @@
 	/* CPU specific feature definitions */
 	#include "MIMXRT1062_features.h"
 
-#elif (defined(CPU_MIMXRT1064CVL5A) || defined(CPU_MIMXRT1064DVL6A))
+#elif (defined(CPU_MIMXRT1064CVJ5A) || defined(CPU_MIMXRT1064CVL5A) || defined(CPU_MIMXRT1064DVJ6A) || \
+	defined(CPU_MIMXRT1064DVL6A))
 	#define MIMXRT1064_SERIES
 	/* CMSIS-style register definitions */
 	#include "MIMXRT1064.h"
