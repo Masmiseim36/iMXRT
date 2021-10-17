@@ -90,6 +90,8 @@ extern "C"
 	\brief Factory for libmem drivers */
 	class LibmemDriver: public libmem_driver_handle_t
 	{
+	public:
+		libmem_driver_paged_write_ctrlblk_t PageWriteControlBlock;
 	private:
 		static LibmemDriver Drivers[4];	// We should not need more than four
 		static uint32_t NextFree;

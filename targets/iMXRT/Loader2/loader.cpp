@@ -114,8 +114,7 @@ int main (uint32_t flags, uint32_t param)
 	ConfigUart ();
 	DebugPrint ("Hello iMXRT Loader\r\n");
 
-//	#ifdef DEBUG
-	#if 0
+	#ifdef DEBUG
 		(void)flags;
 		(void)param;
 		// some test Code, because the Loader can not be debugged while using it in real scenarios
@@ -133,7 +132,7 @@ int main (uint32_t flags, uint32_t param)
 //		LibmemStatus_t res = Libmem_InitializeDriver_Hyperflash (FLEXSPI);
 		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_OctaSPI_DDR);
 //		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_QuadSPI);
-/*		if (res != LibmemStaus_Success)
+		if (res != LibmemStaus_Success)
 		{
 			BOARD_PerformJEDECReset (FLEXSPI);
 			BOARD_InitOctaSPIPins ();
@@ -143,7 +142,7 @@ int main (uint32_t flags, uint32_t param)
 		{
 			ExecuteTest ((uint32_t *)(FLASH_START_ADDRESS + 0x40000));		// Testcode
 		}
-*/
+
 		#if defined FLEXSPI2
 			BOARD_PerformJEDECReset (FLEXSPI2);
 			BOARD_InitQuadSPI2Pins ();

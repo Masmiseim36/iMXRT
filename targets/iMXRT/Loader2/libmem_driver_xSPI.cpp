@@ -35,8 +35,6 @@ OF SUCH DAMAGE. */
 #include "libmem_LUT_Adesto.h"
 #include "libmem_LUT_Macronix.h"
 
-static libmem_driver_paged_write_ctrlblk_t paged_write_ctrlblk;
-
 
 static flexspi_device_config_t DeviceConfig
 {
@@ -336,20 +334,22 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 
 
 	static uint8_t write_buffer[QSPIFLASH_PAGE_SIZE];
-	libmem_driver_handle_t *FlashHandle = LibmemDriver::GetDriver ();
+	LibmemDriver *FlashHandle = LibmemDriver::GetDriver ();
 //	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), FlashSize, geometry, nullptr, &DriverFunctions, &DriverFunctions_Extended);
 	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), FlashSize, geometry, nullptr, &DriverFunctions, nullptr);
+	int err = libmem_driver_paged_write_init (&FlashHandle->PageWriteControlBlock, write_buffer, QSPIFLASH_PAGE_SIZE, ProgramPage, 4, 0);
 	FlashHandle->user_data = (uint32_t)base;
 
 	uint8_t *AliasAddress = libmem_GetAliasBaseAddress (base);
-	if (AliasAddress != nullptr)
+	if (AliasAddress != nullptr && err == LIBMEM_STATUS_SUCCESS)
 	{
 		FlashHandle = LibmemDriver::GetDriver ();
 		libmem_register_driver (FlashHandle, AliasAddress, FlashSize, geometry, nullptr, &DriverFunctions, nullptr);
+		err = libmem_driver_paged_write_init (&FlashHandle->PageWriteControlBlock, write_buffer, QSPIFLASH_PAGE_SIZE, ProgramPage, 4, 0);
 		FlashHandle->user_data = (uint32_t)base;
 		DebugPrint ("### Add Driver for Alias\r\n");
 	}
-	return static_cast<LibmemStatus_t>(libmem_driver_paged_write_init (&paged_write_ctrlblk, write_buffer, QSPIFLASH_PAGE_SIZE, ProgramPage, 4, 0));
+	return static_cast<LibmemStatus_t>(err);
 }
 
 
@@ -550,7 +550,9 @@ The LIBMEM driver's write function.
 \return int The LIBMEM status result */
 static int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
 {
-	return libmem_driver_paged_write (h, dest, src, size, &paged_write_ctrlblk);
+	DebugPrintf ("libmem_ProgramPage at 0x%x - size: %d\r\n", dest, size);
+	LibmemDriver *driver = static_cast<LibmemDriver *>(h);
+	return libmem_driver_paged_write (h, dest, src, size, &driver->PageWriteControlBlock);
 }
 
 /*! libmem_EraseSector:
@@ -578,7 +580,9 @@ The LIBMEM driver's flush function.
 \return int The LIBMEM status result */
 static int libmem_Flush (libmem_driver_handle_t *h)
 {
-	return libmem_driver_paged_write_flush (h, &paged_write_ctrlblk);
+	DebugPrint ("libmem_Flush\r\n");
+	LibmemDriver *driver = static_cast<LibmemDriver *>(h);
+	return libmem_driver_paged_write_flush (h, &driver->PageWriteControlBlock);
 }
 
 /*! libmem_Read:
