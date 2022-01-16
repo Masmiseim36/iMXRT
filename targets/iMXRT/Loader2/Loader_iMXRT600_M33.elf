@@ -1,0 +1,1029 @@
+                    (0x40C94000u)
+/** Peripheral IOMUXC_SNVS base pointer */
+#define IOMUXC_SNVS                              ((IOMUXC_SNVS_Type *)IOMUXC_SNVS_BASE)
+/** Array initializer of IOMUXC_SNVS peripheral base addresses */
+#define IOMUXC_SNVS_BASE_ADDRS                   { IOMUXC_SNVS_BASE }
+/** Array initializer of IOMUXC_SNVS peripheral base pointers */
+#define IOMUXC_SNVS_BASE_PTRS                    { IOMUXC_SNVS }
+
+/*!
+ * @}
+ */ /* end of group IOMUXC_SNVS_Peripheral_Access_Layer */
+
+
+/* ----------------------------------------------------------------------------
+   -- IOMUXC_SNVS_GPR Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup IOMUXC_SNVS_GPR_Peripheral_Access_Layer IOMUXC_SNVS_GPR Peripheral Access Layer
+ * @{
+ */
+
+/** IOMUXC_SNVS_GPR - Register Layout Typedef */
+typedef struct {
+  __IO uint32_t GPR[32];                           /**< GPR0 General Purpose Register, array offset: 0x0, array step: 0x4 */
+  __IO uint32_t GPR32;                             /**< GPR32 General Purpose Register, offset: 0x80 */
+  __IO uint32_t GPR33;                             /**< GPR33 General Purpose Register, offset: 0x84 */
+  __IO uint32_t GPR34;                             /**< GPR34 General Purpose Register, offset: 0x88 */
+  __IO uint32_t GPR35;                             /**< GPR35 General Purpose Register, offset: 0x8C */
+  __IO uint32_t GPR36;                             /**< GPR36 General Purpose Register, offset: 0x90 */
+  __IO uint32_t GPR37;                             /**< GPR37 General Purpose Register, offset: 0x94 */
+} IOMUXC_SNVS_GPR_Type;
+
+/* ----------------------------------------------------------------------------
+   -- IOMUXC_SNVS_GPR Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup IOMUXC_SNVS_GPR_Register_Masks IOMUXC_SNVS_GPR Register Masks
+ * @{
+ */
+
+/*! @name GPR - GPR0 General Purpose Register */
+/*! @{ */
+
+#define IOMUXC_SNVS_GPR_GPR_GPR_MASK             (0xFFFFFFFFU)
+#define IOMUXC_SNVS_GPR_GPR_GPR_SHIFT            (0U)
+/*! GPR - General purpose bits
+ */
+#define IOMUXC_SNVS_GPR_GPR_GPR(x)               (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR_GPR_SHIFT)) & IOMUXC_SNVS_GPR_GPR_GPR_MASK)
+/*! @} */
+
+/* The count of IOMUXC_SNVS_GPR_GPR */
+#define IOMUXC_SNVS_GPR_GPR_COUNT                (32U)
+
+/*! @name GPR32 - GPR32 General Purpose Register */
+/*! @{ */
+
+#define IOMUXC_SNVS_GPR_GPR32_GPR_MASK           (0xFFFEU)
+#define IOMUXC_SNVS_GPR_GPR32_GPR_SHIFT          (1U)
+/*! GPR - General purpose bits
+ */
+#define IOMUXC_SNVS_GPR_GPR32_GPR(x)             (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR32_GPR_SHIFT)) & IOMUXC_SNVS_GPR_GPR32_GPR_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR32_LOCK_MASK          (0xFFFF0000U)
+#define IOMUXC_SNVS_GPR_GPR32_LOCK_SHIFT         (16U)
+/*! LOCK - Lock the write to bit 15:0
+ */
+#define IOMUXC_SNVS_GPR_GPR32_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR32_LOCK_SHIFT)) & IOMUXC_SNVS_GPR_GPR32_LOCK_MASK)
+/*! @} */
+
+/*! @name GPR33 - GPR33 General Purpose Register */
+/*! @{ */
+
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_STATUS_CAPT_CLR_MASK (0x2U)
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_STATUS_CAPT_CLR_SHIFT (1U)
+/*! DCDC_STATUS_CAPT_CLR - DCDC captured status clear
+ *  0b0..No change
+ *  0b1..Clear the 3 bits of DCDC captured status: DCDC_OVER_VOL, DCDC_OVER_CUR, and DCDC_IN_LOW_VOL
+ */
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_STATUS_CAPT_CLR(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR33_DCDC_STATUS_CAPT_CLR_SHIFT)) & IOMUXC_SNVS_GPR_GPR33_DCDC_STATUS_CAPT_CLR_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR33_SNVS_BYPASS_EN_MASK (0x4U)
+#define IOMUXC_SNVS_GPR_GPR33_SNVS_BYPASS_EN_SHIFT (2U)
+/*! SNVS_BYPASS_EN - SNVS LDO_SNVS_ANA bypass enable
+ *  0b1..Enable bypass
+ *  0b0..Disable bypass
+ */
+#define IOMUXC_SNVS_GPR_GPR33_SNVS_BYPASS_EN(x)  (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR33_SNVS_BYPASS_EN_SHIFT)) & IOMUXC_SNVS_GPR_GPR33_SNVS_BYPASS_EN_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_IN_LOW_VOL_MASK (0x10000U)
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_IN_LOW_VOL_SHIFT (16U)
+/*! DCDC_IN_LOW_VOL - DCDC_IN low voltage detect
+ *  0b1..Voltage on DCDC_IN is lower than 2.6V
+ *  0b0..Voltage on DCDC_IN is higher than 2.6V
+ */
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_IN_LOW_VOL(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR33_DCDC_IN_LOW_VOL_SHIFT)) & IOMUXC_SNVS_GPR_GPR33_DCDC_IN_LOW_VOL_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_CUR_MASK (0x20000U)
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_CUR_SHIFT (17U)
+/*! DCDC_OVER_CUR - DCDC output over current alert
+ *  0b1..Overcurrent on DCDC output
+ *  0b0..No Overcurrent on DCDC output
+ */
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_CUR(x)   (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_CUR_SHIFT)) & IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_CUR_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_VOL_MASK (0x40000U)
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_VOL_SHIFT (18U)
+/*! DCDC_OVER_VOL - DCDC output over voltage alert
+ *  0b1..Overvoltage on DCDC VDDLP0 or VDDLP8 output
+ *  0b0..No Overvoltage on DCDC VDDLP0 or VDDLP8 output
+ */
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_VOL(x)   (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_VOL_SHIFT)) & IOMUXC_SNVS_GPR_GPR33_DCDC_OVER_VOL_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_STS_DC_OK_MASK (0x80000U)
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_STS_DC_OK_SHIFT (19U)
+/*! DCDC_STS_DC_OK - DCDC status OK
+ *  0b0..DCDC is settling
+ *  0b1..DCDC already settled
+ */
+#define IOMUXC_SNVS_GPR_GPR33_DCDC_STS_DC_OK(x)  (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR33_DCDC_STS_DC_OK_SHIFT)) & IOMUXC_SNVS_GPR_GPR33_DCDC_STS_DC_OK_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR33_SNVS_XTAL_CLK_OK_MASK (0x100000U)
+#define IOMUXC_SNVS_GPR_GPR33_SNVS_XTAL_CLK_OK_SHIFT (20U)
+/*! SNVS_XTAL_CLK_OK - 32K OSC ok flag
+ *  0b1..32K oscillator is stable into normal operation
+ *  0b0..32K oscillator is NOT stable into normal operation
+ */
+#define IOMUXC_SNVS_GPR_GPR33_SNVS_XTAL_CLK_OK(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR33_SNVS_XTAL_CLK_OK_SHIFT)) & IOMUXC_SNVS_GPR_GPR33_SNVS_XTAL_CLK_OK_MASK)
+/*! @} */
+
+/*! @name GPR34 - GPR34 General Purpose Register */
+/*! @{ */
+
+#define IOMUXC_SNVS_GPR_GPR34_LOCK_MASK          (0x1U)
+#define IOMUXC_SNVS_GPR_GPR34_LOCK_SHIFT         (0U)
+/*! LOCK - Lock the write to bit 31:1
+ *  0b0..Write access is not blocked
+ *  0b1..Write access is blocked
+ */
+#define IOMUXC_SNVS_GPR_GPR34_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR34_LOCK_SHIFT)) & IOMUXC_SNVS_GPR_GPR34_LOCK_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CORE_VOLT_DET_TRIM_SEL_MASK (0x2U)
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CORE_VOLT_DET_TRIM_SEL_SHIFT (1U)
+/*! SNVS_CORE_VOLT_DET_TRIM_SEL - SNVS core voltage detect trim select
+ *  0b0..The trimming codes are selected from eFuse
+ *  0b1..The trimming codes of core voltage detectors used to change the voltage falling trip point are selected from SNVS_CORE_VOLT_DET_TRIM
+ */
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CORE_VOLT_DET_TRIM_SEL(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR34_SNVS_CORE_VOLT_DET_TRIM_SEL_SHIFT)) & IOMUXC_SNVS_GPR_GPR34_SNVS_CORE_VOLT_DET_TRIM_SEL_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CORE_VOLT_DET_TRIM_MASK (0xCU)
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CORE_VOLT_DET_TRIM_SHIFT (2U)
+/*! SNVS_CORE_VOLT_DET_TRIM - SNVS core voltage detect trim
+ */
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CORE_VOLT_DET_TRIM(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR34_SNVS_CORE_VOLT_DET_TRIM_SHIFT)) & IOMUXC_SNVS_GPR_GPR34_SNVS_CORE_VOLT_DET_TRIM_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_TRIM_SEL_MASK (0x80U)
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_TRIM_SEL_SHIFT (7U)
+/*! SNVS_CLK_DET_TRIM_SEL - SNVS clock detect trim select
+ *  0b0..The trimming codes are selected from eFuse
+ *  0b1..The trimming codes of clock detector used to change the boundary frequencies are selected from SNVS_CLK_DET_TRIM
+ */
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_TRIM_SEL(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_TRIM_SEL_SHIFT)) & IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_TRIM_SEL_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_TRIM_MASK (0xFF00U)
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_TRIM_SHIFT (8U)
+/*! SNVS_CLK_DET_TRIM - SNVS clock detect trim bits
+ */
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_TRIM(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_TRIM_SHIFT)) & IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_TRIM_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_OFFSET_HIGH_MASK (0x30000U)
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_OFFSET_HIGH_SHIFT (16U)
+/*! SNVS_CLK_DET_OFFSET_HIGH - SNVS clock detect offset of high boundary frequency
+ *  0b00..No change (Default)
+ *  0b01..Add +5 to the Trim
+ *  0b10..Add +10 to the trim
+ *  0b11..Add -5 to the Trim
+ */
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_OFFSET_HIGH(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_OFFSET_HIGH_SHIFT)) & IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_OFFSET_HIGH_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_OFFSET_LOW_MASK (0xC0000U)
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_OFFSET_LOW_SHIFT (18U)
+/*! SNVS_CLK_DET_OFFSET_LOW - SNVS clock detect offset of low boundary frequency
+ *  0b00..No change (Default)
+ *  0b01..Add +5 to the Trim
+ *  0b10..Add +10 to the trim
+ *  0b11..Add -5 to the Trim
+ */
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_OFFSET_LOW(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_OFFSET_LOW_SHIFT)) & IOMUXC_SNVS_GPR_GPR34_SNVS_CLK_DET_OFFSET_LOW_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CAP_TRIM_SEL_MASK (0x800000U)
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CAP_TRIM_SEL_SHIFT (23U)
+/*! SNVS_CAP_TRIM_SEL - SNVS OSC load capacitor trim select
+ *  0b0..The trimming codes are selected from eFuse
+ *  0b1..The trimming codes are used from SNVS_OSC_CAP_TRIM (osc32k's load capacitor)
+ */
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_CAP_TRIM_SEL(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR34_SNVS_CAP_TRIM_SEL_SHIFT)) & IOMUXC_SNVS_GPR_GPR34_SNVS_CAP_TRIM_SEL_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_OSC_CAP_TRIM_MASK (0xF000000U)
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_OSC_CAP_TRIM_SHIFT (24U)
+/*! SNVS_OSC_CAP_TRIM - SNVS OSC load capacitor trim
+ */
+#define IOMUXC_SNVS_GPR_GPR34_SNVS_OSC_CAP_TRIM(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR34_SNVS_OSC_CAP_TRIM_SHIFT)) & IOMUXC_SNVS_GPR_GPR34_SNVS_OSC_CAP_TRIM_MASK)
+/*! @} */
+
+/*! @name GPR35 - GPR35 General Purpose Register */
+/*! @{ */
+
+#define IOMUXC_SNVS_GPR_GPR35_LOCK_MASK          (0x1U)
+#define IOMUXC_SNVS_GPR_GPR35_LOCK_SHIFT         (0U)
+/*! LOCK - Lock the write to bit 31:1
+ *  0b0..Write access is not blocked
+ *  0b1..Write access is blocked
+ */
+#define IOMUXC_SNVS_GPR_GPR35_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR35_LOCK_SHIFT)) & IOMUXC_SNVS_GPR_GPR35_LOCK_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_VOLT_DET_TRIM_SEL_MASK (0x8U)
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_VOLT_DET_TRIM_SEL_SHIFT (3U)
+/*! SNVS_VOLT_DET_TRIM_SEL - SNVS voltage detect trim select
+ *  0b0..The trimming codes are selected from eFuse
+ *  0b1..The trimming codes of voltage detectors to change the voltage boundaries in battery voltage detecting are selected from SNVS_VOLT_DET_TRIM
+ */
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_VOLT_DET_TRIM_SEL(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR35_SNVS_VOLT_DET_TRIM_SEL_SHIFT)) & IOMUXC_SNVS_GPR_GPR35_SNVS_VOLT_DET_TRIM_SEL_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_VOLT_DET_TRIM_MASK (0xFF0U)
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_VOLT_DET_TRIM_SHIFT (4U)
+/*! SNVS_VOLT_DET_TRIM - SNVS voltage detect trim
+ */
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_VOLT_DET_TRIM(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR35_SNVS_VOLT_DET_TRIM_SHIFT)) & IOMUXC_SNVS_GPR_GPR35_SNVS_VOLT_DET_TRIM_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_TRIM_SEL_MASK (0x8000U)
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_TRIM_SEL_SHIFT (15U)
+/*! SNVS_TEMP_DET_TRIM_SEL - SNVS temperature detect trim select
+ *  0b0..The trimming codes are selected from eFuse
+ *  0b1..The trimming codes to define the temperature boundaries of temperature detector are selected from SNVS_TEMP_DET_TRIM
+ */
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_TRIM_SEL(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_TRIM_SEL_SHIFT)) & IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_TRIM_SEL_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_TRIM_MASK (0xFFF0000U)
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_TRIM_SHIFT (16U)
+/*! SNVS_TEMP_DET_TRIM - SNVS temperature detect trim
+ */
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_TRIM(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_TRIM_SHIFT)) & IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_TRIM_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_OFFSET_HIGH_MASK (0x30000000U)
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_OFFSET_HIGH_SHIFT (28U)
+/*! SNVS_TEMP_DET_OFFSET_HIGH - SNVS temperature detect offset of high temperature boundary
+ *  0b00..No change (Default)
+ *  0b01..Add +5 to the Trim
+ *  0b10..Add +10 to the trim
+ *  0b11..Add -5 to the Trim
+ */
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_OFFSET_HIGH(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_OFFSET_HIGH_SHIFT)) & IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_OFFSET_HIGH_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_OFFSET_LOW_MASK (0xC0000000U)
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_OFFSET_LOW_SHIFT (30U)
+/*! SNVS_TEMP_DET_OFFSET_LOW - SNVS temperature detect offset of low temperature boundary
+ *  0b00..No change (Default)
+ *  0b01..Add +5 to the Trim
+ *  0b10..Add +10 to the trim
+ *  0b11..Add -5 to the Trim
+ */
+#define IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_OFFSET_LOW(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_OFFSET_LOW_SHIFT)) & IOMUXC_SNVS_GPR_GPR35_SNVS_TEMP_DET_OFFSET_LOW_MASK)
+/*! @} */
+
+/*! @name GPR36 - GPR36 General Purpose Register */
+/*! @{ */
+
+#define IOMUXC_SNVS_GPR_GPR36_SNVSDIG_SNVS1P8_ISO_EN_MASK (0x800000U)
+#define IOMUXC_SNVS_GPR_GPR36_SNVSDIG_SNVS1P8_ISO_EN_SHIFT (23U)
+/*! SNVSDIG_SNVS1P8_ISO_EN - SNVS RAM isolation enable bit
+ *  0b1..Enable the isolation to avoid extra leakage power before SNVS SRAM peripheral power or LDO_SNVS_DIG is switched off
+ *  0b0..Enable SRAM access (It should be cleared after LDO_SNVS_DIG and SNVS SRAM peripheral power is back)
+ */
+#define IOMUXC_SNVS_GPR_GPR36_SNVSDIG_SNVS1P8_ISO_EN(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVSDIG_SNVS1P8_ISO_EN_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVSDIG_SNVS1P8_ISO_EN_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_SLEEP_MASK (0x4000000U)
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_SLEEP_SHIFT (26U)
+/*! SNVS_SRAM_SLEEP - SNVS SRAM power-down enable bit
+ *  0b0..Enable SRAM access (It should be cleared after LDO_SNVS_DIG is enabled)
+ *  0b1..SNVS SRAM can go in Shutdown/ Periphery Off Array On/ Periphery On Array Off mode. In addition, this bit
+ *       ensures power-up without stuck-at /high DC current states and hence must be held to 1 during wake-up, so
+ *       this bit is default high.
+ */
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_SLEEP(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_SLEEP_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_SLEEP_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_STDBY_MASK (0x8000000U)
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_STDBY_SHIFT (27U)
+/*! SNVS_SRAM_STDBY - SNVS SRAM standby enable bit
+ *  0b1..SNVS SRAM enters low leakage state and large drivers are switched OFF
+ *  0b0..SNVS SRAM does not enter low leakage state
+ */
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_STDBY(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_STDBY_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_STDBY_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGEMP_FORCE_MASK (0x10000000U)
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGEMP_FORCE_SHIFT (28U)
+/*! SNVS_SRAM_PSWLARGEMP_FORCE - SNVS SRAM large switch control bit for peripheral
+ *  0b1..Switch off SNVS SRAM power for peripheral (SRAM array power is not impacted, and data can be retained)
+ *  0b0..Switch on SNVS SRAM power for peripheral
+ */
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGEMP_FORCE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGEMP_FORCE_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGEMP_FORCE_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGE_MASK (0x20000000U)
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGE_SHIFT (29U)
+/*! SNVS_SRAM_PSWLARGE - SNVS SRAM large switch control bit
+ *  0b1..Switch off SNVS SRAM power for peripheral and array
+ *  0b0..Switch on SNVS SRAM power for peripheral and array
+ */
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGE_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWLARGE_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALLMP_FORCE_MASK (0x40000000U)
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALLMP_FORCE_SHIFT (30U)
+/*! SNVS_SRAM_PSWSMALLMP_FORCE - SNVS SRAM small switch control bit for peripheral
+ *  0b1..Switch off SNVS SRAM power for peripheral (SRAM array power is not impacted, and data can be retained)
+ *  0b0..Switch on SNVS SRAM power for peripheral
+ */
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALLMP_FORCE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALLMP_FORCE_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALLMP_FORCE_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALL_MASK (0x80000000U)
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALL_SHIFT (31U)
+/*! SNVS_SRAM_PSWSMALL - SNVS SRAM small switch control bit
+ *  0b1..Switch off SNVS SRAM power for peripheral and array
+ *  0b0..Switch on SNVS SRAM power for peripheral and array
+ */
+#define IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALL(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALL_SHIFT)) & IOMUXC_SNVS_GPR_GPR36_SNVS_SRAM_PSWSMALL_MASK)
+/*! @} */
+
+/*! @name GPR37 - GPR37 General Purpose Register */
+/*! @{ */
+
+#define IOMUXC_SNVS_GPR_GPR37_LOCK_MASK          (0x1U)
+#define IOMUXC_SNVS_GPR_GPR37_LOCK_SHIFT         (0U)
+/*! LOCK - Lock the write to bit 31:1
+ *  0b0..Write access is not blocked
+ *  0b1..Write access is blocked
+ */
+#define IOMUXC_SNVS_GPR_GPR37_LOCK(x)            (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR37_LOCK_SHIFT)) & IOMUXC_SNVS_GPR_GPR37_LOCK_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR37_SNVS_TAMPER_PUE_MASK (0x7FEU)
+#define IOMUXC_SNVS_GPR_GPR37_SNVS_TAMPER_PUE_SHIFT (1U)
+/*! SNVS_TAMPER_PUE - SNVS tamper detect pin pull enable bit
+ */
+#define IOMUXC_SNVS_GPR_GPR37_SNVS_TAMPER_PUE(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR37_SNVS_TAMPER_PUE_SHIFT)) & IOMUXC_SNVS_GPR_GPR37_SNVS_TAMPER_PUE_MASK)
+
+#define IOMUXC_SNVS_GPR_GPR37_SNVS_TAMPER_PUS_MASK (0x1FF800U)
+#define IOMUXC_SNVS_GPR_GPR37_SNVS_TAMPER_PUS_SHIFT (11U)
+/*! SNVS_TAMPER_PUS - SNVS tamper detect pin pull selection bit
+ */
+#define IOMUXC_SNVS_GPR_GPR37_SNVS_TAMPER_PUS(x) (((uint32_t)(((uint32_t)(x)) << IOMUXC_SNVS_GPR_GPR37_SNVS_TAMPER_PUS_SHIFT)) & IOMUXC_SNVS_GPR_GPR37_SNVS_TAMPER_PUS_MASK)
+/*! @} */
+
+
+/*!
+ * @}
+ */ /* end of group IOMUXC_SNVS_GPR_Register_Masks */
+
+
+/* IOMUXC_SNVS_GPR - Peripheral instance base addresses */
+/** Peripheral IOMUXC_SNVS_GPR base address */
+#define IOMUXC_SNVS_GPR_BASE                     (0x40C98000u)
+/** Peripheral IOMUXC_SNVS_GPR base pointer */
+#define IOMUXC_SNVS_GPR                          ((IOMUXC_SNVS_GPR_Type *)IOMUXC_SNVS_GPR_BASE)
+/** Array initializer of IOMUXC_SNVS_GPR peripheral base addresses */
+#define IOMUXC_SNVS_GPR_BASE_ADDRS               { IOMUXC_SNVS_GPR_BASE }
+/** Array initializer of IOMUXC_SNVS_GPR peripheral base pointers */
+#define IOMUXC_SNVS_GPR_BASE_PTRS                { IOMUXC_SNVS_GPR }
+
+/*!
+ * @}
+ */ /* end of group IOMUXC_SNVS_GPR_Peripheral_Access_Layer */
+
+
+/* ----------------------------------------------------------------------------
+   -- IPS_DOMAIN Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup IPS_DOMAIN_Peripheral_Access_Layer IPS_DOMAIN Peripheral Access Layer
+ * @{
+ */
+
+/** IPS_DOMAIN - Register Layout Typedef */
+typedef struct {
+  struct {                                         /* offset: 0x0, array step: 0x10 */
+    __IO uint32_t SLOT_CTRL;                         /**< Slot Control Register, array offset: 0x0, array step: 0x10 */
+         uint8_t RESERVED_0[12];
+  } SLOT_CTRL[38];
+} IPS_DOMAIN_Type;
+
+/* ----------------------------------------------------------------------------
+   -- IPS_DOMAIN Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup IPS_DOMAIN_Register_Masks IPS_DOMAIN Register Masks
+ * @{
+ */
+
+/*! @name SLOT_CTRL - Slot Control Register */
+/*! @{ */
+
+#define IPS_DOMAIN_SLOT_CTRL_LOCKED_DOMAIN_ID_MASK (0xFU)
+#define IPS_DOMAIN_SLOT_CTRL_LOCKED_DOMAIN_ID_SHIFT (0U)
+/*! LOCKED_DOMAIN_ID - Domain ID of the slot to be locked
+ */
+#define IPS_DOMAIN_SLOT_CTRL_LOCKED_DOMAIN_ID(x) (((uint32_t)(((uint32_t)(x)) << IPS_DOMAIN_SLOT_CTRL_LOCKED_DOMAIN_ID_SHIFT)) & IPS_DOMAIN_SLOT_CTRL_LOCKED_DOMAIN_ID_MASK)
+
+#define IPS_DOMAIN_SLOT_CTRL_DOMAIN_LOCK_MASK    (0x8000U)
+#define IPS_DOMAIN_SLOT_CTRL_DOMAIN_LOCK_SHIFT   (15U)
+/*! DOMAIN_LOCK - Lock domain ID of this slot
+ *  0b0..Do not lock the domain ID
+ *  0b1..Lock the domain ID
+ */
+#define IPS_DOMAIN_SLOT_CTRL_DOMAIN_LOCK(x)      (((uint32_t)(((uint32_t)(x)) << IPS_DOMAIN_SLOT_CTRL_DOMAIN_LOCK_SHIFT)) & IPS_DOMAIN_SLOT_CTRL_DOMAIN_LOCK_MASK)
+
+#define IPS_DOMAIN_SLOT_CTRL_ALLOW_NONSECURE_MASK (0x10000U)
+#define IPS_DOMAIN_SLOT_CTRL_ALLOW_NONSECURE_SHIFT (16U)
+/*! ALLOW_NONSECURE - Allow non-secure write access to this domain control register or domain register
+ *  0b0..Do not allow non-secure write access
+ *  0b1..Allow non-secure write access
+ */
+#define IPS_DOMAIN_SLOT_CTRL_ALLOW_NONSECURE(x)  (((uint32_t)(((uint32_t)(x)) << IPS_DOMAIN_SLOT_CTRL_ALLOW_NONSECURE_SHIFT)) & IPS_DOMAIN_SLOT_CTRL_ALLOW_NONSECURE_MASK)
+
+#define IPS_DOMAIN_SLOT_CTRL_ALLOW_USER_MASK     (0x20000U)
+#define IPS_DOMAIN_SLOT_CTRL_ALLOW_USER_SHIFT    (17U)
+/*! ALLOW_USER - Allow user write access to this domain control register or domain register
+ *  0b0..Do not allow user write access
+ *  0b1..Allow user write access
+ */
+#define IPS_DOMAIN_SLOT_CTRL_ALLOW_USER(x)       (((uint32_t)(((uint32_t)(x)) << IPS_DOMAIN_SLOT_CTRL_ALLOW_USER_SHIFT)) & IPS_DOMAIN_SLOT_CTRL_ALLOW_USER_MASK)
+
+#define IPS_DOMAIN_SLOT_CTRL_LOCK_CONTROL_MASK   (0x80000000U)
+#define IPS_DOMAIN_SLOT_CTRL_LOCK_CONTROL_SHIFT  (31U)
+/*! LOCK_CONTROL - Lock control of this slot
+ *  0b0..Do not lock the control register of this slot
+ *  0b1..Lock the control register of this slot
+ */
+#define IPS_DOMAIN_SLOT_CTRL_LOCK_CONTROL(x)     (((uint32_t)(((uint32_t)(x)) << IPS_DOMAIN_SLOT_CTRL_LOCK_CONTROL_SHIFT)) & IPS_DOMAIN_SLOT_CTRL_LOCK_CONTROL_MASK)
+/*! @} */
+
+/* The count of IPS_DOMAIN_SLOT_CTRL */
+#define IPS_DOMAIN_SLOT_CTRL_COUNT               (38U)
+
+
+/*!
+ * @}
+ */ /* end of group IPS_DOMAIN_Register_Masks */
+
+
+/* IPS_DOMAIN - Peripheral instance base addresses */
+/** Peripheral IPS_DOMAIN base address */
+#define IPS_DOMAIN_BASE                          (0x40C87C00u)
+/** Peripheral IPS_DOMAIN base pointer */
+#define IPS_DOMAIN                               ((IPS_DOMAIN_Type *)IPS_DOMAIN_BASE)
+/** Array initializer of IPS_DOMAIN peripheral base addresses */
+#define IPS_DOMAIN_BASE_ADDRS                    { IPS_DOMAIN_BASE }
+/** Array initializer of IPS_DOMAIN peripheral base pointers */
+#define IPS_DOMAIN_BASE_PTRS                     { IPS_DOMAIN }
+
+/*!
+ * @}
+ */ /* end of group IPS_DOMAIN_Peripheral_Access_Layer */
+
+
+/* ----------------------------------------------------------------------------
+   -- KEY_MANAGER Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup KEY_MANAGER_Peripheral_Access_Layer KEY_MANAGER Peripheral Access Layer
+ * @{
+ */
+
+/** KEY_MANAGER - Register Layout Typedef */
+typedef struct {
+  __IO uint32_t MASTER_KEY_CTRL;                   /**< CSR Master Key Control Register, offset: 0x0 */
+       uint8_t RESERVED_0[12];
+  __IO uint32_t OTFAD1_KEY_CTRL;                   /**< CSR OTFAD-1 Key Control, offset: 0x10 */
+       uint8_t RESERVED_1[4];
+  __IO uint32_t OTFAD2_KEY_CTRL;                   /**< CSR OTFAD-2 Key Control, offset: 0x18 */
+       uint8_t RESERVED_2[4];
+  __IO uint32_t IEE_KEY_CTRL;                      /**< CSR IEE Key Control, offset: 0x20 */
+       uint8_t RESERVED_3[12];
+  __IO uint32_t PUF_KEY_CTRL;                      /**< CSR PUF Key Control, offset: 0x30 */
+       uint8_t RESERVED_4[972];
+  __IO uint32_t SLOT0_CTRL;                        /**< Slot 0 Control, offset: 0x400 */
+  __IO uint32_t SLOT1_CTRL;                        /**< Slot1 Control, offset: 0x404 */
+  __IO uint32_t SLOT2_CTRL;                        /**< Slot2 Control, offset: 0x408 */
+  __IO uint32_t SLOT3_CTRL;                        /**< Slot3 Control, offset: 0x40C */
+  __IO uint32_t SLOT4_CTRL;                        /**< Slot 4 Control, offset: 0x410 */
+} KEY_MANAGER_Type;
+
+/* ----------------------------------------------------------------------------
+   -- KEY_MANAGER Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup KEY_MANAGER_Register_Masks KEY_MANAGER Register Masks
+ * @{
+ */
+
+/*! @name MASTER_KEY_CTRL - CSR Master Key Control Register */
+/*! @{ */
+
+#define KEY_MANAGER_MASTER_KEY_CTRL_SELECT_MASK  (0x1U)
+#define KEY_MANAGER_MASTER_KEY_CTRL_SELECT_SHIFT (0U)
+/*! SELECT - Key select for SNVS OTPMK. Default value comes from FUSE_MASTER_KEY_SEL.
+ *  0b0..select key from UDF
+ *  0b1..If LOCK = 1, select key from PUF, otherwise select key from fuse (bypass the fuse OTPMK to SNVS)
+ */
+#define KEY_MANAGER_MASTER_KEY_CTRL_SELECT(x)    (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_MASTER_KEY_CTRL_SELECT_SHIFT)) & KEY_MANAGER_MASTER_KEY_CTRL_SELECT_MASK)
+
+#define KEY_MANAGER_MASTER_KEY_CTRL_LOCK_MASK    (0x10000U)
+#define KEY_MANAGER_MASTER_KEY_CTRL_LOCK_SHIFT   (16U)
+/*! LOCK - lock this register, prevent from writing. Default value comes from FUSE_MASTER_KEY_SEL_LOCK.
+ *  0b0..not locked
+ *  0b1..locked
+ */
+#define KEY_MANAGER_MASTER_KEY_CTRL_LOCK(x)      (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_MASTER_KEY_CTRL_LOCK_SHIFT)) & KEY_MANAGER_MASTER_KEY_CTRL_LOCK_MASK)
+/*! @} */
+
+/*! @name OTFAD1_KEY_CTRL - CSR OTFAD-1 Key Control */
+/*! @{ */
+
+#define KEY_MANAGER_OTFAD1_KEY_CTRL_SELECT_MASK  (0x1U)
+#define KEY_MANAGER_OTFAD1_KEY_CTRL_SELECT_SHIFT (0U)
+/*! SELECT - key select for OTFAD-1. Default value comes from FUSE_OTFAD1_KEY_SEL.
+ *  0b0..Select key from OCOTP USER_KEY5
+ *  0b1..If PUF_KEY_CTRL[LOCK] is 1, select key from PUF, otherwise select key from OCOTP USER_KEY5
+ */
+#define KEY_MANAGER_OTFAD1_KEY_CTRL_SELECT(x)    (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_OTFAD1_KEY_CTRL_SELECT_SHIFT)) & KEY_MANAGER_OTFAD1_KEY_CTRL_SELECT_MASK)
+
+#define KEY_MANAGER_OTFAD1_KEY_CTRL_LOCK_MASK    (0x10000U)
+#define KEY_MANAGER_OTFAD1_KEY_CTRL_LOCK_SHIFT   (16U)
+/*! LOCK - lock this register, prevent from writing. Default value comes from FUSE_OTFAD1_KEY_SEL_LOCK.
+ *  0b0..not locked
+ *  0b1..locked
+ */
+#define KEY_MANAGER_OTFAD1_KEY_CTRL_LOCK(x)      (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_OTFAD1_KEY_CTRL_LOCK_SHIFT)) & KEY_MANAGER_OTFAD1_KEY_CTRL_LOCK_MASK)
+/*! @} */
+
+/*! @name OTFAD2_KEY_CTRL - CSR OTFAD-2 Key Control */
+/*! @{ */
+
+#define KEY_MANAGER_OTFAD2_KEY_CTRL_SELECT_MASK  (0x1U)
+#define KEY_MANAGER_OTFAD2_KEY_CTRL_SELECT_SHIFT (0U)
+/*! SELECT - key select for OTFAD-2. Default value comes from FUSE_OTFAD1_KEY_SEL.
+ *  0b0..select key from OCOTP USER_KEY5
+ *  0b1..If PUF_KEY_CTRL[LOCK] is 1, select key from PUF, otherwise select key from OCOTP USER_KEY5
+ */
+#define KEY_MANAGER_OTFAD2_KEY_CTRL_SELECT(x)    (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_OTFAD2_KEY_CTRL_SELECT_SHIFT)) & KEY_MANAGER_OTFAD2_KEY_CTRL_SELECT_MASK)
+
+#define KEY_MANAGER_OTFAD2_KEY_CTRL_LOCK_MASK    (0x10000U)
+#define KEY_MANAGER_OTFAD2_KEY_CTRL_LOCK_SHIFT   (16U)
+/*! LOCK - lock this register, prevent from writing. Default value comes from FUSE_OTFAD2_KEY_SEL_LOCK.
+ *  0b0..not locked
+ *  0b1..locked
+ */
+#define KEY_MANAGER_OTFAD2_KEY_CTRL_LOCK(x)      (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_OTFAD2_KEY_CTRL_LOCK_SHIFT)) & KEY_MANAGER_OTFAD2_KEY_CTRL_LOCK_MASK)
+/*! @} */
+
+/*! @name IEE_KEY_CTRL - CSR IEE Key Control */
+/*! @{ */
+
+#define KEY_MANAGER_IEE_KEY_CTRL_RELOAD_MASK     (0x1U)
+#define KEY_MANAGER_IEE_KEY_CTRL_RELOAD_SHIFT    (0U)
+/*! RELOAD - Restart load key signal for IEE
+ *  0b0..Do nothing
+ *  0b1..Restart IEE key load flow
+ */
+#define KEY_MANAGER_IEE_KEY_CTRL_RELOAD(x)       (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_IEE_KEY_CTRL_RELOAD_SHIFT)) & KEY_MANAGER_IEE_KEY_CTRL_RELOAD_MASK)
+/*! @} */
+
+/*! @name PUF_KEY_CTRL - CSR PUF Key Control */
+/*! @{ */
+
+#define KEY_MANAGER_PUF_KEY_CTRL_LOCK_MASK       (0x1U)
+#define KEY_MANAGER_PUF_KEY_CTRL_LOCK_SHIFT      (0U)
+/*! LOCK - Lock signal for key select
+ *  0b0..Do not lock the key select
+ *  0b1..Lock the key select to select key from PUF, otherwise bypass key from OCOPT and do not lock. Once it has
+ *       been set to 1, it cannot be reset manually. It will be set to 0 when the IEE key reload operation is done.
+ */
+#define KEY_MANAGER_PUF_KEY_CTRL_LOCK(x)         (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_PUF_KEY_CTRL_LOCK_SHIFT)) & KEY_MANAGER_PUF_KEY_CTRL_LOCK_MASK)
+/*! @} */
+
+/*! @name SLOT0_CTRL - Slot 0 Control */
+/*! @{ */
+
+#define KEY_MANAGER_SLOT0_CTRL_WHITE_LIST_MASK   (0xFU)
+#define KEY_MANAGER_SLOT0_CTRL_WHITE_LIST_SHIFT  (0U)
+/*! WHITE_LIST - Whitelist
+ */
+#define KEY_MANAGER_SLOT0_CTRL_WHITE_LIST(x)     (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT0_CTRL_WHITE_LIST_SHIFT)) & KEY_MANAGER_SLOT0_CTRL_WHITE_LIST_MASK)
+
+#define KEY_MANAGER_SLOT0_CTRL_LOCK_LIST_MASK    (0x8000U)
+#define KEY_MANAGER_SLOT0_CTRL_LOCK_LIST_SHIFT   (15U)
+/*! LOCK_LIST - Lock whitelist
+ *  0b0..Whitelist is not locked
+ *  0b1..Whitelist is locked
+ */
+#define KEY_MANAGER_SLOT0_CTRL_LOCK_LIST(x)      (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT0_CTRL_LOCK_LIST_SHIFT)) & KEY_MANAGER_SLOT0_CTRL_LOCK_LIST_MASK)
+
+#define KEY_MANAGER_SLOT0_CTRL_TZ_NS_MASK        (0x10000U)
+#define KEY_MANAGER_SLOT0_CTRL_TZ_NS_SHIFT       (16U)
+/*! TZ_NS - Allow non-secure write access to this register and the slot it controls
+ *  0b0..Do not allow non-secure write access
+ *  0b1..Allow non-secure write access
+ */
+#define KEY_MANAGER_SLOT0_CTRL_TZ_NS(x)          (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT0_CTRL_TZ_NS_SHIFT)) & KEY_MANAGER_SLOT0_CTRL_TZ_NS_MASK)
+
+#define KEY_MANAGER_SLOT0_CTRL_TZ_USER_MASK      (0x20000U)
+#define KEY_MANAGER_SLOT0_CTRL_TZ_USER_SHIFT     (17U)
+/*! TZ_USER - Allow user write access to this register and the slot it controls
+ *  0b0..Do not allow user write access
+ *  0b1..Allow user write access
+ */
+#define KEY_MANAGER_SLOT0_CTRL_TZ_USER(x)        (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT0_CTRL_TZ_USER_SHIFT)) & KEY_MANAGER_SLOT0_CTRL_TZ_USER_MASK)
+
+#define KEY_MANAGER_SLOT0_CTRL_LOCK_CONTROL_MASK (0x80000000U)
+#define KEY_MANAGER_SLOT0_CTRL_LOCK_CONTROL_SHIFT (31U)
+/*! LOCK_CONTROL - Lock control of this slot
+ *  0b0..Do not lock the control register of this slot
+ *  0b1..Lock the control register of this slot
+ */
+#define KEY_MANAGER_SLOT0_CTRL_LOCK_CONTROL(x)   (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT0_CTRL_LOCK_CONTROL_SHIFT)) & KEY_MANAGER_SLOT0_CTRL_LOCK_CONTROL_MASK)
+/*! @} */
+
+/*! @name SLOT1_CTRL - Slot1 Control */
+/*! @{ */
+
+#define KEY_MANAGER_SLOT1_CTRL_WHITE_LIST_MASK   (0xFU)
+#define KEY_MANAGER_SLOT1_CTRL_WHITE_LIST_SHIFT  (0U)
+/*! WHITE_LIST - Whitelist
+ */
+#define KEY_MANAGER_SLOT1_CTRL_WHITE_LIST(x)     (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT1_CTRL_WHITE_LIST_SHIFT)) & KEY_MANAGER_SLOT1_CTRL_WHITE_LIST_MASK)
+
+#define KEY_MANAGER_SLOT1_CTRL_LOCK_LIST_MASK    (0x8000U)
+#define KEY_MANAGER_SLOT1_CTRL_LOCK_LIST_SHIFT   (15U)
+/*! LOCK_LIST - Lock whitelist
+ *  0b0..Whitelist is not locked
+ *  0b1..Whitelist is locked
+ */
+#define KEY_MANAGER_SLOT1_CTRL_LOCK_LIST(x)      (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT1_CTRL_LOCK_LIST_SHIFT)) & KEY_MANAGER_SLOT1_CTRL_LOCK_LIST_MASK)
+
+#define KEY_MANAGER_SLOT1_CTRL_TZ_NS_MASK        (0x10000U)
+#define KEY_MANAGER_SLOT1_CTRL_TZ_NS_SHIFT       (16U)
+/*! TZ_NS - Allow non-secure write access to this register and the slot it controls
+ *  0b0..Do not allow non-secure write access
+ *  0b1..Allow non-secure write access
+ */
+#define KEY_MANAGER_SLOT1_CTRL_TZ_NS(x)          (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT1_CTRL_TZ_NS_SHIFT)) & KEY_MANAGER_SLOT1_CTRL_TZ_NS_MASK)
+
+#define KEY_MANAGER_SLOT1_CTRL_TZ_USER_MASK      (0x20000U)
+#define KEY_MANAGER_SLOT1_CTRL_TZ_USER_SHIFT     (17U)
+/*! TZ_USER - Allow user write access to this register and the slot it controls
+ *  0b0..Do not allow user write access
+ *  0b1..Allow user write access
+ */
+#define KEY_MANAGER_SLOT1_CTRL_TZ_USER(x)        (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT1_CTRL_TZ_USER_SHIFT)) & KEY_MANAGER_SLOT1_CTRL_TZ_USER_MASK)
+
+#define KEY_MANAGER_SLOT1_CTRL_LOCK_CONTROL_MASK (0x80000000U)
+#define KEY_MANAGER_SLOT1_CTRL_LOCK_CONTROL_SHIFT (31U)
+/*! LOCK_CONTROL - Lock control of this slot
+ *  0b0..Do not lock the control register of this slot
+ *  0b1..Lock the control register of this slot
+ */
+#define KEY_MANAGER_SLOT1_CTRL_LOCK_CONTROL(x)   (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT1_CTRL_LOCK_CONTROL_SHIFT)) & KEY_MANAGER_SLOT1_CTRL_LOCK_CONTROL_MASK)
+/*! @} */
+
+/*! @name SLOT2_CTRL - Slot2 Control */
+/*! @{ */
+
+#define KEY_MANAGER_SLOT2_CTRL_WHITE_LIST_MASK   (0xFU)
+#define KEY_MANAGER_SLOT2_CTRL_WHITE_LIST_SHIFT  (0U)
+/*! WHITE_LIST - Whitelist
+ */
+#define KEY_MANAGER_SLOT2_CTRL_WHITE_LIST(x)     (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT2_CTRL_WHITE_LIST_SHIFT)) & KEY_MANAGER_SLOT2_CTRL_WHITE_LIST_MASK)
+
+#define KEY_MANAGER_SLOT2_CTRL_LOCK_LIST_MASK    (0x8000U)
+#define KEY_MANAGER_SLOT2_CTRL_LOCK_LIST_SHIFT   (15U)
+/*! LOCK_LIST - Lock whitelist
+ *  0b0..Whitelist is not locked
+ *  0b1..Whitelist is locked
+ */
+#define KEY_MANAGER_SLOT2_CTRL_LOCK_LIST(x)      (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT2_CTRL_LOCK_LIST_SHIFT)) & KEY_MANAGER_SLOT2_CTRL_LOCK_LIST_MASK)
+
+#define KEY_MANAGER_SLOT2_CTRL_TZ_NS_MASK        (0x10000U)
+#define KEY_MANAGER_SLOT2_CTRL_TZ_NS_SHIFT       (16U)
+/*! TZ_NS - Allow non-secure write access to this register and the slot it controls
+ *  0b0..Do not allow non-secure write access
+ *  0b1..Allow non-secure write access
+ */
+#define KEY_MANAGER_SLOT2_CTRL_TZ_NS(x)          (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT2_CTRL_TZ_NS_SHIFT)) & KEY_MANAGER_SLOT2_CTRL_TZ_NS_MASK)
+
+#define KEY_MANAGER_SLOT2_CTRL_TZ_USER_MASK      (0x20000U)
+#define KEY_MANAGER_SLOT2_CTRL_TZ_USER_SHIFT     (17U)
+/*! TZ_USER - Allow user write access to this register and the slot it controls
+ *  0b0..Do not allow user write access
+ *  0b1..Allow user write access
+ */
+#define KEY_MANAGER_SLOT2_CTRL_TZ_USER(x)        (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT2_CTRL_TZ_USER_SHIFT)) & KEY_MANAGER_SLOT2_CTRL_TZ_USER_MASK)
+
+#define KEY_MANAGER_SLOT2_CTRL_LOCK_CONTROL_MASK (0x80000000U)
+#define KEY_MANAGER_SLOT2_CTRL_LOCK_CONTROL_SHIFT (31U)
+/*! LOCK_CONTROL - Lock control of this slot
+ *  0b0..Do not lock the control register of this slot
+ *  0b1..Lock the control register of this slot
+ */
+#define KEY_MANAGER_SLOT2_CTRL_LOCK_CONTROL(x)   (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT2_CTRL_LOCK_CONTROL_SHIFT)) & KEY_MANAGER_SLOT2_CTRL_LOCK_CONTROL_MASK)
+/*! @} */
+
+/*! @name SLOT3_CTRL - Slot3 Control */
+/*! @{ */
+
+#define KEY_MANAGER_SLOT3_CTRL_WHITE_LIST_MASK   (0xFU)
+#define KEY_MANAGER_SLOT3_CTRL_WHITE_LIST_SHIFT  (0U)
+/*! WHITE_LIST - Whitelist
+ */
+#define KEY_MANAGER_SLOT3_CTRL_WHITE_LIST(x)     (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT3_CTRL_WHITE_LIST_SHIFT)) & KEY_MANAGER_SLOT3_CTRL_WHITE_LIST_MASK)
+
+#define KEY_MANAGER_SLOT3_CTRL_LOCK_LIST_MASK    (0x8000U)
+#define KEY_MANAGER_SLOT3_CTRL_LOCK_LIST_SHIFT   (15U)
+/*! LOCK_LIST - Lock whitelist
+ *  0b0..Whitelist is not locked
+ *  0b1..Whitelist is locked
+ */
+#define KEY_MANAGER_SLOT3_CTRL_LOCK_LIST(x)      (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT3_CTRL_LOCK_LIST_SHIFT)) & KEY_MANAGER_SLOT3_CTRL_LOCK_LIST_MASK)
+
+#define KEY_MANAGER_SLOT3_CTRL_TZ_NS_MASK        (0x10000U)
+#define KEY_MANAGER_SLOT3_CTRL_TZ_NS_SHIFT       (16U)
+/*! TZ_NS - Allow non-secure write access to this register and the slot it controls
+ *  0b0..Do not allow non-secure write access
+ *  0b1..Allow non-secure write access
+ */
+#define KEY_MANAGER_SLOT3_CTRL_TZ_NS(x)          (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT3_CTRL_TZ_NS_SHIFT)) & KEY_MANAGER_SLOT3_CTRL_TZ_NS_MASK)
+
+#define KEY_MANAGER_SLOT3_CTRL_TZ_USER_MASK      (0x20000U)
+#define KEY_MANAGER_SLOT3_CTRL_TZ_USER_SHIFT     (17U)
+/*! TZ_USER - Allow user write access to this register and the slot it controls
+ *  0b0..Do not allow user write access
+ *  0b1..Allow user write access
+ */
+#define KEY_MANAGER_SLOT3_CTRL_TZ_USER(x)        (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT3_CTRL_TZ_USER_SHIFT)) & KEY_MANAGER_SLOT3_CTRL_TZ_USER_MASK)
+
+#define KEY_MANAGER_SLOT3_CTRL_LOCK_CONTROL_MASK (0x80000000U)
+#define KEY_MANAGER_SLOT3_CTRL_LOCK_CONTROL_SHIFT (31U)
+/*! LOCK_CONTROL - Lock control of this slot
+ *  0b0..Do not lock the control register of this slot
+ *  0b1..Lock the control register of this slot
+ */
+#define KEY_MANAGER_SLOT3_CTRL_LOCK_CONTROL(x)   (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT3_CTRL_LOCK_CONTROL_SHIFT)) & KEY_MANAGER_SLOT3_CTRL_LOCK_CONTROL_MASK)
+/*! @} */
+
+/*! @name SLOT4_CTRL - Slot 4 Control */
+/*! @{ */
+
+#define KEY_MANAGER_SLOT4_CTRL_WHITE_LIST_MASK   (0xFU)
+#define KEY_MANAGER_SLOT4_CTRL_WHITE_LIST_SHIFT  (0U)
+/*! WHITE_LIST - Whitelist
+ */
+#define KEY_MANAGER_SLOT4_CTRL_WHITE_LIST(x)     (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT4_CTRL_WHITE_LIST_SHIFT)) & KEY_MANAGER_SLOT4_CTRL_WHITE_LIST_MASK)
+
+#define KEY_MANAGER_SLOT4_CTRL_LOCK_LIST_MASK    (0x8000U)
+#define KEY_MANAGER_SLOT4_CTRL_LOCK_LIST_SHIFT   (15U)
+/*! LOCK_LIST - Lock whitelist
+ *  0b0..Whitelist is not locked
+ *  0b1..Whitelist is locked
+ */
+#define KEY_MANAGER_SLOT4_CTRL_LOCK_LIST(x)      (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT4_CTRL_LOCK_LIST_SHIFT)) & KEY_MANAGER_SLOT4_CTRL_LOCK_LIST_MASK)
+
+#define KEY_MANAGER_SLOT4_CTRL_TZ_NS_MASK        (0x10000U)
+#define KEY_MANAGER_SLOT4_CTRL_TZ_NS_SHIFT       (16U)
+/*! TZ_NS - Allow non-secure write access to this register and the slot it controls
+ *  0b0..Do not allow non-secure write access
+ *  0b1..Allow non-secure write access
+ */
+#define KEY_MANAGER_SLOT4_CTRL_TZ_NS(x)          (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT4_CTRL_TZ_NS_SHIFT)) & KEY_MANAGER_SLOT4_CTRL_TZ_NS_MASK)
+
+#define KEY_MANAGER_SLOT4_CTRL_TZ_USER_MASK      (0x20000U)
+#define KEY_MANAGER_SLOT4_CTRL_TZ_USER_SHIFT     (17U)
+/*! TZ_USER - Allow user write access to this register and the slot it controls
+ *  0b0..Do not allow user write access
+ *  0b1..Allow user write access
+ */
+#define KEY_MANAGER_SLOT4_CTRL_TZ_USER(x)        (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT4_CTRL_TZ_USER_SHIFT)) & KEY_MANAGER_SLOT4_CTRL_TZ_USER_MASK)
+
+#define KEY_MANAGER_SLOT4_CTRL_LOCK_CONTROL_MASK (0x80000000U)
+#define KEY_MANAGER_SLOT4_CTRL_LOCK_CONTROL_SHIFT (31U)
+/*! LOCK_CONTROL - Lock control of this slot
+ *  0b0..Do not lock the control register of this slot
+ *  0b1..Lock the control register of this slot
+ */
+#define KEY_MANAGER_SLOT4_CTRL_LOCK_CONTROL(x)   (((uint32_t)(((uint32_t)(x)) << KEY_MANAGER_SLOT4_CTRL_LOCK_CONTROL_SHIFT)) & KEY_MANAGER_SLOT4_CTRL_LOCK_CONTROL_MASK)
+/*! @} */
+
+
+/*!
+ * @}
+ */ /* end of group KEY_MANAGER_Register_Masks */
+
+
+/* KEY_MANAGER - Peripheral instance base addresses */
+/** Peripheral KEY_MANAGER base address */
+#define KEY_MANAGER_BASE                         (0x40C80000u)
+/** Peripheral KEY_MANAGER base pointer */
+#define KEY_MANAGER                              ((KEY_MANAGER_Type *)KEY_MANAGER_BASE)
+/** Array initializer of KEY_MANAGER peripheral base addresses */
+#define KEY_MANAGER_BASE_ADDRS                   { KEY_MANAGER_BASE }
+/** Array initializer of KEY_MANAGER peripheral base pointers */
+#define KEY_MANAGER_BASE_PTRS                    { KEY_MANAGER }
+
+/*!
+ * @}
+ */ /* end of group KEY_MANAGER_Peripheral_Access_Layer */
+
+
+/* ----------------------------------------------------------------------------
+   -- KPP Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup KPP_Peripheral_Access_Layer KPP Peripheral Access Layer
+ * @{
+ */
+
+/** KPP - Register Layout Typedef */
+typedef struct {
+  __IO uint16_t KPCR;                              /**< Keypad Control Register, offset: 0x0 */
+  __IO uint16_t KPSR;                              /**< Keypad Status Register, offset: 0x2 */
+  __IO uint16_t KDDR;                              /**< Keypad Data Direction Register, offset: 0x4 */
+  __IO uint16_t KPDR;                              /**< Keypad Data Register, offset: 0x6 */
+} KPP_Type;
+
+/* ----------------------------------------------------------------------------
+   -- KPP Register Masks
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup KPP_Register_Masks KPP Register Masks
+ * @{
+ */
+
+/*! @name KPCR - Keypad Control Register */
+/*! @{ */
+
+#define KPP_KPCR_KRE_MASK                        (0xFFU)
+#define KPP_KPCR_KRE_SHIFT                       (0U)
+/*! KRE - KRE
+ *  0b00000000..Row is not included in the keypad key press detect.
+ *  0b00000001..Row is included in the keypad key press detect.
+ */
+#define KPP_KPCR_KRE(x)                          (((uint16_t)(((uint16_t)(x)) << KPP_KPCR_KRE_SHIFT)) & KPP_KPCR_KRE_MASK)
+
+#define KPP_KPCR_KCO_MASK                        (0xFF00U)
+#define KPP_KPCR_KCO_SHIFT                       (8U)
+/*! KCO - KCO
+ *  0b00000000..Column strobe output is totem pole drive.
+ *  0b00000001..Column strobe output is open drain.
+ */
+#define KPP_KPCR_KCO(x)                          (((uint16_t)(((uint16_t)(x)) << KPP_KPCR_KCO_SHIFT)) & KPP_KPCR_KCO_MASK)
+/*! @} */
+
+/*! @name KPSR - Keypad Status Register */
+/*! @{ */
+
+#define KPP_KPSR_KPKD_MASK                       (0x1U)
+#define KPP_KPSR_KPKD_SHIFT                      (0U)
+/*! KPKD - KPKD
+ *  0b0..No key presses detected
+ *  0b1..A key has been depressed
+ */
+#define KPP_KPSR_KPKD(x)                         (((uint16_t)(((uint16_t)(x)) << KPP_KPSR_KPKD_SHIFT)) & KPP_KPSR_KPKD_MASK)
+
+#define KPP_KPSR_KPKR_MASK                       (0x2U)
+#define KPP_KPSR_KPKR_SHIFT                      (1U)
+/*! KPKR - KPKR
+ *  0b0..No key release detected
+ *  0b1..All keys have been released
+ */
+#define KPP_KPSR_KPKR(x)                         (((uint16_t)(((uint16_t)(x)) << KPP_KPSR_KPKR_SHIFT)) & KPP_KPSR_KPKR_MASK)
+
+#define KPP_KPSR_KDSC_MASK                       (0x4U)
+#define KPP_KPSR_KDSC_SHIFT                      (2U)
+/*! KDSC - KDSC
+ *  0b0..No effect
+ *  0b1..Set bits that clear the keypad depress synchronizer chain
+ */
+#define KPP_KPSR_KDSC(x)                         (((uint16_t)(((uint16_t)(x)) << KPP_KPSR_KDSC_SHIFT)) & KPP_KPSR_KDSC_MASK)
+
+#define KPP_KPSR_KRSS_MASK                       (0x8U)
+#define KPP_KPSR_KRSS_SHIFT                      (3U)
+/*! KRSS - KRSS
+ *  0b0..No effect
+ *  0b1..Set bits which sets keypad release synchronizer chain
+ */
+#define KPP_KPSR_KRSS(x)                         (((uint16_t)(((uint16_t)(x)) << KPP_KPSR_KRSS_SHIFT)) & KPP_KPSR_KRSS_MASK)
+
+#define KPP_KPSR_KDIE_MASK                       (0x100U)
+#define KPP_KPSR_KDIE_SHIFT                      (8U)
+/*! KDIE - KDIE
+ *  0b0..No interrupt request is generated when KPKD is set.
+ *  0b1..An interrupt request is generated when KPKD is set.
+ */
+#define KPP_KPSR_KDIE(x)                         (((uint16_t)(((uint16_t)(x)) << KPP_KPSR_KDIE_SHIFT)) & KPP_KPSR_KDIE_MASK)
+
+#define KPP_KPSR_KRIE_MASK                       (0x200U)
+#define KPP_KPSR_KRIE_SHIFT                      (9U)
+/*! KRIE - KRIE
+ *  0b0..No interrupt request is generated when KPKR is set.
+ *  0b1..An interrupt request is generated when KPKR is set.
+ */
+#define KPP_KPSR_KRIE(x)                         (((uint16_t)(((uint16_t)(x)) << KPP_KPSR_KRIE_SHIFT)) & KPP_KPSR_KRIE_MASK)
+/*! @} */
+
+/*! @name KDDR - Keypad Data Direction Register */
+/*! @{ */
+
+#define KPP_KDDR_KRDD_MASK                       (0xFFU)
+#define KPP_KDDR_KRDD_SHIFT                      (0U)
+/*! KRDD - KRDD
+ *  0b00000000..ROWn pin configured as an input.
+ *  0b00000001..ROWn pin configured as an output.
+ */
+#define KPP_KDDR_KRDD(x)                         (((uint16_t)(((uint16_t)(x)) << KPP_KDDR_KRDD_SHIFT)) & KPP_KDDR_KRDD_MASK)
+
+#define KPP_KDDR_KCDD_MASK                       (0xFF00U)
+#define KPP_KDDR_KCDD_SHIFT                      (8U)
+/*! KCDD - KCDD
+ *  0b00000000..COLn pin is configured as an input.
+ *  0b00000001..COLn pin is configured as an output.
+ */
+#define KPP_KDDR_KCDD(x)                         (((uint16_t)(((uint16_t)(x)) << KPP_KDDR_KCDD_SHIFT)) & KPP_KDDR_KCDD_MASK)
+/*! @} */
+
+/*! @name KPDR - Keypad Data Register */
+/*! @{ */
+
+#define KPP_KPDR_KRD_MASK                        (0xFFU)
+#define KPP_KPDR_KRD_SHIFT                       (0U)
+/*! KRD - KRD
+ */
+#define KPP_KPDR_KRD(x)                          (((uint16_t)(((uint16_t)(x)) << KPP_KPDR_KRD_SHIFT)) & KPP_KPDR_KRD_MASK)
+
+#define KPP_KPDR_KCD_MASK                        (0xFF00U)
+#define KPP_KPDR_KCD_SHIFT                       (8U)
+/*! KCD - KCD
+ */
+#define KPP_KPDR_KCD(x)                          (((uint16_t)(((uint16_t)(x)) << KPP_KPDR_KCD_SHIFT)) & KPP_KPDR_KCD_MASK)
+/*! @} */
+
+
+/*!
+ * @}
+ */ /* end of group KPP_Register_Masks */
+
+
+/* KPP - Peripheral instance base addresses */
+/** Peripheral KPP base address */
+#define KPP_BASE                                 (0x400E0000u)
+/** Peripheral KPP base pointer */
+#define KPP                                      ((KPP_Type *)KPP_BASE)
+/** Array initializer of KPP peripheral base addresses */
+#define KPP_BASE_ADDRS                           { KPP_BASE }
+/** Array initializer of KPP peripheral base pointers */
+#define KPP_BASE_PTRS                            { KPP }
+/** Interrupt vectors for the KPP peripheral type */
+#define KPP_IRQS                                 { KPP_IRQn }
+
+/*!
+ * @}
+ */ /* end of group KPP_Peripheral_Access_Layer */
+
+
+/* ----------------------------------------------------------------------------
+   -- LCDIF Peripheral Access Layer
+   ---------------------------------------------------------------------------- */
+
+/*!
+ * @addtogroup LCDIF_Peripheral_Access_Layer LCDIF Peripheral Access Layer
+ * @{
+ */
+
+/** LCDIF - Register Layout Typedef */
+typedef struct {
+  __IO uint32_t CTRL;                              /**< LCDIF General Control Register, offset: 0x0 */
+  __IO uint32_t CTRL_SET;                          /**< LCDIF General Control Register, offset: 0x4 */
+  __IO uint32_t CTRL_CLR;                          /**< LCDIF General Control Register, offset: 0x8 */
+  __IO uint32_t CTRL_TOG;                          /**< LCDIF General Control Register, offset: 0xC */
+  __IO uint32_t CTRL1;                             /**< LCDIF General Control1 Register, offset: 0x10 */
+  __IO uint32_t CTRL1_SET;                         /**< LCDIF General Control1 Register, offset: 0x14 */
+  __IO uint32_t CTRL1_CLR;                         /**< LCDIF General Control1 Register, offset: 0x18 */
+  __IO uint32_t CTRL1_TOG;                         /**< LCDIF General Control1 Register, offset: 0x1C */
+  __IO uint32_t CTRL2;                             /**< LCDIF General Control2 Register, offset: 0x20 */
+  __IO uint32_t CTRL2_SET;                         /**< LCDIF General Control2 Register, offset: 0x24 */
+  __IO uint32_t CTRL2_CLR;                         /**< LCDIF General Control2 Register, offset: 0x28 */
+  __IO uint32_t CTRL2_TOG;                         /**< LCDIF General Control2 Register, offset: 0x2C */
+  __IO uint32_t TRANSFER_COUNT;                    /**< LCDIF Horizontal and Vertical Valid Data Count Register, offset: 0x30 */
+       uint8_t RESERVED_0[12];
+  __IO uint32_t CUR_BUF;                           /**< LCD Interface Current Buffer Address Register, offset: 0x40 */
+       uint8_t RESERVED_1[12];
+  __IO uint32_t NEXT_BUF;                          /**< LCD Interface Next Buffer Address Register, offset: 0x50 */
+       uint8_t RESERVED_2[28];
+  __IO uint32_t VDCTRL0;                           /**< LCDIF VSYNC Mode and Dotclk Mode Control Register0, offset: 0x70 */
+  __IO uint32_t VDCTRL0_SET;                       /**< LCDIF VSYNC Mode and Dotclk Mode Control Register0, offset: 0x74 */
+  __IO uint32_t VDCTRL0_CLR;                       /**< LCDIF VSYNC Mode and Dotclk Mode Control Register0, offset: 0x78 */
+  __IO uint32_t VDCTRL0_TOG;                       /**< LCDIF VSYNC Mode and Dotclk Mode Control Register0, offset: 0x7C */
+  __IO uint32_t VDCTRL1;                           /**< LCDIF VSYNC Mode and Dotclk Mode Control Register1, offset: 0x80 */
+       uint8_t RESERVED_3[12];
+  __IO uint32_t VDCTRL2;                           /**< LCDIF VSYNC Mode and Dotclk Mode Control Register2, offset: 0x90 */
+       uint8_t RESERVED_4[12];
+  __IO uint32_t VDCTRL3;                           /**< LCDIF VSYNC Mode and Dotclk Mode Control Register3, offset: 0xA0 */
+       uint8_t RESERVED_5[12];
+  __IO uint32_t VDCTRL4;                           /**< LCDIF VSYNC Mode and Dotclk Mode Control Register4, offset: 0xB0 */
+       uint8_t RESERVED_6[220];
+  __IO uint32_t BM_ERROR_STAT;                     /**< Bus Master Error Status Register, offset: 0x190 */
+       uint8_t RESERVED_7[12];
+  __IO uint32_t CRC_STAT;                          /**< CRC Status Register, offset: 0x1A0 */
+       uint8_t RESERVED_8[12];
+  __I  uint32_t STAT;                              /**< LCD Interface Status Register, offset: 0x1B0 */
+       uint8_t RESERVED_9[76];
+  __IO uint32_t THRES;                             /**< LCDIF Threshold Register, offset: 0x200 */
+       uint8_t RESERVED_10[380];
+  __IO uint32_t PIGEONCTRL0;                       /**< LCDIF Pigeon Mode Control0 Register, offset: 0x380 */
+  __IO uint32_t PIGEONCTRL0_SET;                   /**< LCDIF Pigeon Mode Control0 Register, offset: 0x384 */
+  __IO uint32_t PIGEONCTRL0_CLR;                   /**< LCDIF Pigeon Mode Control0 Register, offset: 0x388 */
+  __IO uint32_t PIGEONCTRL0_TOG;                   /**< LCDIF Pigeon Mode Control0 Register, offset: 0x38C */
+  __IO uint32_t PIGEONCTRL1;                       /**< LCDIF Pigeon Mode Control1 Register, offset: 0x390 */
+  __IO uint32_t PIGEONCTRL1_SET;                   /**< LCDIF Pigeon Mode Control1 Register, 

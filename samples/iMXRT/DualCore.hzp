@@ -1,0 +1,145 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="Sample: DualCore" target="8" version="2">
+  <configuration Name="THUMB Debug" inherited_configurations="THUMB;Debug" />
+  <configuration
+    Name="THUMB"
+    Platform="ARM"
+    arm_instruction_set="Thumb"
+    arm_library_instruction_set="Thumb"
+    c_preprocessor_definitions="__THUMB"
+    hidden="Yes" />
+  <configuration
+    Name="Debug"
+    c_preprocessor_definitions="DEBUG"
+    gcc_debugging_level="Level 3"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="None"
+    hidden="Yes" />
+  <configuration
+    Name="THUMB Release"
+    inherited_configurations="THUMB;Release" />
+  <configuration
+    Name="Release"
+    c_preprocessor_definitions="NDEBUG;STARTUP_FROM_RESET=1"
+    gcc_debugging_level="None"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="Level 1"
+    hidden="Yes" />
+  <project Name="DualCore_M7">
+    <configuration
+      CMSIS_CORE="Yes"
+      Name="Common"
+      Placement="FlexSPI (QuadSPI)"
+      Target="MIMXRT1176DVMAA_cm7"
+      arm_architecture="v7EM"
+      arm_core_type="Cortex-M7"
+      arm_fp_abi="Hard"
+      arm_fpu_type="FPv5-D16"
+      arm_linker_heap_size="1024"
+      arm_linker_stack_size="1024"
+      arm_simulator_memory_simulation_parameter="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x04000000"
+      arm_target_loader_applicable_loaders="Flash"
+      arm_target_loader_default_loader="Flash"
+      arm_target_loader_parameter="1"
+      arm_target_loader_reset_after_download="No"
+      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT"
+      debug_dependent_projects="DualCore_M4"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/$(DeviceName)_registers.xml"
+      debug_startup_completion_point="main"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT117x_cm7.xml"
+      linker_section_placement_file="$(TargetsDir)/iMXRT/placement_flexspi.xml"
+      linker_section_placement_macros=""
+      macros="DeviceName=MIMXRT1176_cm7;Family=iMXRT1170"
+      project_dependencies="DualCore_M4"
+      project_directory=""
+      project_type="Executable"
+      property_groups_file_path="$(TargetsDir)/iMXRT/propertyGroups.xml"
+      target_connect_script="Connect()"
+      target_get_partname_script="GetPartName()"
+      target_reset_script="Reset()"
+      target_script_file="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
+    <configuration
+      Name="Flash"
+      arm_target_flash_loader_file_path="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family).elf"
+      arm_target_loader_parameter="5" />
+    <folder Name="XIP_BOOT_HEADER">
+      <file file_name="flexspi_flash.h" />
+      <file file_name="flexspi_flash_Hyperflash.c" />
+      <file file_name="flexspi_flash_QSPI.c" />
+      <file file_name="flexspi_boot.c" />
+      <file file_name="flexspi_boot.h" />
+      <file file_name="flexspi_flash_OSPI_Adesto.c" />
+    </folder>
+    <folder Name="System Files">
+      <file file_name="$(StudioDir)/source/thumb_crt0.s" />
+      <file file_name="$(TargetsDir)/iMXRT/startup_$(DeviceName).s" />
+      <file file_name="$(TargetsDir)/iMXRT/system_$(DeviceName).h" />
+      <file file_name="$(TargetsDir)/iMXRT/system_$(DeviceName).c" />
+      <file file_name="$(TargetsDir)/iMXRT/$(DeviceName).h" />
+      <file file_name="$(TargetsDir)/iMXRT/$(DeviceName)_features.h" />
+      <file file_name="$(TargetsDir)/iMXRT/fsl_device_registers.h" />
+      <file file_name="MemoryMap_MIMXRT117x_cm7.xml">
+        <configuration Name="Common" file_type="Memory Map" />
+      </file>
+      <file file_name="placement_flexspi_M7.xml">
+        <configuration Name="Common" file_type="Section Placement" />
+      </file>
+      <configuration Name="Common" default_code_section=".init" />
+    </folder>
+    <file file_name="main_DualCore.cpp" />
+  </project>
+  <project Name="DualCore_M4">
+    <configuration
+      CMSIS_CORE="Yes"
+      Name="Common"
+      Placement="FlexSPI (QuadSPI)"
+      STLport="Yes"
+      Target="MIMXRT1176DVMAA_cm4"
+      arm_architecture="v7EM"
+      arm_core_type="Cortex-M4"
+      arm_fp_abi="Hard"
+      arm_fpu_type="FPv4-SP-D16"
+      arm_linker_heap_size="1024"
+      arm_linker_stack_size="1024"
+      arm_simulator_memory_simulation_parameter="RAM;0x1FFE0000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20240000;0x00080000;ROM;0x30000000;0x04000000"
+      arm_target_loader_applicable_loaders="Flash"
+      arm_target_loader_default_loader="Flash"
+      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/$(DeviceName)_registers.xml"
+      debug_startup_completion_point="main"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT117x_cm4.xml"
+      linker_section_placement_file="$(TargetsDir)/iMXRT/placement_flexspi.xml"
+      linker_section_placement_macros=""
+      macros="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170"
+      project_directory=""
+      project_type="Executable"
+      property_groups_file_path="$(TargetsDir)/iMXRT/propertyGroups_cm4.xml"
+      target_connect_script="Connect()"
+      target_get_partname_script="GetPartName()"
+      target_reset_script="Reset()"
+      target_script_file="$(TargetsDir)/iMXRT/iMXRT_Target.js"
+      target_stop_script="OnTargetStop_11xx_M4()" />
+    <configuration
+      Name="Flash"
+      arm_target_flash_loader_file_path="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family)_M4.elf"
+      arm_target_loader_parameter="5" />
+    <folder Name="System Files">
+      <file file_name="$(StudioDir)/source/thumb_crt0.s" />
+      <file file_name="$(TargetsDir)/iMXRT/startup_$(DeviceName).s" />
+      <file file_name="$(TargetsDir)/iMXRT/system_$(DeviceName).h" />
+      <file file_name="$(TargetsDir)/iMXRT/system_$(DeviceName).c" />
+      <file file_name="$(TargetsDir)/iMXRT/$(DeviceName).h" />
+      <file file_name="$(TargetsDir)/iMXRT/$(DeviceName)_features.h" />
+      <file file_name="$(TargetsDir)/iMXRT/fsl_device_registers.h" />
+      <file file_name="placement_flexspi_M4.xml">
+        <configuration Name="Common" file_type="Section Placement" />
+      </file>
+      <file file_name="MemoryMap_MIMXRT117x_cm4.xml">
+        <configuration Name="Common" file_type="Memory Map" />
+      </file>
+      <configuration Name="Common" default_code_section=".init" />
+    </folder>
+    <configuration Name="Release" c_preprocessor_definitions="NDEBUG" />
+    <file file_name="main_DualCore.cpp" />
+  </project>
+</solution>

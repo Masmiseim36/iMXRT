@@ -1,0 +1,527 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="iMXRT Loader" target="8" version="2">
+  <configuration
+    Name="Common"
+    Platform="ARM"
+    arm_instruction_set="Thumb"
+    arm_library_instruction_set="Thumb"
+    c_additional_options="-fno-signed-char;-Wno-narrowing;-Wall;-Wextra;-Wmisleading-indentation;-Wshadow;-Wdouble-promotion;-Wformat=2"
+    c_preprocessor_definitions="__THUMB;STARTUP_FROM_RESET=1;DISABLE_WDOG=1"
+    c_preprocessor_undefinitions="__STDCPP_THREADS__"
+    clang_tidy_checks_cpp="*;-llvm*;-fuchsia*;-modernize-use-trailing-return-type;-*braces-around-statements;-*magic-numbers;-cppcoreguidelines-pro-bounds-constant-array-index;-google-readability-namespace-comments"
+    cpp_only_additional_options="-Woverloaded-virtual;-Wnon-virtual-dtor" />
+  <configuration
+    Name="Debug"
+    c_preprocessor_definitions="DEBUG=1"
+    gcc_debugging_level="Level 3"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="None"
+    hidden="Yes" />
+  <configuration
+    Name="Release"
+    c_preprocessor_definitions="NDEBUG=1"
+    gcc_debugging_level="None"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="Level 1"
+    hidden="Yes" />
+  <configuration
+    Name="CM7"
+    Placement="TCM"
+    arm_architecture="v7EM"
+    arm_core_type="Cortex-M7"
+    arm_simulator_memory_simulation_parameter="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000"
+    hidden="Yes"
+    linker_section_placement_file="../placement_tcm.xml"
+    property_groups_file_path="$(ProjectDir)/../propertyGroups.xml" />
+  <configuration
+    Name="CM4"
+    Placement="TCM"
+    arm_architecture="v7EM"
+    arm_core_type="Cortex-M4"
+    arm_simulator_memory_simulation_parameter="ROM;0x08000000;0x04000000;RAM;0x1FFE0000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20240000;0x00080000;ROM;0x30000000;0x04000000"
+    hidden="Yes"
+    linker_section_placement_file="$(StudioDir)/targets/Cortex_M/tcm_placement.xml"
+    property_groups_file_path="$(ProjectDir)/../propertyGroups_cm4.xml" />
+  <configuration
+    Name="CM33"
+    Placement="SRAM"
+    arm_architecture="v8M_Mainline"
+    arm_core_type="Cortex-M33"
+    arm_fpu_type="FPv5-SP-D16"
+    arm_simulator_memory_simulation_parameter="ROM;0x08000000;0x08000000;RAM;0x00000000;0x00480000;RAM;0x10000000;0x00480000;RAM;0x20000000;0x00480000;RAM;0x30000000;0x00480000"
+    arm_v8M_has_cmse="Yes"
+    arm_v8M_has_dsp="Yes"
+    hidden="Yes"
+    linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
+    linker_section_placement_macros="RAM_NAME=SRAM_data"
+    property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml" />
+  <configuration
+    Name="600"
+    Target="MIMXRT685SFVKB_cm33"
+    c_preprocessor_definitions="CPU_MIMXRT685SFVKB_cm33"
+    c_user_include_directories=".;./iMXRT600/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT600.xml"
+    macros="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
+  <configuration
+    Name="1011"
+    Target="MIMXRT1011xxx5A"
+    arm_fpu_type="FPv5-SP-D16"
+    c_preprocessor_definitions="CPU_MIMXRT1011DAE5A"
+    c_user_include_directories=".;./iMXRT1011/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT1015.xml"
+    macros="DeviceName=MIMXRT1011" />
+  <configuration
+    Name="1015"
+    Target="MIMXRT1015CAF4A"
+    arm_fpu_type="FPv5-D16"
+    c_preprocessor_definitions="CPU_MIMXRT1015CAF4A"
+    c_user_include_directories=".;./iMXRT1015/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT1015.xml"
+    macros="DeviceName=MIMXRT1015" />
+  <configuration
+    Name="1021"
+    Target="MIMXRT1021DAF5A"
+    arm_fpu_type="FPv5-D16"
+    c_preprocessor_definitions="CPU_MIMXRT1021DAF5A"
+    c_user_include_directories=".;./iMXRT1021/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
+    macros="DeviceName=MIMXRT1021" />
+  <configuration
+    Name="1024"
+    Target="MIMXRT1024DAG5A"
+    arm_fpu_type="FPv5-D16"
+    c_preprocessor_definitions="CPU_MIMXRT1024DAG5A"
+    c_user_include_directories=".;./iMXRT1024/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
+    macros="DeviceName=MIMXRT1024" />
+  <configuration
+    Name="1050"
+    Target="MIMXRT1052DVJ6B"
+    arm_fpu_type="FPv5-D16"
+    c_preprocessor_definitions="CPU_MIMXRT1052DVJ6B"
+    c_user_include_directories=".;./iMXRT1050/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT105x.xml"
+    macros="DeviceName=MIMXRT1052" />
+  <configuration
+    Name="1060"
+    Target="MIMXRT1062DVJ6A"
+    arm_fpu_type="FPv5-D16"
+    c_preprocessor_definitions="CPU_MIMXRT1062DVJ6A"
+    c_user_include_directories=".;./iMXRT1060/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
+    macros="DeviceName=MIMXRT1062" />
+  <configuration
+    Name="1064"
+    Target="MIMXRT1064DVL6A"
+    arm_fpu_type="FPv5-D16"
+    c_preprocessor_definitions="CPU_MIMXRT1064DVL6A"
+    c_user_include_directories=".;./iMXRT1064/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
+    macros="DeviceName=MIMXRT1064" />
+  <configuration
+    Name="1170_CM7"
+    Target="MIMXRT1176DVMAA_cm7"
+    arm_fpu_type="FPv5-D16"
+    c_preprocessor_definitions="CPU_MIMXRT1176DVMAA_cm7"
+    c_user_include_directories=".;./iMXRT1170/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT117x_cm7.xml"
+    macros="DeviceName=MIMXRT1176_cm7;Family=iMXRT1170" />
+  <configuration
+    Name="1170_CM4"
+    Target="MIMXRT1176DVMAA_cm4"
+    arm_fpu_type="FPv4-SP-D16"
+    c_preprocessor_definitions="CPU_MIMXRT1176DVMAA_cm4"
+    c_user_include_directories=".;./iMXRT1170/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT117x_cm4.xml"
+    macros="DeviceName=MIMXRT1176_cm4" />
+  <configuration
+    Name="MIMXRT600_Debug"
+    build_output_file_name="Loader_iMXRT600_M33_Debug.elf"
+    inherited_configurations="CM33;600;Debug" />
+  <configuration
+    Name="MIMXRT600_Release"
+    build_output_file_name="Loader_iMXRT600_M33.elf"
+    inherited_configurations="CM33;600;Release" />
+  <configuration
+    Name="MIMXRT1011_Debug"
+    build_output_file_name="Loader_iMXRT1011_Debug.elf"
+    inherited_configurations="CM7;1011;Debug" />
+  <configuration
+    Name="MIMXRT1011_Release"
+    build_output_file_name="Loader_iMXRT1011.elf"
+    inherited_configurations="CM7;1011;Release" />
+  <configuration
+    Name="MIMXRT1015_Debug"
+    build_output_file_name="Loader_iMXRT1015_Debug.elf"
+    inherited_configurations="CM7;1015;Debug" />
+  <configuration
+    Name="MIMXRT1015_Release"
+    build_output_file_name="Loader_iMXRT1015.elf"
+    inherited_configurations="CM7;1015;Release" />
+  <configuration
+    Name="MIMXRT1021_Debug"
+    build_output_file_name="Loader_iMXRT1021_Debug.elf"
+    inherited_configurations="CM7;1021;Debug" />
+  <configuration
+    Name="MIMXRT1021_Release"
+    build_output_file_name="Loader_iMXRT1021.elf"
+    inherited_configurations="CM7;1021;Release" />
+  <configuration
+    Name="MIMXRT1024_Debug"
+    build_output_file_name="Loader_iMXRT1024_Debug.elf"
+    inherited_configurations="CM7;1024;Debug" />
+  <configuration
+    Name="MIMXRT1024_Release"
+    build_output_file_name="Loader_iMXRT1024.elf"
+    inherited_configurations="CM7;1024;Release" />
+  <configuration
+    Name="MIMXRT1050_Debug"
+    build_output_file_name="Loader_iMXRT1050_Debug.elf"
+    inherited_configurations="CM7;1050;Debug" />
+  <configuration
+    Name="MIMXRT1050_Release"
+    build_output_file_name="Loader_iMXRT1050.elf"
+    inherited_configurations="CM7;1050;Release" />
+  <configuration
+    Name="MIMXRT1060_Debug"
+    build_output_file_name="Loader_iMXRT1060_Debug.elf"
+    inherited_configurations="CM7;1060;Debug" />
+  <configuration
+    Name="MIMXRT1060_Release"
+    build_output_file_name="Loader_iMXRT1060.elf"
+    inherited_configurations="CM7;1060;Release" />
+  <configuration
+    Name="MIMXRT1064_Debug"
+    build_output_file_name="Loader_iMXRT1064_Debug.elf"
+    inherited_configurations="CM7;1064;Debug" />
+  <configuration
+    Name="MIMXRT1064_Release"
+    build_output_file_name="Loader_iMXRT1064.elf"
+    inherited_configurations="CM7;1064;Release" />
+  <configuration
+    Name="MIMXRT1170_Debug"
+    build_output_file_name="Loader_iMXRT1170_Debug.elf"
+    inherited_configurations="CM7;1170_CM7;Debug" />
+  <configuration
+    Name="MIMXRT1170_Release"
+    build_output_file_name="Loader_iMXRT1170.elf"
+    inherited_configurations="CM7;1170_CM7;Release" />
+  <configuration
+    Name="MIMXRT1170_CM4_Debug"
+    build_output_file_name="Loader_iMXRT1170_M4_Debug.elf"
+    inherited_configurations="CM4;1170_CM4;Debug" />
+  <configuration
+    Name="MIMXRT1170_CM4_Release"
+    build_output_file_name="Loader_iMXRT1170_M4.elf"
+    inherited_configurations="CM4;1170_CM4;Release" />
+  <project Name="Loader_CM7">
+    <configuration
+      CMSIS_CORE="Yes"
+      Name="Common"
+      arm_fp_abi="Hard"
+      arm_library_optimization="Small"
+      arm_linker_heap_size="1024"
+      arm_linker_stack_size="2048"
+      arm_target_loader_applicable_loaders=""
+      arm_target_loader_default_loader=""
+      arm_target_loader_reset_after_download="No"
+      batch_build_configurations="MIMXRT600_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1170_Release;MIMXRT1170_CM4_Release"
+      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
+      c_user_include_directories=".;./.."
+      debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
+      debug_startup_completion_point="main"
+      debug_type_file="$(StudioDir)/bin/libc++.xml"
+      gcc_c_language_standard="c11"
+      gcc_cplusplus_language_standard="c++14"
+      libcxx="Yes (No Exceptions)"
+      linker_additional_files="$(StudioDir)/lib/libmem$(LibExt)$(LIB);$(StudioDir)/lib/libmem_loader$(LibExt)$(LIB)"
+      linker_keep_symbols="libmem_crc32"
+      project_directory=""
+      project_type="Executable"
+      target_connect_script="Connect()"
+      target_get_partname_script="GetPartName()"
+      target_reset_script="Reset_Loader()"
+      target_script_file="$(ProjectDir)/../iMXRT_Target.js" />
+    <folder Name="System Files">
+      <file file_name="thumb_crt0.s" />
+      <file file_name="../system_$(DeviceName).h" />
+      <file file_name="../system_$(DeviceName).c" />
+      <file file_name="../$(DeviceName).h" />
+      <file file_name="../$(DeviceName)_features.h" />
+      <file file_name="../fsl_device_registers.h" />
+      <file file_name="startup.s" />
+      <file file_name="$(ProjectDir)/../iMXRT_Target.js">
+        <configuration Name="Common" file_type="Target Script" />
+      </file>
+      <configuration Name="Common" gcc_c_language_standard="gnu11" />
+    </folder>
+    <folder Name="drivers">
+      <file file_name="fsl_common.c" />
+      <file file_name="fsl_common.h" />
+      <file file_name="fsl_flexspi.c" />
+      <file file_name="fsl_flexspi.h" />
+      <file file_name="pin_mux.h" />
+      <folder Name="iMXRT500">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="500" build_exclude_from_build="No" />
+        <file file_name="iMXRT500/board.h" />
+        <file file_name="iMXRT500/clock_config.c" />
+        <file file_name="iMXRT500/clock_config.h" />
+        <file file_name="iMXRT500/fsl_clock.c" />
+        <file file_name="iMXRT500/fsl_clock.h" />
+        <file file_name="iMXRT500/fsl_dma.c" />
+        <file file_name="iMXRT500/fsl_dma.h" />
+        <file file_name="iMXRT500/fsl_gpio.c" />
+        <file file_name="iMXRT500/fsl_gpio.h" />
+        <file file_name="iMXRT500/fsl_iopctl.h" />
+        <file file_name="iMXRT500/fsl_power.c" />
+        <file file_name="iMXRT500/fsl_power.h" />
+        <file file_name="iMXRT500/fsl_reset.c" />
+        <file file_name="iMXRT500/fsl_reset.h" />
+        <file file_name="iMXRT500/pin_mux.c" />
+      </folder>
+      <folder Name="iMXRT600">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="600" build_exclude_from_build="No" />
+        <file file_name="iMXRT600/board.h" />
+        <file file_name="iMXRT600/clock_config.c" />
+        <file file_name="iMXRT600/clock_config.h" />
+        <file file_name="iMXRT600/fsl_clock.c" />
+        <file file_name="iMXRT600/fsl_clock.h" />
+        <file file_name="iMXRT600/fsl_dma.c" />
+        <file file_name="iMXRT600/fsl_dma.h" />
+        <file file_name="iMXRT600/fsl_gpio.c" />
+        <file file_name="iMXRT600/fsl_gpio.h" />
+        <file file_name="iMXRT600/fsl_reset.c" />
+        <file file_name="iMXRT600/fsl_reset.h" />
+        <file file_name="iMXRT600/pin_mux.c" />
+        <file file_name="iMXRT600/fsl_iopctl.h" />
+        <file file_name="iMXRT600/fsl_power.c" />
+        <file file_name="iMXRT600/fsl_power.h" />
+        <file file_name="iMXRT600/placement.xml">
+          <configuration Name="Common" file_type="Section Placement" />
+        </file>
+      </folder>
+      <folder Name="iMXRT1011">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1011" build_exclude_from_build="No" />
+        <file file_name="iMXRT1011/pin_mux.c" />
+        <file file_name="iMXRT1011/board.h" />
+        <file file_name="iMXRT1011/clock_config.c" />
+        <file file_name="iMXRT1011/clock_config.h" />
+        <file file_name="iMXRT1011/fsl_iomuxc.h" />
+        <file file_name="iMXRT1011/fsl_clock.c" />
+        <file file_name="iMXRT1011/fsl_clock.h" />
+        <file file_name="iMXRT1011/fsl_gpio.c" />
+        <file file_name="iMXRT1011/fsl_gpio.h" />
+        <file file_name="fsl_cache.c" />
+        <file file_name="fsl_cache.h" />
+        <file file_name="fsl_dmamux.c" />
+        <file file_name="fsl_dmamux.h" />
+        <file file_name="fsl_lpuart.c" />
+        <file file_name="fsl_lpuart.h" />
+        <file file_name="../MemoryMap_MIMXRT1011.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
+      </folder>
+      <folder Name="iMXRT1015">
+        <file file_name="iMXRT1015/fsl_clock.c" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1015" build_exclude_from_build="No" />
+        <file file_name="iMXRT1015/clock_config.c" />
+        <file file_name="iMXRT1015/clock_config.h" />
+        <file file_name="iMXRT1015/fsl_iomuxc.h" />
+        <file file_name="iMXRT1015/fsl_clock.h" />
+        <file file_name="iMXRT1015/pin_mux.c" />
+        <file file_name="iMXRT1015/board.h" />
+        <file file_name="iMXRT1015/fsl_gpio.c" />
+        <file file_name="iMXRT1015/fsl_gpio.h" />
+        <file file_name="fsl_cache.c" />
+        <file file_name="fsl_cache.h" />
+        <file file_name="fsl_dmamux.c" />
+        <file file_name="fsl_dmamux.h" />
+        <file file_name="fsl_lpuart.c" />
+        <file file_name="fsl_lpuart.h" />
+        <file file_name="../MemoryMap_MIMXRT1015.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
+      </folder>
+      <folder Name="iMXRT1021">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1021" build_exclude_from_build="No" />
+        <file file_name="iMXRT1021/fsl_clock.h" />
+        <file file_name="iMXRT1021/fsl_iomuxc.h" />
+        <file file_name="iMXRT1021/fsl_clock.c" />
+        <file file_name="iMXRT1021/clock_config.c" />
+        <file file_name="iMXRT1021/clock_config.h" />
+        <file file_name="iMXRT1021/pin_mux.c" />
+        <file file_name="iMXRT1021/board.h" />
+        <file file_name="iMXRT1021/fsl_gpio.c" />
+        <file file_name="iMXRT1021/fsl_gpio.h" />
+        <file file_name="fsl_cache.c" />
+        <file file_name="fsl_cache.h" />
+        <file file_name="fsl_dmamux.c" />
+        <file file_name="fsl_dmamux.h" />
+        <file file_name="fsl_lpuart.c" />
+        <file file_name="fsl_lpuart.h" />
+        <file file_name="../MemoryMap_MIMXRT102x.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
+      </folder>
+      <folder Name="iMXRT1024">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1024" build_exclude_from_build="No" />
+        <file file_name="iMXRT1024/fsl_clock.h" />
+        <file file_name="iMXRT1024/fsl_iomuxc.h" />
+        <file file_name="iMXRT1024/fsl_clock.c" />
+        <file file_name="iMXRT1024/clock_config.c" />
+        <file file_name="iMXRT1024/clock_config.h" />
+        <file file_name="iMXRT1024/pin_mux.c" />
+        <file file_name="iMXRT1024/board.h" />
+        <file file_name="iMXRT1024/fsl_gpio.c" />
+        <file file_name="iMXRT1024/fsl_gpio.h" />
+        <file file_name="fsl_cache.c" />
+        <file file_name="fsl_cache.h" />
+        <file file_name="fsl_dmamux.c" />
+        <file file_name="fsl_dmamux.h" />
+        <file file_name="fsl_lpuart.c" />
+        <file file_name="fsl_lpuart.h" />
+        <file file_name="../MemoryMap_MIMXRT102x.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
+      </folder>
+      <folder Name="iMXRT1050">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1050" build_exclude_from_build="No" />
+        <file file_name="iMXRT1050/fsl_clock.h" />
+        <file file_name="iMXRT1050/fsl_iomuxc.h" />
+        <file file_name="iMXRT1050/fsl_clock.c" />
+        <file file_name="iMXRT1050/clock_config.c" />
+        <file file_name="iMXRT1050/clock_config.h" />
+        <file file_name="iMXRT1050/pin_mux.c" />
+        <file file_name="iMXRT1050/board.h" />
+        <file file_name="iMXRT1050/fsl_gpio.c" />
+        <file file_name="iMXRT1050/fsl_gpio.h" />
+        <file file_name="fsl_cache.c" />
+        <file file_name="fsl_cache.h" />
+        <file file_name="fsl_dmamux.c" />
+        <file file_name="fsl_dmamux.h" />
+        <file file_name="fsl_lpuart.c" />
+        <file file_name="fsl_lpuart.h" />
+        <file file_name="../MemoryMap_MIMXRT105x.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
+      </folder>
+      <folder Name="iMXRT1060">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1060" build_exclude_from_build="No" />
+        <file file_name="iMXRT1060/fsl_clock.h" />
+        <file file_name="iMXRT1060/fsl_iomuxc.h" />
+        <file file_name="iMXRT1060/fsl_clock.c" />
+        <file file_name="iMXRT1060/clock_config.c" />
+        <file file_name="iMXRT1060/clock_config.h" />
+        <file file_name="iMXRT1060/pin_mux.c" />
+        <file file_name="iMXRT1060/board.h" />
+        <file file_name="iMXRT1060/fsl_gpio.c" />
+        <file file_name="iMXRT1060/fsl_gpio.h" />
+        <file file_name="fsl_cache.c" />
+        <file file_name="fsl_cache.h" />
+        <file file_name="fsl_dmamux.c" />
+        <file file_name="fsl_dmamux.h" />
+        <file file_name="fsl_lpuart.c" />
+        <file file_name="fsl_lpuart.h" />
+        <file file_name="../MemoryMap_MIMXRT106x.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
+      </folder>
+      <folder Name="iMXRT1064">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1064" build_exclude_from_build="No" />
+        <file file_name="iMXRT1064/fsl_clock.h" />
+        <file file_name="iMXRT1064/fsl_iomuxc.h" />
+        <file file_name="iMXRT1064/fsl_clock.c" />
+        <file file_name="iMXRT1064/clock_config.c" />
+        <file file_name="iMXRT1064/clock_config.h" />
+        <file file_name="iMXRT1064/pin_mux.c" />
+        <file file_name="iMXRT1064/board.h" />
+        <file file_name="iMXRT1064/fsl_gpio.c" />
+        <file file_name="iMXRT1064/fsl_gpio.h" />
+        <file file_name="fsl_cache.c" />
+        <file file_name="fsl_cache.h" />
+        <file file_name="fsl_dmamux.c" />
+        <file file_name="fsl_dmamux.h" />
+        <file file_name="fsl_lpuart.c" />
+        <file file_name="fsl_lpuart.h" />
+        <file file_name="../MemoryMap_MIMXRT106x.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
+      </folder>
+      <folder Name="iMXRT1170">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1170_CM7" build_exclude_from_build="No" />
+        <configuration Name="1170_CM4" build_exclude_from_build="No" />
+        <file file_name="iMXRT1170/fsl_clock.c" />
+        <file file_name="iMXRT1170/fsl_clock.h" />
+        <file file_name="iMXRT1170/fsl_iomuxc.h" />
+        <file file_name="iMXRT1170/clock_config.h" />
+        <file file_name="iMXRT1170/clock_config.c" />
+        <file file_name="iMXRT1170/fsl_anatop_ai.h" />
+        <file file_name="iMXRT1170/fsl_anatop_ai.c" />
+        <file file_name="iMXRT1170/pin_mux.c" />
+        <file file_name="iMXRT1170/board.h" />
+        <file file_name="iMXRT1170/fsl_gpio.c" />
+        <file file_name="iMXRT1170/fsl_gpio.h" />
+        <file file_name="iMXRT1170/fsl_pmu.c" />
+        <file file_name="iMXRT1170/fsl_pmu.h" />
+        <file file_name="fsl_cache.c">
+          <configuration Name="CM4" build_exclude_from_build="Yes" />
+        </file>
+        <file file_name="fsl_cache.h" />
+        <file file_name="fsl_dmamux.c" />
+        <file file_name="fsl_dmamux.h" />
+        <file file_name="fsl_lpuart.c" />
+        <file file_name="fsl_lpuart.h" />
+        <file file_name="../MemoryMap_MIMXRT117x_cm7.xml" />
+      </folder>
+      <folder Name="CM4">
+        <file file_name="iMXRT1170/cm4/fsl_cache.c" />
+        <file file_name="iMXRT1170/cm4/fsl_cache.h" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="CM4" build_exclude_from_build="No" />
+      </folder>
+    </folder>
+    <folder Name="Source">
+      <file file_name="loader.cpp" />
+      <file file_name="board.cpp" />
+      <file file_name="libmem_driver_Hyperflash.h" />
+      <file file_name="libmem_driver_Hyperflash.cpp" />
+      <file file_name="libmem_Tools.h" />
+      <file file_name="libmem_Tools.cpp" />
+      <file file_name="libmem_driver_xSPI.h" />
+      <file file_name="libmem_driver_xSPI.cpp" />
+      <file file_name="DebugPrint.h" />
+      <file file_name="DebugPrint.cpp" />
+      <file file_name="DebugPrint_USART.cpp" />
+      <file file_name="board_generic.h" />
+      <file file_name="libmem_LUT_Generic.h" />
+      <file file_name="libmem_LUT_Adesto.h" />
+      <file file_name="libmem_LUT_Adesto.cpp" />
+      <file file_name="libmem_LUT_Macronix.h" />
+      <file file_name="libmem_LUT_Macronix.cpp" />
+    </folder>
+    <folder Name="libmem">
+      <file file_name="$(StudioDir)/include/libmem.h" />
+      <file file_name="$(StudioDir)/include/libmem_loader.h" />
+    </folder>
+  </project>
+</solution>

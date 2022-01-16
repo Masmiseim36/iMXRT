@@ -1,0 +1,48 @@
+<!DOCTYPE Linker_Placement_File>
+<Root name="Flash Section Placement">
+	<MemorySegment name="$(FLASH_NAME:FlexSPI)">
+		<ProgramSection size="0x400"       load="Yes" name=".boot"               keep="Yes" fill="0xFF" address_symbol="__FLASH_BASE" />
+		<ProgramSection alignment="4"      load="Yes" name=".boot_hdr.conf"      keep="Yes" fill="0xFF" address_symbol="__HDR_BASE" />
+		<ProgramSection alignment="0x1000" load="Yes" name=".boot_hdr.ivt"       keep="Yes" fill="0xFF"/>
+		<ProgramSection                    load="Yes" name=".boot_hdr.boot_data" keep="Yes" fill="0xFF"/>
+		<ProgramSection                    load="Yes" name=".boot_hdr.dcd_data"  keep="Yes" fill="0xFF"/>
+		<ProgramSection alignment="0x1000" load="Yes" name=".vectors"                       fill="0xFF" address_symbol="__VECTOR_TABLE" />
+		<ProgramSection alignment="4"      load="Yes" name=".init" />
+		<ProgramSection alignment="4"      load="Yes" name=".init_rodata" />
+		<ProgramSection alignment="4"      load="Yes" name=".text" />
+		<ProgramSection alignment="4"      load="Yes" name=".dtors" />
+		<ProgramSection alignment="4"      load="Yes" name=".ctors" />
+		<ProgramSection alignment="4"      load="Yes" name=".rodata" />
+		<ProgramSection alignment="4"      load="Yes" name=".rodata2" />
+		<ProgramSection alignment="4"      load="Yes" name=".ARM.exidx" address_symbol="__exidx_start" end_symbol="__exidx_end" />
+		<ProgramSection alignment="4"      load="Yes" name=".fast"       runin=".fast_run" />
+		<ProgramSection alignment="4"      load="Yes" name=".data"       runin=".data_run" />
+		<ProgramSection alignment="4"      load="Yes" name=".tdata"      runin=".tdata_run" />
+		<ProgramSection alignment="4"      load="Yes" name=".data_tcm"   runin=".data_tcm_run" />
+		<ProgramSection alignment="4"      load="Yes" name=".rodata_tcm" runin=".rodata_tcm_run" />
+		<ProgramSection alignment="4"      load="Yes" name=".text_tcm"   runin=".text_tcm_run" />
+	</MemorySegment>
+
+	<MemorySegment name="$(RAM_NAME:ITCM)">
+		<ProgramSection alignment="0x100" load="No" name=".vectors_ram" start="$(RAM_START:$(SRAM_START:))" />
+		<ProgramSection alignment="4"     load="No" name=".fast_run" />
+		<ProgramSection alignment="4"     load="No" name=".text_tcm_run" />
+	</MemorySegment>
+
+	<MemorySegment name="$(DTCM_NAME:DTCM)">
+		<ProgramSection alignment="4" load="No" name=".bss_tcm" />
+		<ProgramSection alignment="4" load="No" name=".data_tcm_run" />
+		<ProgramSection alignment="4" load="No" name=".rodata_tcm_run" />
+	</MemorySegment>
+
+	<MemorySegment name="OCRAM1">
+		<ProgramSection alignment="4" load="No" name=".data_run" />
+		<ProgramSection alignment="4" load="No" name=".bss" />
+		<ProgramSection alignment="4" load="No" name=".tbss" />
+		<ProgramSection alignment="4" load="No" name=".tdata_run" />
+		<ProgramSection alignment="4" load="No" name=".non_init" />
+		<ProgramSection alignment="4" size="__HEAPSIZE__" load="No" name=".heap" />
+		<ProgramSection alignment="8" size="__STACKSIZE__" load="No" name=".stack" />
+		<ProgramSection alignment="8" size="__STACKSIZE_PROCESS__" load="No" name=".stack_process" />
+	</MemorySegment>
+</Root>
