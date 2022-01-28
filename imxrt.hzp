@@ -171,30 +171,32 @@
           <file file_name="targets/iMXRT/startup_MIMXRT106A.s" />
         </folder>
         <folder Name="116x">
-          <file file_name="targets/iMXRT/XML/MIMXRT1165_cm4_Registers.xml" />
-          <file file_name="targets/iMXRT/XML/MIMXRT1165_cm7_Registers.xml" />
           <file file_name="targets/iMXRT/MIMXRT1165_cm4.h" />
           <file file_name="targets/iMXRT/MIMXRT1165_cm4_features.h" />
+          <file file_name="targets/iMXRT/XML/MIMXRT1165_cm4_Registers.xml" />
           <file file_name="targets/iMXRT/MIMXRT1165_cm7.h" />
           <file file_name="targets/iMXRT/MIMXRT1165_cm7_features.h" />
+          <file file_name="targets/iMXRT/XML/MIMXRT1165_cm7_Registers.xml" />
           <file file_name="targets/iMXRT/system_MIMXRT1165_cm4.c" />
           <file file_name="targets/iMXRT/system_MIMXRT1165_cm4.h" />
           <file file_name="targets/iMXRT/system_MIMXRT1165_cm7.c" />
           <file file_name="targets/iMXRT/system_MIMXRT1165_cm7.h" />
           <file file_name="targets/iMXRT/startup_MIMXRT1165_cm4.s" />
           <file file_name="targets/iMXRT/startup_MIMXRT1165_cm7.s" />
-          <file file_name="targets/iMXRT/XML/MIMXRT1166_cm4_Registers.xml" />
-          <file file_name="targets/iMXRT/XML/MIMXRT1166_cm7_Registers.xml" />
           <file file_name="targets/iMXRT/MIMXRT1166_cm4.h" />
           <file file_name="targets/iMXRT/MIMXRT1166_cm4_features.h" />
+          <file file_name="targets/iMXRT/XML/MIMXRT1166_cm4_Registers.xml" />
           <file file_name="targets/iMXRT/MIMXRT1166_cm7.h" />
           <file file_name="targets/iMXRT/MIMXRT1166_cm7_features.h" />
+          <file file_name="targets/iMXRT/XML/MIMXRT1166_cm7_Registers.xml" />
           <file file_name="targets/iMXRT/system_MIMXRT1166_cm4.c" />
           <file file_name="targets/iMXRT/system_MIMXRT1166_cm4.h" />
           <file file_name="targets/iMXRT/system_MIMXRT1166_cm7.c" />
           <file file_name="targets/iMXRT/system_MIMXRT1166_cm7.h" />
           <file file_name="targets/iMXRT/startup_MIMXRT1166_cm4.s" />
           <file file_name="targets/iMXRT/startup_MIMXRT1166_cm7.s" />
+          <file file_name="targets/iMXRT/MemoryMap_MIMXRT116x_cm4.xml" />
+          <file file_name="targets/iMXRT/MemoryMap_MIMXRT116x_cm7.xml" />
         </folder>
         <folder Name="117x">
           <file file_name="targets/iMXRT/MIMXRT1171.h" />
