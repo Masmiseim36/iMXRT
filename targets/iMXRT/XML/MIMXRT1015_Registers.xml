@@ -5390,6 +5390,18 @@
       <BitField start="2" size="1" name="DM_STATE" description="DM line state output of the charger detector." />
       <BitField start="3" size="1" name="DP_STATE" description="DP line state output of the charger detector." />
     </Register>
+    <Register start="+0x1E0" size="4" name="USB_ANALOG_USB1_LOOPBACK" access="Read/Write" description="USB Loopback Test Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="UTMI_TESTSTART" description="Setting this bit can enable 1" />
+    </Register>
+    <Register start="+0x1E4" size="4" name="USB_ANALOG_USB1_LOOPBACK_SET" access="Read/Write" description="USB Loopback Test Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="UTMI_TESTSTART" description="Setting this bit can enable 1" />
+    </Register>
+    <Register start="+0x1E8" size="4" name="USB_ANALOG_USB1_LOOPBACK_CLR" access="Read/Write" description="USB Loopback Test Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="UTMI_TESTSTART" description="Setting this bit can enable 1" />
+    </Register>
+    <Register start="+0x1EC" size="4" name="USB_ANALOG_USB1_LOOPBACK_TOG" access="Read/Write" description="USB Loopback Test Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="UTMI_TESTSTART" description="Setting this bit can enable 1" />
+    </Register>
     <Register start="+0x1F0" size="4" name="USB_ANALOG_USB1_MISC" access="Read/Write" description="USB Misc Register" reset_value="0x2" reset_mask="0xFFFFFFFF">
       <BitField start="0" size="1" name="HS_USE_EXTERNAL_R" description="Use external resistor to generate the current bias for the high speed transmitter" />
       <BitField start="1" size="1" name="EN_DEGLITCH" description="Enable the deglitching circuit of the USB PLL output." />
@@ -5410,9 +5422,9 @@
       <BitField start="1" size="1" name="EN_DEGLITCH" description="Enable the deglitching circuit of the USB PLL output." />
       <BitField start="30" size="1" name="EN_CLK_UTMI" description="Enables the clk to the UTMI block." />
     </Register>
-    <Register start="+0x260" size="4" name="USB_ANALOG_DIGPROG" access="ReadOnly" description="Chip Silicon Version" reset_value="0x620002" reset_mask="0xFFFFFFFF">
+    <Register start="+0x260" size="4" name="USB_ANALOG_DIGPROG" access="ReadOnly" description="Chip Silicon Version" reset_value="0x6B0000" reset_mask="0xFFFFFFFF">
       <BitField start="0" size="32" name="SILICON_REVISION" description="Chip silicon revision">
-        <Enum name="SILICON_REVISION_6422530" start="0x620002" description="Silicon revision 1.0" />
+        <Enum name="SILICON_REVISION_7012352" start="0x6B0000" description="Silicon revision 1.0" />
       </BitField>
     </Register>
   </RegisterGroup>
@@ -26885,6 +26897,69 @@
       <BitField start="30" size="1" name="CLKGATE" description="This bit must be set to zero for a normal operation" />
       <BitField start="31" size="1" name="SFTRST" description="Set this bit to zero to enable a normal DCP operation" />
     </Register>
+    <Register start="+0x4" size="4" name="DCP_CTRL_SET" access="Read/Write" description="DCP control register 0" reset_value="0xF0800000" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="8" name="CHANNEL_INTERRUPT_ENABLE" description="Per-channel interrupt enable bit">
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x4" description="CH2" />
+        <Enum name="CH3" start="0x8" description="CH3" />
+      </BitField>
+      <BitField start="21" size="1" name="ENABLE_CONTEXT_SWITCHING" description="Enable automatic context switching for the channels" />
+      <BitField start="22" size="1" name="ENABLE_CONTEXT_CACHING" description="The software must set this bit to enable the caching of contexts between the operations" />
+      <BitField start="23" size="1" name="GATHER_RESIDUAL_WRITES" description="The software must set this bit to enable the ragged writes to the unaligned buffers to be gathered between multiple write operations" />
+      <BitField start="28" size="1" name="PRESENT_SHA" description="Indicates whether the SHA1/SHA2 functions are present.">
+        <Enum name="Absent" start="0" description="Absent" />
+        <Enum name="Present" start="0x1" description="Present" />
+      </BitField>
+      <BitField start="29" size="1" name="PRESENT_CRYPTO" description="Indicates whether the crypto (cipher/hash) functions are present.">
+        <Enum name="Absent" start="0" description="Absent" />
+        <Enum name="Present" start="0x1" description="Present" />
+      </BitField>
+      <BitField start="30" size="1" name="CLKGATE" description="This bit must be set to zero for a normal operation" />
+      <BitField start="31" size="1" name="SFTRST" description="Set this bit to zero to enable a normal DCP operation" />
+    </Register>
+    <Register start="+0x8" size="4" name="DCP_CTRL_CLR" access="Read/Write" description="DCP control register 0" reset_value="0xF0800000" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="8" name="CHANNEL_INTERRUPT_ENABLE" description="Per-channel interrupt enable bit">
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x4" description="CH2" />
+        <Enum name="CH3" start="0x8" description="CH3" />
+      </BitField>
+      <BitField start="21" size="1" name="ENABLE_CONTEXT_SWITCHING" description="Enable automatic context switching for the channels" />
+      <BitField start="22" size="1" name="ENABLE_CONTEXT_CACHING" description="The software must set this bit to enable the caching of contexts between the operations" />
+      <BitField start="23" size="1" name="GATHER_RESIDUAL_WRITES" description="The software must set this bit to enable the ragged writes to the unaligned buffers to be gathered between multiple write operations" />
+      <BitField start="28" size="1" name="PRESENT_SHA" description="Indicates whether the SHA1/SHA2 functions are present.">
+        <Enum name="Absent" start="0" description="Absent" />
+        <Enum name="Present" start="0x1" description="Present" />
+      </BitField>
+      <BitField start="29" size="1" name="PRESENT_CRYPTO" description="Indicates whether the crypto (cipher/hash) functions are present.">
+        <Enum name="Absent" start="0" description="Absent" />
+        <Enum name="Present" start="0x1" description="Present" />
+      </BitField>
+      <BitField start="30" size="1" name="CLKGATE" description="This bit must be set to zero for a normal operation" />
+      <BitField start="31" size="1" name="SFTRST" description="Set this bit to zero to enable a normal DCP operation" />
+    </Register>
+    <Register start="+0xC" size="4" name="DCP_CTRL_TOG" access="Read/Write" description="DCP control register 0" reset_value="0xF0800000" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="8" name="CHANNEL_INTERRUPT_ENABLE" description="Per-channel interrupt enable bit">
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x4" description="CH2" />
+        <Enum name="CH3" start="0x8" description="CH3" />
+      </BitField>
+      <BitField start="21" size="1" name="ENABLE_CONTEXT_SWITCHING" description="Enable automatic context switching for the channels" />
+      <BitField start="22" size="1" name="ENABLE_CONTEXT_CACHING" description="The software must set this bit to enable the caching of contexts between the operations" />
+      <BitField start="23" size="1" name="GATHER_RESIDUAL_WRITES" description="The software must set this bit to enable the ragged writes to the unaligned buffers to be gathered between multiple write operations" />
+      <BitField start="28" size="1" name="PRESENT_SHA" description="Indicates whether the SHA1/SHA2 functions are present.">
+        <Enum name="Absent" start="0" description="Absent" />
+        <Enum name="Present" start="0x1" description="Present" />
+      </BitField>
+      <BitField start="29" size="1" name="PRESENT_CRYPTO" description="Indicates whether the crypto (cipher/hash) functions are present.">
+        <Enum name="Absent" start="0" description="Absent" />
+        <Enum name="Present" start="0x1" description="Present" />
+      </BitField>
+      <BitField start="30" size="1" name="CLKGATE" description="This bit must be set to zero for a normal operation" />
+      <BitField start="31" size="1" name="SFTRST" description="Set this bit to zero to enable a normal DCP operation" />
+    </Register>
     <Register start="+0x10" size="4" name="DCP_STAT" access="Read/Write" description="DCP status register" reset_value="0x10000000" reset_mask="0xFFFFFFFF">
       <BitField start="0" size="4" name="IRQ" description="Indicates which channels have pending interrupt requests" />
       <BitField start="16" size="8" name="READY_CHANNELS" description="Indicates which channels are ready to proceed with a transfer (the active channel is also included)">
@@ -26902,7 +26977,103 @@
       </BitField>
       <BitField start="28" size="1" name="OTP_KEY_READY" description="When set, it indicates that the OTP key is shifted from the fuse block and is ready for use." />
     </Register>
+    <Register start="+0x14" size="4" name="DCP_STAT_SET" access="Read/Write" description="DCP status register" reset_value="0x10000000" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="4" name="IRQ" description="Indicates which channels have pending interrupt requests" />
+      <BitField start="16" size="8" name="READY_CHANNELS" description="Indicates which channels are ready to proceed with a transfer (the active channel is also included)">
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x4" description="CH2" />
+        <Enum name="CH3" start="0x8" description="CH3" />
+      </BitField>
+      <BitField start="24" size="4" name="CUR_CHANNEL" description="Current (active) channel (encoded)">
+        <Enum name="None" start="0" description="None" />
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x3" description="CH2" />
+        <Enum name="CH3" start="0x4" description="CH3" />
+      </BitField>
+      <BitField start="28" size="1" name="OTP_KEY_READY" description="When set, it indicates that the OTP key is shifted from the fuse block and is ready for use." />
+    </Register>
+    <Register start="+0x18" size="4" name="DCP_STAT_CLR" access="Read/Write" description="DCP status register" reset_value="0x10000000" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="4" name="IRQ" description="Indicates which channels have pending interrupt requests" />
+      <BitField start="16" size="8" name="READY_CHANNELS" description="Indicates which channels are ready to proceed with a transfer (the active channel is also included)">
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x4" description="CH2" />
+        <Enum name="CH3" start="0x8" description="CH3" />
+      </BitField>
+      <BitField start="24" size="4" name="CUR_CHANNEL" description="Current (active) channel (encoded)">
+        <Enum name="None" start="0" description="None" />
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x3" description="CH2" />
+        <Enum name="CH3" start="0x4" description="CH3" />
+      </BitField>
+      <BitField start="28" size="1" name="OTP_KEY_READY" description="When set, it indicates that the OTP key is shifted from the fuse block and is ready for use." />
+    </Register>
+    <Register start="+0x1C" size="4" name="DCP_STAT_TOG" access="Read/Write" description="DCP status register" reset_value="0x10000000" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="4" name="IRQ" description="Indicates which channels have pending interrupt requests" />
+      <BitField start="16" size="8" name="READY_CHANNELS" description="Indicates which channels are ready to proceed with a transfer (the active channel is also included)">
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x4" description="CH2" />
+        <Enum name="CH3" start="0x8" description="CH3" />
+      </BitField>
+      <BitField start="24" size="4" name="CUR_CHANNEL" description="Current (active) channel (encoded)">
+        <Enum name="None" start="0" description="None" />
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x3" description="CH2" />
+        <Enum name="CH3" start="0x4" description="CH3" />
+      </BitField>
+      <BitField start="28" size="1" name="OTP_KEY_READY" description="When set, it indicates that the OTP key is shifted from the fuse block and is ready for use." />
+    </Register>
     <Register start="+0x20" size="4" name="DCP_CHANNELCTRL" access="Read/Write" description="DCP channel control register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="8" name="ENABLE_CHANNEL" description="Setting a bit in this field enables the DMA channel associated with it">
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x4" description="CH2" />
+        <Enum name="CH3" start="0x8" description="CH3" />
+      </BitField>
+      <BitField start="8" size="8" name="HIGH_PRIORITY_CHANNEL" description="Setting a bit in this field causes the corresponding channel to have high-priority arbitration">
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x4" description="CH2" />
+        <Enum name="CH3" start="0x8" description="CH3" />
+      </BitField>
+      <BitField start="16" size="1" name="CH0_IRQ_MERGED" description="Indicates that the interrupt for channel 0 must be merged with the other interrupts on the shared dcp_irq interrupt" />
+    </Register>
+    <Register start="+0x24" size="4" name="DCP_CHANNELCTRL_SET" access="Read/Write" description="DCP channel control register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="8" name="ENABLE_CHANNEL" description="Setting a bit in this field enables the DMA channel associated with it">
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x4" description="CH2" />
+        <Enum name="CH3" start="0x8" description="CH3" />
+      </BitField>
+      <BitField start="8" size="8" name="HIGH_PRIORITY_CHANNEL" description="Setting a bit in this field causes the corresponding channel to have high-priority arbitration">
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x4" description="CH2" />
+        <Enum name="CH3" start="0x8" description="CH3" />
+      </BitField>
+      <BitField start="16" size="1" name="CH0_IRQ_MERGED" description="Indicates that the interrupt for channel 0 must be merged with the other interrupts on the shared dcp_irq interrupt" />
+    </Register>
+    <Register start="+0x28" size="4" name="DCP_CHANNELCTRL_CLR" access="Read/Write" description="DCP channel control register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="8" name="ENABLE_CHANNEL" description="Setting a bit in this field enables the DMA channel associated with it">
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x4" description="CH2" />
+        <Enum name="CH3" start="0x8" description="CH3" />
+      </BitField>
+      <BitField start="8" size="8" name="HIGH_PRIORITY_CHANNEL" description="Setting a bit in this field causes the corresponding channel to have high-priority arbitration">
+        <Enum name="CH0" start="0x1" description="CH0" />
+        <Enum name="CH1" start="0x2" description="CH1" />
+        <Enum name="CH2" start="0x4" description="CH2" />
+        <Enum name="CH3" start="0x8" description="CH3" />
+      </BitField>
+      <BitField start="16" size="1" name="CH0_IRQ_MERGED" description="Indicates that the interrupt for channel 0 must be merged with the other interrupts on the shared dcp_irq interrupt" />
+    </Register>
+    <Register start="+0x2C" size="4" name="DCP_CHANNELCTRL_TOG" access="Read/Write" description="DCP channel control register" reset_value="0" reset_mask="0xFFFFFFFF">
       <BitField start="0" size="8" name="ENABLE_CHANNEL" description="Setting a bit in this field enables the DMA channel associated with it">
         <Enum name="CH0" start="0x1" description="CH0" />
         <Enum name="CH1" start="0x2" description="CH1" />
@@ -27037,7 +27208,64 @@
       </BitField>
       <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure" />
     </Register>
+    <Register start="+0x124" size="4" name="DCP_CH0STAT_SET" access="Read/Write" description="DCP channel 0 status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="HASH_MISMATCH" description="This bit indicates that a hashing check operation mismatched for the control packets that enable the HASH_CHECK bit" />
+      <BitField start="2" size="1" name="ERROR_SETUP" description="This bit indicates that the hardware detected an invalid programming configuration (such as a buffer length that is not a multiple of the natural data size for the operation)" />
+      <BitField start="3" size="1" name="ERROR_PACKET" description="This bit indicates that a bus error occurred when reading the packet or payload, or when writing the status back to the packet payload" />
+      <BitField start="4" size="1" name="ERROR_SRC" description="This bit indicates that a bus error occurred when reading from the source buffer" />
+      <BitField start="5" size="1" name="ERROR_DST" description="This bit indicates that a bus error occurred when storing to the destination buffer" />
+      <BitField start="6" size="1" name="ERROR_PAGEFAULT" description="This bit indicates that a page fault occurred while converting a virtual address to a physical address" />
+      <BitField start="16" size="8" name="ERROR_CODE" description="Indicates the additional error codes for some of the error conditions">
+        <Enum name="NEXT_CHAIN_IS_0" start="0x1" description="Error signalled because the next pointer is 0x00000000" />
+        <Enum name="NO_CHAIN" start="0x2" description="Error signalled because the semaphore is non-zero and neither chain bit is set" />
+        <Enum name="CONTEXT_ERROR" start="0x3" description="Error signalled because an error is reported reading/writing the context buffer" />
+        <Enum name="PAYLOAD_ERROR" start="0x4" description="Error signalled because an error is reported reading/writing the payload" />
+        <Enum name="INVALID_MODE" start="0x5" description="Error signalled because the control packet specifies an invalid mode select (for instance, blit + hash)" />
+      </BitField>
+      <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure" />
+    </Register>
+    <Register start="+0x128" size="4" name="DCP_CH0STAT_CLR" access="Read/Write" description="DCP channel 0 status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="HASH_MISMATCH" description="This bit indicates that a hashing check operation mismatched for the control packets that enable the HASH_CHECK bit" />
+      <BitField start="2" size="1" name="ERROR_SETUP" description="This bit indicates that the hardware detected an invalid programming configuration (such as a buffer length that is not a multiple of the natural data size for the operation)" />
+      <BitField start="3" size="1" name="ERROR_PACKET" description="This bit indicates that a bus error occurred when reading the packet or payload, or when writing the status back to the packet payload" />
+      <BitField start="4" size="1" name="ERROR_SRC" description="This bit indicates that a bus error occurred when reading from the source buffer" />
+      <BitField start="5" size="1" name="ERROR_DST" description="This bit indicates that a bus error occurred when storing to the destination buffer" />
+      <BitField start="6" size="1" name="ERROR_PAGEFAULT" description="This bit indicates that a page fault occurred while converting a virtual address to a physical address" />
+      <BitField start="16" size="8" name="ERROR_CODE" description="Indicates the additional error codes for some of the error conditions">
+        <Enum name="NEXT_CHAIN_IS_0" start="0x1" description="Error signalled because the next pointer is 0x00000000" />
+        <Enum name="NO_CHAIN" start="0x2" description="Error signalled because the semaphore is non-zero and neither chain bit is set" />
+        <Enum name="CONTEXT_ERROR" start="0x3" description="Error signalled because an error is reported reading/writing the context buffer" />
+        <Enum name="PAYLOAD_ERROR" start="0x4" description="Error signalled because an error is reported reading/writing the payload" />
+        <Enum name="INVALID_MODE" start="0x5" description="Error signalled because the control packet specifies an invalid mode select (for instance, blit + hash)" />
+      </BitField>
+      <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure" />
+    </Register>
+    <Register start="+0x12C" size="4" name="DCP_CH0STAT_TOG" access="Read/Write" description="DCP channel 0 status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="HASH_MISMATCH" description="This bit indicates that a hashing check operation mismatched for the control packets that enable the HASH_CHECK bit" />
+      <BitField start="2" size="1" name="ERROR_SETUP" description="This bit indicates that the hardware detected an invalid programming configuration (such as a buffer length that is not a multiple of the natural data size for the operation)" />
+      <BitField start="3" size="1" name="ERROR_PACKET" description="This bit indicates that a bus error occurred when reading the packet or payload, or when writing the status back to the packet payload" />
+      <BitField start="4" size="1" name="ERROR_SRC" description="This bit indicates that a bus error occurred when reading from the source buffer" />
+      <BitField start="5" size="1" name="ERROR_DST" description="This bit indicates that a bus error occurred when storing to the destination buffer" />
+      <BitField start="6" size="1" name="ERROR_PAGEFAULT" description="This bit indicates that a page fault occurred while converting a virtual address to a physical address" />
+      <BitField start="16" size="8" name="ERROR_CODE" description="Indicates the additional error codes for some of the error conditions">
+        <Enum name="NEXT_CHAIN_IS_0" start="0x1" description="Error signalled because the next pointer is 0x00000000" />
+        <Enum name="NO_CHAIN" start="0x2" description="Error signalled because the semaphore is non-zero and neither chain bit is set" />
+        <Enum name="CONTEXT_ERROR" start="0x3" description="Error signalled because an error is reported reading/writing the context buffer" />
+        <Enum name="PAYLOAD_ERROR" start="0x4" description="Error signalled because an error is reported reading/writing the payload" />
+        <Enum name="INVALID_MODE" start="0x5" description="Error signalled because the control packet specifies an invalid mode select (for instance, blit + hash)" />
+      </BitField>
+      <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure" />
+    </Register>
     <Register start="+0x130" size="4" name="DCP_CH0OPTS" access="Read/Write" description="DCP channel 0 options register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
+    </Register>
+    <Register start="+0x134" size="4" name="DCP_CH0OPTS_SET" access="Read/Write" description="DCP channel 0 options register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
+    </Register>
+    <Register start="+0x138" size="4" name="DCP_CH0OPTS_CLR" access="Read/Write" description="DCP channel 0 options register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
+    </Register>
+    <Register start="+0x13C" size="4" name="DCP_CH0OPTS_TOG" access="Read/Write" description="DCP channel 0 options register" reset_value="0" reset_mask="0xFFFFFFFF">
       <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
     </Register>
     <Register start="+0x140" size="4" name="DCP_CH1CMDPTR" access="Read/Write" description="DCP channel 1 command pointer address register" reset_value="0" reset_mask="0xFFFFFFFF">
@@ -27063,7 +27291,64 @@
       </BitField>
       <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure." />
     </Register>
+    <Register start="+0x164" size="4" name="DCP_CH1STAT_SET" access="Read/Write" description="DCP channel 1 status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="HASH_MISMATCH" description="This bit indicates that a hashing check operation is mismatched for the control packets that enable the HASH_CHECK bit" />
+      <BitField start="2" size="1" name="ERROR_SETUP" description="This bit indicates that the hardware detected an invalid programming configuration (such as a buffer length that is not a multiple of the natural data size for the operation)" />
+      <BitField start="3" size="1" name="ERROR_PACKET" description="This bit indicates that a bus error occurred when reading the packet or payload, or when writing the status back to the packet paylaod" />
+      <BitField start="4" size="1" name="ERROR_SRC" description="This bit indicates that a bus error occurred when reading from the source buffer" />
+      <BitField start="5" size="1" name="ERROR_DST" description="This bit indicates that a bus error occurred when storing to the destination buffer" />
+      <BitField start="6" size="1" name="ERROR_PAGEFAULT" description="This bit indicates that a page fault occurred while converting a virtual address to a physical address" />
+      <BitField start="16" size="8" name="ERROR_CODE" description="Indicates the additional error codes for some of the error conditions.">
+        <Enum name="NEXT_CHAIN_IS_0" start="0x1" description="Error is signalled because the next pointer is 0x00000000." />
+        <Enum name="NO_CHAIN" start="0x2" description="Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set." />
+        <Enum name="CONTEXT_ERROR" start="0x3" description="Error is signalled because an error was reported when reading/writing the context buffer." />
+        <Enum name="PAYLOAD_ERROR" start="0x4" description="Error is signalled because an error was reported when reading/writing the payload." />
+        <Enum name="INVALID_MODE" start="0x5" description="Error is signalled because the control packet specifies an invalid mode select (for example, blit + hash)." />
+      </BitField>
+      <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure." />
+    </Register>
+    <Register start="+0x168" size="4" name="DCP_CH1STAT_CLR" access="Read/Write" description="DCP channel 1 status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="HASH_MISMATCH" description="This bit indicates that a hashing check operation is mismatched for the control packets that enable the HASH_CHECK bit" />
+      <BitField start="2" size="1" name="ERROR_SETUP" description="This bit indicates that the hardware detected an invalid programming configuration (such as a buffer length that is not a multiple of the natural data size for the operation)" />
+      <BitField start="3" size="1" name="ERROR_PACKET" description="This bit indicates that a bus error occurred when reading the packet or payload, or when writing the status back to the packet paylaod" />
+      <BitField start="4" size="1" name="ERROR_SRC" description="This bit indicates that a bus error occurred when reading from the source buffer" />
+      <BitField start="5" size="1" name="ERROR_DST" description="This bit indicates that a bus error occurred when storing to the destination buffer" />
+      <BitField start="6" size="1" name="ERROR_PAGEFAULT" description="This bit indicates that a page fault occurred while converting a virtual address to a physical address" />
+      <BitField start="16" size="8" name="ERROR_CODE" description="Indicates the additional error codes for some of the error conditions.">
+        <Enum name="NEXT_CHAIN_IS_0" start="0x1" description="Error is signalled because the next pointer is 0x00000000." />
+        <Enum name="NO_CHAIN" start="0x2" description="Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set." />
+        <Enum name="CONTEXT_ERROR" start="0x3" description="Error is signalled because an error was reported when reading/writing the context buffer." />
+        <Enum name="PAYLOAD_ERROR" start="0x4" description="Error is signalled because an error was reported when reading/writing the payload." />
+        <Enum name="INVALID_MODE" start="0x5" description="Error is signalled because the control packet specifies an invalid mode select (for example, blit + hash)." />
+      </BitField>
+      <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure." />
+    </Register>
+    <Register start="+0x16C" size="4" name="DCP_CH1STAT_TOG" access="Read/Write" description="DCP channel 1 status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="HASH_MISMATCH" description="This bit indicates that a hashing check operation is mismatched for the control packets that enable the HASH_CHECK bit" />
+      <BitField start="2" size="1" name="ERROR_SETUP" description="This bit indicates that the hardware detected an invalid programming configuration (such as a buffer length that is not a multiple of the natural data size for the operation)" />
+      <BitField start="3" size="1" name="ERROR_PACKET" description="This bit indicates that a bus error occurred when reading the packet or payload, or when writing the status back to the packet paylaod" />
+      <BitField start="4" size="1" name="ERROR_SRC" description="This bit indicates that a bus error occurred when reading from the source buffer" />
+      <BitField start="5" size="1" name="ERROR_DST" description="This bit indicates that a bus error occurred when storing to the destination buffer" />
+      <BitField start="6" size="1" name="ERROR_PAGEFAULT" description="This bit indicates that a page fault occurred while converting a virtual address to a physical address" />
+      <BitField start="16" size="8" name="ERROR_CODE" description="Indicates the additional error codes for some of the error conditions.">
+        <Enum name="NEXT_CHAIN_IS_0" start="0x1" description="Error is signalled because the next pointer is 0x00000000." />
+        <Enum name="NO_CHAIN" start="0x2" description="Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set." />
+        <Enum name="CONTEXT_ERROR" start="0x3" description="Error is signalled because an error was reported when reading/writing the context buffer." />
+        <Enum name="PAYLOAD_ERROR" start="0x4" description="Error is signalled because an error was reported when reading/writing the payload." />
+        <Enum name="INVALID_MODE" start="0x5" description="Error is signalled because the control packet specifies an invalid mode select (for example, blit + hash)." />
+      </BitField>
+      <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure." />
+    </Register>
     <Register start="+0x170" size="4" name="DCP_CH1OPTS" access="Read/Write" description="DCP channel 1 options register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
+    </Register>
+    <Register start="+0x174" size="4" name="DCP_CH1OPTS_SET" access="Read/Write" description="DCP channel 1 options register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
+    </Register>
+    <Register start="+0x178" size="4" name="DCP_CH1OPTS_CLR" access="Read/Write" description="DCP channel 1 options register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
+    </Register>
+    <Register start="+0x17C" size="4" name="DCP_CH1OPTS_TOG" access="Read/Write" description="DCP channel 1 options register" reset_value="0" reset_mask="0xFFFFFFFF">
       <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
     </Register>
     <Register start="+0x180" size="4" name="DCP_CH2CMDPTR" access="Read/Write" description="DCP channel 2 command pointer address register" reset_value="0" reset_mask="0xFFFFFFFF">
@@ -27089,7 +27374,64 @@
       </BitField>
       <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure." />
     </Register>
+    <Register start="+0x1A4" size="4" name="DCP_CH2STAT_SET" access="Read/Write" description="DCP channel 2 status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="HASH_MISMATCH" description="This bit indicates that a hashing check operation is mismatched for the control packets that enable the HASH_CHECK bit" />
+      <BitField start="2" size="1" name="ERROR_SETUP" description="This bit indicates that the hardware detected an invalid programming configuration (such as a buffer length that is not a multiple of the natural data size for the operation)" />
+      <BitField start="3" size="1" name="ERROR_PACKET" description="This bit indicates that a bus error occurred when reading the packet or payload, or when writing the status back to the packet paylaod" />
+      <BitField start="4" size="1" name="ERROR_SRC" description="This bit indicates that a bus error occurred when reading from the source buffer" />
+      <BitField start="5" size="1" name="ERROR_DST" description="This bit indicates that a bus error occurred when storing to the destination buffer" />
+      <BitField start="6" size="1" name="ERROR_PAGEFAULT" description="This bit indicates that a page fault occurred while converting a virtual address to a physical address" />
+      <BitField start="16" size="8" name="ERROR_CODE" description="Indicates additional error codes for some of the error conditions.">
+        <Enum name="NEXT_CHAIN_IS_0" start="0x1" description="Error is signalled because the next pointer is 0x00000000." />
+        <Enum name="NO_CHAIN" start="0x2" description="Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set." />
+        <Enum name="CONTEXT_ERROR" start="0x3" description="Error is signalled because an error was reported while reading/writing the context buffer." />
+        <Enum name="PAYLOAD_ERROR" start="0x4" description="Error is signalled because an error was reported while reading/writing the payload." />
+        <Enum name="INVALID_MODE" start="0x5" description="Error is signalled because the control packet specifies an invalid mode select (for instance, blit + hash)." />
+      </BitField>
+      <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure." />
+    </Register>
+    <Register start="+0x1A8" size="4" name="DCP_CH2STAT_CLR" access="Read/Write" description="DCP channel 2 status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="HASH_MISMATCH" description="This bit indicates that a hashing check operation is mismatched for the control packets that enable the HASH_CHECK bit" />
+      <BitField start="2" size="1" name="ERROR_SETUP" description="This bit indicates that the hardware detected an invalid programming configuration (such as a buffer length that is not a multiple of the natural data size for the operation)" />
+      <BitField start="3" size="1" name="ERROR_PACKET" description="This bit indicates that a bus error occurred when reading the packet or payload, or when writing the status back to the packet paylaod" />
+      <BitField start="4" size="1" name="ERROR_SRC" description="This bit indicates that a bus error occurred when reading from the source buffer" />
+      <BitField start="5" size="1" name="ERROR_DST" description="This bit indicates that a bus error occurred when storing to the destination buffer" />
+      <BitField start="6" size="1" name="ERROR_PAGEFAULT" description="This bit indicates that a page fault occurred while converting a virtual address to a physical address" />
+      <BitField start="16" size="8" name="ERROR_CODE" description="Indicates additional error codes for some of the error conditions.">
+        <Enum name="NEXT_CHAIN_IS_0" start="0x1" description="Error is signalled because the next pointer is 0x00000000." />
+        <Enum name="NO_CHAIN" start="0x2" description="Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set." />
+        <Enum name="CONTEXT_ERROR" start="0x3" description="Error is signalled because an error was reported while reading/writing the context buffer." />
+        <Enum name="PAYLOAD_ERROR" start="0x4" description="Error is signalled because an error was reported while reading/writing the payload." />
+        <Enum name="INVALID_MODE" start="0x5" description="Error is signalled because the control packet specifies an invalid mode select (for instance, blit + hash)." />
+      </BitField>
+      <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure." />
+    </Register>
+    <Register start="+0x1AC" size="4" name="DCP_CH2STAT_TOG" access="Read/Write" description="DCP channel 2 status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="HASH_MISMATCH" description="This bit indicates that a hashing check operation is mismatched for the control packets that enable the HASH_CHECK bit" />
+      <BitField start="2" size="1" name="ERROR_SETUP" description="This bit indicates that the hardware detected an invalid programming configuration (such as a buffer length that is not a multiple of the natural data size for the operation)" />
+      <BitField start="3" size="1" name="ERROR_PACKET" description="This bit indicates that a bus error occurred when reading the packet or payload, or when writing the status back to the packet paylaod" />
+      <BitField start="4" size="1" name="ERROR_SRC" description="This bit indicates that a bus error occurred when reading from the source buffer" />
+      <BitField start="5" size="1" name="ERROR_DST" description="This bit indicates that a bus error occurred when storing to the destination buffer" />
+      <BitField start="6" size="1" name="ERROR_PAGEFAULT" description="This bit indicates that a page fault occurred while converting a virtual address to a physical address" />
+      <BitField start="16" size="8" name="ERROR_CODE" description="Indicates additional error codes for some of the error conditions.">
+        <Enum name="NEXT_CHAIN_IS_0" start="0x1" description="Error is signalled because the next pointer is 0x00000000." />
+        <Enum name="NO_CHAIN" start="0x2" description="Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set." />
+        <Enum name="CONTEXT_ERROR" start="0x3" description="Error is signalled because an error was reported while reading/writing the context buffer." />
+        <Enum name="PAYLOAD_ERROR" start="0x4" description="Error is signalled because an error was reported while reading/writing the payload." />
+        <Enum name="INVALID_MODE" start="0x5" description="Error is signalled because the control packet specifies an invalid mode select (for instance, blit + hash)." />
+      </BitField>
+      <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure." />
+    </Register>
     <Register start="+0x1B0" size="4" name="DCP_CH2OPTS" access="Read/Write" description="DCP channel 2 options register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
+    </Register>
+    <Register start="+0x1B4" size="4" name="DCP_CH2OPTS_SET" access="Read/Write" description="DCP channel 2 options register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
+    </Register>
+    <Register start="+0x1B8" size="4" name="DCP_CH2OPTS_CLR" access="Read/Write" description="DCP channel 2 options register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
+    </Register>
+    <Register start="+0x1BC" size="4" name="DCP_CH2OPTS_TOG" access="Read/Write" description="DCP channel 2 options register" reset_value="0" reset_mask="0xFFFFFFFF">
       <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
     </Register>
     <Register start="+0x1C0" size="4" name="DCP_CH3CMDPTR" access="Read/Write" description="DCP channel 3 command pointer address register" reset_value="0" reset_mask="0xFFFFFFFF">
@@ -27115,7 +27457,64 @@
       </BitField>
       <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure." />
     </Register>
+    <Register start="+0x1E4" size="4" name="DCP_CH3STAT_SET" access="Read/Write" description="DCP channel 3 status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="HASH_MISMATCH" description="This bit indicates that a hashing check operation is mismatched for the control packets that enable the HASH_CHECK bit" />
+      <BitField start="2" size="1" name="ERROR_SETUP" description="This bit indicates that the hardware detected an invalid programming configuration (such as a buffer length that is not a multiple of the natural data size for the operation)" />
+      <BitField start="3" size="1" name="ERROR_PACKET" description="This bit indicates that a bus error occurred when reading the packet or payload or when writing the status back to the packet paylaod" />
+      <BitField start="4" size="1" name="ERROR_SRC" description="This bit indicates that a bus error occurred when reading from the source buffer" />
+      <BitField start="5" size="1" name="ERROR_DST" description="This bit indicates that a bus error occurred when storing to the destination buffer" />
+      <BitField start="6" size="1" name="ERROR_PAGEFAULT" description="This bit indicates that a page fault occurred while converting a virtual address to a physical address" />
+      <BitField start="16" size="8" name="ERROR_CODE" description="Indicates additional error codes for some of the error conditions.">
+        <Enum name="NEXT_CHAIN_IS_0" start="0x1" description="Error is signalled because the next pointer is 0x00000000." />
+        <Enum name="NO_CHAIN" start="0x2" description="Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set." />
+        <Enum name="CONTEXT_ERROR" start="0x3" description="Error is signalled because an error was reported while reading/writing the context buffer." />
+        <Enum name="PAYLOAD_ERROR" start="0x4" description="Error is signalled because an error was reported while reading/writing the payload." />
+        <Enum name="INVALID_MODE" start="0x5" description="Error is signalled because the control packet specifies an invalid mode select (for example, blit + hash)." />
+      </BitField>
+      <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure." />
+    </Register>
+    <Register start="+0x1E8" size="4" name="DCP_CH3STAT_CLR" access="Read/Write" description="DCP channel 3 status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="HASH_MISMATCH" description="This bit indicates that a hashing check operation is mismatched for the control packets that enable the HASH_CHECK bit" />
+      <BitField start="2" size="1" name="ERROR_SETUP" description="This bit indicates that the hardware detected an invalid programming configuration (such as a buffer length that is not a multiple of the natural data size for the operation)" />
+      <BitField start="3" size="1" name="ERROR_PACKET" description="This bit indicates that a bus error occurred when reading the packet or payload or when writing the status back to the packet paylaod" />
+      <BitField start="4" size="1" name="ERROR_SRC" description="This bit indicates that a bus error occurred when reading from the source buffer" />
+      <BitField start="5" size="1" name="ERROR_DST" description="This bit indicates that a bus error occurred when storing to the destination buffer" />
+      <BitField start="6" size="1" name="ERROR_PAGEFAULT" description="This bit indicates that a page fault occurred while converting a virtual address to a physical address" />
+      <BitField start="16" size="8" name="ERROR_CODE" description="Indicates additional error codes for some of the error conditions.">
+        <Enum name="NEXT_CHAIN_IS_0" start="0x1" description="Error is signalled because the next pointer is 0x00000000." />
+        <Enum name="NO_CHAIN" start="0x2" description="Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set." />
+        <Enum name="CONTEXT_ERROR" start="0x3" description="Error is signalled because an error was reported while reading/writing the context buffer." />
+        <Enum name="PAYLOAD_ERROR" start="0x4" description="Error is signalled because an error was reported while reading/writing the payload." />
+        <Enum name="INVALID_MODE" start="0x5" description="Error is signalled because the control packet specifies an invalid mode select (for example, blit + hash)." />
+      </BitField>
+      <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure." />
+    </Register>
+    <Register start="+0x1EC" size="4" name="DCP_CH3STAT_TOG" access="Read/Write" description="DCP channel 3 status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="HASH_MISMATCH" description="This bit indicates that a hashing check operation is mismatched for the control packets that enable the HASH_CHECK bit" />
+      <BitField start="2" size="1" name="ERROR_SETUP" description="This bit indicates that the hardware detected an invalid programming configuration (such as a buffer length that is not a multiple of the natural data size for the operation)" />
+      <BitField start="3" size="1" name="ERROR_PACKET" description="This bit indicates that a bus error occurred when reading the packet or payload or when writing the status back to the packet paylaod" />
+      <BitField start="4" size="1" name="ERROR_SRC" description="This bit indicates that a bus error occurred when reading from the source buffer" />
+      <BitField start="5" size="1" name="ERROR_DST" description="This bit indicates that a bus error occurred when storing to the destination buffer" />
+      <BitField start="6" size="1" name="ERROR_PAGEFAULT" description="This bit indicates that a page fault occurred while converting a virtual address to a physical address" />
+      <BitField start="16" size="8" name="ERROR_CODE" description="Indicates additional error codes for some of the error conditions.">
+        <Enum name="NEXT_CHAIN_IS_0" start="0x1" description="Error is signalled because the next pointer is 0x00000000." />
+        <Enum name="NO_CHAIN" start="0x2" description="Error is signalled because the semaphore is of a non-zero value and neither of the chain bits is set." />
+        <Enum name="CONTEXT_ERROR" start="0x3" description="Error is signalled because an error was reported while reading/writing the context buffer." />
+        <Enum name="PAYLOAD_ERROR" start="0x4" description="Error is signalled because an error was reported while reading/writing the payload." />
+        <Enum name="INVALID_MODE" start="0x5" description="Error is signalled because the control packet specifies an invalid mode select (for example, blit + hash)." />
+      </BitField>
+      <BitField start="24" size="8" name="TAG" description="Indicates the tag from the last completed packet in the command structure." />
+    </Register>
     <Register start="+0x1F0" size="4" name="DCP_CH3OPTS" access="Read/Write" description="DCP channel 3 options register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
+    </Register>
+    <Register start="+0x1F4" size="4" name="DCP_CH3OPTS_SET" access="Read/Write" description="DCP channel 3 options register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
+    </Register>
+    <Register start="+0x1F8" size="4" name="DCP_CH3OPTS_CLR" access="Read/Write" description="DCP channel 3 options register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
+    </Register>
+    <Register start="+0x1FC" size="4" name="DCP_CH3OPTS_TOG" access="Read/Write" description="DCP channel 3 options register" reset_value="0" reset_mask="0xFFFFFFFF">
       <BitField start="0" size="16" name="RECOVERY_TIMER" description="This field indicates the recovery time for the channel" />
     </Register>
     <Register start="+0x400" size="4" name="DCP_DBGSELECT" access="Read/Write" description="DCP debug select register" reset_value="0" reset_mask="0xFFFFFFFF">
@@ -33592,6 +33991,909 @@
       </BitField>
     </Register>
   </RegisterGroup>
+  <RegisterGroup name="SystemControl" start="0xE000E000" description="System Control Block">
+    <Register start="+0x8" size="4" name="SCB_ACTLR" access="Read/Write" description="Auxiliary Control Register," reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="2" size="1" name="DISFOLD" description="Disables folding of IT instructions.">
+        <Enum name="DISFOLD_0" start="0" description="Normal operation." />
+      </BitField>
+      <BitField start="10" size="1" name="FPEXCODIS" description="Disables FPU exception outputs.">
+        <Enum name="FPEXCODIS_0" start="0" description="Normal operation." />
+        <Enum name="FPEXCODIS_1" start="0x1" description="FPU exception outputs are disabled." />
+      </BitField>
+      <BitField start="11" size="1" name="DISRAMODE" description="Disables dynamic read allocate mode for Write-Back Write-Allocate memory regions.">
+        <Enum name="DISRAMODE_0" start="0" description="Normal operation." />
+        <Enum name="DISRAMODE_1" start="0x1" description="Dynamic disabled." />
+      </BitField>
+      <BitField start="12" size="1" name="DISITMATBFLUSH" description="Disables ITM and DWT ATB flush.">
+        <Enum name="DISITMATBFLUSH_1" start="0x1" description="ITM and DWT ATB flush disabled, this bit is always 1." />
+      </BitField>
+      <BitField start="13" size="1" name="DISBTACREAD" description="Disables BTAC read.">
+        <Enum name="DISBTACREAD_0" start="0" description="Normal operation." />
+        <Enum name="DISBTACREAD_1" start="0x1" description="BTAC is not used and only static branch prediction can occur." />
+      </BitField>
+      <BitField start="14" size="1" name="DISBTACALLOC" description="Disables BTAC allocate.">
+        <Enum name="DISBTACALLOC_0" start="0" description="Normal operation." />
+        <Enum name="DISBTACALLOC_1" start="0x1" description="No new entries are allocated in Branch Target Address Cache (BTAC), but existing entries can be updated." />
+      </BitField>
+      <BitField start="15" size="1" name="DISCRITAXIRUR" description="Disables critical AXI Read-Under-Read.">
+        <Enum name="DISCRITAXIRUR_0" start="0" description="Normal operation." />
+        <Enum name="DISCRITAXIRUR_1" start="0x1" description="An AXI read to Strongly-Ordered or Device memory, or an LDREX to Shareable memory, is not put on AXI if there are any outstanding reads on AXI. Transactions on AXI cannot be interrupted. This bit might reduce the time that these transactions are in progress and might improve worst case interrupt latency. Performance is decreased when this bit is set." />
+      </BitField>
+      <BitField start="16" size="5" name="DISDI" description="Disables dual-issued.">
+        <Enum name="DISDI_0" start="0" description="Normal operation." />
+        <Enum name="DISDI_1" start="0x1" description="Nothing can be dual-issued when this instruction type is in channel 0." />
+      </BitField>
+      <BitField start="21" size="5" name="DISISSCH1" description="Disables dual-issued.">
+        <Enum name="DISISSCH1_0" start="0" description="Normal operation." />
+        <Enum name="DISISSCH1_1" start="0x1" description="Nothing can be dual-issued when this instruction type is in channel 1." />
+      </BitField>
+      <BitField start="26" size="1" name="DISDYNADD" description="Disables dynamic allocation of ADD and SUB instructions">
+        <Enum name="DISDYNADD_0" start="0" description="Normal operation. Some ADD and SUB instrctions are resolved in EX1." />
+        <Enum name="DISDYNADD_1" start="0x1" description="All ADD and SUB instructions are resolved in EX2." />
+      </BitField>
+      <BitField start="27" size="1" name="DISCRITAXIRUW" description="Disables critical AXI read-under-write">
+        <Enum name="DISCRITAXIRUW_0" start="0" description="Normal operation. This is backwards compatible with r0." />
+        <Enum name="DISCRITAXIRUW_1" start="0x1" description="AXI reads to DEV/SO memory. Exclusive reads to Shareable memory are not initiated on the AXIM AR channel until all outstanding stores on AXI are complete." />
+      </BitField>
+      <BitField start="28" size="1" name="DISFPUISSOPT" description="Disables critical AXI read-under-write">
+        <Enum name="DISFPUISSOPT_0" start="0" description="Normal operation." />
+      </BitField>
+    </Register>
+    <Register start="+0xD00" size="4" name="SCB_CPUID" access="ReadOnly" description="CPUID Base Register" reset_value="0x410FC240" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="4" name="REVISION" description="Indicates patch release: 0x0 = Patch 0" />
+      <BitField start="4" size="12" name="PARTNO" description="Indicates part number" />
+      <BitField start="16" size="4" name="ARCHITECTURE" description="ARCHITECTURE" />
+      <BitField start="20" size="4" name="VARIANT" description="Indicates processor revision: 0x2 = Revision 2" />
+      <BitField start="24" size="8" name="IMPLEMENTER" description="Implementer code" />
+    </Register>
+    <Register start="+0xD04" size="4" name="SCB_ICSR" access="Read/Write" description="Interrupt Control and State Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="9" name="VECTACTIVE" description="Active exception number" />
+      <BitField start="11" size="1" name="RETTOBASE" description="Indicates whether there are preempted active exceptions">
+        <Enum name="RETTOBASE_0" start="0" description="there are preempted active exceptions to execute" />
+        <Enum name="RETTOBASE_1" start="0x1" description="there are no active exceptions, or the currently-executing exception is the only active exception" />
+      </BitField>
+      <BitField start="12" size="9" name="VECTPENDING" description="Exception number of the highest priority pending enabled exception" />
+      <BitField start="22" size="1" name="ISRPENDING" description="Interrupt pending flag, excluding NMI and Faults">
+        <Enum name="ISRPENDING_0" start="0" description="No external interrupt pending." />
+        <Enum name="ISRPENDING_1" start="0x1" description="External interrupt pending." />
+      </BitField>
+      <BitField start="25" size="1" name="PENDSTCLR" description="SysTick exception clear-pending bit">
+        <Enum name="PENDSTCLR_0" start="0" description="no effect" />
+        <Enum name="PENDSTCLR_1" start="0x1" description="removes the pending state from the SysTick exception" />
+      </BitField>
+      <BitField start="26" size="1" name="PENDSTSET" description="SysTick exception set-pending bit">
+        <Enum name="PENDSTSET_0" start="0" description="write: no effect; read: SysTick exception is not pending" />
+        <Enum name="PENDSTSET_1" start="0x1" description="write: changes SysTick exception state to pending; read: SysTick exception is pending" />
+      </BitField>
+      <BitField start="27" size="1" name="PENDSVCLR" description="PendSV clear-pending bit">
+        <Enum name="PENDSVCLR_0" start="0" description="no effect" />
+        <Enum name="PENDSVCLR_1" start="0x1" description="removes the pending state from the PendSV exception" />
+      </BitField>
+      <BitField start="28" size="1" name="PENDSVSET" description="PendSV set-pending bit">
+        <Enum name="PENDSVSET_0" start="0" description="write: no effect; read: PendSV exception is not pending" />
+        <Enum name="PENDSVSET_1" start="0x1" description="write: changes PendSV exception state to pending; read: PendSV exception is pending" />
+      </BitField>
+      <BitField start="31" size="1" name="NMIPENDSET" description="NMI set-pending bit">
+        <Enum name="NMIPENDSET_0" start="0" description="write: no effect; read: NMI exception is not pending" />
+        <Enum name="NMIPENDSET_1" start="0x1" description="write: changes NMI exception state to pending; read: NMI exception is pending" />
+      </BitField>
+    </Register>
+    <Register start="+0xD08" size="4" name="SCB_VTOR" access="Read/Write" description="Vector Table Offset Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="7" size="25" name="TBLOFF" description="Vector table base offset" />
+    </Register>
+    <Register start="+0xD0C" size="4" name="SCB_AIRCR" access="Read/Write" description="Application Interrupt and Reset Control Register" reset_value="0xFA050000" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="VECTRESET" description="Writing 1 to this bit causes a local system reset">
+        <Enum name="VECTRESET_0" start="0" description="No change" />
+        <Enum name="VECTRESET_1" start="0x1" description="Causes a local system reset" />
+      </BitField>
+      <BitField start="1" size="1" name="VECTCLRACTIVE" description="Writing 1 to this bit clears all active state information for fixed and configurable exceptions.">
+        <Enum name="VECTCLRACTIVE_0" start="0" description="No change" />
+        <Enum name="VECTCLRACTIVE_1" start="0x1" description="Clears all active state information for fixed and configurable exceptions" />
+      </BitField>
+      <BitField start="2" size="1" name="SYSRESETREQ" description="System reset request">
+        <Enum name="SYSRESETREQ_0" start="0" description="no system reset request" />
+        <Enum name="SYSRESETREQ_1" start="0x1" description="asserts a signal to the outer system that requests a reset" />
+      </BitField>
+      <BitField start="8" size="3" name="PRIGROUP" description="Interrupt priority grouping field. This field determines the split of group priority from subpriority." />
+      <BitField start="15" size="1" name="ENDIANNESS" description="Data endianness">
+        <Enum name="ENDIANNESS_0" start="0" description="Little-endian" />
+        <Enum name="ENDIANNESS_1" start="0x1" description="Big-endian" />
+      </BitField>
+      <BitField start="16" size="16" name="VECTKEY" description="Register key" />
+    </Register>
+    <Register start="+0xD10" size="4" name="SCB_SCR" access="Read/Write" description="System Control Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="SLEEPONEXIT" description="Indicates sleep-on-exit when returning from Handler mode to Thread mode">
+        <Enum name="SLEEPONEXIT_0" start="0" description="o not sleep when returning to Thread mode" />
+        <Enum name="SLEEPONEXIT_1" start="0x1" description="enter sleep, or deep sleep, on return from an ISR" />
+      </BitField>
+      <BitField start="2" size="1" name="SLEEPDEEP" description="Controls whether the processor uses sleep or deep sleep as its low power mode">
+        <Enum name="SLEEPDEEP_0" start="0" description="sleep" />
+        <Enum name="SLEEPDEEP_1" start="0x1" description="deep sleep" />
+      </BitField>
+      <BitField start="4" size="1" name="SEVONPEND" description="Send Event on Pending bit">
+        <Enum name="SEVONPEND_0" start="0" description="only enabled interrupts or events can wakeup the processor, disabled interrupts are excluded" />
+        <Enum name="SEVONPEND_1" start="0x1" description="enabled events and all interrupts, including disabled interrupts, can wakeup the processor" />
+      </BitField>
+    </Register>
+    <Register start="+0xD14" size="4" name="SCB_CCR" access="Read/Write" description="Configuration and Control Register" reset_value="0x40000" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="NONBASETHRDENA" description="Indicates how the processor enters Thread mode">
+        <Enum name="NONBASETHRDENA_0" start="0" description="processor can enter Thread mode only when no exception is active" />
+        <Enum name="NONBASETHRDENA_1" start="0x1" description="processor can enter Thread mode from any level under the control of an EXC_RETURN value" />
+      </BitField>
+      <BitField start="1" size="1" name="USERSETMPEND" description="Enables unprivileged software access to the STIR">
+        <Enum name="USERSETMPEND_0" start="0" description="disable" />
+        <Enum name="USERSETMPEND_1" start="0x1" description="enable" />
+      </BitField>
+      <BitField start="3" size="1" name="UNALIGN_TRP" description="Enables unaligned access traps">
+        <Enum name="UNALIGN_TRP_0" start="0" description="do not trap unaligned halfword and word accesses" />
+        <Enum name="UNALIGN_TRP_1" start="0x1" description="trap unaligned halfword and word accesses" />
+      </BitField>
+      <BitField start="4" size="1" name="DIV_0_TRP" description="Enables faulting or halting when the processor executes an SDIV or UDIV instruction with a divisor of 0">
+        <Enum name="DIV_0_TRP_0" start="0" description="do not trap divide by 0" />
+        <Enum name="DIV_0_TRP_1" start="0x1" description="trap divide by 0" />
+      </BitField>
+      <BitField start="8" size="1" name="BFHFNMIGN" description="Enables handlers with priority -1 or -2 to ignore data BusFaults caused by load and store instructions.">
+        <Enum name="BFHFNMIGN_0" start="0" description="data bus faults caused by load and store instructions cause a lock-up" />
+        <Enum name="BFHFNMIGN_1" start="0x1" description="handlers running at priority -1 and -2 ignore data bus faults caused by load and store instructions" />
+      </BitField>
+      <BitField start="9" size="1" name="STKALIGN" description="Indicates stack alignment on exception entry">
+        <Enum name="STKALIGN_0" start="0" description="4-byte aligned" />
+        <Enum name="STKALIGN_1" start="0x1" description="8-byte aligned" />
+      </BitField>
+      <BitField start="16" size="1" name="DC" description="Enables L1 data cache.">
+        <Enum name="DC_0" start="0" description="L1 data cache disabled" />
+        <Enum name="DC_1" start="0x1" description="L1 data cache enabled" />
+      </BitField>
+      <BitField start="17" size="1" name="IC" description="Enables L1 instruction cache.">
+        <Enum name="IC_0" start="0" description="L1 instruction cache disabled" />
+        <Enum name="IC_1" start="0x1" description="L1 instruction cache enabled" />
+      </BitField>
+      <BitField start="18" size="1" name="BP" description="Always reads-as-one. It indicates branch prediction is enabled." />
+    </Register>
+    <Register start="+0xD18" size="4" name="SCB_SHPR1" access="Read/Write" description="System Handler Priority Register 1" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="8" name="PRI_4" description="Priority of system handler 4, MemManage" />
+      <BitField start="8" size="8" name="PRI_5" description="Priority of system handler 5, BusFault" />
+      <BitField start="16" size="8" name="PRI_6" description="Priority of system handler 6, UsageFault" />
+    </Register>
+    <Register start="+0xD1C" size="4" name="SCB_SHPR2" access="Read/Write" description="System Handler Priority Register 2" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="24" size="8" name="PRI_11" description="Priority of system handler 11, SVCall" />
+    </Register>
+    <Register start="+0xD20" size="4" name="SCB_SHPR3" access="Read/Write" description="System Handler Priority Register 3" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="16" size="8" name="PRI_14" description="Priority of system handler 14, PendSV" />
+      <BitField start="24" size="8" name="PRI_15" description="Priority of system handler 15, SysTick exception" />
+    </Register>
+    <Register start="+0xD24" size="4" name="SCB_SHCSR" access="Read/Write" description="System Handler Control and State Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="MEMFAULTACT" description="MemManage exception active bit">
+        <Enum name="MEMFAULTACT_0" start="0" description="exception is not active" />
+        <Enum name="MEMFAULTACT_1" start="0x1" description="exception is active" />
+      </BitField>
+      <BitField start="1" size="1" name="BUSFAULTACT" description="BusFault exception active bit">
+        <Enum name="BUSFAULTACT_0" start="0" description="exception is not active" />
+        <Enum name="BUSFAULTACT_1" start="0x1" description="exception is active" />
+      </BitField>
+      <BitField start="3" size="1" name="USGFAULTACT" description="UsageFault exception active bit">
+        <Enum name="USGFAULTACT_0" start="0" description="exception is not active" />
+        <Enum name="USGFAULTACT_1" start="0x1" description="exception is active" />
+      </BitField>
+      <BitField start="7" size="1" name="SVCALLACT" description="SVCall active bit">
+        <Enum name="SVCALLACT_0" start="0" description="exception is not active" />
+        <Enum name="SVCALLACT_1" start="0x1" description="exception is active" />
+      </BitField>
+      <BitField start="8" size="1" name="MONITORACT" description="Debug monitor active bit">
+        <Enum name="MONITORACT_0" start="0" description="exception is not active" />
+        <Enum name="MONITORACT_1" start="0x1" description="exception is active" />
+      </BitField>
+      <BitField start="10" size="1" name="PENDSVACT" description="PendSV exception active bit">
+        <Enum name="PENDSVACT_0" start="0" description="exception is not active" />
+        <Enum name="PENDSVACT_1" start="0x1" description="exception is active" />
+      </BitField>
+      <BitField start="11" size="1" name="SYSTICKACT" description="SysTick exception active bit">
+        <Enum name="SYSTICKACT_0" start="0" description="exception is not active" />
+        <Enum name="SYSTICKACT_1" start="0x1" description="exception is active" />
+      </BitField>
+      <BitField start="12" size="1" name="USGFAULTPENDED" description="UsageFault exception pending bit">
+        <Enum name="USGFAULTPENDED_0" start="0" description="exception is not pending" />
+        <Enum name="USGFAULTPENDED_1" start="0x1" description="exception is pending" />
+      </BitField>
+      <BitField start="13" size="1" name="MEMFAULTPENDED" description="MemManage exception pending bit">
+        <Enum name="MEMFAULTPENDED_0" start="0" description="exception is not pending" />
+        <Enum name="MEMFAULTPENDED_1" start="0x1" description="exception is pending" />
+      </BitField>
+      <BitField start="14" size="1" name="BUSFAULTPENDED" description="BusFault exception pending bit">
+        <Enum name="BUSFAULTPENDED_0" start="0" description="exception is not pending" />
+        <Enum name="BUSFAULTPENDED_1" start="0x1" description="exception is pending" />
+      </BitField>
+      <BitField start="15" size="1" name="SVCALLPENDED" description="SVCall pending bit">
+        <Enum name="SVCALLPENDED_0" start="0" description="exception is not pending" />
+        <Enum name="SVCALLPENDED_1" start="0x1" description="exception is pending" />
+      </BitField>
+      <BitField start="16" size="1" name="MEMFAULTENA" description="MemManage enable bit">
+        <Enum name="MEMFAULTENA_0" start="0" description="disable the exception" />
+        <Enum name="MEMFAULTENA_1" start="0x1" description="enable the exception" />
+      </BitField>
+      <BitField start="17" size="1" name="BUSFAULTENA" description="BusFault enable bit">
+        <Enum name="BUSFAULTENA_0" start="0" description="disable the exception" />
+        <Enum name="BUSFAULTENA_1" start="0x1" description="enable the exception" />
+      </BitField>
+      <BitField start="18" size="1" name="USGFAULTENA" description="UsageFault enable bit">
+        <Enum name="USGFAULTENA_0" start="0" description="disable the exception" />
+        <Enum name="USGFAULTENA_1" start="0x1" description="enable the exception" />
+      </BitField>
+    </Register>
+    <Register start="+0xD28" size="4" name="SCB_CFSR" access="Read/Write" description="Configurable Fault Status Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="IACCVIOL" description="Instruction access violation flag">
+        <Enum name="IACCVIOL_0" start="0" description="no instruction access violation fault" />
+        <Enum name="IACCVIOL_1" start="0x1" description="the processor attempted an instruction fetch from a location that does not permit execution" />
+      </BitField>
+      <BitField start="1" size="1" name="DACCVIOL" description="Data access violation flag">
+        <Enum name="DACCVIOL_0" start="0" description="no data access violation fault" />
+        <Enum name="DACCVIOL_1" start="0x1" description="the processor attempted a load or store at a location that does not permit the operation" />
+      </BitField>
+      <BitField start="3" size="1" name="MUNSTKERR" description="MemManage fault on unstacking for a return from exception">
+        <Enum name="MUNSTKERR_0" start="0" description="no unstacking fault" />
+        <Enum name="MUNSTKERR_1" start="0x1" description="unstack for an exception return has caused one or more access violations" />
+      </BitField>
+      <BitField start="4" size="1" name="MSTKERR" description="MemManage fault on stacking for exception entry">
+        <Enum name="MSTKERR_0" start="0" description="no stacking fault" />
+        <Enum name="MSTKERR_1" start="0x1" description="stacking for an exception entry has caused one or more access violations" />
+      </BitField>
+      <BitField start="5" size="1" name="MLSPERR" description="MemManage fault occurred during floating-point lazy state preservation">
+        <Enum name="MLSPERR_0" start="0" description="No MemManage fault occurred during floating-point lazy state preservation" />
+        <Enum name="MLSPERR_1" start="0x1" description="A MemManage fault occurred during floating-point lazy state preservation" />
+      </BitField>
+      <BitField start="7" size="1" name="MMARVALID" description="MemManage Fault Address Register (MMFAR) valid flag">
+        <Enum name="MMARVALID_0" start="0" description="value in MMAR is not a valid fault address" />
+        <Enum name="MMARVALID_1" start="0x1" description="MMAR holds a valid fault address" />
+      </BitField>
+      <BitField start="8" size="1" name="IBUSERR" description="Instruction bus error">
+        <Enum name="IBUSERR_0" start="0" description="no instruction bus error" />
+        <Enum name="IBUSERR_1" start="0x1" description="instruction bus error" />
+      </BitField>
+      <BitField start="9" size="1" name="PRECISERR" description="Precise data bus error">
+        <Enum name="PRECISERR_0" start="0" description="no precise data bus error" />
+        <Enum name="PRECISERR_1" start="0x1" description="a data bus error has occurred, and the PC value stacked for the exception return points to the instruction that caused the fault" />
+      </BitField>
+      <BitField start="10" size="1" name="IMPRECISERR" description="Imprecise data bus error">
+        <Enum name="IMPRECISERR_0" start="0" description="no imprecise data bus error" />
+        <Enum name="IMPRECISERR_1" start="0x1" description="a data bus error has occurred, but the return address in the stack frame is not related to the instruction that caused the error" />
+      </BitField>
+      <BitField start="11" size="1" name="UNSTKERR" description="BusFault on unstacking for a return from exception">
+        <Enum name="UNSTKERR_0" start="0" description="no unstacking fault" />
+        <Enum name="UNSTKERR_1" start="0x1" description="unstack for an exception return has caused one or more BusFaults" />
+      </BitField>
+      <BitField start="12" size="1" name="STKERR" description="BusFault on stacking for exception entry">
+        <Enum name="STKERR_0" start="0" description="no stacking fault" />
+        <Enum name="STKERR_1" start="0x1" description="stacking for an exception entry has caused one or more BusFaults" />
+      </BitField>
+      <BitField start="13" size="1" name="LSPERR" description="Bus fault occurred during floating-point lazy state preservation">
+        <Enum name="LSPERR_0" start="0" description="No bus fault occurred during floating-point lazy state preservation" />
+        <Enum name="LSPERR_1" start="0x1" description="A bus fault occurred during floating-point lazy state preservation" />
+      </BitField>
+      <BitField start="15" size="1" name="BFARVALID" description="BusFault Address Register (BFAR) valid flag">
+        <Enum name="BFARVALID_0" start="0" description="value in BFAR is not a valid fault address" />
+        <Enum name="BFARVALID_1" start="0x1" description="BFAR holds a valid fault address" />
+      </BitField>
+      <BitField start="16" size="1" name="UNDEFINSTR" description="Undefined instruction UsageFault">
+        <Enum name="UNDEFINSTR_0" start="0" description="no undefined instruction UsageFault" />
+        <Enum name="UNDEFINSTR_1" start="0x1" description="the processor has attempted to execute an undefined instruction" />
+      </BitField>
+      <BitField start="17" size="1" name="INVSTATE" description="Invalid state UsageFault">
+        <Enum name="INVSTATE_0" start="0" description="no invalid state UsageFault" />
+        <Enum name="INVSTATE_1" start="0x1" description="the processor has attempted to execute an instruction that makes illegal use of the EPSR" />
+      </BitField>
+      <BitField start="18" size="1" name="INVPC" description="Invalid PC load UsageFault, caused by an invalid PC load by EXC_RETURN">
+        <Enum name="INVPC_0" start="0" description="no invalid PC load UsageFault" />
+        <Enum name="INVPC_1" start="0x1" description="the processor has attempted an illegal load of EXC_RETURN to the PC" />
+      </BitField>
+      <BitField start="19" size="1" name="NOCP" description="No coprocessor UsageFault">
+        <Enum name="NOCP_0" start="0" description="no UsageFault caused by attempting to access a coprocessor" />
+        <Enum name="NOCP_1" start="0x1" description="the processor has attempted to access a coprocessor" />
+      </BitField>
+      <BitField start="24" size="1" name="UNALIGNED" description="Unaligned access UsageFault">
+        <Enum name="UNALIGNED_0" start="0" description="no unaligned access fault, or unaligned access trapping not enabled" />
+        <Enum name="UNALIGNED_1" start="0x1" description="the processor has made an unaligned memory access" />
+      </BitField>
+      <BitField start="25" size="1" name="DIVBYZERO" description="Divide by zero UsageFault">
+        <Enum name="DIVBYZERO_0" start="0" description="no divide by zero fault, or divide by zero trapping not enabled" />
+        <Enum name="DIVBYZERO_1" start="0x1" description="the processor has executed an SDIV or UDIV instruction with a divisor of 0" />
+      </BitField>
+    </Register>
+    <Register start="+0xD2C" size="4" name="SCB_HFSR" access="Read/Write" description="HardFault Status register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="1" size="1" name="VECTTBL" description="Indicates a BusFault on a vector table read during exception processing.">
+        <Enum name="VECTTBL_0" start="0" description="no BusFault on vector table read" />
+        <Enum name="VECTTBL_1" start="0x1" description="BusFault on vector table read" />
+      </BitField>
+      <BitField start="30" size="1" name="FORCED" description="Indicates a forced hard fault, generated by escalation of a fault with configurable priority that cannot be handles, either because of priority or because it is disabled.">
+        <Enum name="FORCED_0" start="0" description="no forced HardFault" />
+        <Enum name="FORCED_1" start="0x1" description="forced HardFault" />
+      </BitField>
+      <BitField start="31" size="1" name="DEBUGEVT" description="Reserved for Debug use. When writing to the register you must write 0 to this bit, otherwise behavior is Unpredictable.">
+        <Enum name="DEBUGEVT_0" start="0" description="No Debug event has occurred." />
+        <Enum name="DEBUGEVT_1" start="0x1" description="Debug event has occurred. The Debug Fault Status Register has been updated." />
+      </BitField>
+    </Register>
+    <Register start="+0xD30" size="4" name="SCB_DFSR" access="Read/Write" description="Debug Fault Status Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="HALTED" description="Indicates a debug event generated by either a C_HALT or C_STEP request, triggered by a write to the DHCSR or a step request triggered by setting DEMCR.MON_STEP to 1.">
+        <Enum name="HALTED_0" start="0" description="No active halt request debug event" />
+        <Enum name="HALTED_1" start="0x1" description="Halt request debug event active" />
+      </BitField>
+      <BitField start="1" size="1" name="BKPT" description="Debug event generated by BKPT instruction execution or a breakpoint match in FPB">
+        <Enum name="BKPT_0" start="0" description="No current breakpoint debug event" />
+        <Enum name="BKPT_1" start="0x1" description="At least one current breakpoint debug event" />
+      </BitField>
+      <BitField start="2" size="1" name="DWTTRAP" description="Debug event generated by the DWT">
+        <Enum name="DWTTRAP_0" start="0" description="No current debug events generated by the DWT" />
+        <Enum name="DWTTRAP_1" start="0x1" description="At least one current debug event generated by the DWT" />
+      </BitField>
+      <BitField start="3" size="1" name="VCATCH" description="Indicates triggering of a Vector catch">
+        <Enum name="VCATCH_0" start="0" description="No Vector catch triggered" />
+        <Enum name="VCATCH_1" start="0x1" description="Vector catch triggered" />
+      </BitField>
+      <BitField start="4" size="1" name="EXTERNAL" description="Debug event generated because of the assertion of an external debug request">
+        <Enum name="EXTERNAL_0" start="0" description="No external debug request debug event" />
+        <Enum name="EXTERNAL_1" start="0x1" description="External debug request debug event" />
+      </BitField>
+    </Register>
+    <Register start="+0xD34" size="4" name="SCB_MMFAR" access="Read/Write" description="MemManage Fault Address Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="ADDRESS" description="Address of MemManage fault location" />
+    </Register>
+    <Register start="+0xD38" size="4" name="SCB_BFAR" access="Read/Write" description="BusFault Address Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="ADDRESS" description="Address of the BusFault location" />
+    </Register>
+    <Register start="+0xD40" size="4" name="SCB_ID_PFR0" access="ReadOnly" description="Processor Feature Register 0" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="4" name="STATE0" description="ARM instruction set support">
+        <Enum name="STATE0_0" start="0" description="ARMv7-M unused" />
+        <Enum name="STATE0_1" start="0x1" description="ARMv7-M unused" />
+        <Enum name="STATE0_2" start="0x2" description="ARMv7-M unused" />
+        <Enum name="STATE0_3" start="0x3" description="Support for Thumb encoding including Thumb-2 technology, with all basic 16-bit and 32-bit instructions." />
+      </BitField>
+      <BitField start="4" size="4" name="STATE1" description="Thumb instruction set support">
+        <Enum name="STATE1_0" start="0" description="The processor does not support the ARM instruction set." />
+        <Enum name="STATE1_1" start="0x1" description="ARMv7-M unused" />
+      </BitField>
+      <BitField start="8" size="4" name="STATE2" description="ARMv7-M unused" />
+      <BitField start="12" size="4" name="STATE3" description="ARMv7-M unused" />
+    </Register>
+    <Register start="+0xD44" size="4" name="SCB_ID_PFR1" access="ReadOnly" description="Processor Feature Register 1" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="8" size="4" name="PROGMODEL" description="M profile programmers' model">
+        <Enum name="PROGMODEL_0" start="0" description="ARMv7-M unused" />
+        <Enum name="PROGMODEL_2" start="0x2" description="Two-stack programmers' model supported" />
+      </BitField>
+    </Register>
+    <Register start="+0xD48" size="4" name="SCB_ID_DFR0" access="ReadOnly" description="Debug Feature Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="20" size="4" name="DEBUGMODEL" description="Support for memory-mapped debug model for M profile processors">
+        <Enum name="DEBUGMODEL_0" start="0" description="Not supported" />
+        <Enum name="DEBUGMODEL_1" start="0x1" description="Support for M profile Debug architecture, with memory-mapped access." />
+      </BitField>
+    </Register>
+    <Register start="+0xD4C" size="4" name="SCB_ID_AFR0" access="ReadOnly" description="Auxiliary Feature Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="4" name="IMPLEMENTATION_DEFINED0" description="Gives information about the IMPLEMENTATION DEFINED features of a processor implementation." />
+      <BitField start="4" size="4" name="IMPLEMENTATION_DEFINED1" description="Gives information about the IMPLEMENTATION DEFINED features of a processor implementation." />
+      <BitField start="8" size="4" name="IMPLEMENTATION_DEFINED2" description="Gives information about the IMPLEMENTATION DEFINED features of a processor implementation." />
+      <BitField start="12" size="4" name="IMPLEMENTATION_DEFINED3" description="Gives information about the IMPLEMENTATION DEFINED features of a processor implementation." />
+    </Register>
+    <Register start="+0xD50" size="4" name="SCB_ID_MMFR0" access="ReadOnly" description="Memory Model Feature Register 0" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="4" size="4" name="PMSASUPPORT" description="Indicates support for a PMSA">
+        <Enum name="PMSASUPPORT_0" start="0" description="Not supported" />
+        <Enum name="PMSASUPPORT_1" start="0x1" description="ARMv7-M unused" />
+        <Enum name="PMSASUPPORT_2" start="0x2" description="ARMv7-M unused" />
+        <Enum name="PMSASUPPORT_3" start="0x3" description="PMSAv7, providing support for a base region and subregions." />
+      </BitField>
+      <BitField start="8" size="4" name="OUTERMOST_SHAREABILITY" description="Indicates the outermost shareability domain implemented">
+        <Enum name="OUTERMOST_SHAREABILITY_0" start="0" description="Implemented as Non-cacheable" />
+        <Enum name="OUTERMOST_SHAREABILITY_1" start="0x1" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_2" start="0x2" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_3" start="0x3" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_4" start="0x4" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_5" start="0x5" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_6" start="0x6" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_7" start="0x7" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_8" start="0x8" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_9" start="0x9" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_10" start="0xA" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_11" start="0xB" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_12" start="0xC" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_13" start="0xD" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_14" start="0xE" description="ARMv7-M unused" />
+        <Enum name="OUTERMOST_SHAREABILITY_15" start="0xF" description="Shareability ignored." />
+      </BitField>
+      <BitField start="12" size="4" name="SHAREABILITY_LEVELS" description="Indicates the number of shareability levels implemented">
+        <Enum name="SHAREABILITY_LEVELS_0" start="0" description="One level of shareability implemented" />
+        <Enum name="SHAREABILITY_LEVELS_1" start="0x1" description="ARMv7-M unused" />
+      </BitField>
+      <BitField start="16" size="4" name="TCM_SUPPORT" description="Indicates the support for Tightly Coupled Memory">
+        <Enum name="TCM_SUPPORT_0" start="0" description="No tightly coupled memories implemented." />
+        <Enum name="TCM_SUPPORT_1" start="0x1" description="Tightly coupled memories implemented with IMPLEMENTATION DEFINED control." />
+        <Enum name="TCM_SUPPORT_2" start="0x2" description="ARMv7-M unused" />
+      </BitField>
+      <BitField start="20" size="4" name="AUXILIARY_REGISTERS" description="Indicates the support for Auxiliary registers">
+        <Enum name="AUXILIARY_REGISTERS_0" start="0" description="Not supported" />
+        <Enum name="AUXILIARY_REGISTERS_1" start="0x1" description="Support for Auxiliary Control Register only." />
+        <Enum name="AUXILIARY_REGISTERS_2" start="0x2" description="ARMv7-M unused" />
+      </BitField>
+    </Register>
+    <Register start="+0xD54" size="4" name="SCB_ID_MMFR1" access="ReadOnly" description="Memory Model Feature Register 1" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="ID_MMFR1" description="Gives information about the implemented memory model and memory management support." />
+    </Register>
+    <Register start="+0xD58" size="4" name="SCB_ID_MMFR2" access="ReadOnly" description="Memory Model Feature Register 2" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="24" size="4" name="WFI_STALL" description="Indicates the support for Wait For Interrupt (WFI) stalling">
+        <Enum name="WFI_STALL_0" start="0" description="Not supported" />
+        <Enum name="WFI_STALL_1" start="0x1" description="Support for WFI stalling" />
+      </BitField>
+    </Register>
+    <Register start="+0xD5C" size="4" name="SCB_ID_MMFR3" access="ReadOnly" description="Memory Model Feature Register 3" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="ID_MMFR3" description="Gives information about the implemented memory model and memory management support." />
+    </Register>
+    <Register start="+0xD60" size="4" name="SCB_ID_ISAR0" access="ReadOnly" description="Instruction Set Attributes Register 0" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="4" size="4" name="BITCOUNT_INSTRS" description="Indicates the supported Bit Counting instructions">
+        <Enum name="BITCOUNT_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="BITCOUNT_INSTRS_1" start="0x1" description="Adds support for the CLZ instruction" />
+      </BitField>
+      <BitField start="8" size="4" name="BITFIELD_INSTRS" description="Indicates the supported BitField instructions">
+        <Enum name="BITFIELD_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="BITFIELD_INSTRS_1" start="0x1" description="Adds support for the BFC, BFI, SBFX, and UBFX instructions" />
+      </BitField>
+      <BitField start="12" size="4" name="CMPBRANCH_INSTRS" description="Indicates the supported combined Compare and Branch instructions">
+        <Enum name="CMPBRANCH_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="CMPBRANCH_INSTRS_1" start="0x1" description="Adds support for the CBNZ and CBZ instructions" />
+      </BitField>
+      <BitField start="16" size="4" name="COPROC_INSTRS" description="Indicates the supported Coprocessor instructions">
+        <Enum name="COPROC_INSTRS_0" start="0" description="None supported, except for separately attributed architectures, for example the Floating-point extension" />
+        <Enum name="COPROC_INSTRS_1" start="0x1" description="Adds support for generic CDP, LDC, MCR, MRC, and STC instructions" />
+        <Enum name="COPROC_INSTRS_2" start="0x2" description="As for 1, and adds support for generic CDP2, LDC2, MCR2, MRC2, and STC2 instructions" />
+        <Enum name="COPROC_INSTRS_3" start="0x3" description="As for 2, and adds support for generic MCRR and MRRC instructions" />
+        <Enum name="COPROC_INSTRS_4" start="0x4" description="As for 3, and adds support for generic MCRR2 and MRRC2 instructions" />
+      </BitField>
+      <BitField start="20" size="4" name="DEBUG_INSTRS" description="Indicates the supported Debug instructions">
+        <Enum name="DEBUG_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="DEBUG_INSTRS_1" start="0x1" description="Adds support for the BKPT instruction" />
+      </BitField>
+      <BitField start="24" size="4" name="DIVIDE_INSTRS" description="Indicates the supported Divide instructions">
+        <Enum name="DIVIDE_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="DIVIDE_INSTRS_1" start="0x1" description="Adds support for the SDIV and UDIV instructions" />
+      </BitField>
+    </Register>
+    <Register start="+0xD64" size="4" name="SCB_ID_ISAR1" access="ReadOnly" description="Instruction Set Attributes Register 1" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="12" size="4" name="EXTEND_INSTRS" description="Indicates the supported Extend instructions">
+        <Enum name="EXTEND_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="EXTEND_INSTRS_1" start="0x1" description="Adds support for the SXTB, SXTH, UXTB, and UXTH instructions" />
+        <Enum name="EXTEND_INSTRS_2" start="0x2" description="As for 1, and adds support for the SXTAB, SXTAB16, SXTAH, SXTB16, UXTAB, UXTAB16, UXTAH, and UXTB16 instructions" />
+      </BitField>
+      <BitField start="16" size="4" name="IFTHEN_INSTRS" description="Indicates the supported IfThen instructions">
+        <Enum name="IFTHEN_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="IFTHEN_INSTRS_1" start="0x1" description="Adds support for the IT instructions, and for the IT bits in the PSRs" />
+      </BitField>
+      <BitField start="20" size="4" name="IMMEDIATE_INSTRS" description="Indicates the support for data-processing instructions with long immediate">
+        <Enum name="IMMEDIATE_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="IMMEDIATE_INSTRS_1" start="0x1" description="Adds support for the ADDW, MOVW, MOVT, and SUBW instructions" />
+      </BitField>
+      <BitField start="24" size="4" name="INTERWORK_INSTRS" description="Indicates the supported Interworking instructions">
+        <Enum name="INTERWORK_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="INTERWORK_INSTRS_1" start="0x1" description="Adds support for the BX instruction, and the T bit in the PSR" />
+        <Enum name="INTERWORK_INSTRS_2" start="0x2" description="As for 1, and adds support for the BLX instruction, and PC loads have BX-like behavior" />
+        <Enum name="INTERWORK_INSTRS_3" start="0x3" description="ARMv7-M unused" />
+      </BitField>
+    </Register>
+    <Register start="+0xD68" size="4" name="SCB_ID_ISAR2" access="ReadOnly" description="Instruction Set Attributes Register 2" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="4" name="LOADSTORE_INSTRS" description="Indicates the supported additional load and store instructions">
+        <Enum name="LOADSTORE_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="LOADSTORE_INSTRS_1" start="0x1" description="Adds support for the LDRD and STRD instructions" />
+      </BitField>
+      <BitField start="4" size="4" name="MEMHINT_INSTRS" description="Indicates the supported Memory Hint instructions">
+        <Enum name="MEMHINT_INSTRS_0" start="0" description="None supported, ARMv7-M unused." />
+        <Enum name="MEMHINT_INSTRS_1" start="0x1" description="Adds support for the PLD instruction, ARMv7-M unused." />
+        <Enum name="MEMHINT_INSTRS_2" start="0x2" description="As for 1, ARMv7-M unused." />
+        <Enum name="MEMHINT_INSTRS_3" start="0x3" description="As for 1 or 2, and adds support for the PLI instruction." />
+      </BitField>
+      <BitField start="8" size="4" name="MULTIACCESSINT_INSTRS" description="Indicates the support for multi-access interruptible instructions">
+        <Enum name="MULTIACCESSINT_INSTRS_0" start="0" description="None supported. This means the LDM and STM instructions are not interruptible. ARMv7-M unused." />
+        <Enum name="MULTIACCESSINT_INSTRS_1" start="0x1" description="LDM and STM instructions are restartable." />
+        <Enum name="MULTIACCESSINT_INSTRS_2" start="0x2" description="LDM and STM instructions are continuable." />
+      </BitField>
+      <BitField start="12" size="4" name="MULT_INSTRS" description="Indicates the supported additional Multiply instructions">
+        <Enum name="MULT_INSTRS_0" start="0" description="None supported. This means only MUL is supported. ARMv7-M unused." />
+        <Enum name="MULT_INSTRS_1" start="0x1" description="Adds support for the MLA instruction, ARMv7-M unused." />
+        <Enum name="MULT_INSTRS_2" start="0x2" description="As for 1, and adds support for the MLS instruction." />
+      </BitField>
+      <BitField start="16" size="4" name="MULTS_INSTRS" description="Indicates the supported advanced signed Multiply instructions">
+        <Enum name="MULTS_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="MULTS_INSTRS_1" start="0x1" description="Adds support for the SMULL and SMLAL instructions" />
+        <Enum name="MULTS_INSTRS_2" start="0x2" description="As for 1, and adds support for the SMLABB, SMLABT, SMLALBB, SMLALBT, SMLALTB, SMLALTT, SMLATB, SMLATT, SMLAWB, SMLAWT, SMULBB, SMULBT, SMULTB, SMULTT, SMULWB, and SMULWT instructions." />
+        <Enum name="MULTS_INSTRS_3" start="0x3" description="As for 2, and adds support for the SMLAD, SMLADX, SMLALD, SMLALDX, SMLSD, SMLSDX, SMLSLD, SMLSLDX, SMMLA, SMMLAR, SMMLS, SMMLSR, SMMUL, SMMULR, SMUAD, SMUADX, SMUSD, and SMUSDX instructions." />
+      </BitField>
+      <BitField start="20" size="4" name="MULTU_INSTRS" description="Indicates the supported advanced unsigned Multiply instructions">
+        <Enum name="MULTU_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="MULTU_INSTRS_1" start="0x1" description="Adds support for the UMULL and UMLAL instructions." />
+        <Enum name="MULTU_INSTRS_2" start="0x2" description="As for 1, and adds support for the UMAAL instruction." />
+      </BitField>
+      <BitField start="28" size="4" name="REVERSAL_INSTRS" description="Indicates the supported Reversal instructions">
+        <Enum name="REVERSAL_INSTRS_0" start="0" description="None supported, ARMv7-M unused" />
+        <Enum name="REVERSAL_INSTRS_1" start="0x1" description="Adds support for the REV, REV16, and REVSH instructions, ARMv7-M unused." />
+        <Enum name="REVERSAL_INSTRS_2" start="0x2" description="As for 1, and adds support for the RBIT instruction." />
+      </BitField>
+    </Register>
+    <Register start="+0xD6C" size="4" name="SCB_ID_ISAR3" access="ReadOnly" description="Instruction Set Attributes Register 3" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="4" name="SATURATE_INSTRS" description="Indicates the supported Saturate instructions">
+        <Enum name="SATURATE_INSTRS_0" start="0" description="None supported" />
+        <Enum name="SATURATE_INSTRS_1" start="0x1" description="Adds support for the QADD, QDADD, QDSUB, and QSUB instructions, and for the Q bit in the PSRs." />
+      </BitField>
+      <BitField start="4" size="4" name="SIMD_INSTRS" description="Indicates the supported SIMD instructions">
+        <Enum name="SIMD_INSTRS_0" start="0" description="None supported, ARMv7-M unused." />
+        <Enum name="SIMD_INSTRS_1" start="0x1" description="Adds support for the SSAT and USAT instructions, and for the Q bit in the PSRs." />
+        <Enum name="SIMD_INSTRS_3" start="0x3" description="As for 1, and adds support for the PKHBT, PKHTB, QADD16, QADD8, QASX, QSUB16, QSUB8, QSAX, SADD16, SADD8, SASX, SEL, SHADD16, SHADD8, SHASX, SHSUB16, SHSUB8, SHSAX, SSAT16, SSUB16, SSUB8, SSAX, SXTAB16, SXTB16, UADD16, UADD8, UASX, UHADD16, UHADD8, UHASX, UHSUB16, UHSUB8, UHSAX, UQADD16, UQADD8, UQASX, UQSUB16, UQSUB8, UQSAX, USAD8, USADA8, USAT16, USUB16, USUB8, USAX, UXTAB16, and UXTB16 instructions. Also adds support for the GE[3:0] bits in the PSRs." />
+      </BitField>
+      <BitField start="8" size="4" name="SVC_INSTRS" description="Indicates the supported SVC instructions">
+        <Enum name="SVC_INSTRS_0" start="0" description="None supported, ARMv7-M unused." />
+        <Enum name="SVC_INSTRS_1" start="0x1" description="Adds support for the SVC instruction." />
+      </BitField>
+      <BitField start="12" size="4" name="SYNCHPRIM_INSTRS" description="Together with the ID_ISAR4[SYNCHPRIM_INSTRS_FRAC] indicates the supported Synchronization Primitives" />
+      <BitField start="16" size="4" name="TABBRANCH_INSTRS" description="Indicates the supported Table Branch instructions">
+        <Enum name="TABBRANCH_INSTRS_0" start="0" description="None supported, ARMv7-M unused." />
+        <Enum name="TABBRANCH_INSTRS_1" start="0x1" description="Adds support for the TBB and TBH instructions." />
+      </BitField>
+      <BitField start="20" size="4" name="THUMBCOPY_INSTRS" description="Indicates the supported non flag-setting MOV instructions">
+        <Enum name="THUMBCOPY_INSTRS_0" start="0" description="None supported, ARMv7-M unused." />
+        <Enum name="THUMBCOPY_INSTRS_1" start="0x1" description="Adds support for encoding T1 of the MOV (register) instruction copying from a low register to a low register." />
+      </BitField>
+      <BitField start="24" size="4" name="TRUENOP_INSTRS" description="Indicates the supported non flag-setting MOV instructions">
+        <Enum name="TRUENOP_INSTRS_0" start="0" description="None supported, ARMv7-M unused." />
+        <Enum name="TRUENOP_INSTRS_1" start="0x1" description="Adds support for encoding T1 of the MOV (register) instruction copying from a low register to a low register." />
+      </BitField>
+    </Register>
+    <Register start="+0xD70" size="4" name="SCB_ID_ISAR4" access="ReadOnly" description="Instruction Set Attributes Register 4" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="4" name="UNPRIV_INSTRS" description="Indicates the supported unprivileged instructions. These are the instruction variants indicated by a T suffix.">
+        <Enum name="UNPRIV_INSTRS_0" start="0" description="None supported, ARMv7-M unused." />
+        <Enum name="UNPRIV_INSTRS_1" start="0x1" description="Adds support for the LDRBT, LDRT, STRBT, and STRT instructions." />
+        <Enum name="UNPRIV_INSTRS_2" start="0x2" description="As for 1, and adds support for the LDRHT, LDRSBT, LDRSHT, and STRHT instructions." />
+      </BitField>
+      <BitField start="4" size="4" name="WITHSHIFTS_INSTRS" description="Indicates the support for instructions with shifts">
+        <Enum name="WITHSHIFTS_INSTRS_0" start="0" description="Nonzero shifts supported only in MOV and shift instructions." />
+        <Enum name="WITHSHIFTS_INSTRS_1" start="0x1" description="Adds support for shifts of loads and stores over the range LSL 0-3." />
+        <Enum name="WITHSHIFTS_INSTRS_3" start="0x3" description="As for 1, and adds support for other constant shift options, on loads, stores, and other instructions." />
+        <Enum name="WITHSHIFTS_INSTRS_4" start="0x4" description="ARMv7-M unused." />
+      </BitField>
+      <BitField start="8" size="4" name="WRITEBACK_INSTRS" description="Indicates the support for Writeback addressing modes">
+        <Enum name="WRITEBACK_INSTRS_0" start="0" description="Basic support. Only the LDM, STM, PUSH, and POP instructions support writeback addressing modes. ARMv7-M unused." />
+        <Enum name="WRITEBACK_INSTRS_1" start="0x1" description="Adds support for all of the writeback addressing modes defined in the ARMv7-M architecture." />
+      </BitField>
+      <BitField start="16" size="4" name="BARRIER_INSTRS" description="Indicates the supported Barrier instructions">
+        <Enum name="BARRIER_INSTRS_0" start="0" description="None supported, ARMv7-M unused." />
+        <Enum name="BARRIER_INSTRS_1" start="0x1" description="Adds support for the DMB, DSB, and ISB barrier instructions." />
+      </BitField>
+      <BitField start="20" size="4" name="SYNCHPRIM_INSTRS_FRAC" description="Together with the ID_ISAR3[SYNCHPRIM_INSTRS] indicates the supported Synchronization Primitives" />
+      <BitField start="24" size="4" name="PSR_M_INSTRS" description="Indicates the supported M profile instructions to modify the PSRs">
+        <Enum name="PSR_M_INSTRS_0" start="0" description="None supported, ARMv7-M unused." />
+        <Enum name="PSR_M_INSTRS_1" start="0x1" description="Adds support for the M-profile forms of the CPS, MRS, and MSR instructions, to access the PSRs." />
+      </BitField>
+    </Register>
+    <Register start="+0xD78" size="4" name="SCB_CLIDR" access="ReadOnly" description="Cache Level ID register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="3" name="CL1" description="Indicate the type of cache implemented at level 1.">
+        <Enum name="CL1_0" start="0" description="No cache" />
+        <Enum name="CL1_1" start="0x1" description="Instruction cache only" />
+        <Enum name="CL1_2" start="0x2" description="Data cache only" />
+        <Enum name="CL1_3" start="0x3" description="Separate instruction and data caches" />
+        <Enum name="CL1_4" start="0x4" description="Unified cache" />
+      </BitField>
+      <BitField start="3" size="3" name="CL2" description="Indicate the type of cache implemented at level 2.">
+        <Enum name="CL2_0" start="0" description="No cache" />
+        <Enum name="CL2_1" start="0x1" description="Instruction cache only" />
+        <Enum name="CL2_2" start="0x2" description="Data cache only" />
+        <Enum name="CL2_3" start="0x3" description="Separate instruction and data caches" />
+        <Enum name="CL2_4" start="0x4" description="Unified cache" />
+      </BitField>
+      <BitField start="6" size="3" name="CL3" description="Indicate the type of cache implemented at level 3.">
+        <Enum name="CL3_0" start="0" description="No cache" />
+        <Enum name="CL3_1" start="0x1" description="Instruction cache only" />
+        <Enum name="CL3_2" start="0x2" description="Data cache only" />
+        <Enum name="CL3_3" start="0x3" description="Separate instruction and data caches" />
+        <Enum name="CL3_4" start="0x4" description="Unified cache" />
+      </BitField>
+      <BitField start="9" size="3" name="CL4" description="Indicate the type of cache implemented at level 4.">
+        <Enum name="CL4_0" start="0" description="No cache" />
+        <Enum name="CL4_1" start="0x1" description="Instruction cache only" />
+        <Enum name="CL4_2" start="0x2" description="Data cache only" />
+        <Enum name="CL4_3" start="0x3" description="Separate instruction and data caches" />
+        <Enum name="CL4_4" start="0x4" description="Unified cache" />
+      </BitField>
+      <BitField start="12" size="3" name="CL5" description="Indicate the type of cache implemented at level 5.">
+        <Enum name="CL5_0" start="0" description="No cache" />
+        <Enum name="CL5_1" start="0x1" description="Instruction cache only" />
+        <Enum name="CL5_2" start="0x2" description="Data cache only" />
+        <Enum name="CL5_3" start="0x3" description="Separate instruction and data caches" />
+        <Enum name="CL5_4" start="0x4" description="Unified cache" />
+      </BitField>
+      <BitField start="15" size="3" name="CL6" description="Indicate the type of cache implemented at level 6.">
+        <Enum name="CL6_0" start="0" description="No cache" />
+        <Enum name="CL6_1" start="0x1" description="Instruction cache only" />
+        <Enum name="CL6_2" start="0x2" description="Data cache only" />
+        <Enum name="CL6_3" start="0x3" description="Separate instruction and data caches" />
+        <Enum name="CL6_4" start="0x4" description="Unified cache" />
+      </BitField>
+      <BitField start="18" size="3" name="CL7" description="Indicate the type of cache implemented at level 7.">
+        <Enum name="CL7_0" start="0" description="No cache" />
+        <Enum name="CL7_1" start="0x1" description="Instruction cache only" />
+        <Enum name="CL7_2" start="0x2" description="Data cache only" />
+        <Enum name="CL7_3" start="0x3" description="Separate instruction and data caches" />
+        <Enum name="CL7_4" start="0x4" description="Unified cache" />
+      </BitField>
+      <BitField start="21" size="3" name="LOUIS" description="Level of Unification Inner Shareable for the cache hierarchy. This field is RAZ.">
+        <Enum name="LOUIS_0" start="0" description="0" />
+        <Enum name="LOUIS_1" start="0x1" description="1" />
+        <Enum name="LOUIS_2" start="0x2" description="2" />
+        <Enum name="LOUIS_3" start="0x3" description="3" />
+        <Enum name="LOUIS_4" start="0x4" description="4" />
+        <Enum name="LOUIS_5" start="0x5" description="5" />
+        <Enum name="LOUIS_6" start="0x6" description="6" />
+        <Enum name="LOUIS_7" start="0x7" description="7" />
+      </BitField>
+      <BitField start="24" size="3" name="LOC" description="Level of Coherency for the cache hierarchy">
+        <Enum name="LOC_0" start="0" description="0" />
+        <Enum name="LOC_1" start="0x1" description="1" />
+        <Enum name="LOC_2" start="0x2" description="2" />
+        <Enum name="LOC_3" start="0x3" description="3" />
+        <Enum name="LOC_4" start="0x4" description="4" />
+        <Enum name="LOC_5" start="0x5" description="5" />
+        <Enum name="LOC_6" start="0x6" description="6" />
+        <Enum name="LOC_7" start="0x7" description="7" />
+      </BitField>
+      <BitField start="27" size="3" name="LOU" description="Level of Unification for the cache hierarchy">
+        <Enum name="LOU_0" start="0" description="0" />
+        <Enum name="LOU_1" start="0x1" description="1" />
+        <Enum name="LOU_2" start="0x2" description="2" />
+        <Enum name="LOU_3" start="0x3" description="3" />
+        <Enum name="LOU_4" start="0x4" description="4" />
+        <Enum name="LOU_5" start="0x5" description="5" />
+        <Enum name="LOU_6" start="0x6" description="6" />
+        <Enum name="LOU_7" start="0x7" description="7" />
+      </BitField>
+    </Register>
+    <Register start="+0xD7C" size="4" name="SCB_CTR" access="ReadOnly" description="Cache Type register" reset_value="0x8000C000" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="4" name="IMINLINE" description="Log2 of the number of words in the smallest cache line of all the instruction caches that are controlled by the processor." />
+      <BitField start="16" size="4" name="DMINLINE" description="Log2 of the number of words in the smallest cache line of all the data caches and unified caches that are controlled by the processor." />
+      <BitField start="20" size="4" name="ERG" description="Exclusives Reservation Granule. The maximum size of the reservation granule that has been implemented for the Load-Exclusive and Store-Exclusive instructions, encoded as Log2 of the number of words." />
+      <BitField start="24" size="4" name="CWG" description="Cache Write-back Granule. The maximum size of memory that can be overwritten as a result of the eviction of a cache entry that has had a memory location in it modified, encoded as Log2 of the number of words." />
+      <BitField start="29" size="3" name="FORMAT" description="Indicates the implemented CTR format.">
+        <Enum name="FORMAT_4" start="0x4" description="ARMv7 format." />
+      </BitField>
+    </Register>
+    <Register start="+0xD80" size="4" name="SCB_CCSIDR" access="ReadOnly" description="Cache Size ID Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="3" name="LINESIZE" description="(Log2(Number of words in cache line)) - 2.">
+        <Enum name="LINESIZE_0" start="0" description="The line length of 4 words." />
+        <Enum name="LINESIZE_1" start="0x1" description="The line length of 8 words." />
+        <Enum name="LINESIZE_2" start="0x2" description="The line length of 16 words." />
+        <Enum name="LINESIZE_3" start="0x3" description="The line length of 32 words." />
+        <Enum name="LINESIZE_4" start="0x4" description="The line length of 64 words." />
+        <Enum name="LINESIZE_5" start="0x5" description="The line length of 128 words." />
+        <Enum name="LINESIZE_6" start="0x6" description="The line length of 256 words." />
+        <Enum name="LINESIZE_7" start="0x7" description="The line length of 512 words." />
+      </BitField>
+      <BitField start="3" size="10" name="ASSOCIATIVITY" description="(Associativity of cache) - 1, therefore a value of 0 indicates an associativity of 1. The associativity does not have to be a power of 2." />
+      <BitField start="13" size="15" name="NUMSETS" description="(Number of sets in cache) - 1, therefore a value of 0 indicates 1 set in the cache. The number of sets does not have to be a power of 2." />
+      <BitField start="28" size="1" name="WA" description="Indicates whether the cache level supports write-allocation">
+        <Enum name="WA_0" start="0" description="Feature not supported" />
+        <Enum name="WA_1" start="0x1" description="Feature supported" />
+      </BitField>
+      <BitField start="29" size="1" name="RA" description="Indicates whether the cache level supports read-allocation">
+        <Enum name="RA_0" start="0" description="Feature not supported" />
+        <Enum name="RA_1" start="0x1" description="Feature supported" />
+      </BitField>
+      <BitField start="30" size="1" name="WB" description="Indicates whether the cache level supports write-back">
+        <Enum name="WB_0" start="0" description="Feature not supported" />
+        <Enum name="WB_1" start="0x1" description="Feature supported" />
+      </BitField>
+      <BitField start="31" size="1" name="WT" description="Indicates whether the cache level supports write-through">
+        <Enum name="WT_0" start="0" description="Feature not supported" />
+        <Enum name="WT_1" start="0x1" description="Feature supported" />
+      </BitField>
+    </Register>
+    <Register start="+0xD84" size="4" name="SCB_CSSELR" access="Read/Write" description="Cache Size Selection Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="IND" description="Instruction not data bit">
+        <Enum name="IND_0" start="0" description="Data or unified cache." />
+        <Enum name="IND_1" start="0x1" description="Instruction cache." />
+      </BitField>
+      <BitField start="1" size="3" name="LEVEL" description="Cache level of required cache">
+        <Enum name="LEVEL_0" start="0" description="Level 1 cache." />
+        <Enum name="LEVEL_1" start="0x1" description="Level 2 cache." />
+        <Enum name="LEVEL_2" start="0x2" description="Level 3 cache." />
+        <Enum name="LEVEL_3" start="0x3" description="Level 4 cache." />
+        <Enum name="LEVEL_4" start="0x4" description="Level 5 cache." />
+        <Enum name="LEVEL_5" start="0x5" description="Level 6 cache." />
+        <Enum name="LEVEL_6" start="0x6" description="Level 7 cache." />
+      </BitField>
+    </Register>
+    <Register start="+0xD88" size="4" name="SCB_CPACR" access="Read/Write" description="Coprocessor Access Control Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="2" name="CP0" description="Access privileges for coprocessor 0.">
+        <Enum name="CP0_0" start="0" description="Access denied. Any attempted access generates a NOCP UsageFault." />
+        <Enum name="CP0_1" start="0x1" description="Privileged access only. An unprivileged access generates a NOCP UsageFault." />
+        <Enum name="CP0_3" start="0x3" description="Full access." />
+      </BitField>
+      <BitField start="2" size="2" name="CP1" description="Access privileges for coprocessor 1.">
+        <Enum name="CP1_0" start="0" description="Access denied. Any attempted access generates a NOCP UsageFault." />
+        <Enum name="CP1_1" start="0x1" description="Privileged access only. An unprivileged access generates a NOCP UsageFault." />
+        <Enum name="CP1_3" start="0x3" description="Full access." />
+      </BitField>
+      <BitField start="4" size="2" name="CP2" description="Access privileges for coprocessor 2.">
+        <Enum name="CP2_0" start="0" description="Access denied. Any attempted access generates a NOCP UsageFault." />
+        <Enum name="CP2_1" start="0x1" description="Privileged access only. An unprivileged access generates a NOCP UsageFault." />
+        <Enum name="CP2_3" start="0x3" description="Full access." />
+      </BitField>
+      <BitField start="6" size="2" name="CP3" description="Access privileges for coprocessor 3.">
+        <Enum name="CP3_0" start="0" description="Access denied. Any attempted access generates a NOCP UsageFault." />
+        <Enum name="CP3_1" start="0x1" description="Privileged access only. An unprivileged access generates a NOCP UsageFault." />
+        <Enum name="CP3_3" start="0x3" description="Full access." />
+      </BitField>
+      <BitField start="8" size="2" name="CP4" description="Access privileges for coprocessor 4.">
+        <Enum name="CP4_0" start="0" description="Access denied. Any attempted access generates a NOCP UsageFault." />
+        <Enum name="CP4_1" start="0x1" description="Privileged access only. An unprivileged access generates a NOCP UsageFault." />
+        <Enum name="CP4_3" start="0x3" description="Full access." />
+      </BitField>
+      <BitField start="10" size="2" name="CP5" description="Access privileges for coprocessor 5.">
+        <Enum name="CP5_0" start="0" description="Access denied. Any attempted access generates a NOCP UsageFault." />
+        <Enum name="CP5_1" start="0x1" description="Privileged access only. An unprivileged access generates a NOCP UsageFault." />
+        <Enum name="CP5_3" start="0x3" description="Full access." />
+      </BitField>
+      <BitField start="12" size="2" name="CP6" description="Access privileges for coprocessor 6.">
+        <Enum name="CP6_0" start="0" description="Access denied. Any attempted access generates a NOCP UsageFault." />
+        <Enum name="CP6_1" start="0x1" description="Privileged access only. An unprivileged access generates a NOCP UsageFault." />
+        <Enum name="CP6_3" start="0x3" description="Full access." />
+      </BitField>
+      <BitField start="14" size="2" name="CP7" description="Access privileges for coprocessor 7.">
+        <Enum name="CP7_0" start="0" description="Access denied. Any attempted access generates a NOCP UsageFault." />
+        <Enum name="CP7_1" start="0x1" description="Privileged access only. An unprivileged access generates a NOCP UsageFault." />
+        <Enum name="CP7_3" start="0x3" description="Full access." />
+      </BitField>
+      <BitField start="20" size="2" name="CP10" description="Access privileges for coprocessor 10.">
+        <Enum name="CP10_0" start="0" description="Access denied. Any attempted access generates a NOCP UsageFault." />
+        <Enum name="CP10_1" start="0x1" description="Privileged access only. An unprivileged access generates a NOCP UsageFault." />
+        <Enum name="CP10_3" start="0x3" description="Full access." />
+      </BitField>
+      <BitField start="22" size="2" name="CP11" description="Access privileges for coprocessor 11.">
+        <Enum name="CP11_0" start="0" description="Access denied. Any attempted access generates a NOCP UsageFault." />
+        <Enum name="CP11_1" start="0x1" description="Privileged access only. An unprivileged access generates a NOCP UsageFault." />
+        <Enum name="CP11_3" start="0x3" description="Full access." />
+      </BitField>
+    </Register>
+    <Register start="+0xF00" size="4" name="SCB_STIR" access="Read/Write" description="Instruction cache invalidate all to Point of Unification (PoU)" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="9" name="INTID" description="Indicates the interrupt to be triggered" />
+    </Register>
+    <Register start="+0xF50" size="4" name="SCB_ICIALLU" access="WriteOnly" description="Instruction cache invalidate all to Point of Unification (PoU)" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="ICIALLU" description="I-cache invalidate all to PoU" />
+    </Register>
+    <Register start="+0xF58" size="4" name="SCB_ICIMVAU" access="WriteOnly" description="Instruction cache invalidate by address to PoU" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="ICIMVAU" description="I-cache invalidate by MVA to PoU" />
+    </Register>
+    <Register start="+0xF5C" size="4" name="SCB_DCIMVAC" access="WriteOnly" description="Data cache invalidate by address to Point of Coherency (PoC)" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="DCIMVAC" description="D-cache invalidate by MVA to PoC" />
+    </Register>
+    <Register start="+0xF60" size="4" name="SCB_DCISW" access="WriteOnly" description="Data cache invalidate by set/way" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="DCISW" description="D-cache invalidate by set-way" />
+    </Register>
+    <Register start="+0xF64" size="4" name="SCB_DCCMVAU" access="WriteOnly" description="Data cache by address to PoU" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="DCCMVAU" description="D-cache clean by MVA to PoU" />
+    </Register>
+    <Register start="+0xF68" size="4" name="SCB_DCCMVAC" access="WriteOnly" description="Data cache clean by address to PoC" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="DCCMVAC" description="D-cache clean by MVA to PoC" />
+    </Register>
+    <Register start="+0xF6C" size="4" name="SCB_DCCSW" access="WriteOnly" description="Data cache clean by set/way" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="DCCSW" description="D-cache clean by set-way" />
+    </Register>
+    <Register start="+0xF70" size="4" name="SCB_DCCIMVAC" access="WriteOnly" description="Data cache clean and invalidate by address to PoC" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="DCCIMVAC" description="D-cache clean and invalidate by MVA to PoC" />
+    </Register>
+    <Register start="+0xF74" size="4" name="SCB_DCCISW" access="WriteOnly" description="Data cache clean and invalidate by set/way" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="32" name="DCCISW" description="D-cache clean and invalidate by set-way" />
+    </Register>
+    <Register start="+0xF90" size="4" name="SCB_CM7_ITCMCR" access="Read/Write" description="Instruction Tightly-Coupled Memory Control Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="EN" description="TCM enable. When a TCM is disabled all accesses are made to the AXIM interface.">
+        <Enum name="EN_0" start="0" description="TCM disabled." />
+        <Enum name="EN_1" start="0x1" description="TCM enabled." />
+      </BitField>
+      <BitField start="1" size="1" name="RMW" description="Read-Modify-Write (RMW) enable. Indicates that all writes to TCM, that are not the full width of the TCM RAM, use a RMW sequence.">
+        <Enum name="RMW_0" start="0" description="RMW disabled." />
+        <Enum name="RMW_1" start="0x1" description="RMW enabled." />
+      </BitField>
+      <BitField start="2" size="1" name="RETEN" description="Retry phase enable. When enabled the processor guarantees to honor the retry output on the corresponding TCM interface, re-executing the instruction which carried out the TCM access.">
+        <Enum name="RETEN_0" start="0" description="Retry phase disabled." />
+        <Enum name="RETEN_1" start="0x1" description="Retry phase enabled." />
+      </BitField>
+      <BitField start="3" size="4" name="SZ" description="TCM size. Indicates the size of the relevant TCM.">
+        <Enum name="SZ_0" start="0" description="No TCM implemented." />
+        <Enum name="SZ_3" start="0x3" description="4KB." />
+        <Enum name="SZ_4" start="0x4" description="8KB." />
+        <Enum name="SZ_5" start="0x5" description="16KB." />
+        <Enum name="SZ_6" start="0x6" description="32KB." />
+        <Enum name="SZ_7" start="0x7" description="64KB." />
+        <Enum name="SZ_8" start="0x8" description="128KB." />
+        <Enum name="SZ_9" start="0x9" description="256KB." />
+        <Enum name="SZ_10" start="0xA" description="512KB." />
+        <Enum name="SZ_11" start="0xB" description="1MB." />
+        <Enum name="SZ_12" start="0xC" description="2MB." />
+        <Enum name="SZ_13" start="0xD" description="4MB." />
+        <Enum name="SZ_14" start="0xE" description="8MB." />
+        <Enum name="SZ_15" start="0xF" description="16MB." />
+      </BitField>
+    </Register>
+    <Register start="+0xF94" size="4" name="SCB_CM7_DTCMCR" access="Read/Write" description="Data Tightly-Coupled Memory Control Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="EN" description="TCM enable. When a TCM is disabled all accesses are made to the AXIM interface.">
+        <Enum name="EN_0" start="0" description="TCM disabled." />
+        <Enum name="EN_1" start="0x1" description="TCM enabled." />
+      </BitField>
+      <BitField start="1" size="1" name="RMW" description="Read-Modify-Write (RMW) enable. Indicates that all writes to TCM, that are not the full width of the TCM RAM, use a RMW sequence.">
+        <Enum name="RMW_0" start="0" description="RMW disabled." />
+        <Enum name="RMW_1" start="0x1" description="RMW enabled." />
+      </BitField>
+      <BitField start="2" size="1" name="RETEN" description="Retry phase enable. When enabled the processor guarantees to honor the retry output on the corresponding TCM interface, re-executing the instruction which carried out the TCM access.">
+        <Enum name="RETEN_0" start="0" description="Retry phase disabled." />
+        <Enum name="RETEN_1" start="0x1" description="Retry phase enabled." />
+      </BitField>
+      <BitField start="3" size="4" name="SZ" description="TCM size. Indicates the size of the relevant TCM.">
+        <Enum name="SZ_0" start="0" description="No TCM implemented." />
+        <Enum name="SZ_3" start="0x3" description="4KB." />
+        <Enum name="SZ_4" start="0x4" description="8KB." />
+        <Enum name="SZ_5" start="0x5" description="16KB." />
+        <Enum name="SZ_6" start="0x6" description="32KB." />
+        <Enum name="SZ_7" start="0x7" description="64KB." />
+        <Enum name="SZ_8" start="0x8" description="128KB." />
+        <Enum name="SZ_9" start="0x9" description="256KB." />
+        <Enum name="SZ_10" start="0xA" description="512KB." />
+        <Enum name="SZ_11" start="0xB" description="1MB." />
+        <Enum name="SZ_12" start="0xC" description="2MB." />
+        <Enum name="SZ_13" start="0xD" description="4MB." />
+        <Enum name="SZ_14" start="0xE" description="8MB." />
+        <Enum name="SZ_15" start="0xF" description="16MB." />
+      </BitField>
+    </Register>
+    <Register start="+0xF98" size="4" name="SCB_CM7_AHBPCR" access="Read/Write" description="AHBP Control Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="EN" description="AHBP enable.">
+        <Enum name="EN_0" start="0" description="AHBP disabled. When disabled all accesses are made to the AXIM interface." />
+        <Enum name="EN_1" start="0x1" description="AHBP enabled." />
+      </BitField>
+      <BitField start="1" size="3" name="SZ" description="AHBP size.">
+        <Enum name="SZ_0" start="0" description="0MB. AHBP disabled." />
+        <Enum name="SZ_1" start="0x1" description="64MB." />
+        <Enum name="SZ_2" start="0x2" description="128MB." />
+        <Enum name="SZ_3" start="0x3" description="256MB." />
+        <Enum name="SZ_4" start="0x4" description="512MB." />
+      </BitField>
+    </Register>
+    <Register start="+0xF9C" size="4" name="SCB_CM7_CACR" access="Read/Write" description="L1 Cache Control Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="SIWT" description="Shared cacheable-is-WT for data cache. Enables limited cache coherency usage.">
+        <Enum name="SIWT_0" start="0" description="Normal Cacheable Shared locations are treated as being Non-cacheable. Default mode of operation for Shared memory." />
+        <Enum name="SIWT_1" start="0x1" description="Normal Cacheable shared locations are treated as Write-Through." />
+      </BitField>
+      <BitField start="1" size="1" name="ECCDIS" description="Enables ECC in the instruction and data cache.">
+        <Enum name="ECCDIS_0" start="0" description="Enables ECC in the instruction and data cache." />
+        <Enum name="ECCDIS_1" start="0x1" description="Disables ECC in the instruction and data cache." />
+      </BitField>
+      <BitField start="2" size="1" name="FORCEWT" description="Enables Force Write-Through in the data cache.">
+        <Enum name="FORCEWT_0" start="0" description="Disables Force Write-Through." />
+        <Enum name="FORCEWT_1" start="0x1" description="Enables Force Write-Through. All Cacheable memory regions are treated as Write-Through." />
+      </BitField>
+    </Register>
+    <Register start="+0xFA0" size="4" name="SCB_CM7_AHBSCR" access="Read/Write" description="AHB Slave Control Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="2" name="CTL" description="AHBS prioritization control.">
+        <Enum name="CTL_0" start="0" description="AHBS access priority demoted. This is the reset value." />
+        <Enum name="CTL_1" start="0x1" description="Software access priority demoted." />
+        <Enum name="CTL_2" start="0x2" description="AHBS access priority demoted by initializing the fairness counter to the CM7_AHBSCR[INITCOUNT] value when the software execution priority is higher than or equal to the threshold level programed in CM7_AHBSCR[TPRI]." />
+        <Enum name="CTL_3" start="0x3" description="AHBSPRI signal has control of access priority." />
+      </BitField>
+      <BitField start="2" size="9" name="TPRI" description="Threshold execution priority for AHBS traffic demotion." />
+      <BitField start="11" size="5" name="INITCOUNT" description="Fairness counter initialization value." />
+    </Register>
+    <Register start="+0xFA8" size="4" name="SCB_CM7_ABFSR" access="Read/Write" description="Auxiliary Bus Fault Status Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="ITCM" description="Asynchronous fault on ITCM interface." />
+      <BitField start="1" size="1" name="DTCM" description="Asynchronous fault on DTCM interface." />
+      <BitField start="2" size="1" name="AHBP" description="Asynchronous fault on AHBP interface." />
+      <BitField start="3" size="1" name="AXIM" description="Asynchronous fault on AXIM interface." />
+      <BitField start="4" size="1" name="EPPB" description="Asynchronous fault on EPPB interface." />
+      <BitField start="8" size="2" name="AXIMTYPE" description="Indicates the type of fault on the AXIM interface. Only valid when AXIM is 1.">
+        <Enum name="AXIMTYPE_0" start="0" description="OKAY." />
+        <Enum name="AXIMTYPE_1" start="0x1" description="EXOKAY." />
+        <Enum name="AXIMTYPE_2" start="0x2" description="SLVERR." />
+        <Enum name="AXIMTYPE_3" start="0x3" description="DECERR." />
+      </BitField>
+    </Register>
+  </RegisterGroup>
   <RegisterGroup name="NVIC" start="0xE000E100" description="Nested Vectored Interrupt Controller">
     <Register name="NVIC_ISER0" description="Interrupt Set-Enable Register 0" start="0xE000E100">
       <BitField name="DMA0_DMA16" start="0" size="1" />
@@ -33611,6 +34913,9 @@
       <BitField name="DMA14_DMA30" start="14" size="1" />
       <BitField name="DMA15_DMA31" start="15" size="1" />
       <BitField name="DMA_ERROR" start="16" size="1" />
+      <BitField name="CTI0_ERROR" start="17" size="1" />
+      <BitField name="CTI1_ERROR" start="18" size="1" />
+      <BitField name="CORE" start="19" size="1" />
       <BitField name="LPUART1" start="20" size="1" />
       <BitField name="LPUART2" start="21" size="1" />
       <BitField name="LPUART3" start="22" size="1" />
@@ -33623,6 +34928,11 @@
       <BitField name="LPSPI2" start="1" size="1" />
       <BitField name="FLEXRAM" start="6" size="1" />
       <BitField name="KPP" start="7" size="1" />
+      <BitField name="Reserved56" start="8" size="1" />
+      <BitField name="GPR" start="9" size="1" />
+      <BitField name="Reserved58" start="10" size="1" />
+      <BitField name="Reserved59" start="11" size="1" />
+      <BitField name="Reserved60" start="12" size="1" />
       <BitField name="WDOG2" start="13" size="1" />
       <BitField name="SNVS_HP_WRAPPER" start="14" size="1" />
       <BitField name="SNVS_HP_WRAPPER_TZ" start="15" size="1" />
@@ -33630,6 +34940,7 @@
       <BitField name="CSU" start="17" size="1" />
       <BitField name="DCP" start="18" size="1" />
       <BitField name="DCP_VMI" start="19" size="1" />
+      <BitField name="Reserved68" start="20" size="1" />
       <BitField name="TRNG" start="21" size="1" />
       <BitField name="BEE" start="23" size="1" />
       <BitField name="SAI1" start="24" size="1" />
@@ -33638,13 +34949,17 @@
       <BitField name="SAI3_TX" start="27" size="1" />
       <BitField name="SPDIF" start="28" size="1" />
       <BitField name="PMU" start="29" size="1" />
+      <BitField name="Reserved78" start="30" size="1" />
       <BitField name="TEMP_LOW_HIGH" start="31" size="1" />
     </Register>
     <Register name="NVIC_ISER2" description="Interrupt Set-Enable Register 2" start="0xE000E108">
       <BitField name="TEMP_PANIC" start="0" size="1" />
       <BitField name="USB_PHY" start="1" size="1" />
+      <BitField name="Reserved82" start="2" size="1" />
       <BitField name="ADC1" start="3" size="1" />
       <BitField name="DCDC" start="5" size="1" />
+      <BitField name="Reserved86" start="6" size="1" />
+      <BitField name="Reserved87" start="7" size="1" />
       <BitField name="GPIO1_INT0" start="8" size="1" />
       <BitField name="GPIO1_INT1" start="9" size="1" />
       <BitField name="GPIO1_INT2" start="10" size="1" />
@@ -33659,9 +34974,12 @@
       <BitField name="GPIO2_Combined_16_31" start="19" size="1" />
       <BitField name="GPIO3_Combined_0_15" start="20" size="1" />
       <BitField name="GPIO3_Combined_16_31" start="21" size="1" />
+      <BitField name="Reserved102" start="22" size="1" />
+      <BitField name="Reserved103" start="23" size="1" />
       <BitField name="GPIO5_Combined_0_15" start="24" size="1" />
       <BitField name="GPIO5_Combined_16_31" start="25" size="1" />
       <BitField name="FLEXIO1" start="26" size="1" />
+      <BitField name="Reserved107" start="27" size="1" />
       <BitField name="WDOG1" start="28" size="1" />
       <BitField name="RTWDOG" start="29" size="1" />
       <BitField name="EWM" start="30" size="1" />
@@ -33671,6 +34989,7 @@
       <BitField name="CCM_2" start="0" size="1" />
       <BitField name="GPC" start="1" size="1" />
       <BitField name="SRC" start="2" size="1" />
+      <BitField name="Reserved115" start="3" size="1" />
       <BitField name="GPT1" start="4" size="1" />
       <BitField name="GPT2" start="5" size="1" />
       <BitField name="PWM1_0" start="6" size="1" />
@@ -33678,16 +34997,24 @@
       <BitField name="PWM1_2" start="8" size="1" />
       <BitField name="PWM1_3" start="9" size="1" />
       <BitField name="PWM1_FAULT" start="10" size="1" />
+      <BitField name="Reserved123" start="11" size="1" />
       <BitField name="FLEXSPI" start="12" size="1" />
+      <BitField name="Reserved128" start="16" size="1" />
       <BitField name="USB_OTG1" start="17" size="1" />
+      <BitField name="XBAR1_IRQ_0_1" start="20" size="1" />
+      <BitField name="XBAR1_IRQ_2_3" start="21" size="1" />
       <BitField name="ADC_ETC_IRQ0" start="22" size="1" />
       <BitField name="ADC_ETC_IRQ1" start="23" size="1" />
       <BitField name="ADC_ETC_IRQ2" start="24" size="1" />
       <BitField name="ADC_ETC_ERROR" start="25" size="1" />
       <BitField name="PIT" start="26" size="1" />
+      <BitField name="Reserved143" start="31" size="1" />
     </Register>
     <Register name="NVIC_ISER4" description="Interrupt Set-Enable Register 4" start="0xE000E110">
+      <BitField name="Reserved144" start="0" size="1" />
       <BitField name="ENC1" start="1" size="1" />
+      <BitField name="Reserved147" start="3" size="1" />
+      <BitField name="Reserved148" start="4" size="1" />
       <BitField name="TMR1" start="5" size="1" />
     </Register>
     <Register name="NVIC_ICER0" description="Interrupt Clear-Enable Register 0" start="0xE000E180">
@@ -33708,6 +35035,9 @@
       <BitField name="DMA14_DMA30" start="14" size="1" />
       <BitField name="DMA15_DMA31" start="15" size="1" />
       <BitField name="DMA_ERROR" start="16" size="1" />
+      <BitField name="CTI0_ERROR" start="17" size="1" />
+      <BitField name="CTI1_ERROR" start="18" size="1" />
+      <BitField name="CORE" start="19" size="1" />
       <BitField name="LPUART1" start="20" size="1" />
       <BitField name="LPUART2" start="21" size="1" />
       <BitField name="LPUART3" start="22" size="1" />
@@ -33720,6 +35050,11 @@
       <BitField name="LPSPI2" start="1" size="1" />
       <BitField name="FLEXRAM" start="6" size="1" />
       <BitField name="KPP" start="7" size="1" />
+      <BitField name="Reserved56" start="8" size="1" />
+      <BitField name="GPR" start="9" size="1" />
+      <BitField name="Reserved58" start="10" size="1" />
+      <BitField name="Reserved59" start="11" size="1" />
+      <BitField name="Reserved60" start="12" size="1" />
       <BitField name="WDOG2" start="13" size="1" />
       <BitField name="SNVS_HP_WRAPPER" start="14" size="1" />
       <BitField name="SNVS_HP_WRAPPER_TZ" start="15" size="1" />
@@ -33727,6 +35062,7 @@
       <BitField name="CSU" start="17" size="1" />
       <BitField name="DCP" start="18" size="1" />
       <BitField name="DCP_VMI" start="19" size="1" />
+      <BitField name="Reserved68" start="20" size="1" />
       <BitField name="TRNG" start="21" size="1" />
       <BitField name="BEE" start="23" size="1" />
       <BitField name="SAI1" start="24" size="1" />
@@ -33735,13 +35071,17 @@
       <BitField name="SAI3_TX" start="27" size="1" />
       <BitField name="SPDIF" start="28" size="1" />
       <BitField name="PMU" start="29" size="1" />
+      <BitField name="Reserved78" start="30" size="1" />
       <BitField name="TEMP_LOW_HIGH" start="31" size="1" />
     </Register>
     <Register name="NVIC_ICER2" description="Interrupt Clear-Enable Register 2" start="0xE000E188">
       <BitField name="TEMP_PANIC" start="0" size="1" />
       <BitField name="USB_PHY" start="1" size="1" />
+      <BitField name="Reserved82" start="2" size="1" />
       <BitField name="ADC1" start="3" size="1" />
       <BitField name="DCDC" start="5" size="1" />
+      <BitField name="Reserved86" start="6" size="1" />
+      <BitField name="Reserved87" start="7" size="1" />
       <BitField name="GPIO1_INT0" start="8" size="1" />
       <BitField name="GPIO1_INT1" start="9" size="1" />
       <BitField name="GPIO1_INT2" start="10" size="1" />
@@ -33756,9 +35096,12 @@
       <BitField name="GPIO2_Combined_16_31" start="19" size="1" />
       <BitField name="GPIO3_Combined_0_15" start="20" size="1" />
       <BitField name="GPIO3_Combined_16_31" start="21" size="1" />
+      <BitField name="Reserved102" start="22" size="1" />
+      <BitField name="Reserved103" start="23" size="1" />
       <BitField name="GPIO5_Combined_0_15" start="24" size="1" />
       <BitField name="GPIO5_Combined_16_31" start="25" size="1" />
       <BitField name="FLEXIO1" start="26" size="1" />
+      <BitField name="Reserved107" start="27" size="1" />
       <BitField name="WDOG1" start="28" size="1" />
       <BitField name="RTWDOG" start="29" size="1" />
       <BitField name="EWM" start="30" size="1" />
@@ -33768,6 +35111,7 @@
       <BitField name="CCM_2" start="0" size="1" />
       <BitField name="GPC" start="1" size="1" />
       <BitField name="SRC" start="2" size="1" />
+      <BitField name="Reserved115" start="3" size="1" />
       <BitField name="GPT1" start="4" size="1" />
       <BitField name="GPT2" start="5" size="1" />
       <BitField name="PWM1_0" start="6" size="1" />
@@ -33775,16 +35119,24 @@
       <BitField name="PWM1_2" start="8" size="1" />
       <BitField name="PWM1_3" start="9" size="1" />
       <BitField name="PWM1_FAULT" start="10" size="1" />
+      <BitField name="Reserved123" start="11" size="1" />
       <BitField name="FLEXSPI" start="12" size="1" />
+      <BitField name="Reserved128" start="16" size="1" />
       <BitField name="USB_OTG1" start="17" size="1" />
+      <BitField name="XBAR1_IRQ_0_1" start="20" size="1" />
+      <BitField name="XBAR1_IRQ_2_3" start="21" size="1" />
       <BitField name="ADC_ETC_IRQ0" start="22" size="1" />
       <BitField name="ADC_ETC_IRQ1" start="23" size="1" />
       <BitField name="ADC_ETC_IRQ2" start="24" size="1" />
       <BitField name="ADC_ETC_ERROR" start="25" size="1" />
       <BitField name="PIT" start="26" size="1" />
+      <BitField name="Reserved143" start="31" size="1" />
     </Register>
     <Register name="NVIC_ICER4" description="Interrupt Clear-Enable Register 4" start="0xE000E190">
+      <BitField name="Reserved144" start="0" size="1" />
       <BitField name="ENC1" start="1" size="1" />
+      <BitField name="Reserved147" start="3" size="1" />
+      <BitField name="Reserved148" start="4" size="1" />
       <BitField name="TMR1" start="5" size="1" />
     </Register>
     <Register name="NVIC_ISPR0" description="Interrupt Set-Pending Register 0" start="0xE000E200">
@@ -33805,6 +35157,9 @@
       <BitField name="DMA14_DMA30" start="14" size="1" />
       <BitField name="DMA15_DMA31" start="15" size="1" />
       <BitField name="DMA_ERROR" start="16" size="1" />
+      <BitField name="CTI0_ERROR" start="17" size="1" />
+      <BitField name="CTI1_ERROR" start="18" size="1" />
+      <BitField name="CORE" start="19" size="1" />
       <BitField name="LPUART1" start="20" size="1" />
       <BitField name="LPUART2" start="21" size="1" />
       <BitField name="LPUART3" start="22" size="1" />
@@ -33817,6 +35172,11 @@
       <BitField name="LPSPI2" start="1" size="1" />
       <BitField name="FLEXRAM" start="6" size="1" />
       <BitField name="KPP" start="7" size="1" />
+      <BitField name="Reserved56" start="8" size="1" />
+      <BitField name="GPR" start="9" size="1" />
+      <BitField name="Reserved58" start="10" size="1" />
+      <BitField name="Reserved59" start="11" size="1" />
+      <BitField name="Reserved60" start="12" size="1" />
       <BitField name="WDOG2" start="13" size="1" />
       <BitField name="SNVS_HP_WRAPPER" start="14" size="1" />
       <BitField name="SNVS_HP_WRAPPER_TZ" start="15" size="1" />
@@ -33824,6 +35184,7 @@
       <BitField name="CSU" start="17" size="1" />
       <BitField name="DCP" start="18" size="1" />
       <BitField name="DCP_VMI" start="19" size="1" />
+      <BitField name="Reserved68" start="20" size="1" />
       <BitField name="TRNG" start="21" size="1" />
       <BitField name="BEE" start="23" size="1" />
       <BitField name="SAI1" start="24" size="1" />
@@ -33832,13 +35193,17 @@
       <BitField name="SAI3_TX" start="27" size="1" />
       <BitField name="SPDIF" start="28" size="1" />
       <BitField name="PMU" start="29" size="1" />
+      <BitField name="Reserved78" start="30" size="1" />
       <BitField name="TEMP_LOW_HIGH" start="31" size="1" />
     </Register>
     <Register name="NVIC_ISPR2" description="Interrupt Set-Pending Register 2" start="0xE000E208">
       <BitField name="TEMP_PANIC" start="0" size="1" />
       <BitField name="USB_PHY" start="1" size="1" />
+      <BitField name="Reserved82" start="2" size="1" />
       <BitField name="ADC1" start="3" size="1" />
       <BitField name="DCDC" start="5" size="1" />
+      <BitField name="Reserved86" start="6" size="1" />
+      <BitField name="Reserved87" start="7" size="1" />
       <BitField name="GPIO1_INT0" start="8" size="1" />
       <BitField name="GPIO1_INT1" start="9" size="1" />
       <BitField name="GPIO1_INT2" start="10" size="1" />
@@ -33853,9 +35218,12 @@
       <BitField name="GPIO2_Combined_16_31" start="19" size="1" />
       <BitField name="GPIO3_Combined_0_15" start="20" size="1" />
       <BitField name="GPIO3_Combined_16_31" start="21" size="1" />
+      <BitField name="Reserved102" start="22" size="1" />
+      <BitField name="Reserved103" start="23" size="1" />
       <BitField name="GPIO5_Combined_0_15" start="24" size="1" />
       <BitField name="GPIO5_Combined_16_31" start="25" size="1" />
       <BitField name="FLEXIO1" start="26" size="1" />
+      <BitField name="Reserved107" start="27" size="1" />
       <BitField name="WDOG1" start="28" size="1" />
       <BitField name="RTWDOG" start="29" size="1" />
       <BitField name="EWM" start="30" size="1" />
@@ -33865,6 +35233,7 @@
       <BitField name="CCM_2" start="0" size="1" />
       <BitField name="GPC" start="1" size="1" />
       <BitField name="SRC" start="2" size="1" />
+      <BitField name="Reserved115" start="3" size="1" />
       <BitField name="GPT1" start="4" size="1" />
       <BitField name="GPT2" start="5" size="1" />
       <BitField name="PWM1_0" start="6" size="1" />
@@ -33872,16 +35241,24 @@
       <BitField name="PWM1_2" start="8" size="1" />
       <BitField name="PWM1_3" start="9" size="1" />
       <BitField name="PWM1_FAULT" start="10" size="1" />
+      <BitField name="Reserved123" start="11" size="1" />
       <BitField name="FLEXSPI" start="12" size="1" />
+      <BitField name="Reserved128" start="16" size="1" />
       <BitField name="USB_OTG1" start="17" size="1" />
+      <BitField name="XBAR1_IRQ_0_1" start="20" size="1" />
+      <BitField name="XBAR1_IRQ_2_3" start="21" size="1" />
       <BitField name="ADC_ETC_IRQ0" start="22" size="1" />
       <BitField name="ADC_ETC_IRQ1" start="23" size="1" />
       <BitField name="ADC_ETC_IRQ2" start="24" size="1" />
       <BitField name="ADC_ETC_ERROR" start="25" size="1" />
       <BitField name="PIT" start="26" size="1" />
+      <BitField name="Reserved143" start="31" size="1" />
     </Register>
     <Register name="NVIC_ISPR4" description="Interrupt Set-Pending Register 4" start="0xE000E210">
+      <BitField name="Reserved144" start="0" size="1" />
       <BitField name="ENC1" start="1" size="1" />
+      <BitField name="Reserved147" start="3" size="1" />
+      <BitField name="Reserved148" start="4" size="1" />
       <BitField name="TMR1" start="5" size="1" />
     </Register>
     <Register name="NVIC_ICPR0" description="Interrupt Clear-Pending Register 0" start="0xE000E280">
@@ -33902,6 +35279,9 @@
       <BitField name="DMA14_DMA30" start="14" size="1" />
       <BitField name="DMA15_DMA31" start="15" size="1" />
       <BitField name="DMA_ERROR" start="16" size="1" />
+      <BitField name="CTI0_ERROR" start="17" size="1" />
+      <BitField name="CTI1_ERROR" start="18" size="1" />
+      <BitField name="CORE" start="19" size="1" />
       <BitField name="LPUART1" start="20" size="1" />
       <BitField name="LPUART2" start="21" size="1" />
       <BitField name="LPUART3" start="22" size="1" />
@@ -33914,6 +35294,11 @@
       <BitField name="LPSPI2" start="1" size="1" />
       <BitField name="FLEXRAM" start="6" size="1" />
       <BitField name="KPP" start="7" size="1" />
+      <BitField name="Reserved56" start="8" size="1" />
+      <BitField name="GPR" start="9" size="1" />
+      <BitField name="Reserved58" start="10" size="1" />
+      <BitField name="Reserved59" start="11" size="1" />
+      <BitField name="Reserved60" start="12" size="1" />
       <BitField name="WDOG2" start="13" size="1" />
       <BitField name="SNVS_HP_WRAPPER" start="14" size="1" />
       <BitField name="SNVS_HP_WRAPPER_TZ" start="15" size="1" />
@@ -33921,6 +35306,7 @@
       <BitField name="CSU" start="17" size="1" />
       <BitField name="DCP" start="18" size="1" />
       <BitField name="DCP_VMI" start="19" size="1" />
+      <BitField name="Reserved68" start="20" size="1" />
       <BitField name="TRNG" start="21" size="1" />
       <BitField name="BEE" start="23" size="1" />
       <BitField name="SAI1" start="24" size="1" />
@@ -33929,13 +35315,17 @@
       <BitField name="SAI3_TX" start="27" size="1" />
       <BitField name="SPDIF" start="28" size="1" />
       <BitField name="PMU" start="29" size="1" />
+      <BitField name="Reserved78" start="30" size="1" />
       <BitField name="TEMP_LOW_HIGH" start="31" size="1" />
     </Register>
     <Register name="NVIC_ICPR2" description="Interrupt Clear-Pending Register 2" start="0xE000E288">
       <BitField name="TEMP_PANIC" start="0" size="1" />
       <BitField name="USB_PHY" start="1" size="1" />
+      <BitField name="Reserved82" start="2" size="1" />
       <BitField name="ADC1" start="3" size="1" />
       <BitField name="DCDC" start="5" size="1" />
+      <BitField name="Reserved86" start="6" size="1" />
+      <BitField name="Reserved87" start="7" size="1" />
       <BitField name="GPIO1_INT0" start="8" size="1" />
       <BitField name="GPIO1_INT1" start="9" size="1" />
       <BitField name="GPIO1_INT2" start="10" size="1" />
@@ -33950,9 +35340,12 @@
       <BitField name="GPIO2_Combined_16_31" start="19" size="1" />
       <BitField name="GPIO3_Combined_0_15" start="20" size="1" />
       <BitField name="GPIO3_Combined_16_31" start="21" size="1" />
+      <BitField name="Reserved102" start="22" size="1" />
+      <BitField name="Reserved103" start="23" size="1" />
       <BitField name="GPIO5_Combined_0_15" start="24" size="1" />
       <BitField name="GPIO5_Combined_16_31" start="25" size="1" />
       <BitField name="FLEXIO1" start="26" size="1" />
+      <BitField name="Reserved107" start="27" size="1" />
       <BitField name="WDOG1" start="28" size="1" />
       <BitField name="RTWDOG" start="29" size="1" />
       <BitField name="EWM" start="30" size="1" />
@@ -33962,6 +35355,7 @@
       <BitField name="CCM_2" start="0" size="1" />
       <BitField name="GPC" start="1" size="1" />
       <BitField name="SRC" start="2" size="1" />
+      <BitField name="Reserved115" start="3" size="1" />
       <BitField name="GPT1" start="4" size="1" />
       <BitField name="GPT2" start="5" size="1" />
       <BitField name="PWM1_0" start="6" size="1" />
@@ -33969,16 +35363,24 @@
       <BitField name="PWM1_2" start="8" size="1" />
       <BitField name="PWM1_3" start="9" size="1" />
       <BitField name="PWM1_FAULT" start="10" size="1" />
+      <BitField name="Reserved123" start="11" size="1" />
       <BitField name="FLEXSPI" start="12" size="1" />
+      <BitField name="Reserved128" start="16" size="1" />
       <BitField name="USB_OTG1" start="17" size="1" />
+      <BitField name="XBAR1_IRQ_0_1" start="20" size="1" />
+      <BitField name="XBAR1_IRQ_2_3" start="21" size="1" />
       <BitField name="ADC_ETC_IRQ0" start="22" size="1" />
       <BitField name="ADC_ETC_IRQ1" start="23" size="1" />
       <BitField name="ADC_ETC_IRQ2" start="24" size="1" />
       <BitField name="ADC_ETC_ERROR" start="25" size="1" />
       <BitField name="PIT" start="26" size="1" />
+      <BitField name="Reserved143" start="31" size="1" />
     </Register>
     <Register name="NVIC_ICPR4" description="Interrupt Clear-Pending Register 4" start="0xE000E290">
+      <BitField name="Reserved144" start="0" size="1" />
       <BitField name="ENC1" start="1" size="1" />
+      <BitField name="Reserved147" start="3" size="1" />
+      <BitField name="Reserved148" start="4" size="1" />
       <BitField name="TMR1" start="5" size="1" />
     </Register>
     <Register name="NVIC_IABR0" description="Interrupt Active Bit Register 0" start="0xE000E300" access="ReadOnly">
@@ -33999,6 +35401,9 @@
       <BitField name="DMA14_DMA30" start="14" size="1" />
       <BitField name="DMA15_DMA31" start="15" size="1" />
       <BitField name="DMA_ERROR" start="16" size="1" />
+      <BitField name="CTI0_ERROR" start="17" size="1" />
+      <BitField name="CTI1_ERROR" start="18" size="1" />
+      <BitField name="CORE" start="19" size="1" />
       <BitField name="LPUART1" start="20" size="1" />
       <BitField name="LPUART2" start="21" size="1" />
       <BitField name="LPUART3" start="22" size="1" />
@@ -34011,6 +35416,11 @@
       <BitField name="LPSPI2" start="1" size="1" />
       <BitField name="FLEXRAM" start="6" size="1" />
       <BitField name="KPP" start="7" size="1" />
+      <BitField name="Reserved56" start="8" size="1" />
+      <BitField name="GPR" start="9" size="1" />
+      <BitField name="Reserved58" start="10" size="1" />
+      <BitField name="Reserved59" start="11" size="1" />
+      <BitField name="Reserved60" start="12" size="1" />
       <BitField name="WDOG2" start="13" size="1" />
       <BitField name="SNVS_HP_WRAPPER" start="14" size="1" />
       <BitField name="SNVS_HP_WRAPPER_TZ" start="15" size="1" />
@@ -34018,6 +35428,7 @@
       <BitField name="CSU" start="17" size="1" />
       <BitField name="DCP" start="18" size="1" />
       <BitField name="DCP_VMI" start="19" size="1" />
+      <BitField name="Reserved68" start="20" size="1" />
       <BitField name="TRNG" start="21" size="1" />
       <BitField name="BEE" start="23" size="1" />
       <BitField name="SAI1" start="24" size="1" />
@@ -34026,13 +35437,17 @@
       <BitField name="SAI3_TX" start="27" size="1" />
       <BitField name="SPDIF" start="28" size="1" />
       <BitField name="PMU" start="29" size="1" />
+      <BitField name="Reserved78" start="30" size="1" />
       <BitField name="TEMP_LOW_HIGH" start="31" size="1" />
     </Register>
     <Register name="NVIC_IABR2" description="Interrupt Active Bit Register 2" start="0xE000E308" access="ReadOnly">
       <BitField name="TEMP_PANIC" start="0" size="1" />
       <BitField name="USB_PHY" start="1" size="1" />
+      <BitField name="Reserved82" start="2" size="1" />
       <BitField name="ADC1" start="3" size="1" />
       <BitField name="DCDC" start="5" size="1" />
+      <BitField name="Reserved86" start="6" size="1" />
+      <BitField name="Reserved87" start="7" size="1" />
       <BitField name="GPIO1_INT0" start="8" size="1" />
       <BitField name="GPIO1_INT1" start="9" size="1" />
       <BitField name="GPIO1_INT2" start="10" size="1" />
@@ -34047,9 +35462,12 @@
       <BitField name="GPIO2_Combined_16_31" start="19" size="1" />
       <BitField name="GPIO3_Combined_0_15" start="20" size="1" />
       <BitField name="GPIO3_Combined_16_31" start="21" size="1" />
+      <BitField name="Reserved102" start="22" size="1" />
+      <BitField name="Reserved103" start="23" size="1" />
       <BitField name="GPIO5_Combined_0_15" start="24" size="1" />
       <BitField name="GPIO5_Combined_16_31" start="25" size="1" />
       <BitField name="FLEXIO1" start="26" size="1" />
+      <BitField name="Reserved107" start="27" size="1" />
       <BitField name="WDOG1" start="28" size="1" />
       <BitField name="RTWDOG" start="29" size="1" />
       <BitField name="EWM" start="30" size="1" />
@@ -34059,6 +35477,7 @@
       <BitField name="CCM_2" start="0" size="1" />
       <BitField name="GPC" start="1" size="1" />
       <BitField name="SRC" start="2" size="1" />
+      <BitField name="Reserved115" start="3" size="1" />
       <BitField name="GPT1" start="4" size="1" />
       <BitField name="GPT2" start="5" size="1" />
       <BitField name="PWM1_0" start="6" size="1" />
@@ -34066,16 +35485,24 @@
       <BitField name="PWM1_2" start="8" size="1" />
       <BitField name="PWM1_3" start="9" size="1" />
       <BitField name="PWM1_FAULT" start="10" size="1" />
+      <BitField name="Reserved123" start="11" size="1" />
       <BitField name="FLEXSPI" start="12" size="1" />
+      <BitField name="Reserved128" start="16" size="1" />
       <BitField name="USB_OTG1" start="17" size="1" />
+      <BitField name="XBAR1_IRQ_0_1" start="20" size="1" />
+      <BitField name="XBAR1_IRQ_2_3" start="21" size="1" />
       <BitField name="ADC_ETC_IRQ0" start="22" size="1" />
       <BitField name="ADC_ETC_IRQ1" start="23" size="1" />
       <BitField name="ADC_ETC_IRQ2" start="24" size="1" />
       <BitField name="ADC_ETC_ERROR" start="25" size="1" />
       <BitField name="PIT" start="26" size="1" />
+      <BitField name="Reserved143" start="31" size="1" />
     </Register>
     <Register name="NVIC_IABR4" description="Interrupt Active Bit Register 4" start="0xE000E310" access="ReadOnly">
+      <BitField name="Reserved144" start="0" size="1" />
       <BitField name="ENC1" start="1" size="1" />
+      <BitField name="Reserved147" start="3" size="1" />
+      <BitField name="Reserved148" start="4" size="1" />
       <BitField name="TMR1" start="5" size="1" />
     </Register>
     <Register name="NVIC_IPR0" description="Interrupt Priority Register 0" start="0xE000E400">
@@ -34104,6 +35531,9 @@
     </Register>
     <Register name="NVIC_IPR4" description="Interrupt Priority Register 4" start="0xE000E410">
       <BitField name="DMA_ERROR" start="4" size="4" />
+      <BitField name="CTI0_ERROR" start="12" size="4" />
+      <BitField name="CTI1_ERROR" start="20" size="4" />
+      <BitField name="CORE" start="28" size="4" />
     </Register>
     <Register name="NVIC_IPR5" description="Interrupt Priority Register 5" start="0xE000E414">
       <BitField name="LPUART1" start="4" size="4" />
@@ -34124,8 +35554,14 @@
       <BitField name="FLEXRAM" start="20" size="4" />
       <BitField name="KPP" start="28" size="4" />
     </Register>
-    <Register name="NVIC_IPR10" description="Interrupt Priority Register 10" start="0xE000E428" />
+    <Register name="NVIC_IPR10" description="Interrupt Priority Register 10" start="0xE000E428">
+      <BitField name="Reserved56" start="4" size="4" />
+      <BitField name="GPR" start="12" size="4" />
+      <BitField name="Reserved58" start="20" size="4" />
+      <BitField name="Reserved59" start="28" size="4" />
+    </Register>
     <Register name="NVIC_IPR11" description="Interrupt Priority Register 11" start="0xE000E42C">
+      <BitField name="Reserved60" start="4" size="4" />
       <BitField name="WDOG2" start="12" size="4" />
       <BitField name="SNVS_HP_WRAPPER" start="20" size="4" />
       <BitField name="SNVS_HP_WRAPPER_TZ" start="28" size="4" />
@@ -34137,6 +35573,7 @@
       <BitField name="DCP_VMI" start="28" size="4" />
     </Register>
     <Register name="NVIC_IPR13" description="Interrupt Priority Register 13" start="0xE000E434">
+      <BitField name="Reserved68" start="4" size="4" />
       <BitField name="TRNG" start="12" size="4" />
       <BitField name="BEE" start="28" size="4" />
     </Register>
@@ -34149,15 +35586,19 @@
     <Register name="NVIC_IPR15" description="Interrupt Priority Register 15" start="0xE000E43C">
       <BitField name="SPDIF" start="4" size="4" />
       <BitField name="PMU" start="12" size="4" />
+      <BitField name="Reserved78" start="20" size="4" />
       <BitField name="TEMP_LOW_HIGH" start="28" size="4" />
     </Register>
     <Register name="NVIC_IPR16" description="Interrupt Priority Register 16" start="0xE000E440">
       <BitField name="TEMP_PANIC" start="4" size="4" />
       <BitField name="USB_PHY" start="12" size="4" />
+      <BitField name="Reserved82" start="20" size="4" />
       <BitField name="ADC1" start="28" size="4" />
     </Register>
     <Register name="NVIC_IPR17" description="Interrupt Priority Register 17" start="0xE000E444">
       <BitField name="DCDC" start="12" size="4" />
+      <BitField name="Reserved86" start="20" size="4" />
+      <BitField name="Reserved87" start="28" size="4" />
     </Register>
     <Register name="NVIC_IPR18" description="Interrupt Priority Register 18" start="0xE000E448">
       <BitField name="GPIO1_INT0" start="4" size="4" />
@@ -34180,11 +35621,14 @@
     <Register name="NVIC_IPR21" description="Interrupt Priority Register 21" start="0xE000E454">
       <BitField name="GPIO3_Combined_0_15" start="4" size="4" />
       <BitField name="GPIO3_Combined_16_31" start="12" size="4" />
+      <BitField name="Reserved102" start="20" size="4" />
+      <BitField name="Reserved103" start="28" size="4" />
     </Register>
     <Register name="NVIC_IPR22" description="Interrupt Priority Register 22" start="0xE000E458">
       <BitField name="GPIO5_Combined_0_15" start="4" size="4" />
       <BitField name="GPIO5_Combined_16_31" start="12" size="4" />
       <BitField name="FLEXIO1" start="20" size="4" />
+      <BitField name="Reserved107" start="28" size="4" />
     </Register>
     <Register name="NVIC_IPR23" description="Interrupt Priority Register 23" start="0xE000E45C">
       <BitField name="WDOG1" start="4" size="4" />
@@ -34196,6 +35640,7 @@
       <BitField name="CCM_2" start="4" size="4" />
       <BitField name="GPC" start="12" size="4" />
       <BitField name="SRC" start="20" size="4" />
+      <BitField name="Reserved115" start="28" size="4" />
     </Register>
     <Register name="NVIC_IPR25" description="Interrupt Priority Register 25" start="0xE000E464">
       <BitField name="GPT1" start="4" size="4" />
@@ -34207,14 +35652,18 @@
       <BitField name="PWM1_2" start="4" size="4" />
       <BitField name="PWM1_3" start="12" size="4" />
       <BitField name="PWM1_FAULT" start="20" size="4" />
+      <BitField name="Reserved123" start="28" size="4" />
     </Register>
     <Register name="NVIC_IPR27" description="Interrupt Priority Register 27" start="0xE000E46C">
       <BitField name="FLEXSPI" start="4" size="4" />
     </Register>
     <Register name="NVIC_IPR28" description="Interrupt Priority Register 28" start="0xE000E470">
+      <BitField name="Reserved128" start="4" size="4" />
       <BitField name="USB_OTG1" start="12" size="4" />
     </Register>
     <Register name="NVIC_IPR29" description="Interrupt Priority Register 29" start="0xE000E474">
+      <BitField name="XBAR1_IRQ_0_1" start="4" size="4" />
+      <BitField name="XBAR1_IRQ_2_3" start="12" size="4" />
       <BitField name="ADC_ETC_IRQ0" start="20" size="4" />
       <BitField name="ADC_ETC_IRQ1" start="28" size="4" />
     </Register>
@@ -34223,11 +35672,16 @@
       <BitField name="ADC_ETC_ERROR" start="12" size="4" />
       <BitField name="PIT" start="20" size="4" />
     </Register>
-    <Register name="NVIC_IPR31" description="Interrupt Priority Register 31" start="0xE000E47C" />
+    <Register name="NVIC_IPR31" description="Interrupt Priority Register 31" start="0xE000E47C">
+      <BitField name="Reserved143" start="28" size="4" />
+    </Register>
     <Register name="NVIC_IPR32" description="Interrupt Priority Register 32" start="0xE000E480">
+      <BitField name="Reserved144" start="4" size="4" />
       <BitField name="ENC1" start="12" size="4" />
+      <BitField name="Reserved147" start="28" size="4" />
     </Register>
     <Register name="NVIC_IPR33" description="Interrupt Priority Register 33" start="0xE000E484">
+      <BitField name="Reserved148" start="4" size="4" />
       <BitField name="TMR1" start="12" size="4" />
     </Register>
   </RegisterGroup>

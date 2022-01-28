@@ -6,10 +6,8 @@
     <propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
     <propertygroup name="Placement" value="TCM" choose="Yes" />
     <property name="arm_architecture" value="v7EM" />
-    <property name="arm_core_type" value="Cortex-M7" />
     <property name="arm_fpu_abi" value="Hard" />
-    <property name="arm_fpu_type" value="FPv5-D16" />
-    <property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000" />
+    <property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000" />
     <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
     <property name="target_reset_script" value="Reset()" />
     <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
@@ -23,7 +21,9 @@
     <property name="linker_scanf_fmt_level" />
     <property name="linker_scanf_fp_enabled" />
     <property name="linker_scanf_character_group_matching_enabled" />
+    <property name="link_symbol_definitions" value="__NCACHE_REGION_START=__NCACHE_REGION_segment_start__;__NCACHE_REGION_SIZE=__NCACHE_REGION_segment_size__;__base_NCACHE_REGION=__NCACHE_REGION_segment_start__;__top_NCACHE_REGION=__NCACHE_REGION_segment_end__" />
     <propertygroup name="CMSIS_CORE" value="Yes" />
+    <property name="c_user_include_directories" value="$(TargetsDir)/iMXRT/devices/$(DeviceFamily)" />
     <folder name="Source Files" filter="c;cpp;cxx;cc;h;s;asm;inc">
       <file name="main.c" source="$(StudioDir)/samples/Shared/main.c" />
     </folder>
@@ -32,15 +32,30 @@
       <file name="$(DeviceStartFile)" expand="no" />
     </folder>
   </project>
+  <project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT External GCC Built Executable" description="An external GCC built executable for a generic iMXRT processor." type="Executable" template_name="iMXRT_GCC_EXE">
+    <configuration name="$(Configuration)" />
+    <property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
+    <propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
+    <propertygroup name="Placement" value="TCM" choose="Yes" />
+    <property name="arm_architecture" value="v7EM" />
+    <property name="arm_fpu_abi" value="Hard" />
+    <property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000" />
+    <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
+    <property name="target_reset_script" value="Reset()" />
+    <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
+    <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+    <property name="c_system_include_directories" value="$(ARMGCCDIR)/../arm-none-eabi/include;$(ARMGCCDIR)/../lib/gcc/arm-none-eabi/$(ARMGCCVERSION)/include;$(ARMGCCDIR)/../lib/gcc/arm-none-eabi/$(ARMGCCVERSION)/include-fixed;$(ARMGCCDIR)/../arm-none-eabi/include/c++/$(ARMGCCVERSION);$(ARMGCCDIR)/../arm-none-eabi/include/c++/$(ARMGCCVERSION)/bits" />
+    <property name="use_external_gcc" value="Yes" />
+    <property name="build_toolchain_directory" value="$(ARMGCCDIR)" />
+    <property name="gcc_prefix" value="$(ARMGCCPREFIX)" />
+  </project>
   <project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT Externally Built Executable" description="An externally built executable for iMXRT processor." type="Externally Built Executable" template_name="iMXRT_EXT_EXE">
     <property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
     <propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
     <propertygroup name="Placement" value="TCM" choose="Yes" />
     <property name="arm_architecture" value="v7EM" />
-    <property name="arm_core_type" value="Cortex-M7" />
     <property name="arm_fpu_abi" value="Hard" />
-    <property name="arm_fpu_type" value="FPv5-D16" />
-    <property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000" />
+    <property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000" />
     <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
     <property name="target_reset_script" value="Reset()" />
     <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2016 Rowley Associates Limited.                             *
+ * Copyright (c) 2016-2022 Rowley Associates Limited.                        *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
@@ -8,6 +8,17 @@
  * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. *
  *                                                                           *
  *****************************************************************************/
+
+function EnableCM4()
+{
+  TargetInterface.pokeUint32 (0x40C04000, 0x3);
+  TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
+}
+
+function ResetCM4()
+{
+  TargetInterface.stop(1000);
+}
 
 function Reset()
 {

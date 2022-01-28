@@ -85,6 +85,10 @@
   .code 16 
   .global _vectors
 _vectors:
+  .global __Vectors
+__Vectors:
+  .global g_pfnVectors
+g_pfnVectors:
    .long   __stack_end__
 #ifdef STARTUP_FROM_RESET
   .word reset_handler
@@ -106,245 +110,261 @@ ISR_RESERVED
 ISR_HANDLER PendSV_Handler
 ISR_HANDLER SysTick_Handler
   // External Interrupts
-ISR_HANDLER2 DMA0_DMA16                           
-ISR_HANDLER2 DMA1_DMA17                           
-ISR_HANDLER2 DMA2_DMA18                           
-ISR_HANDLER2 DMA3_DMA19                           
-ISR_HANDLER2 DMA4_DMA20                           
-ISR_HANDLER2 DMA5_DMA21                           
-ISR_HANDLER2 DMA6_DMA22                           
-ISR_HANDLER2 DMA7_DMA23                           
-ISR_HANDLER2 DMA8_DMA24                           
-ISR_HANDLER2 DMA9_DMA25                           
-ISR_HANDLER2 DMA10_DMA26                          
-ISR_HANDLER2 DMA11_DMA27                          
-ISR_HANDLER2 DMA12_DMA28                          
-ISR_HANDLER2 DMA13_DMA29                          
-ISR_HANDLER2 DMA14_DMA30                          
-ISR_HANDLER2 DMA15_DMA31                          
-ISR_HANDLER2 DMA_ERROR                            
-ISR_HANDLER2 CTI0_ERROR                           
-ISR_HANDLER2 CTI1_ERROR                           
-ISR_HANDLER2 CORE                                 
-ISR_HANDLER2 LPUART1                              
-ISR_HANDLER2 LPUART2                              
-ISR_HANDLER2 LPUART3                              
-ISR_HANDLER2 LPUART4                              
-ISR_HANDLER2 LPUART5                              
-ISR_HANDLER2 LPUART6                              
-ISR_HANDLER2 LPUART7                              
-ISR_HANDLER2 LPUART8                              
-ISR_HANDLER2 LPI2C1                               
-ISR_HANDLER2 LPI2C2                               
-ISR_HANDLER2 LPI2C3                               
-ISR_HANDLER2 LPI2C4                               
-ISR_HANDLER2 LPSPI1                               
-ISR_HANDLER2 LPSPI2                               
-ISR_HANDLER2 LPSPI3                               
-ISR_HANDLER2 LPSPI4                               
-ISR_HANDLER2 CAN1                                 
-ISR_HANDLER2 CAN2                                 
-ISR_HANDLER2 FLEXRAM                              
-ISR_HANDLER2 KPP                                  
-ISR_HANDLER2 TSC_DIG                              
-ISR_HANDLER2 GPR_IRQ                              
-ISR_HANDLER2 LCDIF                                
-ISR_HANDLER2 CSI                                  
-ISR_HANDLER2 PXP                                  
-ISR_HANDLER2 WDOG2                                
-ISR_HANDLER2 SNVS_HP_WRAPPER                      
-ISR_HANDLER2 SNVS_HP_WRAPPER_TZ                   
-ISR_HANDLER2 SNVS_LP_WRAPPER                      
-ISR_HANDLER2 CSU                                  
-ISR_HANDLER2 DCP                                  
-ISR_HANDLER2 DCP_VMI                              
-ISR_RESERVED                           
-ISR_HANDLER2 TRNG                                 
-ISR_HANDLER2 SJC                                  
-ISR_HANDLER2 BEE                                  
-ISR_HANDLER2 SAI1                                 
-ISR_HANDLER2 SAI2                                 
-ISR_HANDLER2 SAI3_RX                              
-ISR_HANDLER2 SAI3_TX                              
-ISR_HANDLER2 SPDIF                                
-ISR_HANDLER2 ANATOP_EVENT0                        
-ISR_HANDLER2 ANATOP_EVENT1                        
-ISR_HANDLER2 ANATOP_TAMP_LOW_HIGH                 
-ISR_HANDLER2 ANATOP_TEMP_PANIC                    
-ISR_HANDLER2 USB_PHY1                             
-ISR_HANDLER2 USB_PHY2                             
-ISR_HANDLER2 ADC1                                 
-ISR_HANDLER2 ADC2                                 
-ISR_HANDLER2 DCDC                                 
-ISR_RESERVED                           
-ISR_RESERVED                           
-ISR_HANDLER2 GPIO1_INT0                           
-ISR_HANDLER2 GPIO1_INT1                           
-ISR_HANDLER2 GPIO1_INT2                           
-ISR_HANDLER2 GPIO1_INT3                           
-ISR_HANDLER2 GPIO1_INT4                           
-ISR_HANDLER2 GPIO1_INT5                           
-ISR_HANDLER2 GPIO1_INT6                           
-ISR_HANDLER2 GPIO1_INT7                           
-ISR_HANDLER2 GPIO1_Combined_0_15                  
-ISR_HANDLER2 GPIO1_Combined_16_31                 
-ISR_HANDLER2 GPIO2_Combined_0_15                  
-ISR_HANDLER2 GPIO2_Combined_16_31                 
-ISR_HANDLER2 GPIO3_Combined_0_15                  
-ISR_HANDLER2 GPIO3_Combined_16_31                 
-ISR_HANDLER2 GPIO4_Combined_0_15                  
-ISR_HANDLER2 GPIO4_Combined_16_31                 
-ISR_HANDLER2 GPIO5_Combined_0_15                  
-ISR_HANDLER2 GPIO5_Combined_16_31                 
-ISR_HANDLER2 FLEXIO1                              
-ISR_HANDLER2 FLEXIO2                              
-ISR_HANDLER2 WDOG1                                
-ISR_HANDLER2 RTWDOG                               
-ISR_HANDLER2 EWM                                  
-ISR_HANDLER2 CCM_1                                
-ISR_HANDLER2 CCM_2                                
-ISR_HANDLER2 GPC                                  
-ISR_HANDLER2 SRC                                  
-ISR_RESERVED                          
-ISR_HANDLER2 GPT1                                 
-ISR_HANDLER2 GPT2                                 
-ISR_HANDLER2 PWM1_0                               
-ISR_HANDLER2 PWM1_1                               
-ISR_HANDLER2 PWM1_2                               
-ISR_HANDLER2 PWM1_3                               
-ISR_HANDLER2 PWM1_FAULT                           
-ISR_RESERVED                          
-ISR_HANDLER2 FLEXSPI                              
-ISR_HANDLER2 SEMC                                 
-ISR_HANDLER2 USDHC1                               
-ISR_HANDLER2 USDHC2                               
-ISR_HANDLER2 USB_OTG2                             
-ISR_HANDLER2 USB_OTG1                             
-ISR_HANDLER2 ENET                                 
-ISR_HANDLER2 ENET_1588_Timer                      
-ISR_HANDLER2 XBAR1_IRQ_0_1                        
-ISR_HANDLER2 XBAR1_IRQ_2_3                        
-ISR_HANDLER2 ADC_ETC_IRQ0                         
-ISR_HANDLER2 ADC_ETC_IRQ1                         
-ISR_HANDLER2 ADC_ETC_IRQ2                         
-ISR_HANDLER2 ADC_ETC_ERROR_IRQ                    
-ISR_HANDLER2 PIT                                  
-ISR_HANDLER2 ACMP1                                
-ISR_HANDLER2 ACMP2                                
-ISR_HANDLER2 ACMP3                                
-ISR_HANDLER2 ACMP4                                
-ISR_RESERVED                          
-ISR_RESERVED                         
-ISR_HANDLER2 ENC1                                 
-ISR_HANDLER2 ENC2                                 
-ISR_HANDLER2 ENC3                                 
-ISR_HANDLER2 ENC4                                 
-ISR_HANDLER2 TMR1                                 
-ISR_HANDLER2 TMR2                                 
-ISR_HANDLER2 TMR3                                 
-ISR_HANDLER2 TMR4                                 
-ISR_HANDLER2 PWM2_0                               
-ISR_HANDLER2 PWM2_1                               
-ISR_HANDLER2 PWM2_2                               
-ISR_HANDLER2 PWM2_3                               
-ISR_HANDLER2 PWM2_FAULT                           
-ISR_HANDLER2 PWM3_0                               
-ISR_HANDLER2 PWM3_1                               
-ISR_HANDLER2 PWM3_2                               
-ISR_HANDLER2 PWM3_3                               
-ISR_HANDLER2 PWM3_FAULT                           
-ISR_HANDLER2 PWM4_0                               
-ISR_HANDLER2 PWM4_1                               
-ISR_HANDLER2 PWM4_2                               
-ISR_HANDLER2 PWM4_3                               
-ISR_HANDLER2 PWM4_FAULT                           
-ISR_RESERVED                          
-ISR_RESERVED                         
-ISR_RESERVED                          
-ISR_RESERVED                          
-ISR_RESERVED                          
-ISR_RESERVED                          
-ISR_HANDLER2 SJC_ARM_DEBUG_IRQHandler                        
-ISR_HANDLER2 NMI_WAKEUP_IRQHandler                           
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
-ISR_RESERVED                                      
+ISR_HANDLER2 DMA0_DMA16
+ISR_HANDLER2 DMA1_DMA17
+ISR_HANDLER2 DMA2_DMA18
+ISR_HANDLER2 DMA3_DMA19
+ISR_HANDLER2 DMA4_DMA20
+ISR_HANDLER2 DMA5_DMA21
+ISR_HANDLER2 DMA6_DMA22
+ISR_HANDLER2 DMA7_DMA23
+ISR_HANDLER2 DMA8_DMA24
+ISR_HANDLER2 DMA9_DMA25
+ISR_HANDLER2 DMA10_DMA26
+ISR_HANDLER2 DMA11_DMA27
+ISR_HANDLER2 DMA12_DMA28
+ISR_HANDLER2 DMA13_DMA29
+ISR_HANDLER2 DMA14_DMA30
+ISR_HANDLER2 DMA15_DMA31
+ISR_HANDLER2 DMA_ERROR
+ISR_HANDLER2 CTI0_ERROR
+ISR_HANDLER2 CTI1_ERROR
+ISR_HANDLER2 CORE
+ISR_HANDLER2 LPUART1
+ISR_HANDLER2 LPUART2
+ISR_HANDLER2 LPUART3
+ISR_HANDLER2 LPUART4
+ISR_HANDLER2 LPUART5
+ISR_HANDLER2 LPUART6
+ISR_HANDLER2 LPUART7
+ISR_HANDLER2 LPUART8
+ISR_HANDLER2 LPI2C1
+ISR_HANDLER2 LPI2C2
+ISR_HANDLER2 LPI2C3
+ISR_HANDLER2 LPI2C4
+ISR_HANDLER2 LPSPI1
+ISR_HANDLER2 LPSPI2
+ISR_HANDLER2 LPSPI3
+ISR_HANDLER2 LPSPI4
+ISR_HANDLER2 CAN1
+ISR_HANDLER2 CAN2
+ISR_HANDLER2 FLEXRAM
+ISR_HANDLER2 KPP
+ISR_HANDLER2 TSC_DIG
+ISR_HANDLER2 GPR_IRQ
+ISR_HANDLER2 LCDIF
+ISR_HANDLER2 CSI
+ISR_HANDLER2 PXP
+ISR_HANDLER2 WDOG2
+ISR_HANDLER2 SNVS_HP_WRAPPER
+ISR_HANDLER2 SNVS_HP_WRAPPER_TZ
+ISR_HANDLER2 SNVS_LP_WRAPPER
+ISR_HANDLER2 CSU
+ISR_HANDLER2 DCP
+ISR_HANDLER2 DCP_VMI
+ISR_RESERVED // 52
+ISR_HANDLER2 TRNG
+ISR_HANDLER2 SJC
+ISR_HANDLER2 BEE
+ISR_HANDLER2 SAI1
+ISR_HANDLER2 SAI2
+ISR_HANDLER2 SAI3_RX
+ISR_HANDLER2 SAI3_TX
+ISR_HANDLER2 SPDIF
+ISR_HANDLER2 PMU_EVENT
+ISR_RESERVED // 62
+ISR_HANDLER2 TEMP_LOW_HIGH
+ISR_HANDLER2 TEMP_PANIC
+ISR_HANDLER2 USB_PHY1
+ISR_HANDLER2 USB_PHY2
+ISR_HANDLER2 ADC1
+ISR_HANDLER2 ADC2
+ISR_HANDLER2 DCDC
+ISR_RESERVED // 70
+ISR_RESERVED // 71
+ISR_HANDLER2 GPIO1_INT0
+ISR_HANDLER2 GPIO1_INT1
+ISR_HANDLER2 GPIO1_INT2
+ISR_HANDLER2 GPIO1_INT3
+ISR_HANDLER2 GPIO1_INT4
+ISR_HANDLER2 GPIO1_INT5
+ISR_HANDLER2 GPIO1_INT6
+ISR_HANDLER2 GPIO1_INT7
+ISR_HANDLER2 GPIO1_Combined_0_15
+ISR_HANDLER2 GPIO1_Combined_16_31
+ISR_HANDLER2 GPIO2_Combined_0_15
+ISR_HANDLER2 GPIO2_Combined_16_31
+ISR_HANDLER2 GPIO3_Combined_0_15
+ISR_HANDLER2 GPIO3_Combined_16_31
+ISR_HANDLER2 GPIO4_Combined_0_15
+ISR_HANDLER2 GPIO4_Combined_16_31
+ISR_HANDLER2 GPIO5_Combined_0_15
+ISR_HANDLER2 GPIO5_Combined_16_31
+ISR_HANDLER2 FLEXIO1
+ISR_HANDLER2 FLEXIO2
+ISR_HANDLER2 WDOG1
+ISR_HANDLER2 RTWDOG
+ISR_HANDLER2 EWM
+ISR_HANDLER2 CCM_1
+ISR_HANDLER2 CCM_2
+ISR_HANDLER2 GPC
+ISR_HANDLER2 SRC
+ISR_RESERVED // 99
+ISR_HANDLER2 GPT1
+ISR_HANDLER2 GPT2
+ISR_HANDLER2 PWM1_0
+ISR_HANDLER2 PWM1_1
+ISR_HANDLER2 PWM1_2
+ISR_HANDLER2 PWM1_3
+ISR_HANDLER2 PWM1_FAULT
+ISR_RESERVED // 107
+ISR_HANDLER2 FLEXSPI
+ISR_HANDLER2 SEMC
+ISR_HANDLER2 USDHC1
+ISR_HANDLER2 USDHC2
+ISR_HANDLER2 USB_OTG2
+ISR_HANDLER2 USB_OTG1
+ISR_HANDLER2 ENET
+ISR_HANDLER2 ENET_1588_Timer
+ISR_HANDLER2 XBAR1_IRQ_0_1
+ISR_HANDLER2 XBAR1_IRQ_2_3
+ISR_HANDLER2 ADC_ETC_IRQ0
+ISR_HANDLER2 ADC_ETC_IRQ1
+ISR_HANDLER2 ADC_ETC_IRQ2
+ISR_HANDLER2 ADC_ETC_ERROR_IRQ
+ISR_HANDLER2 PIT
+ISR_HANDLER2 ACMP1
+ISR_HANDLER2 ACMP2
+ISR_HANDLER2 ACMP3
+ISR_HANDLER2 ACMP4
+ISR_RESERVED // 127
+ISR_RESERVED // 128
+ISR_HANDLER2 ENC1
+ISR_HANDLER2 ENC2
+ISR_HANDLER2 ENC3
+ISR_HANDLER2 ENC4
+ISR_HANDLER2 TMR1
+ISR_HANDLER2 TMR2
+ISR_HANDLER2 TMR3
+ISR_HANDLER2 TMR4
+ISR_HANDLER2 PWM2_0
+ISR_HANDLER2 PWM2_1
+ISR_HANDLER2 PWM2_2
+ISR_HANDLER2 PWM2_3
+ISR_HANDLER2 PWM2_FAULT
+ISR_HANDLER2 PWM3_0
+ISR_HANDLER2 PWM3_1
+ISR_HANDLER2 PWM3_2
+ISR_HANDLER2 PWM3_3
+ISR_HANDLER2 PWM3_FAULT
+ISR_HANDLER2 PWM4_0
+ISR_HANDLER2 PWM4_1
+ISR_HANDLER2 PWM4_2
+ISR_HANDLER2 PWM4_3
+ISR_HANDLER2 PWM4_FAULT
+ISR_RESERVED // 152
+ISR_RESERVED // 153
+ISR_RESERVED // 154
+ISR_RESERVED // 155
+ISR_RESERVED // 156
+ISR_RESERVED // 157
+ISR_RESERVED // 158
+ISR_RESERVED // 159
+ISR_RESERVED // 160
+ISR_RESERVED // 161
+ISR_RESERVED // 162
+ISR_RESERVED // 163
+ISR_RESERVED // 164
+ISR_RESERVED // 165
+ISR_RESERVED // 166
+ISR_RESERVED // 167
+ISR_RESERVED // 168
+ISR_RESERVED // 169
+ISR_RESERVED // 170
+ISR_RESERVED // 171
+ISR_RESERVED // 172
+ISR_RESERVED // 173
+ISR_RESERVED // 174
+ISR_RESERVED // 175
+ISR_RESERVED // 176
+ISR_RESERVED // 177
+ISR_RESERVED // 178
+ISR_RESERVED // 179
+ISR_RESERVED // 180
+ISR_RESERVED // 181
+ISR_RESERVED // 182
+ISR_RESERVED // 183
+ISR_RESERVED // 184
+ISR_RESERVED // 185
+ISR_RESERVED // 186
+ISR_RESERVED // 187
+ISR_RESERVED // 188
+ISR_RESERVED // 189
+ISR_RESERVED // 190
+ISR_RESERVED // 191
+ISR_RESERVED // 192
+ISR_RESERVED // 193
+ISR_RESERVED // 194
+ISR_RESERVED // 195
+ISR_RESERVED // 196
+ISR_RESERVED // 197
+ISR_RESERVED // 198
+ISR_RESERVED // 199
+ISR_RESERVED // 200
+ISR_RESERVED // 201
+ISR_RESERVED // 202
+ISR_RESERVED // 203
+ISR_RESERVED // 204
+ISR_RESERVED // 205
+ISR_RESERVED // 206
+ISR_RESERVED // 207
+ISR_RESERVED // 208
+ISR_RESERVED // 209
+ISR_RESERVED // 210
+ISR_RESERVED // 211
+ISR_RESERVED // 212
+ISR_RESERVED // 213
+ISR_RESERVED // 214
+ISR_RESERVED // 215
+ISR_RESERVED // 216
+ISR_RESERVED // 217
+ISR_RESERVED // 218
+ISR_RESERVED // 219
+ISR_RESERVED // 220
+ISR_RESERVED // 221
+ISR_RESERVED // 222
+ISR_RESERVED // 223
+ISR_RESERVED // 224
+ISR_RESERVED // 225
+ISR_RESERVED // 226
+ISR_RESERVED // 227
+ISR_RESERVED // 228
+ISR_RESERVED // 229
+ISR_RESERVED // 230
+ISR_RESERVED // 231
+ISR_RESERVED // 232
+ISR_RESERVED // 233
+ISR_RESERVED // 234
+ISR_RESERVED // 235
+ISR_RESERVED // 236
+ISR_RESERVED // 237
+ISR_RESERVED // 238
+ISR_RESERVED // 239
+ISR_RESERVED // 240
+ISR_RESERVED // 241
+ISR_RESERVED // 242
+ISR_RESERVED // 243
+ISR_RESERVED // 244
+ISR_RESERVED // 245
+ISR_RESERVED // 246
+ISR_RESERVED // 247
+ISR_RESERVED // 248
+ISR_RESERVED // 249
+ISR_RESERVED // 250
+ISR_RESERVED // 251
+ISR_RESERVED // 252
+ISR_RESERVED // 253
+ISR_RESERVED // 254
 .long 0xFFFFFFFF   /*  Reserved for user TRIM value*/
 
   .section .vectors, "ax"

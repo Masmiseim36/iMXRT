@@ -1,9 +1,13 @@
 <!DOCTYPE CrossStudio_Package_Description_File>
-<package name="iMXRT" author="Rowley Associates Ltd" cpu_manufacturer="NXP" cpu_family="iMXRT" version="4.3" crossstudio_versions="8:4.2-" dependencies="CMSIS" build_version="2019032201.12597;crossworks_v4;crossworks_v4" >
+<package name="iMXRT" author="Rowley Associates Ltd" cpu_manufacturer="NXP" cpu_family="iMXRT" version="4.4" crossstudio_versions="8:4.8-" dependencies="CMSIS" build_version="" >
   <group title="System Solutions">
     <file title="iMXRT Loader Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader.hzp" />
   </group>
   <targets>
+    <category name="iMXRT1010">
+      <cpu name="MIMXRT1011CAE4A" />
+      <cpu name="MIMXRT1011DAE5A" />
+    </category>
     <category name="iMXRT1015">
       <cpu name="MIMXRT1015CAF4A" />
       <cpu name="MIMXRT1015DAF5A" />
@@ -13,6 +17,10 @@
       <cpu name="MIMXRT1021CAF4A" />
       <cpu name="MIMXRT1021DAG5A" /> 
       <cpu name="MIMXRT1021DAF5A" />
+    </category>
+    <category name="iMXRT1024">
+      <cpu name="MIMXRT1024CAG4A" /> 
+      <cpu name="MIMXRT1024DAG5A" />
     </category>
     <category name="iMXRT1050">
       <cpu name="MIMXRT1051CVL5A" />
@@ -40,6 +48,11 @@
       <cpu name="MIMXRT1064CVL5A" />
       <cpu name="MIMXRT1064DVL6A" />
     </category>
+    <category name="iMXRT1170">
+      <cpu name="MIMXRT1176DVMAA" />
+      <cpu name="MIMXRT1176AVM8A" />
+      <cpu name="MIMXRT1176CVM8A" />
+    </category>
   </targets>
   <documentation>
     <section name="Creating iMXRT Projects">
@@ -51,11 +64,14 @@
         <li>Set the required project name and location directory.</li>
         <li>Click <b>OK</b>.</li>
       </ul>
-      <h5>To import IAR project files supplied with the NXP iMXRT SDK</h5>
+      <h5>To import MCUXpresso project files</h5>
       <ul>
-        <li>Select <b>File &gt; Import Project... &gt; IAR Ewarm Project</b> menu item.</li>
-        <li>Navigate to the directory containing the project e.g. E:/NXP/EVKB-IMXRT1050/boards/evkbimxrt1050/driver_examples/gpio/led_output/iar.</li>
-        <li>Select the workspace e.g. igpio_led_output.ewd.</li>
+        <li>Select <b>File &gt; Import Project... &gt; Import Eclipse Project</b> menu item.</li>
+        <li>Navigate to the directory containing the eclipse .project and select it.</li>
+        <li>Type "imxrt" in the Project Template Chooser search.</li>
+        <li>Select one of the displayed project templates.</li>
+        <li>Set the Section Placement and Target Processor properties.</li>
+        <li>For projects that use the CrossWorks tools you will need to remove the <b>startup</b> folder from the project.</li>
       </ul>
       <h5>To build and debug an application the runs in Flash memory</h5>
       <ul>
@@ -80,6 +96,17 @@
       explorer and selecting the <b>Target Processor</b> entry.</p>
       <p>Selecting the target processor will specify the memory map that is used for the build and debug. You can view the selected 
       memory map by right clicking on the project node in the project explorer and selecting <b>Edit Memory Map</b>.</p>
+      <p>The memory map file has the following macros that can be used to specify the start and sizes of the memory regions:</p>
+      <ul>
+        <li><b>ITCMSTART</b> and <b>ITCMSIZE</b> the start and size of the ITCM memory segment.</li>
+        <li><b>DTCMSTART</b> and <b>DTCMSIZE</b> the start and size of the DTCM memory segment.</li>
+        <li><b>OCRAMSTART</b> and <b>OCRAMSIZE</b> the start and size of the OCRAM memory segment.</li>
+        <li><b>FlexSPISTART</b> and <b>FlexSPISIZE</b> the start and size of the FlexSPI memory segment.</li>
+        <li><b>FlexSPI2START</b> and <b>FlexSPI2SIZE</b> the start and size of the FlexSPI2 memory segment.</li>
+        <li><b>RAMSIZE</b> the size of the SDRAM memory segment.</li>
+        <li><b>NCACHE_REGION_START</b> the start of the non cacheable memory segment.</li>
+        <li><b>NCACHE_REGION_SIZE</b> the size of the non cacheable memory segment.</li>
+      </ul>
        
       <h5>Section Placement</h5>
       <p>CrossStudio for ARM supports iMXRT projects running applications in a number of different
@@ -91,6 +118,9 @@
         <li><b>FlexSPI (HYPER)</b> application runs in FlexSPI and DTCM memories.</li>
         <li><b>FlexSPI (QuadSPI)</b> application runs in FlexSPI and DTCM memories.</li>
         <li><b>FlexSPI2 (QuadSPI)</b> application runs in FlexSPI2 and DTCM memories.</li>
+        <li><b>FlexSPI (HYPER, No DCD)</b> application runs in FlexSPI and DTCM memories, no Device Configuration Data.</li>
+        <li><b>FlexSPI (QuadSPI, No DCD)</b> application runs in FlexSPI and DTCM memories, no Device Configuration Data.</li>
+        <li><b>FlexSPI2 (QuadSPI, No DCD)</b> application runs in FlexSPI2 and DTCM memories, no Device Configuration Data.</li>
       </ul>
 
       <h5>Stack and Heap Sizes</h5>
@@ -116,6 +146,10 @@
     </section>
   </documentation>
   <history>
+    <version name="4.4">
+      <description>Add external GCC project template.</description>
+      <description>Add support for iMXRT1011, iMXRT1024 and iMXRT1170 devices.</description>
+    </version>
     <version name="4.3">
       <description>Add support for iMXRT1015 devices.</description>
     </version>

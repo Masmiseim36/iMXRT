@@ -11,7 +11,12 @@
 
 #include <libmem_flm_driver.h>
 
-#if defined(FLM_ALGORITHM_MIMXRT1021_QuadSPI_4KB_SEC) || defined(FLM_ALGORITHM_MIMXRT1015_QuadSPI_4KB_SEC)
+#if defined(FLM_ALGORITHM_MIMXRT1021_QuadSPI_4KB_SEC) ||\
+    defined(FLM_ALGORITHM_MIMXRT1015_QuadSPI_4KB_SEC) ||\
+    defined(FLM_ALGORITHM_MIMXRT1011_QuadSPI_4KB_SEC) ||\
+    defined(FLM_ALGORITHM_MIMXRT1024_QuadSPI_4KB_SEC) ||\
+    defined(FLM_ALGORITHM_MIMXRT105x_QuadSPI_4KB_SEC) ||\
+    defined(FLM_ALGORITHM_MIMXRT106x_QSPI_4KB_SEC)
 
 // MIMXRT1020 8mB QuadSPI NOR Flash
 
@@ -39,39 +44,39 @@ static const libmem_geometry_t geometry[] =
   { 0, 0 } 
 };
 
-#elif defined(FLM_ALGORITHM_MIMXRT105x_QuadSPI_4KB_SEC)
-
-// MIMXRT105x 8mB QuadSPI NOR Flash
-
-#define FLM_START_ADDRESS 0x60000000
-#define FLM_SIZE 0x00800000
-#define FLM_PAGE_SIZE 0x00000100
-
-static const libmem_geometry_t geometry[] =
-{
-  { 0x800, 0x1000 },
-  { 0, 0 } 
-};
-
-#elif defined(FLM_ALGORITHM_MIMXRT106x_QSPI_4KB_SEC)
-
-// MIMXRT106x 8mB QuadSPI NOR Flash
-
-#define FLM_START_ADDRESS 0x60000000
-#define FLM_SIZE 0x00800000
-#define FLM_PAGE_SIZE 0x00000100
-
-static const libmem_geometry_t geometry[] =
-{
-  { 0x800, 0x1000 },
-  { 0, 0 } 
-};
-
 #elif defined(FLM_ALGORITHM_MIMXRT1064_QSPI_4KB_SEC)
 
 // MIMXRT1064 8mB QuadSPI NOR Flash
 
 #define FLM_START_ADDRESS 0x70000000
+#define FLM_SIZE 0x00800000
+#define FLM_PAGE_SIZE 0x00000100
+
+static const libmem_geometry_t geometry[] =
+{
+  { 0x800, 0x1000 },
+  { 0, 0 } 
+};
+
+#elif defined(FLM_ALGORITHM_MIMXRT117x_QuadSPI_4KB_SEC)
+
+// MIMXRT1176 8mB QuadSPI NOR Flash
+
+#define FLM_START_ADDRESS 0x30000000
+#define FLM_SIZE 0x00800000
+#define FLM_PAGE_SIZE 0x00000100
+
+static const libmem_geometry_t geometry[] =
+{
+  { 0x800, 0x1000 },
+  { 0, 0 } 
+};
+
+#elif defined(FLM_ALGORITHM_MIMXRT117x_QuadSPI_4KB_SEC_Alias)
+
+// MIMXRT1176 8mB QuadSPI NOR Flash
+
+#define FLM_START_ADDRESS 0x08000000
 #define FLM_SIZE 0x00800000
 #define FLM_PAGE_SIZE 0x00000100
 
