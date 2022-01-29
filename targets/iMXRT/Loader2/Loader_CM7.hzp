@@ -380,6 +380,8 @@
         <file file_name="iMXRT1170/fsl_anatop_ai.c" />
         <file file_name="iMXRT1170/fsl_clock.c" />
         <file file_name="iMXRT1170/fsl_clock.h" />
+        <file file_name="iMXRT1170/fsl_dcdc.c" />
+        <file file_name="iMXRT1170/fsl_dcdc.h" />
         <file file_name="iMXRT1170/fsl_gpio.c" />
         <file file_name="iMXRT1170/fsl_gpio.h" />
         <file file_name="iMXRT1170/fsl_iomuxc.h" />
