@@ -48,12 +48,12 @@ var IOMUXC_GPR_GPR26 = IOMUXC_GPR + 0x68;
 
 // This function is called each time the debugger stops the target
 // If the cache is enabled, we invalidate it as the JTAG access is not cache coherent
-function OnTargetStop_11xx_M4 ()
+function OnTargetStop_11xx ()
 {
 	var DeviceName = GetProjectPartName ();
-	if (DeviceName.slice(-4) == "_cm7")
+	if (DeviceName.slice(-4) == "_cm7" || DeviceName.slice(-4) == "cm33")
 	{
-		TargetInterface.message ("## Target " + DeviceName + " has been called on the M7 Core");
+//		TargetInterface.message ("## Target " + DeviceName + " has been called on the M7 Core");
 		return;
 	}
 	else
@@ -72,7 +72,7 @@ function OnTargetStop_11xx_M4 ()
 	var CCM_LPCG_LmemDirect = TargetInterface.peekUint32 (CCM_LPCG_LMEM);
 	if (CCM_LPCG_LmemDirect == 0)
 	{
-		TargetInterface.message ("## OnTargetStop_11xx_M4 - cache is clockgated");
+		TargetInterface.message ("## OnTargetStop_11xx - cache is clockgated");
 		return;	// cache is clock gate, so no need to clear it
 	}
 
@@ -81,7 +81,7 @@ function OnTargetStop_11xx_M4 ()
 	psccr = psccr & LMEM_PSCCR_ENCACHE_MASK;
 	if (psccr == 0)
 	{
-		TargetInterface.message ("## OnTargetStop_11xx_M4 - cache is disabled");
+		TargetInterface.message ("## OnTargetStop_11xx - cache is disabled");
 		return;	// no cache enabled, so no need to clear it
 	}
 
@@ -849,6 +849,15 @@ function Clock_Restore_117x ()
 		TargetInterface.pokeUint32 (reg + (i * 0x80), 0);	// Set CCM->CLOCK_ROOT[0 .. 79].CONTROL = 0
 		i++;
 	}
+}
+
+function DeinitPlls_11xx ()
+{
+	// set the gated Flag to all PLLs (0 : clock is not gated; 1 : clock is gated)
+	var ANADIG_PLL = 0x40C84000;
+	TargetInterface.pokeUint32 (ANADIG_PLL + 0x200, 0x40000000);	// ARM PLL	. ANADIG_PLL_Type->PLL_ARM_CTRL
+	TargetInterface.pokeUint32 (ANADIG_PLL + 0x240, 0x40000000);	// Sys2 PLL	- ANADIG_PLL_Type->PLL_528_CTRL
+	TargetInterface.pokeUint32 (ANADIG_PLL + 0x210, 0x40000000);	// Sys3 PLL	- ANADIG_PLL_Type->PLL_480_CTRL
 }
 
 

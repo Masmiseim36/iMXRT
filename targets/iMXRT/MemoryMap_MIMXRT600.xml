@@ -1,8 +1,8 @@
 <!DOCTYPE Board_Memory_Definition_File>
 <Root name="iMXRT" >
-	<MemorySegment name="FlexSPI"       start="0x08000000" size="$(FlexSPISIZE:0x08000000)" access="ReadOnly"/>
-	<MemorySegment name="SRAM_code"     start="0x00000000" size="$(SRAMSIZE:0x00480000)"    access="Read/Write"/>
-	<MemorySegment name="SRAM_code_sec" start="0x10000000" size="$(SRAMSIZE:0x00480000)"    access="Read/Write"/>
-	<MemorySegment name="SRAM_data"     start="0x20000000" size="$(SRAMSIZE:0x00480000)"    access="Read/Write"/>
-	<MemorySegment name="SRAM_data_sec" start="0x30000000" size="$(SRAMSIZE:0x00480000)"    access="Read/Write"/>
+	<MemorySegment name="FlexSPI"       start="$(FlexSPISTART:0x08000000)"     size="$(FlexSPISIZE:0x08000000)"     access="ReadOnly"/>
+	<MemorySegment name="SRAM_code"     start="$(SRAMCODESTART:0x00000000)"    size="$(SRAMCODESIZE:0x00480000)"    access="Read/Write"/>
+	<MemorySegment name="SRAM_code_sec" start="$(SRAMCODESECSTART:0x10000000)" size="$(SRAMCODESECSIZE:0x00480000)" access="Read/Write"/>
+	<MemorySegment name="SRAM_data"     start="$(SRAMDATASTART:0x20000000)"    size="$(SRAMDATASIZE:0x00480000)"    access="Read/Write"/>
+	<MemorySegment name="SRAM_data_sec" start="$(SRAMDATASECSTART:0x30000000)" size="$(SRAMDATASECSIZE:0x00480000)" access="Read/Write"/>
 </Root>

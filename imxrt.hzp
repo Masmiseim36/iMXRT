@@ -40,17 +40,17 @@
         </folder>
       </folder>
       <folder Name="Loader2">
-        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1011.elf" />
-        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1015.elf" />
-        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1021.elf" />
-        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1024.elf" />
-        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1050.elf" />
-        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1060.elf" />
-        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1064.elf" />
-        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1160.elf" />
-        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1160_M4.elf" />
-        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1170.elf" />
-        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1170_M4.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1011_CM7.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1015_CM7.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1021_CM7.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1024_CM7.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1050_CM7.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1060_CM7.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1064_CM7.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1160_CM7.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1160_CM4.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1170_CM7.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1170_CM4.elf" />
       </folder>
       <file file_name="targets/iMXRT/core_cm7.h" />
       <file file_name="targets/iMXRT/fsl_device_registers.h" />
@@ -60,8 +60,6 @@
       <file file_name="targets/iMXRT/placement_tcm.xml" />
       <file file_name="targets/iMXRT/project_templates.xml" />
       <file file_name="targets/iMXRT/propertyGroups.xml" />
-      <file file_name="targets/iMXRT/propertyGroups_cm4.xml" />
-      <file file_name="targets/iMXRT/propertyGroups_cm33.xml" />
       <folder Name="Device">
         <folder Name="5xx">
           <file file_name="targets/iMXRT/XML/MIMXRT533S_Registers.xml" />
@@ -79,6 +77,7 @@
           <file file_name="targets/iMXRT/system_MIMXRT555S.h" />
           <file file_name="targets/iMXRT/system_MIMXRT595S_cm33.c" />
           <file file_name="targets/iMXRT/system_MIMXRT595S_cm33.h" />
+          <file file_name="targets/iMXRT/MemoryMap_MIMXRT500.xml" />
         </folder>
         <folder Name="63x">
           <file file_name="targets/iMXRT/MIMXRT633S.h" />
@@ -265,7 +264,5 @@
     </folder>
   </project>
   <import file_name="targets/iMXRT/Loader/Loader.hzp" />
-  <import file_name="targets/iMXRT/Loader2/Loader_CM4.hzp" />
-  <import file_name="targets/iMXRT/Loader2/Loader_CM7.hzp" />
   <import file_name="samples/iMXRT/iMXRT.hzp" />
 </solution>

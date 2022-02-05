@@ -31,8 +31,7 @@
     arm_core_type="Cortex-M7"
     arm_simulator_memory_simulation_parameter="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000"
     hidden="Yes"
-    linker_section_placement_file="../placement_tcm.xml"
-    property_groups_file_path="$(ProjectDir)/../propertyGroups.xml" />
+    linker_section_placement_file="../placement_tcm.xml" />
   <configuration
     Name="CM4"
     Placement="TCM"
@@ -40,8 +39,7 @@
     arm_core_type="Cortex-M4"
     arm_simulator_memory_simulation_parameter="ROM;0x08000000;0x04000000;RAM;0x1FFE0000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20240000;0x00080000;ROM;0x30000000;0x04000000"
     hidden="Yes"
-    linker_section_placement_file="../placement_tcm.xml"
-    property_groups_file_path="$(ProjectDir)/../propertyGroups_cm4.xml" />
+    linker_section_placement_file="../placement_tcm.xml" />
   <configuration
     Name="CM33"
     Placement="SRAM"
@@ -172,93 +170,93 @@
     inherited_configurations="CM33;600;Release" />
   <configuration
     Name="MIMXRT1011_Debug"
-    build_output_file_name="Loader_iMXRT1011_Debug.elf"
+    build_output_file_name="Loader_iMXRT1011_CM7_Debug.elf"
     inherited_configurations="CM7;1011;Debug" />
   <configuration
     Name="MIMXRT1011_Release"
-    build_output_file_name="Loader_iMXRT1011.elf"
+    build_output_file_name="Loader_iMXRT1011_CM7.elf"
     inherited_configurations="CM7;1011;Release" />
   <configuration
     Name="MIMXRT1015_Debug"
-    build_output_file_name="Loader_iMXRT1015_Debug.elf"
+    build_output_file_name="Loader_iMXRT1015_CM7_Debug.elf"
     inherited_configurations="CM7;1015;Debug" />
   <configuration
     Name="MIMXRT1015_Release"
-    build_output_file_name="Loader_iMXRT1015.elf"
+    build_output_file_name="Loader_iMXRT1015_CM7.elf"
     inherited_configurations="CM7;1015;Release" />
   <configuration
     Name="MIMXRT1021_Debug"
-    build_output_file_name="Loader_iMXRT1021_Debug.elf"
+    build_output_file_name="Loader_iMXRT1021_CM7_Debug.elf"
     inherited_configurations="CM7;1021;Debug" />
   <configuration
     Name="MIMXRT1021_Release"
-    build_output_file_name="Loader_iMXRT1021.elf"
+    build_output_file_name="Loader_iMXRT1021_CM7.elf"
     inherited_configurations="CM7;1021;Release" />
   <configuration
     Name="MIMXRT1024_Debug"
-    build_output_file_name="Loader_iMXRT1024_Debug.elf"
+    build_output_file_name="Loader_iMXRT1024_CM7_Debug.elf"
     inherited_configurations="CM7;1024;Debug" />
   <configuration
     Name="MIMXRT1024_Release"
-    build_output_file_name="Loader_iMXRT1024.elf"
+    build_output_file_name="Loader_iMXRT1024_CM7.elf"
     inherited_configurations="CM7;1024;Release" />
   <configuration
     Name="MIMXRT1050_Debug"
-    build_output_file_name="Loader_iMXRT1050_Debug.elf"
+    build_output_file_name="Loader_iMXRT1050_CM7_Debug.elf"
     inherited_configurations="CM7;1050;Debug" />
   <configuration
     Name="MIMXRT1050_Release"
-    build_output_file_name="Loader_iMXRT1050.elf"
+    build_output_file_name="Loader_iMXRT1050_CM7.elf"
     inherited_configurations="CM7;1050;Release" />
   <configuration
     Name="MIMXRT1060_Debug"
-    build_output_file_name="Loader_iMXRT1060_Debug.elf"
+    build_output_file_name="Loader_iMXRT1060_CM7_Debug.elf"
     inherited_configurations="CM7;1060;Debug" />
   <configuration
     Name="MIMXRT1060_Release"
-    build_output_file_name="Loader_iMXRT1060.elf"
+    build_output_file_name="Loader_iMXRT1060_CM7.elf"
     inherited_configurations="CM7;1060;Release" />
   <configuration
     Name="MIMXRT1064_Debug"
-    build_output_file_name="Loader_iMXRT1064_Debug.elf"
+    build_output_file_name="Loader_iMXRT1064_CM7_Debug.elf"
     inherited_configurations="CM7;1064;Debug" />
   <configuration
     Name="MIMXRT1064_Release"
-    build_output_file_name="Loader_iMXRT1064.elf"
+    build_output_file_name="Loader_iMXRT1064_CM7.elf"
     inherited_configurations="CM7;1064;Release" />
   <configuration
     Name="MIMXRT1160_CM4_Debug"
-    build_output_file_name="Loader_iMXRT1160_M4_Debug.elf"
+    build_output_file_name="Loader_iMXRT1160_CM4_Debug.elf"
     inherited_configurations="CM4;1160_CM4;Debug" />
   <configuration
     Name="MIMXRT1160_CM4_Release"
-    build_output_file_name="Loader_iMXRT1160_M4.elf"
+    build_output_file_name="Loader_iMXRT1160_CM4.elf"
     inherited_configurations="CM4;1160_CM4;Release" />
   <configuration
     Name="MIMXRT1160_CM7_Debug"
-    build_output_file_name="Loader_iMXRT1160_Debug.elf"
+    build_output_file_name="Loader_iMXRT1160_CM7_Debug.elf"
     inherited_configurations="CM7;1160_CM7;Debug" />
   <configuration
     Name="MIMXRT1160_CM7_Release"
-    build_output_file_name="Loader_iMXRT1160.elf"
+    build_output_file_name="Loader_iMXRT1160_CM7.elf"
     inherited_configurations="CM7;1160_CM7;Release" />
   <configuration
     Name="MIMXRT1170_CM7_Debug"
-    build_output_file_name="Loader_iMXRT1170_Debug.elf"
+    build_output_file_name="Loader_iMXRT1170_CM7_Debug.elf"
     inherited_configurations="CM7;1170_CM7;Debug" />
   <configuration
     Name="MIMXRT1170_CM7_Release"
-    build_output_file_name="Loader_iMXRT1170.elf"
+    build_output_file_name="Loader_iMXRT1170_CM7.elf"
     inherited_configurations="CM7;1170_CM7;Release" />
   <configuration
     Name="MIMXRT1170_CM4_Debug"
-    build_output_file_name="Loader_iMXRT1170_M4_Debug.elf"
+    build_output_file_name="Loader_iMXRT1170_CM4_Debug.elf"
     inherited_configurations="CM4;1170_CM4;Debug" />
   <configuration
     Name="MIMXRT1170_CM4_Release"
-    build_output_file_name="Loader_iMXRT1170_M4.elf"
+    build_output_file_name="Loader_iMXRT1170_CM4.elf"
     inherited_configurations="CM4;1170_CM4;Release" />
-  <project Name="Loader_CM7">
+  <project Name="Loader">
     <configuration
       CMSIS_CORE="Yes"
       Name="Common"
@@ -269,7 +267,7 @@
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
       arm_target_loader_reset_after_download="No"
-      batch_build_configurations="MIMXRT600_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_Release;MIMXRT1170_CM4_Release"
+      batch_build_configurations="MIMXRT600_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
       c_user_include_directories=".;./.."
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
@@ -282,6 +280,7 @@
       linker_keep_symbols="libmem_crc32"
       project_directory=""
       project_type="Executable"
+      property_groups_file_path="$(ProjectDir)/../propertyGroups.xml"
       target_connect_script="Connect()"
       target_get_partname_script="GetPartName()"
       target_reset_script="Reset_Loader()"
@@ -529,7 +528,6 @@
         <file file_name="fsl_dmamux.h" />
         <file file_name="fsl_lpuart.c" />
         <file file_name="fsl_lpuart.h" />
-        <file file_name="../MemoryMap_MIMXRT116x_cm7.xml" />
       </folder>
       <folder Name="iMXRT1170">
         <configuration Name="Common" build_exclude_from_build="Yes" />
@@ -537,6 +535,8 @@
         <configuration Name="1170_CM4" build_exclude_from_build="No" />
         <file file_name="iMXRT1170/fsl_clock.c" />
         <file file_name="iMXRT1170/fsl_clock.h" />
+        <file file_name="iMXRT1170/fsl_dcdc.c" />
+        <file file_name="iMXRT1170/fsl_dcdc.h" />
         <file file_name="iMXRT1170/fsl_iomuxc.h" />
         <file file_name="iMXRT1170/clock_config.h" />
         <file file_name="iMXRT1170/clock_config.c" />
@@ -556,7 +556,6 @@
         <file file_name="fsl_dmamux.h" />
         <file file_name="fsl_lpuart.c" />
         <file file_name="fsl_lpuart.h" />
-        <file file_name="../MemoryMap_MIMXRT117x_cm7.xml" />
       </folder>
       <folder Name="CM4">
         <file file_name="iMXRT1170/cm4/fsl_cache.c" />

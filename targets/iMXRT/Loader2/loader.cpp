@@ -108,9 +108,6 @@ int main (uint32_t flags, uint32_t param)
 	#if defined FSL_FEATURE_SOC_IOMUXC_COUNT && FSL_FEATURE_SOC_IOMUXC_COUNT > 0
 		CLOCK_EnableClock (kCLOCK_Iomuxc);
 	#endif
-	#if defined (__DCACHE_PRESENT) && (__DCACHE_PRESENT == 1U)
-		SCB_DisableDCache   ();
-	#endif
 	ConfigUart ();
 	DebugPrint ("Hello iMXRT Loader\r\n");
 
