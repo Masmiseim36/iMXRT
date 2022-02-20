@@ -85,11 +85,16 @@
 
   .syntax unified
   .global reset_handler
+  .global Reset_Handler
 
   .section .vectors, "ax"
   .code 16
   .global _vectors
 _vectors:
+  .global __Vectors
+__Vectors:
+  .global g_pfnVectors
+g_pfnVectors:
    .long   __stack_end__
 #ifdef STARTUP_FROM_RESET
   .word reset_handler
@@ -365,6 +370,7 @@ _vectors_ram:
   .thumb_func
 
 reset_handler:
+Reset_Handler:
 
 #ifdef DISABLE_ECC_ON_STARTUP
   // disable FLEXRAM-ECC (enabled by fuse or ROM) and restore the factory defaults
