@@ -46,7 +46,10 @@
 /*******************************************************************************
  * Code
  ******************************************************************************/
-#if defined(__CC_ARM) || defined(__GNUC__) || defined __SES_ARM || defined __CROSSWORKS_ARM
+#define DUMMY_CYCLES 18U	/* Number of dummy cycles after Read Command for Adesto-Flash */
+#define CTRL_REG_BYTE3_VAL (((DUMMY_CYCLES - 8U) >> 1U) | 0x10U)
+
+#if defined(__CC_ARM) || defined(__ARMCC_VERSION) || defined(__GNUC__) || defined __SES_ARM || defined __CROSSWORKS_ARM
 	__attribute__((section(".boot_hdr.conf")))
 #elif defined(__ICCARM__)
 	#pragma section="app_image"
@@ -55,10 +58,6 @@
 #else
 	#error "Unknown Compiler"
 #endif
-
-#define DUMMY_CYCLES 18U	/* Number of dummy cycles after Read Command for Adesto-Flash */
-#define CTRL_REG_BYTE3_VAL (((DUMMY_CYCLES - 8U) >> 1U) | 0x10U)
-
 const flexspi_nor_config_t FlashBootHeader =
 {
 	.memConfig =

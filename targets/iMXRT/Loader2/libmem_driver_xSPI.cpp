@@ -64,10 +64,10 @@ static libmem_geometry_t geometry[]
 	{0, 0} 
 };
 
-static status_t ReadJEDEC           (FlexSPI_Helper *base, struct DeviceInfo *Info);
-static status_t EraseChip           (FlexSPI_Helper *base);
-static int EraseSector              (libmem_driver_handle_t *h, libmem_sector_info_t *si);
-static int ProgramPage              (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr);
+static status_t ReadJEDEC     (FlexSPI_Helper *base, struct DeviceInfo *Info);
+static status_t EraseChip     (FlexSPI_Helper *base);
+static int EraseSector        (libmem_driver_handle_t *h, libmem_sector_info_t *si);
+static int ProgramPage        (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr);
 
 
 static int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
@@ -301,12 +301,12 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			  (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || \
 			  (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1176_cm7_SERIES) || \
 			  (defined MIMXRT1173_cm4_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm4_SERIES)
-/*			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
+			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
 			CLOCK_SetRootClockMux (FlexSPIClock, 5); // ClockSource_SysPll2 --> 528 MHz
 			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 525 MHz / 2 = ~264 MHz
-			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On); */
+			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On); /*/
 			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 396 MHz / 2 = ~200 MHz
-			DeviceConfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
+			DeviceConfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock); //*/
 		#else
 			#error "unknon controller family"
 		#endif

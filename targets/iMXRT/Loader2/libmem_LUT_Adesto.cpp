@@ -75,7 +75,7 @@ namespace Adesto
 
 	static constexpr uint8_t CtrlReg_Byte3Value (((DummyCycles - 8U) >> 1U) | 0x10U);
 
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, const MemoryType MemType, DeviceInfo &Info, flexspi_config_t &config, flexspi_device_config_t &DeviceConfig)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, const MemoryType MemType, DeviceInfo &Info, flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &DeviceConfig)
 	{
 		(void)Info;
 		if (MemType == MemType_Invalid || MemType == MemType_Hyperflash)
@@ -104,11 +104,11 @@ namespace Adesto
 
 		config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;// To achieve high speeds - always use DQS
 
-		DeviceConfig.CSInterval    = 5;
+/*		DeviceConfig.CSInterval    = 5;
 		DeviceConfig.CSHoldTime    = 2;
 		DeviceConfig.CSSetupTime   = 4;
 		DeviceConfig.dataValidTime = 1;
-
+*/
 		return LibmemStaus_Success;
 	}
 }
