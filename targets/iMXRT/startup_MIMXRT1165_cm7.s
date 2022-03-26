@@ -316,8 +316,8 @@ ISR_RESERVED                                      // Reserved212_IRQHandler     
 ISR_RESERVED                                      // Reserved213_IRQHandler             - Reserved interrupt
 ISR_RESERVED                                      // Reserved214_IRQHandler             - Reserved interrupt
 ISR_RESERVED                                      // Reserved215_IRQHandler             - Reserved interrupt
-ISR_HANDLER2 HWVAD_EVENT                          // HWVAD_EVENT_IRQHandler             - HWVAD event interrupt
-ISR_HANDLER2 HWVAD_ERROR                          // HWVAD_ERROR_IRQHandler             - HWVAD error interrupt
+ISR_HANDLER2 PDM_HWVAD_EVENT                      // PDM_HWVAD_EVENT_IRQHandler             - HWVAD event interrupt
+ISR_HANDLER2 PDM_HWVAD_ERROR                      // PDM_HWVAD_ERROR_IRQHandler             - HWVAD error interrupt
 ISR_HANDLER2 PDM_EVENT                            // PDM_EVENT_IRQHandler               - PDM event interrupt
 ISR_HANDLER2 PDM_ERROR                            // PDM_ERROR_IRQHandler               - PDM error interrupt
 ISR_HANDLER2 EMVSIM1                              // EMVSIM1_IRQHandler                 - EMVSIM1 interrupt
