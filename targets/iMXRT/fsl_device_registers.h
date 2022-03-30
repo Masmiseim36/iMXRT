@@ -1,6 +1,6 @@
 /*
  * Copyright 2014-2016 Freescale Semiconductor, Inc.
- * Copyright 2016-2019 NXP
+ * Copyright 2016-2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -107,6 +107,13 @@
 	/* CPU specific feature definitions */
 	#include "MIMXRT1061_features.h"
 
+#elif (defined(CPU_MIMXRT1061XVN5B))
+	#define MIMXRT1061X_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT1061X.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT1061X_features.h"
+
 #elif (defined(CPU_MIMXRT1062CVJ5A) || defined(CPU_MIMXRT1062CVL5A) || defined(CPU_MIMXRT1062DVJ6A) || \
 	defined(CPU_MIMXRT1062DVL6A))
 	#define MIMXRT1062_SERIES
@@ -114,6 +121,13 @@
 	#include "MIMXRT1062.h"
 	/* CPU specific feature definitions */
 	#include "MIMXRT1062_features.h"
+
+#elif (defined(CPU_MIMXRT1062DVN6B) || defined(CPU_MIMXRT1062XVN5B))
+	#define MIMXRT1062X_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT1062X.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT1062X_features.h"
 
 #elif (defined(CPU_MIMXRT1064CVJ5A) || defined(CPU_MIMXRT1064CVL5A) || defined(CPU_MIMXRT1064DVJ6A) || \
 	defined(CPU_MIMXRT1064DVL6A))

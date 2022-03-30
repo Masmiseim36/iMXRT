@@ -181,8 +181,8 @@ ISR_HANDLER2 USB_PHY2                  // USB_PHY2_IRQHandler             - USBP
 ISR_HANDLER2 ADC1                      // ADC1_IRQHandler                 - ADC1 interrupt
 ISR_HANDLER2 ADC2                      // ADC2_IRQHandler                 - ADC2 interrupt
 ISR_HANDLER2 DCDC                      // DCDC_IRQHandler                 - DCDC interrupt
-ISR_RESERVED                           //                                 - Reserved interrupt
-ISR_RESERVED                           //                                 - Reserved interrupt
+ISR_RESERVED                           // Reserved86_IRQHandler           - Reserved interrupt
+ISR_RESERVED                           // Reserved87_IRQHandler           - Reserved interrupt
 ISR_HANDLER2 GPIO1_INT0                // GPIO1_INT0_IRQHandler           - Active HIGH Interrupt from INT0 from GPIO
 ISR_HANDLER2 GPIO1_INT1                // GPIO1_INT1_IRQHandler           - Active HIGH Interrupt from INT1 from GPIO
 ISR_HANDLER2 GPIO1_INT2                // GPIO1_INT2_IRQHandler           - Active HIGH Interrupt from INT2 from GPIO
@@ -220,7 +220,7 @@ ISR_HANDLER2 PWM1_3                    // PWM1_3_IRQHandler               - PWM1
 ISR_HANDLER2 PWM1_FAULT                // PWM1_FAULT_IRQHandler           - PWM1 fault or reload error interrupt
 ISR_HANDLER2 FLEXSPI2                  // FLEXSPI2_IRQHandler             - FlexSPI2 interrupt
 ISR_HANDLER2 FLEXSPI                   // FLEXSPI_IRQHandler              - FlexSPI0 interrupt
-ISR_HANDLER2 SEMC                      // SEMC_IRQHandler                 - Reserved interrupt
+ISR_HANDLER2 SEMC                      // SEMC_IRQHandler                 - SEMC interrupt
 ISR_HANDLER2 USDHC1                    // USDHC1_IRQHandler               - USDHC1 interrupt
 ISR_HANDLER2 USDHC2                    // USDHC2_IRQHandler               - USDHC2 interrupt
 ISR_HANDLER2 USB_OTG2                  // USB_OTG2_IRQHandler             - USBO2 USB OTG2

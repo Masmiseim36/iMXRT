@@ -144,22 +144,34 @@
           <file file_name="targets/iMXRT/MIMXRT1061.h" />
           <file file_name="targets/iMXRT/MIMXRT1061_features.h" />
           <file file_name="targets/iMXRT/XML/MIMXRT1061_Registers.xml" />
+          <file file_name="targets/iMXRT/MIMXRT1061X.h" />
+          <file file_name="targets/iMXRT/MIMXRT1061X_features.h" />
+          <file file_name="targets/iMXRT/XML/MIMXRT1061X_Registers.xml" />
           <file file_name="targets/iMXRT/MIMXRT1062.h" />
           <file file_name="targets/iMXRT/MIMXRT1062_features.h" />
           <file file_name="targets/iMXRT/XML/MIMXRT1062_Registers.xml" />
+          <file file_name="targets/iMXRT/MIMXRT1062X.h" />
+          <file file_name="targets/iMXRT/MIMXRT1062X_features.h" />
+          <file file_name="targets/iMXRT/XML/MIMXRT1062X_Registers.xml" />
           <file file_name="targets/iMXRT/MIMXRT1064.h" />
           <file file_name="targets/iMXRT/MIMXRT1064_features.h" />
           <file file_name="targets/iMXRT/XML/MIMXRT1064_Registers.xml" />
           <file file_name="targets/iMXRT/startup_MIMXRT1061.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1061X.s" />
           <file file_name="targets/iMXRT/startup_MIMXRT1062.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1062X.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT1064.s" />
           <file file_name="targets/iMXRT/system_MIMXRT1061.c" />
           <file file_name="targets/iMXRT/system_MIMXRT1061.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1061X.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1061X.h" />
           <file file_name="targets/iMXRT/system_MIMXRT1062.c" />
           <file file_name="targets/iMXRT/system_MIMXRT1062.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT1062X.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT1062X.h" />
           <file file_name="targets/iMXRT/system_MIMXRT1064.c" />
           <file file_name="targets/iMXRT/system_MIMXRT1064.h" />
           <file file_name="targets/iMXRT/MemoryMap_MIMXRT106x.xml" />
-          <file file_name="targets/iMXRT/startup_MIMXRT1064.s" />
         </folder>
         <folder Name="106A">
           <file file_name="targets/iMXRT/MIMXRT106A.h" />
@@ -264,5 +276,6 @@
     </folder>
   </project>
   <import file_name="targets/iMXRT/Loader/Loader.hzp" />
+  <import file_name="targets/iMXRT/Loader2/Loader.hzp" />
   <import file_name="samples/iMXRT/iMXRT.hzp" />
 </solution>

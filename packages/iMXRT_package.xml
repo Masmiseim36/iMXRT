@@ -39,10 +39,13 @@
 			<cpu name="MIMXRT1061CVJ5A" />
 			<cpu name="MIMXRT1061CVL5A" />
 			<cpu name="MIMXRT1061DVL6A" />
+			<cpu name="MIMXRT1061XVN5B" />
 			<cpu name="MIMXRT1062CVJ5A" />
 			<cpu name="MIMXRT1062CVL5A" />
 			<cpu name="MIMXRT1062DVJ6A" />
 			<cpu name="MIMXRT1062DVL6A" />
+			<cpu name="MIMXRT1062DVN6B" />
+			<cpu name="MIMXRT1062XVN5B" />
 		</category>
 		<category name="iMXRT1064">
 			<cpu name="MIMXRT1064CVL5A" />

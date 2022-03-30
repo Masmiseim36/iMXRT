@@ -199,6 +199,15 @@
 			<cdefine name="CPU_MIMXRT1061DVL6A"/>
 		</groupEntry>
 
+		<groupEntry name="MIMXRT1061XVN5B" aka="MIMXRT1061xxx5B" family="iMXRT1060">
+			<property name="macros" value="DeviceName=MIMXRT1061X;Family=iMXRT1060;Core=CM7" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
+			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
+			<property name="arm_core_type" value="Cortex-M7" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1061XVN5B"/>
+		</groupEntry>
+
 		<groupEntry name="MIMXRT1062CVL5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
 			<property name="macros" value="DeviceName=MIMXRT1062;Family=iMXRT1060;Core=CM7" />
 			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
@@ -230,6 +239,23 @@
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
 			<cdefine name="CPU_MIMXRT1062DVJ6A"/>
+		</groupEntry>
+
+		<groupEntry name="MIMXRT1062DVN6B" aka="MIMXRT1062xxx6B" family="iMXRT1060">
+			<property name="macros" value="DeviceName=MIMXRT1062X;Family=iMXRT1060;Core=CM7" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
+			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
+			<property name="arm_core_type" value="Cortex-M7" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1062DVN6B"/>
+		</groupEntry>
+		<groupEntry name="MIMXRT1062XVN5B" aka="MIMXRT1062xxx6B" family="iMXRT1060">
+			<property name="macros" value="DeviceName=MIMXRT1062X;Family=iMXRT1060;Core=CM7" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT106x.xml" />
+			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
+			<property name="arm_core_type" value="Cortex-M7" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1062XVN5B"/>
 		</groupEntry>
 
 		<groupEntry name="MIMXRT106ADVL6A" aka="MIMXRT106Axxx6A" family="iMXRT1060">
