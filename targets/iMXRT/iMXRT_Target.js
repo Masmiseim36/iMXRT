@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Original work Copyright (c) 2016 Rowley Associates Limited.               *
- * Modified work Copyright (C) 2019-2021 Markus Klein                        *
+ * Modified work Copyright (C) 2019-2022 Markus Klein                        *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
@@ -106,11 +106,6 @@ function OnTargetStop_11xx ()
 function Connect ()
 {
 	var DeviceName = GetProjectPartName ();
-	if (TargetInterface.implementation() == "j-link")
-	{
-		TargetInterface.message ("## Connect to " + DeviceName + " with j-link");
-		return;
-	}
 	TargetInterface.message ("## Connect to " + DeviceName);
 
 	switch (DeviceName)
@@ -137,40 +132,44 @@ function Connect ()
 		case "MIMXRT1173_cm7":
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
-			TargetInterface.setDeviceTypeProperty ("CORTEX-M7");
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FD000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FE000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FF000);
+			if (TargetInterface.implementation() != "j-link")
+			{
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FD000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FE000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FF000);
 
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000E000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0001000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0002000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0000000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0041000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0042000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0043000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0044000); // Not in ROM Table. Compare ERR050708
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000E000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0001000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0002000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0000000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0041000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0042000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0043000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0044000); // Not in ROM Table. Compare ERR050708
+			}
 			break;
 		case "MIMXRT1165_cm4":
 		case "MIMXRT1166_cm4":
 		case "MIMXRT1173_cm4":
 		case "MIMXRT1175_cm4":
 		case "MIMXRT1176_cm4":
-			TargetInterface.setDeviceTypeProperty ("CORTEX-M4");
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FD000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FE000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FF000);
+			if (TargetInterface.implementation() != "j-link")
+			{
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FD000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FE000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FF000);
 
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000E000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0001000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0002000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0000000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0041000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0042000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0043000);
-			TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0044000); // Not in ROM Table. Compare ERR050708
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000E000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0001000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0002000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0000000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0041000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0042000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0043000);
+				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0044000); // Not in ROM Table. Compare ERR050708
+			}
 			break;
 		default:
 			TargetInterface.message ("Connect - unknown Device: " + DeviceName);
@@ -350,38 +349,12 @@ function Reset_11xx_M4 ()
 	TargetInterface.delay (10);
 
 	// Vector reset
-	TargetInterface.pokeUint32 (0xE000ED0C, 0x5FA0001);
-	TargetInterface.delay (10);
+//	TargetInterface.pokeUint32 (0xE000ED0C, 0x5FA0001);
+//	TargetInterface.delay (10);
 }
 
 function Reset_11xx_M7 ()
 {
-/*
-	var PC = TargetInterface.getRegister ("pc");
-	var SP = TargetInterface.getRegister ("sp");
-	var XPSR = TargetInterface.getRegister ("xpsr");
-	var VTOR = TargetInterface.peekUint32 (0xe000ed08);
-	if (PC == 0x00223104)
-	{
-		TargetInterface.message ("## Reset_11xx_M7 - In Statup-Endless Loop");
-		SP = TargetInterface.peekUint32 (0x30002000);
-		PC = TargetInterface.peekUint32 (0x30002004);
-
-		TargetInterface.setRegister ("sp", SP);
-		TargetInterface.setRegister ("pc", PC);
-		TargetInterface.setRegister ("XPSR", 0x01000000);
-	}
-	else
-	{
-		TargetInterface.setRegister ("px", 0x00223104);
-		TargetInterface.setRegister ("sp", 0x20241000);
-	}
-
-	TargetInterface.message ("## Reset_11xx_M7 PC:   0x" + PC.toString(16));
-	TargetInterface.message ("## Reset_11xx_M7 SP:   0x" + SP.toString(16));
-	TargetInterface.message ("## Reset_11xx_M7 XPSR: 0x" + XPSR.toString(16));
-	TargetInterface.message ("## Reset_11xx_M7 VTOR: 0x" + VTOR.toString(16)); /* */
-
 	// ResetTarget
 	//// Issue DISPLAYMIX reset ////
 	TargetInterface.pokeUint32 (SRC_CTRL_DISPLAY, 1);
@@ -408,20 +381,6 @@ function Reset_11xx_M7 ()
 		reg &= 0x1;	// mask UNDER_RST Flag
 	}
 	TargetInterface.delay (10);
-
-
-	//// Reset Peripherals ////
-/*	TargetInterface.pokeUint32 (SRC_CTRL_MEGA, 1);			// Issue MEGA reset SRC->CTRL_MEGA = SW_RESET
-
-	// Check MEGA reset status
-	var reg = TargetInterface.peekUint32 (SRC_STAT_MEGA);		// SRC->STAT_MEGA
-	reg &= 0x1;												// check UNDER_RST flag
-	while (reg)
-	{
-		reg = TargetInterface.peekUint32 (SRC_STAT_MEGA);
-		reg &= 0x1;
-	}
-	TargetInterface.delay (10); /* */
 }
 
 function Reset ()
