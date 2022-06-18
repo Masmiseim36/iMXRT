@@ -51,14 +51,10 @@ var IOMUXC_GPR_GPR26 = IOMUXC_GPR + 0x68;
 function OnTargetStop_11xx ()
 {
 	var DeviceName = GetProjectPartName ();
-	if (DeviceName.slice(-4) == "_cm7" || DeviceName.slice(-4) == "cm33")
-	{
-//		TargetInterface.message ("## Target " + DeviceName + " has been called on the M7 Core");
-		return;
-	}
-	else
-		TargetInterface.message ("## Target " + DeviceName + " has been stopped");
+	if (DeviceName.slice(-4) != "_cm4")
+		return; // only necessary on M4-Core
 
+	TargetInterface.message ("## Target " + DeviceName + " has been stopped");
 	// Invalidate the Data Cache
 	var LMEM_PSCCR_ENCACHE_MASK = 0x00000001;
 //	var LMEM_PSCCR_ENWRBUF_MASK = 0x00000002;
