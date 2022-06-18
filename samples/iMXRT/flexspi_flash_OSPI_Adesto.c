@@ -92,7 +92,7 @@ const flexspi_nor_config_t FlashBootHeader =
 			0,
 
 			// (1) Read Status (byte 1)
-			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_8PAD, 0x05, DUMMY_DDR, FLEXSPI_8PAD, 0x10),
+			FLEXSPI_LUT_SEQ (CMD_SDR,   FLEXSPI_8PAD, 0x05, DUMMY_DDR, FLEXSPI_8PAD, 8),
 			FLEXSPI_LUT_SEQ (READ_DDR,  FLEXSPI_8PAD, 0x01, STOP,      FLEXSPI_1PAD, 0x0),
 			0,
 			0,

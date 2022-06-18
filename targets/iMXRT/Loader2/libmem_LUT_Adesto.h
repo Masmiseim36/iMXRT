@@ -207,7 +207,7 @@ namespace Adesto
 		0,	// Dummy to fill a block of four
 
 		// (1) Read Status (byte 1) --> compare @LUT_CommandOffsets
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x05, kFLEXSPI_Command_DUMMY_DDR, kFLEXSPI_8PAD, 16),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x05, kFLEXSPI_Command_DUMMY_DDR, kFLEXSPI_8PAD, 8),
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 1,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
