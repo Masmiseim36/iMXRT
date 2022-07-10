@@ -39,7 +39,9 @@ extern "C" {
 		BOARD_UartPinConfig    = IOMUXC_SW_PAD_CTL_PAD_SRE(0) | IOMUXC_SW_PAD_CTL_PAD_DSE(6) | IOMUXC_SW_PAD_CTL_PAD_SPEED(2) | IOMUXC_SW_PAD_CTL_PAD_PKE(1),	// 0x10B0
 
 		//                       Fast Slew Rate               | DSE_6_R0_6 (43 Ohm)          | max(200MHz)                    | Pull/Keeper Enabled           | Hysteresis Disabled | Open Drain Disabled | Keeper | 100K Ohm Pull Down
-		BOARD_FlexSPIPinConfig = IOMUXC_SW_PAD_CTL_PAD_SRE(1) | IOMUXC_SW_PAD_CTL_PAD_DSE(6) | IOMUXC_SW_PAD_CTL_PAD_SPEED(3) | IOMUXC_SW_PAD_CTL_PAD_PKE(1)	// 0x0130F1
+		BOARD_FlexSPIPinConfig = IOMUXC_SW_PAD_CTL_PAD_SRE(1) | IOMUXC_SW_PAD_CTL_PAD_DSE(6) | IOMUXC_SW_PAD_CTL_PAD_SPEED(3) | IOMUXC_SW_PAD_CTL_PAD_PKE(1),	// 0x0130F1
+		BOARD_FlexSPIDQSConfig = IOMUXC_SW_PAD_CTL_PAD_SRE(1) | IOMUXC_SW_PAD_CTL_PAD_DSE(6) | IOMUXC_SW_PAD_CTL_PAD_SPEED(3) | IOMUXC_SW_PAD_CTL_PAD_PKE(1) |
+								 IOMUXC_SW_PAD_CTL_PAD_PUE(1) | IOMUXC_SW_PAD_CTL_PAD_HYS(1)	// 0x0130F1U
 	#endif
 	};
 

@@ -303,10 +303,9 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			  (defined MIMXRT1173_cm4_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm4_SERIES)
 			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
 			CLOCK_SetRootClockMux (FlexSPIClock, 5); // ClockSource_SysPll2 --> 528 MHz
-			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 525 MHz / 2 = ~264 MHz
-			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On); /*/
-			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 396 MHz / 2 = ~200 MHz
-			DeviceConfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock); //*/
+			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 528 MHz / 2 = ~264 MHz
+			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
+			DeviceConfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
 		#else
 			#error "unknon controller family"
 		#endif
