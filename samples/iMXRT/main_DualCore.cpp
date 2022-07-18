@@ -57,7 +57,7 @@ bool InitializeSystemTick (uint32_t SysTickInMS)
 		// Start the core
 		extern uint32_t __FlexSPI_segment_end__;
 		uint32_t bootAddress = (uint32_t)&__FlexSPI_segment_end__;
-		IOMUXC_LPSR_GPR->GPR0 = IOMUXC_LPSR_GPR_GPR0_CM4_INIT_VTOR_LOW((uint32_t)bootAddress);
+		IOMUXC_LPSR_GPR->GPR0 = IOMUXC_LPSR_GPR_GPR0_CM4_INIT_VTOR_LOW ((uint32_t)bootAddress >> 3);
 		IOMUXC_LPSR_GPR->GPR1 = IOMUXC_LPSR_GPR_GPR1_CM4_INIT_VTOR_HIGH((uint32_t)bootAddress >> 16);
 		SRC->SCR |= SRC_SCR_BT_RELEASE_M4_MASK;
 	}

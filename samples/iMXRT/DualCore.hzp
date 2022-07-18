@@ -37,7 +37,7 @@
       arm_fpu_type="FPv5-D16"
       arm_linker_heap_size="1024"
       arm_linker_stack_size="1024"
-      arm_simulator_memory_simulation_parameter="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x04000000"
+      arm_simulator_memory_simulation_parameter="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000"
       arm_target_loader_applicable_loaders="Flash"
       arm_target_loader_default_loader="Flash"
       arm_target_loader_parameter="1"
@@ -49,7 +49,7 @@
       linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT117x_cm7.xml"
       linker_section_placement_file="$(TargetsDir)/iMXRT/placement_flexspi.xml"
       linker_section_placement_macros=""
-      macros="DeviceName=MIMXRT1176_cm7;Family=iMXRT1170"
+      macros="DeviceName=MIMXRT1176_cm7;Family=iMXRT1170;Core=CM7"
       project_dependencies="DualCore_M4"
       project_directory=""
       project_type="Executable"
@@ -57,10 +57,11 @@
       target_connect_script="Connect()"
       target_get_partname_script="GetPartName()"
       target_reset_script="Reset()"
-      target_script_file="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
+      target_script_file="$(TargetsDir)/iMXRT/iMXRT_Target.js"
+      target_stop_script="OnTargetStop_11xx()" />
     <configuration
       Name="Flash"
-      arm_target_flash_loader_file_path="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family).elf"
+      arm_target_flash_loader_file_path="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family)_$(Core).elf"
       arm_target_loader_parameter="5" />
     <folder Name="XIP_BOOT_HEADER">
       <file file_name="flexspi_flash.h" />
@@ -101,7 +102,7 @@
       arm_fpu_type="FPv4-SP-D16"
       arm_linker_heap_size="1024"
       arm_linker_stack_size="1024"
-      arm_simulator_memory_simulation_parameter="RAM;0x1FFE0000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20240000;0x00080000;ROM;0x30000000;0x04000000"
+      arm_simulator_memory_simulation_parameter="RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x08000000;0x04000000"
       arm_target_loader_applicable_loaders="Flash"
       arm_target_loader_default_loader="Flash"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT"
@@ -110,18 +111,18 @@
       linker_memory_map_file="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT117x_cm4.xml"
       linker_section_placement_file="$(TargetsDir)/iMXRT/placement_flexspi.xml"
       linker_section_placement_macros=""
-      macros="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170"
+      macros="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170;Core=CM4"
       project_directory=""
       project_type="Executable"
-      property_groups_file_path="$(TargetsDir)/iMXRT/propertyGroups_cm4.xml"
+      property_groups_file_path="$(TargetsDir)/iMXRT/propertyGroups.xml"
       target_connect_script="Connect()"
       target_get_partname_script="GetPartName()"
       target_reset_script="Reset()"
       target_script_file="$(TargetsDir)/iMXRT/iMXRT_Target.js"
-      target_stop_script="OnTargetStop_11xx_M4()" />
+      target_stop_script="OnTargetStop_11xx()" />
     <configuration
       Name="Flash"
-      arm_target_flash_loader_file_path="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family)_M4.elf"
+      arm_target_flash_loader_file_path="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family)_$(Core).elf"
       arm_target_loader_parameter="5" />
     <folder Name="System Files">
       <file file_name="$(StudioDir)/source/thumb_crt0.s" />
