@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2021  Markus Klein
+Copyright (C) 2019-2022 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -104,8 +104,8 @@ static const libmem_ext_driver_functions_t DriverFunctions_Extended
 \return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
 LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryType MemType)
 {
-	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || \
-		 defined(MIMXRT533S_SERIES) || defined (MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES)
+	#if (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES) || \
+		 defined(MIMXRT533S_SERIES) || defined(MIMXRT555S_SERIES)      || defined(MIMXRT595S_cm33_SERIES))
 		constexpr uint32_t src = 2;	// Use AUX0_PLL as clock source for the FlexSPI
 		uint32_t ClockDiv = 4;		// with a divider of four
 		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (ClockDiv - 1))
@@ -126,9 +126,9 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 		}
 		uint32_t ClockHz = CLOCK_GetFlexspiClkFreq ();
 		//uint32_t SourceClock_Hz = ClockHz * ClockDiv;
-	#elif ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
-		   (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
-		   (defined MIMXRT1064_SERIES))
+	#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
+		   defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || \
+		   defined(MIMXRT1064_SERIES))
 		const clock_usb_pll_config_t g_ccmConfigUsbPll = {.loopDivider = 0U, .src=0};
 		CLOCK_InitUsb1Pll (&g_ccmConfigUsbPll);	// PLL3 --> USB1-PLL
 		CLOCK_InitUsb1Pfd (kCLOCK_Pfd0, 18);	// Set PLL3 PFD0 clock 480MHZ (480*18/24). PLL3 --> USB1-PLL --> PLL480
@@ -161,9 +161,9 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 				break;
 		}
 		CLOCK_SetDiv (FlexSPIDiv, ClockDiv-1);	// flexspi clock divide by six --> 80Mz.
-	#elif (defined MIMXRT1165_cm7_SERIES) || (defined MIMXRT1166_cm7_SERIES) || (defined MIMXRT1165_cm4_SERIES) || (defined MIMXRT1166_cm4_SERIES) || \
-		  (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
-		  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
+	#elif (defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
+		   defined(MIMXRT1171_SERIES)     || defined(MIMXRT1172_SERIES)     || defined(MIMXRT1173_cm7_SERIES) || defined(MIMXRT1173_cm4_SERIES) || \
+		   defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1175_cm4_SERIES) || defined(MIMXRT1176_cm7_SERIES) || defined(MIMXRT1176_cm4_SERIES))
 		clock_root_t FlexSPIClock = kCLOCK_Root_Flexspi1;
 		clock_lpcg_t FlexSPIClockGate = kCLOCK_Flexspi1;
 		switch (base->GetBaseAddr())
@@ -287,20 +287,20 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	// Reconfigure the Interface according to the gathered Flash-Information and configuration
 	if (MemType == MemType_OctaSPI_DDR || MemType == MemType_QuadSPI_DDR)
 	{
-		#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || \
-			 defined(MIMXRT533S_SERIES) || defined (MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES)
+		#if (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES) || \
+			 defined(MIMXRT533S_SERIES) || defined(MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES))
 			ClockDiv--;
-		#elif ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
-			   (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
-			   (defined MIMXRT1064_SERIES))
+		#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
+			   defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || \
+			   defined(MIMXRT1064_SERIES))
 			ClockDiv = 2;
 			CLOCK_SetDiv (FlexSPIDiv, ClockDiv-1);	// flexspi clock divide by two --> 240 Mz.
 			DeviceConfig.flexspiRootClk = SourceClock_Hz / ClockDiv;
 			DeviceConfig.flexspiRootClk = ClockHz;
-		#elif (defined MIMXRT1165_cm7_SERIES) || (defined MIMXRT1166_cm7_SERIES) || (defined MIMXRT1165_cm4_SERIES) || (defined MIMXRT1166_cm4_SERIES) || \
-			  (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || \
-			  (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1176_cm7_SERIES) || \
-			  (defined MIMXRT1173_cm4_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm4_SERIES)
+		#elif (defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
+			   defined(MIMXRT1171_SERIES)     || defined(MIMXRT1172_SERIES)     || \
+			   defined(MIMXRT1173_cm7_SERIES) || defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1176_cm7_SERIES) || \
+			   defined(MIMXRT1173_cm4_SERIES) || defined(MIMXRT1175_cm4_SERIES) || defined(MIMXRT1176_cm4_SERIES))
 			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
 			CLOCK_SetRootClockMux (FlexSPIClock, 5); // ClockSource_SysPll2 --> 528 MHz
 			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 528 MHz / 2 = ~264 MHz
