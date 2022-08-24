@@ -3,7 +3,7 @@
   <project Name="iMXRT">
     <configuration
       Name="Common"
-      combine_command="$(StudioDir)/bin/mkpkg -c &quot;$(CombiningOutputFilePath)&quot; $(CombiningRelInputPaths)"
+      combine_command="$(StudioDir)/bin/mkpkg -compress 9 -c &quot;$(CombiningOutputFilePath)&quot; $(CombiningRelInputPaths)"
       combine_output_filepath="$(ProjectDir)/iMXRT.hzq"
       project_directory=""
       project_type="Combining" />

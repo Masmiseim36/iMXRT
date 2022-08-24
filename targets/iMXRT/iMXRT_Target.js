@@ -249,6 +249,7 @@ function GetPartName ()
 			TargetInterface.pokeUint32 (SRC_SCR, 0x1);			// Enable CM4 -> cm4 core reset is released
 			// Disable system reset caused by sysrstreq from each core:
 			TargetInterface.pokeUint32 (SRC_SRMR, 0xF << 10);	// Set M7REQ_RESET_MODE and M4REQ_RESET_MODE to "do not reset anything":
+			Release_11xx_M4 ();	// Enable the M4 Core
 			break;
 		case "MIMXRT1165_cm4":
 		case "MIMXRT1166_cm4":
@@ -414,7 +415,8 @@ function Reset ()
 		case "MIMXRT1171_cm7":
 		case "MIMXRT1172_cm7":
 			TargetInterface.resetAndStop (1000);
-			Clock_Restore_117x ();
+			DeinitPlls_11xx ();
+			Reset_11xx_M7 ();
 			if (!TargetInterface.isStopped ())
 				TargetInterface.stop ();
 			break;
@@ -424,8 +426,10 @@ function Reset ()
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
 			TargetInterface.resetAndStop (1000);
-			Release_11xx_M4 ();
-			Clock_Restore_117x ();
+			DeinitPlls_11xx ();
+			TargetInterface.pokeUint32 (SRC_CTRL_M4CORE, 2);
+			Reset_11xx_M7 ();
+			Release_11xx_M4 ();	// Enable the M4 Core
 			if (!TargetInterface.isStopped ())
 				TargetInterface.stop ();
 			break;
@@ -434,8 +438,8 @@ function Reset ()
 		case "MIMXRT1173_cm4":
 		case "MIMXRT1175_cm4":
 		case "MIMXRT1176_cm4":
-			Clock_Restore_117x ();
-//			TargetInterface.stop ();
+			Reset_11xx_M4 ();
+			TargetInterface.stop ();
 			if (!TargetInterface.isStopped ())
 				TargetInterface.stop ();
 			break;
