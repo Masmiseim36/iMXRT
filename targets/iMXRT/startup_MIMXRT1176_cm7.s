@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2018 Rowley Associates Limited.                      *
+ * Copyright (c) 2022 Rowley Associates Limited.                      *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
@@ -311,8 +311,8 @@ ISR_RESERVED // 196
 ISR_RESERVED // 197
 ISR_RESERVED // 198
 ISR_RESERVED // 199
-ISR_HANDLER2 HWVAD_EVENT
-ISR_HANDLER2 HWVAD_ERROR
+ISR_HANDLER2 PDM_HWVAD_EVENT
+ISR_HANDLER2 PDM_HWVAD_ERROR
 ISR_HANDLER2 PDM_EVENT
 ISR_HANDLER2 PDM_ERROR
 ISR_HANDLER2 EMVSIM1
@@ -350,22 +350,6 @@ ISR_RESERVED // 235
 ISR_RESERVED // 236
 ISR_RESERVED // 237
 ISR_RESERVED // 238
-ISR_RESERVED // 239
-ISR_RESERVED // 240
-ISR_RESERVED // 241
-ISR_RESERVED // 242
-ISR_RESERVED // 243
-ISR_RESERVED // 244
-ISR_RESERVED // 245
-ISR_RESERVED // 246
-ISR_RESERVED // 247
-ISR_RESERVED // 248
-ISR_RESERVED // 249
-ISR_RESERVED // 250
-ISR_RESERVED // 251
-ISR_RESERVED // 252
-ISR_RESERVED // 253
-ISR_RESERVED // 254
 .long 0xFFFFFFFF   /*  Reserved for user TRIM value*/
 
   .section .vectors, "ax"
@@ -378,10 +362,15 @@ _vectors_ram:
 #endif
 
   .section .init, "ax"
-  .thumb_func
 
-reset_handler:  
+  .thumb_func
 Reset_Handler:
+#ifndef STARTUP_FROM_RESET
+  b .
+#endif
+
+  .thumb_func
+reset_handler:
 
 #ifndef __NO_SYSTEM_INIT
   ldr r0, =__stack_end__
@@ -452,3 +441,6 @@ SystemInit:
 reset_wait:
 1: b 1b /* endless loop */
 #endif /* STARTUP_FROM_RESET */
+
+.section .fill
+  .fill 0x400, 1, 0

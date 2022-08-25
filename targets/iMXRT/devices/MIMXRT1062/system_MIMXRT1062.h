@@ -4,6 +4,8 @@
 **                          MIMXRT1062CVL5A
 **                          MIMXRT1062DVJ6A
 **                          MIMXRT1062DVL6A
+**                          MIMXRT1062DVN6B
+**                          MIMXRT1062XVN5B
 **
 **     Compilers:           Freescale C/C++ for Embedded ARM
 **                          GNU C Compiler
@@ -11,9 +13,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1060RM Rev.1, 12/2018 | IMXRT1060SRM Rev.3
-**     Version:             rev. 1.2, 2019-04-29
-**     Build:               b191113
+**     Reference manual:    IMXRT1060RM Rev.3, 07/2021 | IMXRT106XSRM Rev.0
+**     Version:             rev. 1.4, 2022-03-25
+**     Build:               b220401
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -21,7 +23,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2019 NXP
+**     Copyright 2016-2022 NXP
 **     All rights reserved.
 **
 **     SPDX-License-Identifier: BSD-3-Clause
@@ -38,14 +40,18 @@
 **         Update header files to align with IMXRT1060RM Rev.1.
 **     - rev. 1.2 (2019-04-29)
 **         Add SET/CLR/TOG register group to register CTRL, STAT, CHANNELCTRL, CH0STAT, CH0OPTS, CH1STAT, CH1OPTS, CH2STAT, CH2OPTS, CH3STAT, CH3OPTS of DCP module.
+**     - rev. 1.3 (2021-08-10)
+**         Update header files to align with IMXRT1060RM Rev.3.
+**     - rev. 1.4 (2022-03-25)
+**         Add RT1060X device
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1062
- * @version 1.2
- * @date 2019-04-29
+ * @version 1.4
+ * @date 2022-03-25
  * @brief Device specific configuration file for MIMXRT1062 (header file)
  *
  * Provides a system configuration function and a global variable that contains

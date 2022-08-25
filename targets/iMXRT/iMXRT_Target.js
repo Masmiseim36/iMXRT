@@ -9,23 +9,69 @@
  *                                                                           *
  *****************************************************************************/
 
-function EnableCM4()
+function IsArmdInterface()
 {
-  TargetInterface.pokeUint32 (0x40C04000, 0x3);
-  TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
+  var implementation = TargetInterface.implementation();
+  return implementation == "cmsis-dap" || implementation == "crossworks_hardware";
 }
 
-function ResetCM4()
+function EnableCM4()
 {
-  TargetInterface.stop(1000);
+  if (!IsArmdInterface())
+    return;
+  var start = 0x20200000;
+  TargetInterface.pokeUint32 (start, 0xE7FEE7FE);
+  TargetInterface.pokeUint32 (start+0x4, start+1);
+  TargetInterface.pokeUint32 (0x40C0C000, start & 0xffff); // IOMUXC_LPSR_GPR0
+  TargetInterface.pokeUint32 (0x40C0C004, (start & 0xffff0000) >> 16); // IOMUXC_LPSR_GPR1
+  TargetInterface.pokeUint32 (0x40C04000, 0x1); // SCR
+  TargetInterface.setDebugInterfaceProperty("set_adiv5_AHB_ap_num", 1, 0, 0);
+}
+
+function Connect()
+{
+}
+
+function GetPartName()
+{
+  if (TargetInterface.getProjectProperty("Target").indexOf("_CM4")!=-1)
+    EnableCM4();
 }
 
 function Reset()
 {
-  TargetInterface.resetAndStop(1000);
-  if (TargetInterface.implementation() == "crossworks_simulator")
-    return;
+  if (!IsArmdInterface())
+    {
+      TargetInterface.resetAndStop(1000);
+      return;
+    }  
+  if (TargetInterface.getProjectProperty("Target").indexOf("MIMXRT11")==0)
+    {
+      TargetInterface.setNSRST(0);
+      TargetInterface.delay(100);
+      TargetInterface.setNSRST(1);
+      TargetInterface.delay(100);
+      TargetInterface.resetDebugInterface();
+      TargetInterface.stop(1000);     
+    }
+  else
+    {
+      TargetInterface.resetAndStop(100);
+      InitDCDC();
+    }
+}
 
+function Reset2()
+{
+  Reset();
+  EnableCM4();
+  TargetInterface.stop(1000);
+  TargetInterface.setDebugInterfaceProperty("set_adiv5_AHB_ap_num", 0, 0, 0); 
+}
+
+function InitDCDC()
+{
+  // i.MXRT1010, i.MXRT1015, i.MXRT1020, i.MXRT1024, i.MXRT1050, i.MXRT1060, i.MXRT1064
   ocotp_base = 0x401F4000;
   ocotp_fuse_bank0_base = ocotp_base + 0x400;
   dcdc_base = 0x40080000;
@@ -61,27 +107,3 @@ function Reset()
       TargetInterface.delay(1);
     }
 }
-
-
-function GetPartName()
-{    
-  var PART = "";
-  return PART;
-}
-
-function MatchPartName(name)
-{
-  var partName = GetPartName();
-
-  if (partName == "")
-    return false;
-
-  return partName.substring(0, 6) == name.substring(0, 6);
-
-}
-
-function EnableTrace(traceInterfaceType)
-{
-  // TODO: Enable trace
-}
-

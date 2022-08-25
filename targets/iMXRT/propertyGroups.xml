@@ -1,314 +1,746 @@
 <!DOCTYPE CrossStudio_Group_Values>
 <propertyGroups>
-  <group short="Target Processor" group="Build Options" long="Select a set of target options" name="Target" default="MIMXRT1052DVL6B" >
-
+  <group short="Target Processor" group="Build Options" long="Select a set of target options" name="Target" default="MIMXRT1052DVL6B">
     <groupEntry name="MIMXRT1011CAE4A" aka="MIMXRT1011xxx4A" family="iMXRT1010">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1011.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1011/system_MIMXRT1011.c;QSPI=MIMXRT1011_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1011" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1011_registers.xml"/>
-      <property name="linker_section_placement_macros" value="FILLSIZE=0x400"/>
-      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x10000;DTCMSIZE=0x8000;ITCMSIZE=0x8000"/>
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1011.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1011/system_MIMXRT1011.c;;QSPI=MIMXRT1011_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1011" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1011_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x10000;DTCMSIZE=0x8000;ITCMSIZE=0x8000" />
       <property name="arm_core_type" value="Cortex-M7" />
-      <property name="arm_fpu_type" value="FPv5-D16" />  
-      <cdefine name="CPU_MIMXRT1011CAE4A"/>
+      <property name="arm_fpu_type" value="FPv5-SP-D16" />
+      <property name="arm_target_device_name" value="MIMXRT1011xxx4A" />
+      <cdefine name="CPU_MIMXRT1011CAE4A" />
     </groupEntry>
     <groupEntry name="MIMXRT1011DAE5A" aka="MIMXRT1011xxx5A" family="iMXRT1010">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1011.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1011/system_MIMXRT1011.c;QSPI=MIMXRT1011_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1011" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1011_registers.xml"/>
-      <property name="linker_section_placement_macros" value="FILLSIZE=0x400"/>
-      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x10000;DTCMSIZE=0x8000;ITCMSIZE=0x8000"/>
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1011.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1011/system_MIMXRT1011.c;;QSPI=MIMXRT1011_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1011" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1011_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x10000;DTCMSIZE=0x8000;ITCMSIZE=0x8000" />
       <property name="arm_core_type" value="Cortex-M7" />
-      <property name="arm_fpu_type" value="FPv5-D16" />  
-      <cdefine name="CPU_MIMXRT1011DAE5A"/>
+      <property name="arm_fpu_type" value="FPv5-SP-D16" />
+      <property name="arm_target_device_name" value="MIMXRT1011xxx5A" />
+      <cdefine name="CPU_MIMXRT1011DAE5A" />
     </groupEntry>
-
     <groupEntry name="MIMXRT1015CAF4A" aka="MIMXRT1015xxx4A" family="iMXRT1015">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1015.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1015/system_MIMXRT1015.c;QSPI=MIMXRT1015_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1015" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1015_registers.xml"/>
-      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x10000;DTCMSIZE=0x8000;ITCMSIZE=0x8000"/>
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1015.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1015/system_MIMXRT1015.c;;QSPI=MIMXRT1015_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1015" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1015_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1015CAF4A"/>
+      <property name="arm_target_device_name" value="MIMXRT1015xxx4A" />
+      <cdefine name="CPU_MIMXRT1015CAF4A" />
     </groupEntry>
     <groupEntry name="MIMXRT1015DAF5A" aka="MIMXRT1015xxx5A" family="iMXRT1015">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1015.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1015/system_MIMXRT1015.c;QSPI=MIMXRT1015_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1015" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1015_registers.xml"/>
-      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x10000;DTCMSIZE=0x8000;ITCMSIZE=0x8000"/>
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1015.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1015/system_MIMXRT1015.c;;QSPI=MIMXRT1015_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1015" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1015_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1015DAF5A"/>
+      <property name="arm_target_device_name" value="MIMXRT1015xxx5A" />
+      <cdefine name="CPU_MIMXRT1015DAF5A" />
     </groupEntry>
-
     <groupEntry name="MIMXRT1021CAG4A" aka="MIMXRT1021xxx4A" family="iMXRT1020">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;QSPI=MIMXRT1021_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1021" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml"/>
-      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000"/>
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;;QSPI=MIMXRT1021_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1021" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1021CAG4A"/>
+      <property name="arm_target_device_name" value="MIMXRT1021xxx4A" />
+      <cdefine name="CPU_MIMXRT1021CAG4A" />
     </groupEntry>
     <groupEntry name="MIMXRT1021CAF4A" aka="MIMXRT1021xxx4A" family="iMXRT1020">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;QSPI=MIMXRT1021_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1021" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml"/>
-      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000"/>
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;;QSPI=MIMXRT1021_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1021" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1021CAF4A"/>
+      <property name="arm_target_device_name" value="MIMXRT1021xxx4A" />
+      <cdefine name="CPU_MIMXRT1021CAF4A" />
     </groupEntry>
     <groupEntry name="MIMXRT1021DAG5A" aka="MIMXRT1021xxx5A" family="iMXRT1020">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;QSPI=MIMXRT1021_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1021" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml"/>
-      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000"/>
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;;QSPI=MIMXRT1021_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1021" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1021DAG5A"/>
+      <property name="arm_target_device_name" value="MIMXRT1021xxx5A" />
+      <cdefine name="CPU_MIMXRT1021DAG5A" />
     </groupEntry>
     <groupEntry name="MIMXRT1021DAF5A" aka="MIMXRT1021xxx5A" family="iMXRT1020">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;QSPI=MIMXRT1021_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1021" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml"/>
-      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000"/>
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1021/system_MIMXRT1021.c;;QSPI=MIMXRT1021_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1021" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1021_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1021DAF5A"/>
+      <property name="arm_target_device_name" value="MIMXRT1021xxx5A" />
+      <cdefine name="CPU_MIMXRT1021DAF5A" />
     </groupEntry>
-
     <groupEntry name="MIMXRT1024CAG4A" aka="MIMXRT1024xxx4A" family="iMXRT1024">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1024/system_MIMXRT1024.c;QSPI=MIMXRT1024_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1024" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1024_registers.xml"/>
-      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000"/>
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1024.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1024/system_MIMXRT1024.c;;QSPI=MIMXRT1024_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1024" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1024_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1024CAG4A"/>
+      <property name="arm_target_device_name" value="MIMXRT1024xxx4A" />
+      <cdefine name="CPU_MIMXRT1024CAG4A" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1024CAG4B" aka="MIMXRT1024xxx4B" family="iMXRT1024">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1024.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1024/system_MIMXRT1024.c;;QSPI=MIMXRT1024_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1024" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1024_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="arm_target_device_name" value="MIMXRT1024xxx4B" />
+      <cdefine name="CPU_MIMXRT1024CAG4B" />
     </groupEntry>
     <groupEntry name="MIMXRT1024DAG5A" aka="MIMXRT1024xxx5A" family="iMXRT1024">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1021.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1024/system_MIMXRT1024.c;QSPI=MIMXRT1024_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1024" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1024_registers.xml"/>
-      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000"/>
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1024.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1024/system_MIMXRT1024.c;;QSPI=MIMXRT1024_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1024" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1024_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1024DAG5A"/>
+      <property name="arm_target_device_name" value="MIMXRT1024xxx5A" />
+      <cdefine name="CPU_MIMXRT1024DAG5A" />
     </groupEntry>
-
+    <groupEntry name="MIMXRT1024DAG5B" aka="MIMXRT1024xxx5B" family="iMXRT1024">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1024.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1024/system_MIMXRT1024.c;;QSPI=MIMXRT1024_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1024" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1024_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="OCRAMSIZE=0x20000;DTCMSIZE=0x10000;ITCMSIZE=0x10000" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="arm_target_device_name" value="MIMXRT1024xxx5B" />
+      <cdefine name="CPU_MIMXRT1024DAG5B" />
+    </groupEntry>
     <groupEntry name="MIMXRT1051CVL5A" aka="MIMXRT1051xxx5A" family="iMXRT1050">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1051" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1051CVL5A"/>
+      <property name="arm_target_device_name" value="MIMXRT1051xxx5A" />
+      <cdefine name="CPU_MIMXRT1051CVL5A" />
     </groupEntry>
     <groupEntry name="MIMXRT1051CVL5B" aka="MIMXRT1051xxx5B" family="iMXRT1050">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1051" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1051CVL5B"/>
+      <property name="arm_target_device_name" value="MIMXRT1051xxx5B" />
+      <cdefine name="CPU_MIMXRT1051CVL5B" />
     </groupEntry>
     <groupEntry name="MIMXRT1051CVJ5B" aka="MIMXRT1051xxx5B" family="iMXRT1050">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1051" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1051CVJ5B"/>
+      <property name="arm_target_device_name" value="MIMXRT1051xxx5B" />
+      <cdefine name="CPU_MIMXRT1051CVJ5B" />
     </groupEntry>
-
     <groupEntry name="MIMXRT1051DVL6A" aka="MIMXRT1051xxx6A" family="iMXRT1050">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1051" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1051DVL6A"/>
+      <property name="arm_target_device_name" value="MIMXRT1051xxx6A" />
+      <cdefine name="CPU_MIMXRT1051DVL6A" />
     </groupEntry>
     <groupEntry name="MIMXRT1051DVL6B" aka="MIMXRT1051xxx6B" family="iMXRT1050">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1051.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1051/system_MIMXRT1051.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1051" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1051_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1051DVL6B"/>
+      <property name="arm_target_device_name" value="MIMXRT1051xxx6B" />
+      <cdefine name="CPU_MIMXRT1051DVL6B" />
     </groupEntry>
-
     <groupEntry name="MIMXRT1052CVL5A" aka="MIMXRT1052xxx5A" family="iMXRT1050">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1052" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1052CVL5A"/>
+      <property name="arm_target_device_name" value="MIMXRT1052xxx5A" />
+      <cdefine name="CPU_MIMXRT1052CVL5A" />
     </groupEntry>
     <groupEntry name="MIMXRT1052CVL5B" aka="MIMXRT1052xxx5B" family="iMXRT1050">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1052" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1052CVL5B"/>
+      <property name="arm_target_device_name" value="MIMXRT1052xxx5B" />
+      <cdefine name="CPU_MIMXRT1052CVL5B" />
     </groupEntry>
     <groupEntry name="MIMXRT1052CVJ5B" aka="MIMXRT1052xxx5B" family="iMXRT1050">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1052" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1052CVJ5B"/>
+      <property name="arm_target_device_name" value="MIMXRT1052xxx5B" />
+      <cdefine name="CPU_MIMXRT1052CVJ5B" />
     </groupEntry>
     <groupEntry name="MIMXRT1052DVL6A" aka="MIMXRT1052xxx6A" family="iMXRT1050">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1052" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1052DVL6A"/>
+      <property name="arm_target_device_name" value="MIMXRT1052xxx6A" />
+      <cdefine name="CPU_MIMXRT1052DVL6A" />
     </groupEntry>
     <groupEntry name="MIMXRT1052DVL6B" aka="MIMXRT1052xxx6B" family="iMXRT1050">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1052" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1052DVL6B"/>
+      <property name="arm_target_device_name" value="MIMXRT1052xxx6B" />
+      <cdefine name="CPU_MIMXRT1052DVL6B" />
     </groupEntry>
     <groupEntry name="MIMXRT1052DVJ6B" aka="MIMXRT1052xxx6B" family="iMXRT1050">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1052.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1052/system_MIMXRT1052.c;HYPER=MIMXRT105x_HYPER_256KB_SEC;QSPI=MIMXRT105x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1052" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1052_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1052DVJ6B"/>
+      <property name="arm_target_device_name" value="MIMXRT1052xxx6B" />
+      <cdefine name="CPU_MIMXRT1052DVJ6B" />
     </groupEntry>
-
     <groupEntry name="MIMXRT1061CVL5A" aka="MIMXRT1061xxx5A" family="iMXRT1060">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1061.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC;DeviceFamily=MIMXRT1061" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1061_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1061_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1061CVL5A"/>
+      <property name="arm_target_device_name" value="MIMXRT1061xxx5A" />
+      <cdefine name="CPU_MIMXRT1061CVL5A" />
     </groupEntry>
     <groupEntry name="MIMXRT1061CVJ5A" aka="MIMXRT1061xxx5A" family="iMXRT1060">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1061.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC;DeviceFamily=MIMXRT1061" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1061_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1061_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1061CVJ5A"/>
+      <property name="arm_target_device_name" value="MIMXRT1061xxx5A" />
+      <cdefine name="CPU_MIMXRT1061CVJ5A" />
     </groupEntry>
     <groupEntry name="MIMXRT1061DVL6A" aka="MIMXRT1061xxx6A" family="iMXRT1060">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1061.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC;DeviceFamily=MIMXRT1061" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1061_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1061_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1061DVL6A"/>
+      <property name="arm_target_device_name" value="MIMXRT1061xxx6A" />
+      <cdefine name="CPU_MIMXRT1061DVL6A" />
     </groupEntry>
-
+    <groupEntry name="MIMXRT1061DVJ6A" aka="MIMXRT1061xxx6A" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1061.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC;DeviceFamily=MIMXRT1061" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1061_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="arm_target_device_name" value="MIMXRT1061xxx6A" />
+      <cdefine name="CPU_MIMXRT1061DVJ6A" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1061XVN5B" aka="MIMXRT1061xxx5B" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1061.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1061/system_MIMXRT1061.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC;DeviceFamily=MIMXRT1061" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1061_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="arm_target_device_name" value="MIMXRT1061xxx5B" />
+      <cdefine name="CPU_MIMXRT1061XVN5B" />
+    </groupEntry>
     <groupEntry name="MIMXRT1062CVL5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC;DeviceFamily=MIMXRT1062" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1062CVL5A"/>
+      <property name="arm_target_device_name" value="MIMXRT1062xxx5A" />
+      <cdefine name="CPU_MIMXRT1062CVL5A" />
     </groupEntry>
     <groupEntry name="MIMXRT1062CVJ5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC;DeviceFamily=MIMXRT1062" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1062CVJ5A"/>
+      <property name="arm_target_device_name" value="MIMXRT1062xxx5A" />
+      <cdefine name="CPU_MIMXRT1062CVJ5A" />
     </groupEntry>
     <groupEntry name="MIMXRT1062DVL6A" aka="MIMXRT1062xxx6A" family="iMXRT1060">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC;DeviceFamily=MIMXRT1062" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1062DVL6A"/>
+      <property name="arm_target_device_name" value="MIMXRT1062xxx6A" />
+      <cdefine name="CPU_MIMXRT1062DVL6A" />
     </groupEntry>
     <groupEntry name="MIMXRT1062DVJ6A" aka="MIMXRT1062xxx6A" family="iMXRT1060">
       <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC;DeviceFamily=MIMXRT1062" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml"/>
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1062DVJ6A"/>
+      <property name="arm_target_device_name" value="MIMXRT1062xxx6A" />
+      <cdefine name="CPU_MIMXRT1062DVJ6A" />
     </groupEntry>
-
-    <groupEntry name="MIMXRT1064CVL5A" aka="MIMXRT1064xxx5A" family="iMXRT1064">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT1064_QSPI_4KB_SEC;DeviceFamily=MIMXRT1064" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1064_registers.xml"/>
+    <groupEntry name="MIMXRT1062DVN6B" aka="MIMXRT1062xxx6B" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC;DeviceFamily=MIMXRT1062" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1064CVL5A"/>
+      <property name="arm_target_device_name" value="MIMXRT1062xxx6B" />
+      <cdefine name="CPU_MIMXRT1062DVN6B" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1062XVN5B" aka="MIMXRT1062xxx5B" family="iMXRT1060">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1062/system_MIMXRT1062.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT106x_QSPI_4KB_SEC;DeviceFamily=MIMXRT1062" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1062_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="arm_target_device_name" value="MIMXRT1062xxx5B" />
+      <cdefine name="CPU_MIMXRT1062XVN5B" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1064CVL5A" aka="MIMXRT1064xxx5A" family="iMXRT1064">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1064.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT1064_QSPI_4KB_SEC;DeviceFamily=MIMXRT1064" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1064_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="arm_target_device_name" value="MIMXRT1064xxx5A" />
+      <cdefine name="CPU_MIMXRT1064CVL5A" />
     </groupEntry>
     <groupEntry name="MIMXRT1064DVL6A" aka="MIMXRT1064xxx6A" family="iMXRT1064">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1062.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT1064_QSPI_4KB_SEC;DeviceFamily=MIMXRT1064" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1064_registers.xml"/>
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1064.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT1064_QSPI_4KB_SEC;DeviceFamily=MIMXRT1064" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1064_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <cdefine name="CPU_MIMXRT1064DVL6A"/>
+      <property name="arm_target_device_name" value="MIMXRT1064xxx6A" />
+      <cdefine name="CPU_MIMXRT1064DVL6A" />
     </groupEntry>
-
-    <groupEntry name="MIMXRT1176DVMAA" aka="MIMXRT1176xxxA_M7" family="iMXRT1170">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1176_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1176/system_MIMXRT1176_cm7.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1176" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1176_cm7_registers.xml"/>
+    <groupEntry name="MIMXRT1064CVJ5A" aka="MIMXRT1064xxx5A" family="iMXRT1064">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1064.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT1064_QSPI_4KB_SEC;DeviceFamily=MIMXRT1064" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1064_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <property name="linker_section_placement_macros" value="FILLSIZE=0x400"/>
-      <property name="linker_memory_map_macros" value="OCRAMSTART=0x20240000;OCRAMSIZE=0x40000;DTCMSIZE=0x40000;ITCMSIZE=0x40000;FlexSPISTART=0x30000000;FlexSPI2START=0x60000000"/>
-      <cdefine name="CPU_MIMXRT1176DVMAA_cm7"/>
+      <property name="arm_target_device_name" value="MIMXRT1064xxx5A" />
+      <cdefine name="CPU_MIMXRT1064CVJ5A" />
     </groupEntry>
-    <groupEntry name="MIMXRT1176AVM8A" family="iMXRT1170">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1176_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1176/system_MIMXRT1176_cm7.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1176" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1176_cm7_registers.xml"/>
+    <groupEntry name="MIMXRT1064DVJ6A" aka="MIMXRT1064xxx6A" family="iMXRT1064">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1064.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1064/system_MIMXRT1064.c;HYPER=MIMXRT106x_HYPER_256KB_SEC;QSPI=MIMXRT1064_QSPI_4KB_SEC;DeviceFamily=MIMXRT1064" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1064_registers.xml" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <property name="linker_section_placement_macros" value="FILLSIZE=0x400"/>
-      <property name="linker_memory_map_macros" value="OCRAMSTART=0x20240000;OCRAMSIZE=0x40000;DTCMSIZE=0x40000;ITCMSIZE=0x40000;FlexSPISTART=0x30000000;FlexSPI2START=0x60000000"/>
-      <cdefine name="CPU_MIMXRT1176AVM8A_cm7"/>
+      <property name="arm_target_device_name" value="MIMXRT1064xxx6A" />
+      <cdefine name="CPU_MIMXRT1064DVJ6A" />
     </groupEntry>
-    <groupEntry name="MIMXRT1176CVM8A" family="iMXRT1170">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1176_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1176/system_MIMXRT1176_cm7.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1176" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1176_cm7_registers.xml"/>
+    <groupEntry name="MIMXRT1171AVM8A" aka="MIMXRT1171AVM8A" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1171.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1171/system_MIMXRT1171.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1171" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
       <property name="arm_core_type" value="Cortex-M7" />
       <property name="arm_fpu_type" value="FPv5-D16" />
-      <property name="linker_section_placement_macros" value="FILLSIZE=0x400"/>
-      <property name="linker_memory_map_macros" value="OCRAMSTART=0x20240000;OCRAMSIZE=0x40000;DTCMSIZE=0x40000;ITCMSIZE=0x40000;FlexSPISTART=0x30000000;FlexSPI2START=0x60000000"/>
-      <cdefine name="CPU_MIMXRT1176CVM8A_cm7"/>
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1171xxx8_M7" />
+      <cdefine name="CPU_MIMXRT1171AVM8A" />
     </groupEntry>
-
-    <groupEntry name="MIMXRT1176DVMAA_M4" aka="MIMXRT1176xxxA_M4" family="iMXRT1170">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1176_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1176/system_MIMXRT1176_cm4.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1176" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1176_cm4_registers.xml"/>
+    <groupEntry name="MIMXRT1171CVM8A" aka="MIMXRT1171CVM8A" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1171.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1171/system_MIMXRT1171.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1171" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1171xxx8_M7" />
+      <cdefine name="CPU_MIMXRT1171CVM8A" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1171DVMAA" aka="MIMXRT1171DVMAA" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1171.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1171/system_MIMXRT1171.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1171" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1171xxxA_M7" />
+      <cdefine name="CPU_MIMXRT1171DVMAA" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1172AVM8A" aka="MIMXRT1172AVM8A" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1172.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1172/system_MIMXRT1172.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1172" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1172xxx8_M7" />
+      <cdefine name="CPU_MIMXRT1172AVM8A" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1172CVM8A" aka="MIMXRT1172CVM8A" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1172.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1172/system_MIMXRT1172.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1172" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1172xxx8_M7" />
+      <cdefine name="CPU_MIMXRT1172CVM8A" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1172DVMAA" aka="MIMXRT1172DVMAA" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1172.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1172/system_MIMXRT1172.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1172" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1172xxxA_M7" />
+      <cdefine name="CPU_MIMXRT1172DVMAA" />
+    </groupEntry>
+    <groupEntry name="MIMXRT117FCVM8A" aka="MIMXRT1173FVM8A" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1173.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1173/system_MIMXRT1173.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1173" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT117Fxxx8_M7" />
+      <cdefine name="CPU_MIMXRT117FCVM8A" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1165CVM5A_M7" aka="MIMXRT1165CVM5A" family="iMXRT1160">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1165_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1165/system_MIMXRT1165_cm7.c;HYPER=MIMXRT116x_HYPER_256KB_SEC;QSPI=MIMXRT116x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1165" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="SRAMSIZE=0x10000;OCRAMSIZE=0x10000;OCRAM1SIZE=0x10000;OCRAM2SIZE=0x10000" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1165xxx5_M7" />
+      <cdefine name="CPU_MIMXRT1165CVM5A_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1165DVM6A_M7" aka="MIMXRT1165DVM6A" family="iMXRT1160">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1165_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1165/system_MIMXRT1165_cm7.c;HYPER=MIMXRT116x_HYPER_256KB_SEC;QSPI=MIMXRT116x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1165" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="SRAMSIZE=0x10000;OCRAMSIZE=0x10000;OCRAM1SIZE=0x10000;OCRAM2SIZE=0x10000" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1165xxx6_M7" />
+      <cdefine name="CPU_MIMXRT1165DVM6A_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1165XVM5A_M7" aka="MIMXRT1165XVM5A" family="iMXRT1160">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1165_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1165/system_MIMXRT1165_cm7.c;HYPER=MIMXRT116x_HYPER_256KB_SEC;QSPI=MIMXRT116x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1165" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="SRAMSIZE=0x10000;OCRAMSIZE=0x10000;OCRAM1SIZE=0x10000;OCRAM2SIZE=0x10000" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1165xxx5_M7" />
+      <cdefine name="CPU_MIMXRT1165XVM5A_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1165CVM5A_M4" aka="" family="iMXRT1160">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1165_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1165/system_MIMXRT1165_cm4.c;HYPER=MIMXRT116x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT116x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1165" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
       <property name="arm_core_type" value="Cortex-M4" />
       <property name="arm_fpu_type" value="FPv4-SP-D16" />
-      <property name="linker_section_placement_macros" value="FILLSIZE=0x400"/>
-      <property name="linker_memory_map_macros" value="OCRAMSTART=0x20200000;OCRAMSIZE=0x40000;ITCMSTART=0x1FFE0000;FlexSPISTART=0x08000000;FlexSPI2START=0x60000000"/>
-      <property name="target_get_partname_script" value="EnableCM4()"/>
-      <property name="target_reset_script" value="ResetCM4()"/>
-      <cdefine name="CPU_MIMXRT1176DVMAA_cm4"/>
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="SRAMSIZE=0x10000;OCRAMSIZE=0x10000;OCRAM1SIZE=0x10000;OCRAM2SIZE=0x10000" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1165xxx5_M4" />
+      <cdefine name="CPU_MIMXRT1165CVM5A_cm4" />
     </groupEntry>
-    <groupEntry name="MIMXRT1176AVM8A_M4" family="iMXRT1170">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1176_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1176/system_MIMXRT1176_cm4.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1176" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1176_cm4_registers.xml"/>
+    <groupEntry name="MIMXRT1165DVM6A_M4" aka="" family="iMXRT1160">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1165_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1165/system_MIMXRT1165_cm4.c;HYPER=MIMXRT116x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT116x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1165" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
       <property name="arm_core_type" value="Cortex-M4" />
       <property name="arm_fpu_type" value="FPv4-SP-D16" />
-      <property name="linker_section_placement_macros" value="FILLSIZE=0x400"/>
-      <property name="linker_memory_map_macros" value="OCRAMSTART=0x20200000;OCRAMSIZE=0x40000;ITCMSTART=0x1FFE0000;FlexSPISTART=0x08000000;FlexSPI2START=0x60000000"/>
-      <property name="target_get_partname_script" value="EnableCM4()"/>
-      <property name="target_reset_script" value="ResetCM4()"/>
-      <cdefine name="CPU_MIMXRT1176AVM8A_cm4"/>
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="SRAMSIZE=0x10000;OCRAMSIZE=0x10000;OCRAM1SIZE=0x10000;OCRAM2SIZE=0x10000" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1165xxx6_M4" />
+      <cdefine name="CPU_MIMXRT1165DVM6A_cm4" />
     </groupEntry>
-    <groupEntry name="MIMXRT1176CVM8A_M4" family="iMXRT1170">
-      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1176_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1176/system_MIMXRT1176_cm4.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1176" />
-      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT1176_cm4_registers.xml"/>
+    <groupEntry name="MIMXRT1165XVM5A_M4" aka="" family="iMXRT1160">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1165_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1165/system_MIMXRT1165_cm4.c;HYPER=MIMXRT116x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT116x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1165" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
       <property name="arm_core_type" value="Cortex-M4" />
       <property name="arm_fpu_type" value="FPv4-SP-D16" />
-      <property name="linker_section_placement_macros" value="FILLSIZE=0x400"/>
-      <property name="linker_memory_map_macros" value="OCRAMSTART=0x20200000;OCRAMSIZE=0x40000;ITCMSTART=0x1FFE0000;FlexSPISTART=0x08000000;FlexSPI2START=0x60000000"/>
-      <property name="target_get_partname_script" value="EnableCM4()"/>
-      <property name="target_reset_script" value="ResetCM4()"/>
-      <cdefine name="CPU_MIMXRT1176CVM8A_cm4"/>
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="SRAMSIZE=0x10000;OCRAMSIZE=0x10000;OCRAM1SIZE=0x10000;OCRAM2SIZE=0x10000" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1165xxx5_M4" />
+      <cdefine name="CPU_MIMXRT1165XVM5A_cm4" />
     </groupEntry>
-
+    <groupEntry name="MIMXRT1166CVM5A_M7" aka="MIMXRT1166CVM5A" family="iMXRT1160">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1166_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1166/system_MIMXRT1166_cm7.c;HYPER=MIMXRT116x_HYPER_256KB_SEC;QSPI=MIMXRT116x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1166" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="SRAMSIZE=0x10000;OCRAMSIZE=0x10000;OCRAM1SIZE=0x10000;OCRAM2SIZE=0x10000" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1166xxx5_M7" />
+      <cdefine name="CPU_MIMXRT1166CVM5A_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1166DVM6A_M7" aka="MIMXRT1166DVM6A" family="iMXRT1160">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1166_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1166/system_MIMXRT1166_cm7.c;HYPER=MIMXRT116x_HYPER_256KB_SEC;QSPI=MIMXRT116x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1166" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="SRAMSIZE=0x10000;OCRAMSIZE=0x10000;OCRAM1SIZE=0x10000;OCRAM2SIZE=0x10000" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1166xxx6_M7" />
+      <cdefine name="CPU_MIMXRT1166DVM6A_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1166XVM5A_M7" aka="MIMXRT1166XVM5A" family="iMXRT1160">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1166_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1166/system_MIMXRT1166_cm7.c;HYPER=MIMXRT116x_HYPER_256KB_SEC;QSPI=MIMXRT116x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1166" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="SRAMSIZE=0x10000;OCRAMSIZE=0x10000;OCRAM1SIZE=0x10000;OCRAM2SIZE=0x10000" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1166xxx5_M7" />
+      <cdefine name="CPU_MIMXRT1166XVM5A_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1166CVM5A_M4" aka="" family="iMXRT1160">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1166_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1166/system_MIMXRT1166_cm4.c;HYPER=MIMXRT116x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT116x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1166" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M4" />
+      <property name="arm_fpu_type" value="FPv4-SP-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="SRAMSIZE=0x10000;OCRAMSIZE=0x10000;OCRAM1SIZE=0x10000;OCRAM2SIZE=0x10000" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1166xxx5_M4" />
+      <cdefine name="CPU_MIMXRT1166CVM5A_cm4" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1166DVM6A_M4" aka="" family="iMXRT1160">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1166_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1166/system_MIMXRT1166_cm4.c;HYPER=MIMXRT116x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT116x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1166" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M4" />
+      <property name="arm_fpu_type" value="FPv4-SP-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="SRAMSIZE=0x10000;OCRAMSIZE=0x10000;OCRAM1SIZE=0x10000;OCRAM2SIZE=0x10000" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1166xxx6_M4" />
+      <cdefine name="CPU_MIMXRT1166DVM6A_cm4" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1166XVM5A_M4" aka="" family="iMXRT1160">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1166_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1166/system_MIMXRT1166_cm4.c;HYPER=MIMXRT116x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT116x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1166" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M4" />
+      <property name="arm_fpu_type" value="FPv4-SP-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="linker_memory_map_macros" value="SRAMSIZE=0x10000;OCRAMSIZE=0x10000;OCRAM1SIZE=0x10000;OCRAM2SIZE=0x10000" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1166xxx5_M4" />
+      <cdefine name="CPU_MIMXRT1166XVM5A_cm4" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1173CVM8A_M7" aka="MIMXRT1173CVM8A" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1173_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1173/system_MIMXRT1173_cm7.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1173" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1173xxx8_M7" />
+      <cdefine name="CPU_MIMXRT1173CVM8A_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1173CVM8A_M4" aka="" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1173_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1173/system_MIMXRT1173_cm4.c;HYPER=MIMXRT117x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT117x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1173" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M4" />
+      <property name="arm_fpu_type" value="FPv4-SP-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1173xxx8_M4" />
+      <cdefine name="CPU_MIMXRT1173CVM8A_cm4" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1175DVMAA_M7" aka="MIMXRT1175DVMAA" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1175_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1175/system_MIMXRT1175_cm7.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1175" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1175xxxA_M7" />
+      <cdefine name="CPU_MIMXRT1175DVMAA_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1175AVM8A_M7" aka="MIMXRT1175AVM8A" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1175_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1175/system_MIMXRT1175_cm7.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1175" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1175xxx8_M7" />
+      <cdefine name="CPU_MIMXRT1175AVM8A_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1175CVM8A_M7" aka="MIMXRT1175CVM8A" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1175_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1175/system_MIMXRT1175_cm7.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1175" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1175xxx8_M7" />
+      <cdefine name="CPU_MIMXRT1175CVM8A_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1175DVMAA_M4" aka="" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1175_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1175/system_MIMXRT1175_cm4.c;HYPER=MIMXRT117x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT117x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1175" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M4" />
+      <property name="arm_fpu_type" value="FPv4-SP-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1175xxxA_M4" />
+      <cdefine name="CPU_MIMXRT1175DVMAA_cm4" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1175AVM8A_M4" aka="" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1175_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1175/system_MIMXRT1175_cm4.c;HYPER=MIMXRT117x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT117x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1175" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M4" />
+      <property name="arm_fpu_type" value="FPv4-SP-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1175xxx8_M4" />
+      <cdefine name="CPU_MIMXRT1175AVM8A_cm4" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1175CVM8A_M4" aka="" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1175_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1175/system_MIMXRT1175_cm4.c;HYPER=MIMXRT117x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT117x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1175" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M4" />
+      <property name="arm_fpu_type" value="FPv4-SP-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1175xxx8_M4" />
+      <cdefine name="CPU_MIMXRT1175CVM8A_cm4" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1176DVMAA_M7" aka="MIMXRT1176DVMAA" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1176_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1176/system_MIMXRT1176_cm7.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1176" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1176xxxA_M7" />
+      <cdefine name="CPU_MIMXRT1176DVMAA_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1176AVM8A_M7" aka="MIMXRT1176AVM8A" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1176_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1176/system_MIMXRT1176_cm7.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1176" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1176xxx8_M7" />
+      <cdefine name="CPU_MIMXRT1176AVM8A_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1176CVM8A_M7" aka="MIMXRT1176CVM8A" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1176_cm7.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1176/system_MIMXRT1176_cm7.c;HYPER=MIMXRT117x_HYPER_256KB_SEC;QSPI=MIMXRT117x_QuadSPI_4KB_SEC;DeviceFamily=MIMXRT1176" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M7" />
+      <property name="arm_fpu_type" value="FPv5-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="" />
+      <property name="target_reset_script" value="Reset()" />
+      <property name="arm_target_device_name" value="MIMXRT1176xxx8_M7" />
+      <cdefine name="CPU_MIMXRT1176CVM8A_cm7" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1176DVMAA_M4" aka="" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1176_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1176/system_MIMXRT1176_cm4.c;HYPER=MIMXRT117x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT117x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1176" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M4" />
+      <property name="arm_fpu_type" value="FPv4-SP-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1176xxxA_M4" />
+      <cdefine name="CPU_MIMXRT1176DVMAA_cm4" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1176AVM8A_M4" aka="" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1176_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1176/system_MIMXRT1176_cm4.c;HYPER=MIMXRT117x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT117x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1176" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M4" />
+      <property name="arm_fpu_type" value="FPv4-SP-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1176xxx8_M4" />
+      <cdefine name="CPU_MIMXRT1176AVM8A_cm4" />
+    </groupEntry>
+    <groupEntry name="MIMXRT1176CVM8A_M4" aka="" family="iMXRT1170">
+      <property name="macros" value="DeviceStartFile=$(TargetsDir)/iMXRT/startup_MIMXRT1176_cm4.s;DeviceSystemFile=$(TargetsDir)/iMXRT/devices/MIMXRT1176/system_MIMXRT1176_cm4.c;HYPER=MIMXRT117x_HYPER_256KB_SEC_Alias;QSPI=MIMXRT117x_QuadSPI_4KB_SEC_Alias;DeviceFamily=MIMXRT1176" />
+      <property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_registers.xml" />
+      <property name="arm_core_type" value="Cortex-M4" />
+      <property name="arm_fpu_type" value="FPv4-SP-D16" />
+      <property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml" />
+      <property name="target_get_partname_script" value="EnableCM4()" />
+      <property name="target_reset_script" value="ResetCM4()" />
+      <property name="arm_target_device_name" value="MIMXRT1176xxx8_M4" />
+      <cdefine name="CPU_MIMXRT1176CVM8A_cm4" />
+    </groupEntry>
   </group>
-  <group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="TCM" >
-    <groupEntry name="TCM">      
+  <group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="TCM">
+    <groupEntry name="TCM">
       <property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/tcm_placement.xml" />
-      <property name="linker_section_placement_macros" value="" />
-      <property name="arm_target_loader_applicable_loaders" value=""/>
-      <property name="arm_target_loader_default_loader" value=""/>
+      <property name="arm_target_loader_applicable_loaders" value="" />
+      <property name="arm_target_loader_default_loader" value="" />
     </groupEntry>
     <groupEntry name="RAM">
       <property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/ram_placement.xml" />
-      <property name="linker_section_placement_macros" value="RAM_NAME=OCRAM" />
-      <property name="arm_target_loader_applicable_loaders" value=""/>
-      <property name="arm_target_loader_default_loader" value=""/>
+      <property name="arm_target_loader_applicable_loaders" value="" />
+      <property name="arm_target_loader_default_loader" value="" />
     </groupEntry>
     <groupEntry name="FlexSPI (HYPER)">
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
@@ -316,11 +748,11 @@
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
       <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(HYPER)_Loader.elf" configuration="Flash" />
-      <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
-      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
-      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
-      <cdefine name="XIP_BOOT_HYPERFLASH" value="1"/>
-      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+      <cdefine name="XIP_EXTERNAL_FLASH" value="1" />
+      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
+      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
+      <cdefine name="XIP_BOOT_HYPERFLASH" value="1" />
+      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
     </groupEntry>
     <groupEntry name="FlexSPI (QuadSPI)">
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
@@ -328,11 +760,11 @@
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
       <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(QSPI)_Loader.elf" configuration="Flash" />
-      <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
-      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
-      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
-      <cdefine name="XIP_BOOT_QSPI" value="1"/>
-      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+      <cdefine name="XIP_EXTERNAL_FLASH" value="1" />
+      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
+      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
+      <cdefine name="XIP_BOOT_QSPI" value="1" />
+      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
     </groupEntry>
     <groupEntry name="FlexSPI2 (QuadSPI)">
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
@@ -340,35 +772,35 @@
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
       <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(QSPI)_Loader.elf" configuration="Flash" />
-      <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
-      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
-      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
-      <cdefine name="XIP_BOOT_QSPI" value="1"/>
-      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+      <cdefine name="XIP_EXTERNAL_FLASH" value="1" />
+      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
+      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
+      <cdefine name="XIP_BOOT_QSPI" value="1" />
+      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
     </groupEntry>
-     <groupEntry name="FlexSPI (HYPER, No DCD)">
+    <groupEntry name="FlexSPI (HYPER, No DCD)">
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
       <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(HYPER)_Loader.elf" configuration="Flash" />
-      <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
-      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
-      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="0"/>
-      <cdefine name="XIP_BOOT_HYPERFLASH" value="1"/>
-      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+      <cdefine name="XIP_EXTERNAL_FLASH" value="1" />
+      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
+      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="0" />
+      <cdefine name="XIP_BOOT_HYPERFLASH" value="1" />
+      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
     </groupEntry>
-    <groupEntry name="FlexSPI (QuadSPI, No DCD)">      
+    <groupEntry name="FlexSPI (QuadSPI, No DCD)">
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
       <property name="linker_section_placement_macros" value="" />
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
       <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(QSPI)_Loader.elf" configuration="Flash" />
-      <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
-      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
-      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="0"/>
-      <cdefine name="XIP_BOOT_QSPI" value="1"/>
-      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+      <cdefine name="XIP_EXTERNAL_FLASH" value="1" />
+      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
+      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="0" />
+      <cdefine name="XIP_BOOT_QSPI" value="1" />
+      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
     </groupEntry>
     <groupEntry name="FlexSPI2 (QuadSPI, No DCD)">
       <property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/flexspi_placement.xml" />
@@ -376,11 +808,11 @@
       <property name="arm_target_loader_applicable_loaders" value="Flash" />
       <property name="arm_target_loader_default_loader" value="Flash" />
       <property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader/$(QSPI)_Loader.elf" configuration="Flash" />
-      <cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
-      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
-      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="0"/>
-      <cdefine name="XIP_BOOT_QSPI" value="1"/>
-      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+      <cdefine name="XIP_EXTERNAL_FLASH" value="1" />
+      <cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
+      <cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="0" />
+      <cdefine name="XIP_BOOT_QSPI" value="1" />
+      <cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
     </groupEntry>
   </group>
 </propertyGroups>

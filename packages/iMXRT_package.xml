@@ -1,166 +1,213 @@
 <!DOCTYPE CrossStudio_Package_Description_File>
-<package name="iMXRT" author="Rowley Associates Ltd" cpu_manufacturer="NXP" cpu_family="iMXRT" version="4.4" crossstudio_versions="8:4.8-" dependencies="CMSIS" build_version="" >
-  <group title="System Solutions">
-    <file title="iMXRT Loader Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader.hzp" />
-  </group>
-  <targets>
-    <category name="iMXRT1010">
-      <cpu name="MIMXRT1011CAE4A" />
-      <cpu name="MIMXRT1011DAE5A" />
-    </category>
-    <category name="iMXRT1015">
-      <cpu name="MIMXRT1015CAF4A" />
-      <cpu name="MIMXRT1015DAF5A" />
-    </category>
-    <category name="iMXRT1020">
-      <cpu name="MIMXRT1021CAG4A" /> 
-      <cpu name="MIMXRT1021CAF4A" />
-      <cpu name="MIMXRT1021DAG5A" /> 
-      <cpu name="MIMXRT1021DAF5A" />
-    </category>
-    <category name="iMXRT1024">
-      <cpu name="MIMXRT1024CAG4A" /> 
-      <cpu name="MIMXRT1024DAG5A" />
-    </category>
-    <category name="iMXRT1050">
-      <cpu name="MIMXRT1051CVL5A" />
-      <cpu name="MIMXRT1051CVL5B" />
-      <cpu name="MIMXRT1051CVJ5B" />
-      <cpu name="MIMXRT1051DVL6A" />
-      <cpu name="MIMXRT1051DVL6B" />
-      <cpu name="MIMXRT1052CVL5A" />
-      <cpu name="MIMXRT1052CVL5B" />
-      <cpu name="MIMXRT1052CVJ5B" />
-      <cpu name="MIMXRT1052DVL6A" />
-      <cpu name="MIMXRT1052DVL6B" />
-      <cpu name="MIMXRT1052DVJ6B" />
-    </category>
-    <category name="iMXRT1060">
-      <cpu name="MIMXRT1061CVJ5A" />
-      <cpu name="MIMXRT1061CVL5A" />
-      <cpu name="MIMXRT1061DVL6A" />
-      <cpu name="MIMXRT1062CVJ5A" />
-      <cpu name="MIMXRT1062CVL5A" />
-      <cpu name="MIMXRT1062DVJ6A" />
-      <cpu name="MIMXRT1062DVL6A" />
-    </category>
-    <category name="iMXRT1064">
-      <cpu name="MIMXRT1064CVL5A" />
-      <cpu name="MIMXRT1064DVL6A" />
-    </category>
-    <category name="iMXRT1170">
-      <cpu name="MIMXRT1176DVMAA" />
-      <cpu name="MIMXRT1176AVM8A" />
-      <cpu name="MIMXRT1176CVM8A" />
-    </category>
-  </targets>
-  <documentation>
-    <section name="Creating iMXRT Projects">
-      <h5>To create a new iMXRT project</h5>
-      <ul>
-        <li>Select the <b>File &gt; New &gt; New Project</b> menu item.</li>
-        <li>Select the appropriate <b>Generic iMXRT</b> from the <b>Categories</b> list.</li>
-        <li>Select the required project template type from the <b>Templates</b> list.</li>
-        <li>Set the required project name and location directory.</li>
-        <li>Click <b>OK</b>.</li>
-      </ul>
-      <h5>To import MCUXpresso project files</h5>
-      <ul>
-        <li>Select <b>File &gt; Import Project... &gt; Import Eclipse Project</b> menu item.</li>
-        <li>Navigate to the directory containing the eclipse .project and select it.</li>
-        <li>Type "imxrt" in the Project Template Chooser search.</li>
-        <li>Select one of the displayed project templates.</li>
-        <li>Set the Section Placement and Target Processor properties.</li>
-        <li>For projects that use the CrossWorks tools you will need to remove the <b>startup</b> folder from the project.</li>
-      </ul>
-      <h5>To build and debug an application the runs in Flash memory</h5>
-      <ul>
-        <li>Select the project to work on by using the <b>Project &gt; Set Active Project</b> menu option.</li>
-        <li>Select the configuration you require by using the <b>Build &gt; Set Active Build Configuration</b> menu option.</li>
-        <li>Right click on the project node in the project explorer and select the <b>FlexSPI (HYPER|QuadSPI)</b> placement property.</li>
-        <li>Build the project by using the <b>Build &gt; Build Project</b> menu option.</li>
-        <li>Connect to the appropriate target in the target window.</li>
-        <li>Download and start debugging the current project by using <b>Debug &gt; Start Debugging</b>.</li>
-      </ul>
-      <h5>To make the application startup from reset</h5>
-      <ul>
-        <li>Right click on the project node in the project explorer and select <b>Properties...</b></li>
-        <li>In the properties window scroll down to the <b>Preprocessor Options</b> section.</li>
-        <li>Type <b>STARTUP_FROM_RESET</b> into the <b>Preprocessor Definitions</b> property editor.</li>
-      </ul>
-    </section>
-
-    <section name="iMXRT Project Specifics">
-      <h5>Target Processor</h5>
-      <p>Once a project has been created you can select different target processors by right clicking on the project node in the project 
+<package crossstudio_versions="8:4.8-" version="4.5" dependencies="CMSIS" cpu_family="iMXRT" author="Rowley Associates Ltd" name="iMXRT" cpu_manufacturer="NXP" build_version="2022082500.13398;crossworks_v4;crossworks_v4" date="2022-08-25T13:48:15">
+ <group title="System Solutions">
+  <file title="iMXRT Loader Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader.hzp"/>
+  <file title="iMXRT Loader2 Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader2.hzp"/>
+ </group>
+ <targets>
+  <category name="iMXRT1010">
+   <cpu name="MIMXRT1011CAE4A"/>
+   <cpu name="MIMXRT1011DAE5A"/>
+  </category>
+  <category name="iMXRT1015">
+   <cpu name="MIMXRT1015CAF4A"/>
+   <cpu name="MIMXRT1015DAF5A"/>
+  </category>
+  <category name="iMXRT1020">
+   <cpu name="MIMXRT1021CAG4A"/>
+   <cpu name="MIMXRT1021CAF4A"/>
+   <cpu name="MIMXRT1021DAG5A"/>
+   <cpu name="MIMXRT1021DAF5A"/>
+  </category>
+  <category name="iMXRT1024">
+   <cpu name="MIMXRT1024CAG4A"/>
+   <cpu name="MIMXRT1024CAG4B"/>
+   <cpu name="MIMXRT1024DAG5A"/>
+   <cpu name="MIMXRT1024DAG5B"/>
+  </category>
+  <category name="iMXRT1050">
+   <cpu name="MIMXRT1051CVL5A"/>
+   <cpu name="MIMXRT1051CVL5B"/>
+   <cpu name="MIMXRT1051CVJ5B"/>
+   <cpu name="MIMXRT1051DVL6A"/>
+   <cpu name="MIMXRT1051DVL6B"/>
+   <cpu name="MIMXRT1052CVL5A"/>
+   <cpu name="MIMXRT1052CVL5B"/>
+   <cpu name="MIMXRT1052CVJ5B"/>
+   <cpu name="MIMXRT1052DVL6A"/>
+   <cpu name="MIMXRT1052DVL6B"/>
+   <cpu name="MIMXRT1052DVJ6B"/>
+  </category>
+  <category name="iMXRT1060">
+   <cpu name="MIMXRT1061CVJ5A"/>
+   <cpu name="MIMXRT1061CVL5A"/>
+   <cpu name="MIMXRT1061DVL6A"/>
+   <cpu name="MIMXRT1061DVJ6A"/>
+   <cpu name="MIMXRT1061XVN5B"/>
+   <cpu name="MIMXRT1062CVJ5A"/>
+   <cpu name="MIMXRT1062CVL5A"/>
+   <cpu name="MIMXRT1062DVJ6A"/>
+   <cpu name="MIMXRT1062DVL6A"/>
+   <cpu name="MIMXRT1062DVN6B"/>
+   <cpu name="MIMXRT1062XVN5B"/>
+  </category>
+  <category name="iMXRT1064">
+   <cpu name="MIMXRT1064CVL5A"/>
+   <cpu name="MIMXRT1064DVL6A"/>
+   <cpu name="MIMXRT1064CVJ5A"/>
+   <cpu name="MIMXRT1064CVJ6A"/>
+  </category>
+  <category name="iMXRT1160">
+   <cpu name="MIMXRT1165CVM5A"/>
+   <cpu name="MIMXRT1165DVM6A"/>
+   <cpu name="MIMXRT1165XVM5A"/>
+   <cpu name="MIMXRT1166CVM5A"/>
+   <cpu name="MIMXRT1166DVM6A"/>
+   <cpu name="MIMXRT1166XVM5A"/>
+  </category>
+  <category name="iMXRT1170">
+   <cpu name="MIMXRT1171AVM8A"/>
+   <cpu name="MIMXRT1171CVM8A"/>
+   <cpu name="MIMXRT1171DVMAA"/>
+   <cpu name="MIMXRT1172AVM8A"/>
+   <cpu name="MIMXRT1172CVM8A"/>
+   <cpu name="MIMXRT1172DVMAA"/>
+   <cpu name="MIMXRT117FCVM8A"/>
+   <cpu name="MIMXRT1173CVM8A"/>
+   <cpu name="MIMXRT1175DVMAA"/>
+   <cpu name="MIMXRT1175AVM8A"/>
+   <cpu name="MIMXRT1175CVM8A"/>
+   <cpu name="MIMXRT1176DVMAA"/>
+   <cpu name="MIMXRT1176AVM8A"/>
+   <cpu name="MIMXRT1176CVM8A"/>
+  </category>
+ </targets>
+ <documentation>
+  <section name="Creating iMXRT Projects">
+   <h5>To create a new iMXRT project</h5>
+   <ul>
+    <li>Select the <b>File > New > New Project</b> menu item.</li>
+    <li>Select the appropriate <b>Generic iMXRT</b> from the <b>Categories</b> list.</li>
+    <li>Select the required project template type from the <b>Templates</b> list.</li>
+    <li>Set the required project name and location directory.</li>
+    <li>Click <b>OK</b>.</li>
+   </ul>
+   <h5>To import MCUXpresso project files</h5>
+   <ul>
+    <li>Select <b>File > Import Project... > Import Eclipse Project</b> menu item.</li>
+    <li>Navigate to the directory containing the eclipse .project and select it.</li>
+    <li>Type "imxrt" in the Project Template Chooser search.</li>
+    <li>Select one of the displayed project templates.</li>
+    <li>Set the Section Placement and Target Processor properties.</li>
+    <li>For projects that use the CrossWorks tools you will need to remove the <b>startup</b> folder from the project.</li>
+   </ul>
+   <h5>To build and debug an application the runs in Flash memory</h5>
+   <ul>
+    <li>Select the project to work on by using the <b>Project > Set Active Project</b> menu option.</li>
+    <li>Select the configuration you require by using the <b>Build > Set Active Build Configuration</b> menu option.</li>
+    <li>Right click on the project node in the project explorer and select the <b>FlexSPI (HYPER|QuadSPI)</b> placement property.</li>
+    <li>Build the project by using the <b>Build > Build Project</b> menu option.</li>
+    <li>Connect to the appropriate target in the target window.</li>
+    <li>Download and start debugging the current project by using <b>Debug > Start Debugging</b>.</li>
+   </ul>
+   <h5>To make the application startup from reset</h5>
+   <ul>
+    <li>Right click on the project node in the project explorer and select <b>Properties...</b>
+    </li>
+    <li>In the properties window scroll down to the <b>Preprocessor Options</b> section.</li>
+    <li>Type <b>STARTUP_FROM_RESET</b> into the <b>Preprocessor Definitions</b> property editor.</li>
+   </ul>
+  </section>
+  <section name="iMXRT Project Specifics">
+   <h5>Target Processor</h5>
+   <p>Once a project has been created you can select different target processors by right clicking on the project node in the project 
       explorer and selecting the <b>Target Processor</b> entry.</p>
-      <p>Selecting the target processor will specify the memory map that is used for the build and debug. You can view the selected 
+   <p>Selecting the target processor will specify the memory map that is used for the build and debug. You can view the selected 
       memory map by right clicking on the project node in the project explorer and selecting <b>Edit Memory Map</b>.</p>
-      <p>The memory map file has the following macros that can be used to specify the start and sizes of the memory regions:</p>
-      <ul>
-        <li><b>ITCMSTART</b> and <b>ITCMSIZE</b> the start and size of the ITCM memory segment.</li>
-        <li><b>DTCMSTART</b> and <b>DTCMSIZE</b> the start and size of the DTCM memory segment.</li>
-        <li><b>OCRAMSTART</b> and <b>OCRAMSIZE</b> the start and size of the OCRAM memory segment.</li>
-        <li><b>FlexSPISTART</b> and <b>FlexSPISIZE</b> the start and size of the FlexSPI memory segment.</li>
-        <li><b>FlexSPI2START</b> and <b>FlexSPI2SIZE</b> the start and size of the FlexSPI2 memory segment.</li>
-        <li><b>RAMSIZE</b> the size of the SDRAM memory segment.</li>
-        <li><b>NCACHE_REGION_START</b> the start of the non cacheable memory segment.</li>
-        <li><b>NCACHE_REGION_SIZE</b> the size of the non cacheable memory segment.</li>
-      </ul>
-       
-      <h5>Section Placement</h5>
-      <p>CrossStudio for ARM supports iMXRT projects running applications in a number of different
-      memory configurations. You can select the memory configuration you require by setting the <b>Section Placement</b> property.</p> 
-      <p>For iMXRT projects the set of placements are:</p>
-      <ul>
-        <li><b>TCM</b> application runs ITCM and DTCM memories.</li>
-        <li><b>RAM</b> application runs in OCRAM memory.</li>
-        <li><b>FlexSPI (HYPER)</b> application runs in FlexSPI and DTCM memories.</li>
-        <li><b>FlexSPI (QuadSPI)</b> application runs in FlexSPI and DTCM memories.</li>
-        <li><b>FlexSPI2 (QuadSPI)</b> application runs in FlexSPI2 and DTCM memories.</li>
-        <li><b>FlexSPI (HYPER, No DCD)</b> application runs in FlexSPI and DTCM memories, no Device Configuration Data.</li>
-        <li><b>FlexSPI (QuadSPI, No DCD)</b> application runs in FlexSPI and DTCM memories, no Device Configuration Data.</li>
-        <li><b>FlexSPI2 (QuadSPI, No DCD)</b> application runs in FlexSPI2 and DTCM memories, no Device Configuration Data.</li>
-      </ul>
-
-      <h5>Stack and Heap Sizes</h5>
-      <p>The default stack and heap sizes are set to be 1024 and 1024 bytes by default when a project is created.</p>
-
-      <h5>Target Startup Code</h5>
-      <p>The startup code is device specific and is selected with the <b>Target Processor</b> entry.
+   <p>The memory map file has the following macros that can be used to specify the start and sizes of the memory regions:</p>
+   <ul>
+    <li>
+     <b>ITCMSTART</b> and <b>ITCMSIZE</b> the start and size of the ITCM memory segment.</li>
+    <li>
+     <b>DTCMSTART</b> and <b>DTCMSIZE</b> the start and size of the DTCM memory segment.</li>
+    <li>
+     <b>OCRAMSTART</b> and <b>OCRAMSIZE</b> the start and size of the OCRAM memory segment.</li>
+    <li>
+     <b>FlexSPISTART</b> and <b>FlexSPISIZE</b> the start and size of the FlexSPI memory segment.</li>
+    <li>
+     <b>FlexSPI2START</b> and <b>FlexSPI2SIZE</b> the start and size of the FlexSPI2 memory segment.</li>
+    <li>
+     <b>RAMSIZE</b> the size of the SDRAM memory segment.</li>
+    <li>
+     <b>NCACHE_REGION_START</b> the start of the non cacheable memory segment.</li>
+    <li>
+     <b>NCACHE_REGION_SIZE</b> the size of the non cacheable memory segment.</li>
+   </ul>
+   <h5>Section Placement</h5>
+   <p>CrossStudio for ARM supports iMXRT projects running applications in a number of different
+      memory configurations. You can select the memory configuration you require by setting the <b>Section Placement</b> property.</p>
+   <p>For iMXRT projects the set of placements are:</p>
+   <ul>
+    <li>
+     <b>TCM</b> application runs ITCM and DTCM memories.</li>
+    <li>
+     <b>RAM</b> application runs in OCRAM memory.</li>
+    <li>
+     <b>FlexSPI (HYPER)</b> application runs in FlexSPI and DTCM memories.</li>
+    <li>
+     <b>FlexSPI (QuadSPI)</b> application runs in FlexSPI and DTCM memories.</li>
+    <li>
+     <b>FlexSPI2 (QuadSPI)</b> application runs in FlexSPI2 and DTCM memories.</li>
+    <li>
+     <b>FlexSPI (HYPER, No DCD)</b> application runs in FlexSPI and DTCM memories, no Device Configuration Data.</li>
+    <li>
+     <b>FlexSPI (QuadSPI, No DCD)</b> application runs in FlexSPI and DTCM memories, no Device Configuration Data.</li>
+    <li>
+     <b>FlexSPI2 (QuadSPI, No DCD)</b> application runs in FlexSPI2 and DTCM memories, no Device Configuration Data.</li>
+   </ul>
+   <h5>Stack and Heap Sizes</h5>
+   <p>The default stack and heap sizes are set to be 1024 and 1024 bytes by default when a project is created.</p>
+   <h5>Target Startup Code</h5>
+   <p>The startup code is device specific and is selected with the <b>Target Processor</b> entry.
       There are a set of preprocessor defines that configure the startup code and are documented in the startup file itself. 
       The startup code calls out to a weak symbol <b>SystemInit</b> with the stack pointer set to the end of the <b>stack</b>
       section. The <b>SystemInit</b> function can be used to set the CPU clock or configure any external memories prior to the C 
       initialisation code as such it cannot access initialised static data.</p>
-
-      <p>The startup code declares symbolic names (and weak implementations) for each interrupt service routine,
+   <p>The startup code declares symbolic names (and weak implementations) for each interrupt service routine,
       for example the <b>RTC_SEC_IRQHandler</b> function will be called when the RTC second match interrupt occurs. 
       The names of the interrupt service routines match those in the CMSIS header file. If you are porting code that
       has application specific interrupt service routines then you can use preprocessor definitions
       to rename the declared symbolic name for example <b>RTC_SEC_IRQHandler=RTC_SEC_DriverIRQHandler</b>.</p>
-
-      <h5>Target Reset Script</h5>
-      <p>The reset script <a href="file:$(TargetsDir)/iMXRT/iMXRT_Target.js">iMXRT_Target.js</a> is used by the
+   <h5>Target Reset Script</h5>
+   <p>The reset script <a href="file:$(TargetsDir)/iMXRT/iMXRT_Target.js">iMXRT_Target.js</a> is used by the
       debugger to reset the target board.</p>
-      
-    </section>
-  </documentation>
-  <history>
-    <version name="4.4">
-      <description>Add external GCC project template.</description>
-      <description>Add support for iMXRT1011, iMXRT1024 and iMXRT1170 devices.</description>
-    </version>
-    <version name="4.3">
-      <description>Add support for iMXRT1015 devices.</description>
-    </version>
-    <version name="4.2">
-      <description>Add support for iMXRT1060 and iMXRT1064 devices.</description>
-    </version>
-    <version name="4.1">
-      <description>Now using LIBMEM RPC FLM loader.</description>
-    </version>
-    <version name="4.0">
-      <description>Initial Release.</description>
-    </version>
-  </history>
+  </section>
+ </documentation>
+ <history>
+  <version name="4.5">
+   <description>Fixed FPUType for iMXRT1011 devices.</description>
+   <description>Add latest CMSIS header files.</description>
+   <description>Add support for iMXRT1160 devices.</description>
+   <description>Moved FILL section into iMXRT1011/iMXRT11xx startup code.</description>
+   <description>STARTUP_FROM_RESET now implemented in iMXRT11xx startup code.</description>
+   <description>Add Loader2 implemented using fsl_romapi with builds for iMXRT117x/iMXRT116x QSPI.</description>
+   <description>Modified the Reset() script for iMXRT11xx devices to use the NSRST pin.</description>
+  </version>
+  <version name="4.4">
+   <description>Add external GCC project template.</description>
+   <description>Add support for iMXRT1011, iMXRT1024 and iMXRT1170 devices.</description>
+  </version>
+  <version name="4.3">
+   <description>Add support for iMXRT1015 devices.</description>
+  </version>
+  <version name="4.2">
+   <description>Add support for iMXRT1060 and iMXRT1064 devices.</description>
+  </version>
+  <version name="4.1">
+   <description>Now using LIBMEM RPC FLM loader.</description>
+  </version>
+  <version name="4.0">
+   <description>Initial Release.</description>
+  </version>
+ </history>
 </package>

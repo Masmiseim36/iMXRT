@@ -1,0 +1,14 @@
+<!DOCTYPE Board_Memory_Definition_File>
+<Root name="iMXRT11_CM4" >
+  <MemorySegment name="NCACHE_REGION" start="$(NCACHE_REGION_START:0x20210000)" size="$(NCACHE_REGION_SIZE:0x0)"/>
+  <MemorySegment name="SDRAM"  start="0x80000000" size="$(RAMSIZE:0x1e00000)"/>
+  <MemorySegment name="FlexSPI2" start="$(FlexSPI2START:0x60000000)" size="$(FlexSPI2SIZE:0x04000000)" access="ReadOnly"/>  
+  <MemorySegment name="OCRAM2" start="$(OCRAM2START:0x202C0000)" size="$(OCRAM2SIZE:0x00080000)"/>
+  <MemorySegment name="OCRAM1" start="$(OCRAM1START:0x20240000)" size="$(OCRAM1SIZE:0x00080000)"/>
+  <MemorySegment name="SRAM" start="$(SRAMSTART:0x20240000)" size="$(SRAMSIZE:0x00100000)"/>
+  <MemorySegment name="OCRAM" start="$(OCRAMSTART:0x20240000)" size="$(OCRAMSIZE:0x00100000)"/>
+  <MemorySegment name="OCRAM_M4" start="0x20200000" size="0x00040000"/>
+  <MemorySegment name="DTCM" start="$(DTCMSTART:0x20000000)" size="$(DTCMSIZE:0x00020000)"/>
+  <MemorySegment name="ITCM" start="$(ITCMSTART:0x1FFE0000)" size="$(ITCMSIZE:0x00020000)"/>
+  <MemorySegment name="FlexSPI" start="$(FlexSPISTART:0x08000000)+$(FlexSPILoadOffset:0)" size="$(FlexSPISIZE:0x04000000)-$(FlexSPILoadOffset)" access="ReadOnly"/>
+</Root>

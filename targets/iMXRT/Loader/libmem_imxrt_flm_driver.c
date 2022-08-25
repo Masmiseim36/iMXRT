@@ -60,29 +60,29 @@ static const libmem_geometry_t geometry[] =
 
 #elif defined(FLM_ALGORITHM_MIMXRT117x_QuadSPI_4KB_SEC)
 
-// MIMXRT1176 8mB QuadSPI NOR Flash
+// MIMXRT1176 16mB QuadSPI NOR Flash
 
 #define FLM_START_ADDRESS 0x30000000
-#define FLM_SIZE 0x00800000
+#define FLM_SIZE 0x01000000
 #define FLM_PAGE_SIZE 0x00000100
 
 static const libmem_geometry_t geometry[] =
 {
-  { 0x800, 0x1000 },
+  { 0x1000, 0x1000 },
   { 0, 0 } 
 };
 
 #elif defined(FLM_ALGORITHM_MIMXRT117x_QuadSPI_4KB_SEC_Alias)
 
-// MIMXRT1176 8mB QuadSPI NOR Flash
+// MIMXRT1176 16mB QuadSPI NOR Flash
 
 #define FLM_START_ADDRESS 0x08000000
-#define FLM_SIZE 0x00800000
+#define FLM_SIZE 0x01000000
 #define FLM_PAGE_SIZE 0x00000100
 
 static const libmem_geometry_t geometry[] =
 {
-  { 0x800, 0x1000 },
+  { 0x1000, 0x1000 },
   { 0, 0 } 
 };
 

@@ -1,7 +1,7 @@
 <!DOCTYPE Linker_Placement_File>
 <Root name="Flash Section Placement">
   <MemorySegment name="$(FLASH_NAME:FlexSPI)">
-    <ProgramSection load="Yes" name=".fill" size="$(FILLSIZE:0x0)" keep="Yes"/>
+    <ProgramSection load="Yes" name=".fill" keep="Yes"/>
     <ProgramSection load="Yes" name=".boot_hdr.conf" address_symbol="__FLASH_BASE" keep="Yes" />
     <ProgramSection alignment="0x1000" load="Yes" name=".boot_hdr.ivt" keep="Yes"/>
     <ProgramSection load="Yes" name=".boot_hdr.boot_data" keep="Yes"/>
