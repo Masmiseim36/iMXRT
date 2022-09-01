@@ -103,75 +103,6 @@ function Connect ()
 {
 	var DeviceName = GetProjectPartName ();
 	TargetInterface.message ("## Connect to " + DeviceName);
-
-	switch (DeviceName)
-	{
-		case "MIMXRT633":
-		case "MIMXRT685_cm33":
-			break;
-		case "MIMXRT1011":
-		case "MIMXRT1015":
-		case "MIMXRT1021":
-		case "MIMXRT1024":
-		case "MIMXRT1051":
-		case "MIMXRT1052":
-		case "MIMXRT1061":
-		case "MIMXRT1062":
-		case "MIMXRT1064":
-			// Do nothing
-//			TargetInterface.setNSRST(0);
-			break;
-		case "MIMXRT1165_cm7":
-		case "MIMXRT1166_cm7":
-		case "MIMXRT1171_cm7":
-		case "MIMXRT1172_cm7":
-		case "MIMXRT1173_cm7":
-		case "MIMXRT1175_cm7":
-		case "MIMXRT1176_cm7":
-			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0);
-			if (TargetInterface.implementation() != "j-link")
-			{
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FD000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FE000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FF000);
-
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000E000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0001000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0002000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0000000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0041000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0042000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0043000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0044000); // Not in ROM Table. Compare ERR050708
-			}
-			break;
-		case "MIMXRT1165_cm4":
-		case "MIMXRT1166_cm4":
-		case "MIMXRT1173_cm4":
-		case "MIMXRT1175_cm4":
-		case "MIMXRT1176_cm4":
-			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
-			if (TargetInterface.implementation() != "j-link")
-			{
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FD000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FE000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE00FF000);
-
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE000E000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0001000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0002000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0000000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0041000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0042000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0043000);
-				TargetInterface.setDebugInterfaceProperty ("component_base",  0xE0044000); // Not in ROM Table. Compare ERR050708
-			}
-			break;
-		default:
-			TargetInterface.message ("Connect - unknown Device: " + DeviceName);
-			break;
-	}
-
 	TargetInterface.message ("## Connect to " + DeviceName + " - done");
 }
 
@@ -246,16 +177,19 @@ function GetPartName ()
 		case "MIMXRT1173_cm7":
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
-			TargetInterface.pokeUint32 (SRC_SCR, 0x1);			// Enable CM4 -> cm4 core reset is released
-			// Disable system reset caused by sysrstreq from each core:
-			TargetInterface.pokeUint32 (SRC_SRMR, 0xF << 10);	// Set M7REQ_RESET_MODE and M4REQ_RESET_MODE to "do not reset anything":
-			Release_11xx_M4 ();	// Enable the M4 Core
+			// ToDo: read the chip silicon version
+/*			var MiscDifproc = TargetInterface.peekUint32 (0x40C84800); // ANADIG_MISC-->MISC_DIFPROG (Chip Silicon Version Register)
+			MiscDifproc &= 0x00FFFF00;
+			MiscDifproc >>= 8;
+			PART = "MIMXRT" + MiscDifproc.toString(16)); */
 			break;
 		case "MIMXRT1165_cm4":
 		case "MIMXRT1166_cm4":
 		case "MIMXRT1173_cm4":
 		case "MIMXRT1175_cm4":
 		case "MIMXRT1176_cm4":
+			Release_11xx_M4 ();	// Enable the M4 Core
+			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
 			break;
 		default:
 			TargetInterface.message ("GetPartName - unknown Device: " + DeviceName);
@@ -352,6 +286,9 @@ function Reset_11xx_M4 ()
 
 function Reset_11xx_M7 ()
 {
+	// ARM Sys Reset
+	TargetInterface.pokeUint32 (SRC_SRMR, 0x1400);
+
 	// ResetTarget
 	//// Issue DISPLAYMIX reset ////
 	TargetInterface.pokeUint32 (SRC_CTRL_DISPLAY, 1);
@@ -369,15 +306,10 @@ function Reset_11xx_M7 ()
 	//// Issue M7 reset ////
 	TargetInterface.pokeUint32 (SRC_CTRL_M7CORE, 1);
 
-	// Check M7 reset status
-	reg = TargetInterface.peekUint32 (SRC_STAT_M7CORE);
-	reg &= 0x1;
-	while (reg)
-	{
-		reg = TargetInterface.peekUint32 (SRC_STAT_M7CORE);
-		reg &= 0x1;	// mask UNDER_RST Flag
-	}
+	// Reconnect after reset
 	TargetInterface.delay (10);
+	TargetInterface.resetDebugInterface ();
+	TargetInterface.stop (1000);
 }
 
 function Reset ()
@@ -415,7 +347,6 @@ function Reset ()
 		case "MIMXRT1171_cm7":
 		case "MIMXRT1172_cm7":
 			TargetInterface.resetAndStop (1000);
-			DeinitPlls_11xx ();
 			Reset_11xx_M7 ();
 			if (!TargetInterface.isStopped ())
 				TargetInterface.stop ();
@@ -426,8 +357,6 @@ function Reset ()
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
 			TargetInterface.resetAndStop (1000);
-			DeinitPlls_11xx ();
-			TargetInterface.pokeUint32 (SRC_CTRL_M4CORE, 2);
 			Reset_11xx_M7 ();
 			Release_11xx_M4 ();	// Enable the M4 Core
 			if (!TargetInterface.isStopped ())
