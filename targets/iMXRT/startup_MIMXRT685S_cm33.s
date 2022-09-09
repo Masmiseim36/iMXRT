@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2018 Rowley Associates Limited.                             *
- * Modified work Copyright (C) 2020 Markus Klein                             *
+ * Modified work Copyright (C) 2020-2022 Markus Klein                        *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
@@ -258,3 +258,9 @@ SystemInit:
 reset_wait:
 1: b 1b /* endless loop */
 #endif /* STARTUP_FROM_RESET */
+
+/* The ROM expects the 512-byte FlexSPI NOR configuration parameters to be present at offset 0x400 in Serial NOR flash.
+   Compare Chapter "41.5.1 FlexSPI boot" in the reference manual and also "41.5.1.5.2 FlexSPI NOR flash config parameters"*/
+.section .boot_offset
+  .fill 0x400, 1, 0
+

@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Copyright (c) 2018 Rowley Associates Limited.                             *
- * Modified work Copyright (C) 2021 Markus Klein                             *
+ * Modified work Copyright (C) 2021-2022 Markus Klein                        *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
@@ -448,3 +448,9 @@ SystemInit:
 reset_wait:
 1: b 1b /* endless loop */
 #endif /* STARTUP_FROM_RESET */
+
+/* The ROM expects the 512-byte FlexSPI NOR configuration parameters to be present at offset 0x400 in Serial NOR flash.
+   Compare Chapter "10.6.1.2 FlexSPI Serial NOR Flash Boot Operation" in the reference manual */
+// Use this only when the M7-core is your boot-core, which is the default
+.section .boot_offset
+  .fill 0x400, 1, 0

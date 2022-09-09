@@ -436,3 +436,8 @@ SystemInit:
 reset_wait:
 1: b 1b /* endless loop */
 #endif /* STARTUP_FROM_RESET */
+
+/* The ROM expects the 512-byte FlexSPI NOR configuration parameters to be present at offset 0x400 in Serial NOR flash.
+   Compare Chapter "9.6.1.1 FlexSPI Serial NOR Flash Boot Operation" in the reference manual */
+.section .boot_offset
+  .fill 0x400, 1, 0

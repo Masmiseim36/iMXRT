@@ -204,7 +204,7 @@ int main (uint32_t flags, uint32_t param)
 		DebugPrint ("Libmem Driver coudn't be loaded\r\n");
 
 	// Terminate loader and return error String if an Error occurred
-    if (res == LIBMEM_STATUS_SUCCESS)
+	if (res == LIBMEM_STATUS_SUCCESS)
 	{
 		DebugPrint ("RPC loader finished successfully\r\n");
 		for (int i=0; i<1024*1024;i++)
