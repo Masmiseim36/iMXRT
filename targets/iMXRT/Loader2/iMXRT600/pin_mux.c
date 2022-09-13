@@ -333,7 +333,7 @@ void BOARD_PerformJEDECReset_FlexSPI1 (void)
 
 
 /* BOARD_SetFlexspiClock run in RAM used to configure FlexSPI clock source and divider when XIP. */
-void BOARD_SetFlexspiClock(uint32_t src, uint32_t divider)
+void BOARD_SetFlexspiClock (uint32_t src, uint32_t divider)
 {
     if ((CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src)) ||
         ((CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (divider - 1)))

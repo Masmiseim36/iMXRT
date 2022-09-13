@@ -7,7 +7,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00008000;RAM;0x20000000;0x00008000;RAM;0x20200000;0x00010000;ROM;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-SP-D16" />
-			<cdefine name="CPU_MIMXRT1011CAE4A"/>
+			<cdefine name="CPU_MIMXRT1011CAE4A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1011DAE5A" aka="MIMXRT1011xxx5A" family="iMXRT1011">
 			<property name="macros" value="DeviceName=MIMXRT1011;Family=iMXRT1011;Core=CM7" />
@@ -15,7 +15,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00008000;RAM;0x20000000;0x00008000;RAM;0x20200000;0x00010000;ROM;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-SP-D16" />
-			<cdefine name="CPU_MIMXRT1011DAE5A"/>
+			<cdefine name="CPU_MIMXRT1011DAE5A" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1015CAF4A" aka="MIMXRT1015xxx4A" family="iMXRT1015">
@@ -24,7 +24,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00008000;RAM;0x20000000;0x00008000;RAM;0x20200000;0x00010000;ROM;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1015CAF4A"/>
+			<cdefine name="CPU_MIMXRT1015CAF4A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1015DAF5A" aka="MIMXRT1015xxx5A" family="iMXRT1015">
 			<property name="macros" value="DeviceName=MIMXRT1015;Family=iMXRT1015;Core=CM7" />
@@ -32,7 +32,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00008000;RAM;0x20000000;0x00008000;RAM;0x20200000;0x00010000;ROM;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1015DAF5A"/>
+			<cdefine name="CPU_MIMXRT1015DAF5A" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1021CAG4A" aka="MIMXRT1021xxx4A" family="iMXRT1020">
@@ -41,7 +41,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20200000;0x00020000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1021CAG4A"/>
+			<cdefine name="CPU_MIMXRT1021CAG4A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1021CAF4A" aka="MIMXRT1021xxx4A" family="iMXRT1020">
 			<property name="macros" value="DeviceName=MIMXRT1021;Family=iMXRT1021;Core=CM7" />
@@ -49,7 +49,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20200000;0x00020000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1021CAF4A"/>
+			<cdefine name="CPU_MIMXRT1021CAF4A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1021DAG5A" aka="MIMXRT1021xxx5A" family="iMXRT1020">
 			<property name="macros" value="DeviceName=MIMXRT1021;Family=iMXRT1021;Core=CM7" />
@@ -57,7 +57,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20200000;0x00020000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1021DAG5A"/>
+			<cdefine name="CPU_MIMXRT1021DAG5A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1021DAF5A" aka="MIMXRT1021xxx5A" family="iMXRT1020">
 			<property name="macros" value="DeviceName=MIMXRT1021;Family=iMXRT1021;Core=CM7" />
@@ -65,7 +65,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20200000;0x00020000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1021DAF5A"/>
+			<cdefine name="CPU_MIMXRT1021DAF5A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1024CAG4A" aka="MIMXRT1024xxx4A" family="iMXRT1020">
 			<property name="macros" value="DeviceName=MIMXRT1024;Family=iMXRT1024;Core=CM7" />
@@ -73,7 +73,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20200000;0x00020000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1024CAG4A"/>
+			<cdefine name="CPU_MIMXRT1024CAG4A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1024DAG5A" aka="MIMXRT1024xxx5A" family="iMXRT1020">
 			<property name="macros" value="DeviceName=MIMXRT1024;Family=iMXRT1024;Core=CM7" />
@@ -81,7 +81,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20200000;0x00020000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1024DAG5A"/>
+			<cdefine name="CPU_MIMXRT1024DAG5A" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1051CVL5A" aka="MIMXRT1051xxx5A" family="iMXRT1050">
@@ -90,7 +90,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1051CVL5A"/>
+			<cdefine name="CPU_MIMXRT1051CVL5A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1051CVL5B" aka="MIMXRT1051xxx5B" family="iMXRT1050">
 			<property name="macros" value="DeviceName=MIMXRT1051;Family=iMXRT1050;Core=CM7" />
@@ -98,7 +98,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1051CVL5B"/>
+			<cdefine name="CPU_MIMXRT1051CVL5B" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1051CVJ5B" aka="MIMXRT1051xxx5B" family="iMXRT1050">
 			<property name="macros" value="DeviceName=MIMXRT1051;Family=iMXRT1050;Core=CM7" />
@@ -106,7 +106,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1051CVJ5B"/>
+			<cdefine name="CPU_MIMXRT1051CVJ5B" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1051DVL6A" aka="MIMXRT1051xxx6A" family="iMXRT1050">
 			<property name="macros" value="DeviceName=MIMXRT1051;Family=iMXRT1050;Core=CM7" />
@@ -114,7 +114,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1051DVL6A"/>
+			<cdefine name="CPU_MIMXRT1051DVL6A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1051DVL6B" aka="MIMXRT1051xxx6B" family="iMXRT1050">
 			<property name="macros" value="DeviceName=MIMXRT1051;Family=iMXRT1050;Core=CM7" />
@@ -122,7 +122,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1051DVL6B"/>
+			<cdefine name="CPU_MIMXRT1051DVL6B" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1052CVL5A" aka="MIMXRT1052xxx5A" family="iMXRT1050">
@@ -131,7 +131,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1052CVL5A"/>
+			<cdefine name="CPU_MIMXRT1052CVL5A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1052CVL5B" aka="MIMXRT1052xxx5B" family="iMXRT1050">
 			<property name="macros" value="DeviceName=MIMXRT1052;Family=iMXRT1050;Core=CM7" />
@@ -139,7 +139,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1052CVL5B"/>
+			<cdefine name="CPU_MIMXRT1052CVL5B" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1052CVJ5B" aka="MIMXRT1052xxx5B" family="iMXRT1050">
 			<property name="macros" value="DeviceName=MIMXRT1052;Family=iMXRT1050;Core=CM7" />
@@ -147,7 +147,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1052CVJ5B"/>
+			<cdefine name="CPU_MIMXRT1052CVJ5B" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1052DVL6A" aka="MIMXRT1052xxx6A" family="iMXRT1050">
 			<property name="macros" value="DeviceName=MIMXRT1052;Family=iMXRT1050;Core=CM7" />
@@ -155,7 +155,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1052DVL6A"/>
+			<cdefine name="CPU_MIMXRT1052DVL6A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1052DVL6B" aka="MIMXRT1052xxx6B" family="iMXRT1050">
 			<property name="macros" value="DeviceName=MIMXRT1052;Family=iMXRT1050;Core=CM7" />
@@ -163,7 +163,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1052DVL6B"/>
+			<cdefine name="CPU_MIMXRT1052DVL6B" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1052DVJ6B" aka="MIMXRT1052xxx6B" family="iMXRT1050">
 			<property name="macros" value="DeviceName=MIMXRT1052;Family=iMXRT1050;Core=CM7" />
@@ -171,7 +171,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1052DVJ6B"/>
+			<cdefine name="CPU_MIMXRT1052DVJ6B" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1061CVL5A" aka="MIMXRT1061xxx5A" family="iMXRT1060">
@@ -180,7 +180,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1061CVL5A"/>
+			<cdefine name="CPU_MIMXRT1061CVL5A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1061CVJ5A" aka="MIMXRT1061xxx5A" family="iMXRT1060">
 			<property name="macros" value="DeviceName=MIMXRT1061;Family=iMXRT1060;Core=CM7" />
@@ -188,7 +188,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1061CVJ5A"/>
+			<cdefine name="CPU_MIMXRT1061CVJ5A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1061DVL6A" aka="MIMXRT1061xxx6A" family="iMXRT1060">
 			<property name="macros" value="DeviceName=MIMXRT1061;Family=iMXRT1060;Core=CM7" />
@@ -196,7 +196,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1061DVL6A"/>
+			<cdefine name="CPU_MIMXRT1061DVL6A" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1061XVN5B" aka="MIMXRT1061xxx5B" family="iMXRT1060">
@@ -205,7 +205,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1061XVN5B"/>
+			<cdefine name="CPU_MIMXRT1061XVN5B" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1062CVL5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
@@ -214,7 +214,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1062CVL5A"/>
+			<cdefine name="CPU_MIMXRT1062CVL5A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1062CVJ5A" aka="MIMXRT1062xxx5A" family="iMXRT1060">
 			<property name="macros" value="DeviceName=MIMXRT1062;Family=iMXRT1060;Core=CM7" />
@@ -222,7 +222,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1062CVJ5A"/>
+			<cdefine name="CPU_MIMXRT1062CVJ5A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1062DVL6A" aka="MIMXRT1062xxx6A" family="iMXRT1060">
 			<property name="macros" value="DeviceName=MIMXRT1062;Family=iMXRT1060;Core=CM7" />
@@ -230,7 +230,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1062DVL6A"/>
+			<cdefine name="CPU_MIMXRT1062DVL6A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1062DVJ6A" aka="MIMXRT1062xxx6A" family="iMXRT1060">
 			<property name="macros" value="DeviceName=MIMXRT1062;Family=iMXRT1060;Core=CM7" />
@@ -238,7 +238,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1062DVJ6A"/>
+			<cdefine name="CPU_MIMXRT1062DVJ6A" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1062DVN6B" aka="MIMXRT1062xxx6B" family="iMXRT1060">
@@ -247,7 +247,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1062DVN6B"/>
+			<cdefine name="CPU_MIMXRT1062DVN6B" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1062XVN5B" aka="MIMXRT1062xxx6B" family="iMXRT1060">
 			<property name="macros" value="DeviceName=MIMXRT1062X;Family=iMXRT1060;Core=CM7" />
@@ -255,7 +255,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1062XVN5B"/>
+			<cdefine name="CPU_MIMXRT1062XVN5B" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT106ADVL6A" aka="MIMXRT106Axxx6A" family="iMXRT1060">
@@ -264,7 +264,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
 			<property name="arm_core_type" value="Cortex-M7" />
-			<cdefine name="CPU_MIMXRT106ADVL6A"/>
+			<cdefine name="CPU_MIMXRT106ADVL6A" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1064CVL5A" aka="MIMXRT1064xxx5A" family="iMXRT1064">
@@ -273,7 +273,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1064CVL5A"/>
+			<cdefine name="CPU_MIMXRT1064CVL5A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1064CVJ5A" aka="MIMXRT1064xxx5A" family="iMXRT1064">
 			<property name="macros" value="DeviceName=MIMXRT1064;Family=iMXRT1064;Core=CM7" />
@@ -281,7 +281,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1064CVJ5A"/>
+			<cdefine name="CPU_MIMXRT1064CVJ5A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1064DVL6A" aka="MIMXRT1064xxx6A" family="iMXRT1064">
 			<property name="macros" value="DeviceName=MIMXRT1064;Family=iMXRT1064;Core=CM7" />
@@ -289,7 +289,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1064DVL6A"/>
+			<cdefine name="CPU_MIMXRT1064DVL6A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1064DVJ6A" aka="MIMXRT1064xxx6A" family="iMXRT1064">
 			<property name="macros" value="DeviceName=MIMXRT1064;Family=iMXRT1064;Core=CM7" />
@@ -297,7 +297,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00080000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1064DVJ6A"/>
+			<cdefine name="CPU_MIMXRT1064DVJ6A" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1165CVM5A_cm7" aka="MIMXRT1165xxx5_M7" family="iMXRT1160">
@@ -306,7 +306,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x202B0000;0x00020000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1165CVM5A_cm7"/>
+			<cdefine name="CPU_MIMXRT1165CVM5A_cm7" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1165CVM5A_cm4" aka="MIMXRT1165xxx5_M4" family="iMXRT1160">
 			<property name="macros" value="DeviceName=MIMXRT1165_cm4;Family=iMXRT1160;Core=CM4" />
@@ -314,7 +314,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x202B0000;0x00020000;RAM;0x80000000;0x02000000;0x08000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M4" />
 			<property name="arm_fpu_type" value="FPv4-SP-D16" />
-			<cdefine name="CPU_MIMXRT1165CVM5A_cm4"/>
+			<cdefine name="CPU_MIMXRT1165CVM5A_cm4" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1165DVM6A_cm7" aka="MIMXRT1165xxx6_M7" family="iMXRT1160">
@@ -323,7 +323,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x202B0000;0x00020000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1165DVM6A_cm7"/>
+			<cdefine name="CPU_MIMXRT1165DVM6A_cm7" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1165DVM6A_cm4" aka="MIMXRT1165xxx6_M4" family="iMXRT1160">
 			<property name="macros" value="DeviceName=MIMXRT1165_cm4;Family=iMXRT1160;Core=CM4" />
@@ -331,7 +331,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x202B0000;0x00020000;RAM;0x80000000;0x02000000;0x08000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M4" />
 			<property name="arm_fpu_type" value="FPv4-SP-D16" />
-			<cdefine name="CPU_MIMXRT1165DVM6A_cm4"/>
+			<cdefine name="CPU_MIMXRT1165DVM6A_cm4" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1166CVM5A_cm7" aka="MIMXRT1166xxx5_M7" family="iMXRT1160">
@@ -340,7 +340,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x202B0000;0x00020000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1166CVM5A_cm7"/>
+			<cdefine name="CPU_MIMXRT1166CVM5A_cm7" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1166CVM5A_cm4" aka="MIMXRT1166xxx5_M4" family="iMXRT1160">
 			<property name="macros" value="DeviceName=MIMXRT1166_cm4;Family=iMXRT1160;Core=CM4" />
@@ -348,7 +348,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x202B0000;0x00020000;RAM;0x80000000;0x02000000;0x08000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M4" />
 			<property name="arm_fpu_type" value="FPv4-SP-D16" />
-			<cdefine name="CPU_MIMXRT1166CVM5A_cm4"/>
+			<cdefine name="CPU_MIMXRT1166CVM5A_cm4" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1166DVM6A_cm7" aka="MIMXRT1166xxx6_M7" family="iMXRT1160">
@@ -357,7 +357,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x202B0000;0x00020000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1166DVM6A_cm7"/>
+			<cdefine name="CPU_MIMXRT1166DVM6A_cm7" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1166DVM6A_cm4" aka="MIMXRT1166xxx6_M4" family="iMXRT1160">
 			<property name="macros" value="DeviceName=MIMXRT1166_cm4;Family=iMXRT1160;Core=CM4" />
@@ -365,7 +365,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x202B0000;0x00020000;RAM;0x80000000;0x02000000;0x08000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M4" />
 			<property name="arm_fpu_type" value="FPv4-SP-D16" />
-			<cdefine name="CPU_MIMXRT1166DVM6A_cm4"/>
+			<cdefine name="CPU_MIMXRT1166DVM6A_cm4" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1171AVM8A" aka="MIMXRT1171xxx8" family="iMXRT1170">
@@ -374,7 +374,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1171AVM8A"/>
+			<cdefine name="CPU_MIMXRT1171AVM8A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1171CVM8A" aka="MIMXRT1171xxx8" family="iMXRT1170">
 			<property name="macros" value="DeviceName=MIMXRT1171;Family=iMXRT1170;Core=CM7" />
@@ -382,7 +382,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1171CVM8A"/>
+			<cdefine name="CPU_MIMXRT1171CVM8A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1171DVMAA" aka="MIMXRT1171xxxA" family="iMXRT1170">
 			<property name="macros" value="DeviceName=MIMXRT1171;Family=iMXRT1170;Core=CM7" />
@@ -390,7 +390,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1171DVMAA"/>
+			<cdefine name="CPU_MIMXRT1171DVMAA" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1172AVM8A" aka="MIMXRT1172xxx8" family="iMXRT1170">
@@ -399,7 +399,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1172AVM8A"/>
+			<cdefine name="CPU_MIMXRT1172AVM8A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1172CVM8A" aka="MIMXRT1172xxx8" family="iMXRT1170">
 			<property name="macros" value="DeviceName=MIMXRT1172;Family=iMXRT1170;Core=CM7" />
@@ -407,7 +407,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1172CVM8A"/>
+			<cdefine name="CPU_MIMXRT1172CVM8A" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1172DVMAA" aka="MIMXRT1172xxxA" family="iMXRT1170">
 			<property name="macros" value="DeviceName=MIMXRT1172;Family=iMXRT1170;Core=CM7" />
@@ -415,7 +415,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1172DVMAA"/>
+			<cdefine name="CPU_MIMXRT1172DVMAA" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1173CVM8A_cm7" aka="MIMXRT1173xxx8_M7" family="iMXRT1170">
@@ -424,7 +424,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1173CVM8A_cm7"/>
+			<cdefine name="CPU_MIMXRT1173CVM8A_cm7" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1173CVM8A_cm4" aka="MIMXRT1173xxx8_M4" family="iMXRT1170">
 			<property name="macros" value="DeviceName=MIMXRT1173_cm4;Family=iMXRT1170;Core=CM4" />
@@ -432,7 +432,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x08000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M4" />
 			<property name="arm_fpu_type" value="FPv4-SP-D16" />
-			<cdefine name="CPU_MIMXRT1173CVM8A_cm4"/>
+			<cdefine name="CPU_MIMXRT1173CVM8A_cm4" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1175AVM8A_cm7" aka="MIMXRT1175xxx8_M7" family="iMXRT1170">
@@ -441,7 +441,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1175AVM8A_cm7"/>
+			<cdefine name="CPU_MIMXRT1175AVM8A_cm7" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1175AVM8A_cm4" aka="MIMXRT1175xxx8_M4" family="iMXRT1170">
 			<property name="macros" value="DeviceName=MIMXRT1175_cm4;Family=iMXRT1170;Core=CM4" />
@@ -449,7 +449,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x08000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M4" />
 			<property name="arm_fpu_type" value="FPv4-SP-D16" />
-			<cdefine name="CPU_MIMXRT1175AVM8A_cm4"/>
+			<cdefine name="CPU_MIMXRT1175AVM8A_cm4" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1175CVM8A_cm7" aka="MIMXRT1175xxx8_M7" family="iMXRT1170">
@@ -458,7 +458,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1175CVM8A_cm7"/>
+			<cdefine name="CPU_MIMXRT1175CVM8A_cm7" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1175CVM8A_cm4" aka="MIMXRT1175xxx8_M4" family="iMXRT1170">
 			<property name="macros" value="DeviceName=MIMXRT1175_cm4;Family=iMXRT1170;Core=CM4" />
@@ -466,7 +466,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x08000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M4" />
 			<property name="arm_fpu_type" value="FPv4-SP-D16" />
-			<cdefine name="CPU_MIMXRT1175CVM8A_cm4"/>
+			<cdefine name="CPU_MIMXRT1175CVM8A_cm4" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1175DVMAA_cm7" aka="MIMXRT1175xxxA_M7" family="iMXRT1170">
@@ -475,7 +475,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1175DVMAA_cm7"/>
+			<cdefine name="CPU_MIMXRT1175DVMAA_cm7" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1175DVMAA_cm4" aka="MIMXRT1175xxxA_M4" family="iMXRT1170">
 			<property name="macros" value="DeviceName=MIMXRT1175_cm4;Family=iMXRT1170;Core=CM4" />
@@ -483,7 +483,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x08000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M4" />
 			<property name="arm_fpu_type" value="FPv4-SP-D16" />
-			<cdefine name="CPU_MIMXRT1175DVMAA_cm4"/>
+			<cdefine name="CPU_MIMXRT1175DVMAA_cm4" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1176AVM8A_cm7" aka="MIMXRT1176xxx8_M7" family="iMXRT1170">
@@ -492,7 +492,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1176AVM8A_cm7"/>
+			<cdefine name="CPU_MIMXRT1176AVM8A_cm7" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1176AVM8A_cm4" aka="MIMXRT1176xxx8_M4" family="iMXRT1170">
 			<property name="macros" value="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170;Core=CM4" />
@@ -500,7 +500,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x08000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M4" />
 			<property name="arm_fpu_type" value="FPv4-SP-D16" />
-			<cdefine name="CPU_MIMXRT1176AVM8A_cm4"/>
+			<cdefine name="CPU_MIMXRT1176AVM8A_cm4" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1176CVM8A_cm7" aka="MIMXRT1176xxx8_M7" family="iMXRT1170">
@@ -509,7 +509,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1176CVM8A_cm7"/>
+			<cdefine name="CPU_MIMXRT1176CVM8A_cm7" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1176CVM8A_cm4" aka="MIMXRT1176xxx8_M4" family="iMXRT1170">
 			<property name="macros" value="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170;Core=CM4" />
@@ -517,7 +517,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x08000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M4" />
 			<property name="arm_fpu_type" value="FPv4-SP-D16" />
-			<cdefine name="CPU_MIMXRT1176CVM8A_cm4"/>
+			<cdefine name="CPU_MIMXRT1176CVM8A_cm4" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT1176DVMAA_cm7" aka="MIMXRT1176xxxA_M7" family="iMXRT1170">
@@ -526,7 +526,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00040000;RAM;0x20000000;0x00040000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x30000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M7" />
 			<property name="arm_fpu_type" value="FPv5-D16" />
-			<cdefine name="CPU_MIMXRT1176DVMAA_cm7"/>
+			<cdefine name="CPU_MIMXRT1176DVMAA_cm7" />
 		</groupEntry>
 		<groupEntry name="MIMXRT1176DVMAA_cm4" aka="MIMXRT1176xxxA_M4" family="iMXRT1170">
 			<property name="macros" value="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170;Core=CM4" />
@@ -534,7 +534,7 @@
 			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x1FFE0000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20240000;0x00100000;RAM;0x80000000;0x02000000;0x08000000;0x04000000" />
 			<property name="arm_core_type" value="Cortex-M4" />
 			<property name="arm_fpu_type" value="FPv4-SP-D16" />
-			<cdefine name="CPU_MIMXRT1176DVMAA_cm4"/>
+			<cdefine name="CPU_MIMXRT1176DVMAA_cm4" />
 		</groupEntry>
 
 
@@ -546,7 +546,7 @@
 			<property name="arm_fpu_type" value="FPv5-SP-D16" />
 			<property name="arm_v8M_has_cmse" value="Yes" />
 			<property name="arm_v8M_has_dsp" value="Yes" />
-			<cdefine name="CPU_MIMXRT633SFAWBR"/>
+			<cdefine name="CPU_MIMXRT633SFAWBR" />
 		</groupEntry>
 		<groupEntry name="MIMXRT633SFFOB" aka="MIMXRT633SxxxB" family="iMXRT600">
 			<property name="macros" value="DeviceName=MIMXRT633S;Family=iMXRT600" />
@@ -556,7 +556,7 @@
 			<property name="arm_fpu_type" value="FPv5-SP-D16" />
 			<property name="arm_v8M_has_cmse" value="Yes" />
 			<property name="arm_v8M_has_dsp" value="Yes" />
-			<cdefine name="CPU_MIMXRT633SFFOB"/>
+			<cdefine name="CPU_MIMXRT633SFFOB" />
 		</groupEntry>
 		<groupEntry name="MIMXRT633SFVKB" aka="MIMXRT633SxxxB" family="iMXRT600">
 			<property name="macros" value="DeviceName=MIMXRT633S;Family=iMXRT600" />
@@ -566,7 +566,7 @@
 			<property name="arm_fpu_type" value="FPv5-SP-D16" />
 			<property name="arm_v8M_has_cmse" value="Yes" />
 			<property name="arm_v8M_has_dsp" value="Yes" />
-			<cdefine name="CPU_MIMXRT633SFVKB"/>
+			<cdefine name="CPU_MIMXRT633SFVKB" />
 		</groupEntry>
 
 		<groupEntry name="MIMXRT685SFAWBR_cm33" aka="MIMXRT685SFxxxR_cm33" family="iMXRT600">
@@ -577,7 +577,7 @@
 			<property name="arm_fpu_type" value="FPv5-SP-D16" />
 			<property name="arm_v8M_has_cmse" value="Yes" />
 			<property name="arm_v8M_has_dsp" value="Yes" />
-			<cdefine name="CPU_MIMXRT685SFAWBR_cm33"/>
+			<cdefine name="CPU_MIMXRT685SFAWBR_cm33" />
 		</groupEntry>
 		<groupEntry name="MIMXRT685SFFOB_cm33" aka="MIMXRT685SxxxB_cm33" family="iMXRT600">
 			<property name="macros" value="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
@@ -587,7 +587,7 @@
 			<property name="arm_fpu_type" value="FPv5-SP-D16" />
 			<property name="arm_v8M_has_cmse" value="Yes" />
 			<property name="arm_v8M_has_dsp" value="Yes" />
-			<cdefine name="CPU_MIMXRT685SFFOB_cm33"/>
+			<cdefine name="CPU_MIMXRT685SFFOB_cm33" />
 		</groupEntry>
 		<groupEntry name="MIMXRT685SFVKB_cm33" aka="MIMXRT685SxxxB_cm33" family="iMXRT600">
 			<property name="macros" value="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
@@ -597,44 +597,44 @@
 			<property name="arm_fpu_type" value="FPv5-SP-D16" />
 			<property name="arm_v8M_has_cmse" value="Yes" />
 			<property name="arm_v8M_has_dsp" value="Yes" />
-			<cdefine name="CPU_MIMXRT685SFVKB_cm33"/>
+			<cdefine name="CPU_MIMXRT685SFVKB_cm33" />
 		</groupEntry>
 	</group>
 
 	<group short="Section Placement" group="Build Options" long="Select a set of options based on section placement." name="Placement" default="TCM" >
 		<groupEntry name="User defined">
-			<property name="linker_section_placement_file" value=""/>
-			<property name="arm_target_loader_applicable_loaders" value=""/>
-			<property name="arm_target_loader_default_loader" value=""/>
+			<property name="linker_section_placement_file" value="" />
+			<property name="arm_target_loader_applicable_loaders" value="" />
+			<property name="arm_target_loader_default_loader" value="" />
 		</groupEntry>
 		<groupEntry name="TCM">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_tcm.xml" />
 			<property name="linker_section_placement_macros" value="" />
-			<property name="arm_target_loader_applicable_loaders" value=""/>
-			<property name="arm_target_loader_default_loader" value=""/>
+			<property name="arm_target_loader_applicable_loaders" value="" />
+			<property name="arm_target_loader_default_loader" value="" />
 			<property name="target_reset_script" value="Reset()" />
-			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
 		</groupEntry>
 		<groupEntry name="SRAM">
 			<property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/ram_placement.xml" />
 			<property name="linker_section_placement_macros" value="RAM_NAME=SRAM_data" />
-			<property name="arm_target_loader_applicable_loaders" value=""/>
-			<property name="arm_target_loader_default_loader" value=""/>
+			<property name="arm_target_loader_applicable_loaders" value="" />
+			<property name="arm_target_loader_default_loader" value="" />
 			<property name="target_reset_script" value="Reset()" />
 		</groupEntry>
 		<groupEntry name="OCRAM">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_ocram.xml" />
 			<property name="linker_section_placement_macros" value="RAM_NAME=OCRAM" />
-			<property name="arm_target_loader_applicable_loaders" value=""/>
-			<property name="arm_target_loader_default_loader" value=""/>
+			<property name="arm_target_loader_applicable_loaders" value="" />
+			<property name="arm_target_loader_default_loader" value="" />
 			<property name="target_reset_script" value="Reset()" />
-			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
 		</groupEntry>
 		<groupEntry name="SDRAM">
 			<property name="linker_section_placement_file" value="$(StudioDir)/targets/Cortex_M/ram_placement.xml" />
 			<property name="linker_section_placement_macros" value="RAM_NAME=SDRAM" />
-			<property name="arm_target_loader_applicable_loaders" value=""/>
-			<property name="arm_target_loader_default_loader" value=""/>
+			<property name="arm_target_loader_applicable_loaders" value="" />
+			<property name="arm_target_loader_default_loader" value="" />
 			<property name="target_reset_script" value="Reset()&#xa;Clock_Init()&#xa;SDRAM_Init()" />
 		</groupEntry>
 		<groupEntry name="FlexSPI (HYPER)">
@@ -644,12 +644,12 @@
 			<property name="arm_target_loader_default_loader" value="Flash" />
 			<property name="arm_target_loader_parameter" value="1" configuration="Flash" />
 			<property name="target_reset_script" value="Reset()" />
-			<cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
-			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
-			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
-			<cdefine name="XIP_BOOT_HYPERFLASH" value="1"/>
-			<cdefine name="XIP_BOOT_FLEXSPI1" value="1"/>
-			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+			<cdefine name="XIP_EXTERNAL_FLASH" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_HYPERFLASH" value="1" />
+			<cdefine name="XIP_BOOT_FLEXSPI1" value="1" />
+			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
 		</groupEntry>
 		<groupEntry name="FlexSPI (OctaSPI)">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
@@ -658,12 +658,12 @@
 			<property name="arm_target_loader_default_loader" value="Flash" />
 			<property name="arm_target_loader_parameter" value="2" configuration="Flash" />
 			<property name="target_reset_script" value="Reset()" />
-			<cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
-			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
-			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
-			<cdefine name="XIP_BOOT_OCTASPI" value="1"/>
-			<cdefine name="XIP_BOOT_FLEXSPI1" value="1"/>
-			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+			<cdefine name="XIP_EXTERNAL_FLASH" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_OCTASPI" value="1" />
+			<cdefine name="XIP_BOOT_FLEXSPI1" value="1" />
+			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
 		</groupEntry>
 		<groupEntry name="FlexSPI (QuadSPI)">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
@@ -672,12 +672,12 @@
 			<property name="arm_target_loader_default_loader" value="Flash" />
 			<property name="arm_target_loader_parameter" value="5" configuration="Flash" />
 			<property name="target_reset_script" value="Reset()" />
-			<cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
-			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
-			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
-			<cdefine name="XIP_BOOT_QSPI" value="1"/>
-			<cdefine name="XIP_BOOT_FLEXSPI1" value="1"/>
-			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+			<cdefine name="XIP_EXTERNAL_FLASH" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_QSPI" value="1" />
+			<cdefine name="XIP_BOOT_FLEXSPI1" value="1" />
+			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
 		</groupEntry>
 
 		<groupEntry name="FlexSPI2 (HYPER)">
@@ -687,12 +687,12 @@
 			<property name="arm_target_loader_default_loader" value="Flash" />
 			<property name="arm_target_loader_parameter" value="16" configuration="Flash" />
 			<property name="target_reset_script" value="Reset()" />
-			<cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
-			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
-			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
-			<cdefine name="XIP_BOOT_HYPERFLASH" value="1"/>
-			<cdefine name="XIP_BOOT_FLEXSPI2" value="1"/>
-			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+			<cdefine name="XIP_EXTERNAL_FLASH" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_HYPERFLASH" value="1" />
+			<cdefine name="XIP_BOOT_FLEXSPI2" value="1" />
+			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
 		</groupEntry>
 		<groupEntry name="FlexSPI2 (OctaSPI)">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
@@ -701,12 +701,12 @@
 			<property name="arm_target_loader_default_loader" value="Flash" />
 			<property name="arm_target_loader_parameter" value="32" configuration="Flash" />
 			<property name="target_reset_script" value="Reset()" />
-			<cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
-			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
-			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
-			<cdefine name="XIP_BOOT_OCTASPI" value="1"/>
-			<cdefine name="XIP_BOOT_FLEXSPI2" value="1"/>
-			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+			<cdefine name="XIP_EXTERNAL_FLASH" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_OCTASPI" value="1" />
+			<cdefine name="XIP_BOOT_FLEXSPI2" value="1" />
+			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
 		</groupEntry>
 		<groupEntry name="FlexSPI2 (QuadSPI)">
 			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
@@ -715,12 +715,12 @@
 			<property name="arm_target_loader_default_loader" value="Flash" />
 			<property name="arm_target_loader_parameter" value="80" configuration="Flash" />
 			<property name="target_reset_script" value="Reset()" />
-			<cdefine name="XIP_EXTERNAL_FLASH" value="1"/>
-			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1"/>
-			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1"/>
-			<cdefine name="XIP_BOOT_QSPI" value="1"/>
-			<cdefine name="XIP_BOOT_FLEXSPI2" value="1"/>
-			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1"/>
+			<cdefine name="XIP_EXTERNAL_FLASH" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_QSPI" value="1" />
+			<cdefine name="XIP_BOOT_FLEXSPI2" value="1" />
+			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
 		</groupEntry>
 	</group>
 </propertyGroups>

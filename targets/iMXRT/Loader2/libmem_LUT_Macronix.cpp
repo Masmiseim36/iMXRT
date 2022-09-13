@@ -128,6 +128,7 @@ namespace Macronix
 
 			// Switch to OSPI-Mode
 			// Write to status/control register 2 to set Dummy Cycles to 12
+			// Compare "Dummy Cycle and Frequency Table (MHz)" in the Datasheet
 			status_t stat = flexSPI.WriteEnable (0);	// send write-enable 
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;

@@ -289,7 +289,12 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	{
 		#if (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES) || \
 			 defined(MIMXRT533S_SERIES) || defined(MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES))
-			ClockDiv--;
+			ClockDiv = 2;
+			CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV(ClockDiv - 1);
+			while ((CLKCTL0->FLEXSPIFCLKDIV) & CLKCTL0_FLEXSPIFCLKDIV_REQFLAG_MASK)
+				;
+			DeviceConfig.flexspiRootClk = CLOCK_GetFlexspiClkFreq ();
+			config.rxSampleClock = kFLEXSPI_ReadSampleClkLoopbackInternally; // To achieve high speeds - always use DQS
 		#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
 			   defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || \
 			   defined(MIMXRT1064_SERIES))
@@ -309,7 +314,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 		#else
 			#error "unknon controller family"
 		#endif
-		FLEXSPI_Init (base, &config);
+		FLEXSPI_Init (base, &config); // changing the clock requires reinitialization
 	}
 
 	// Use the size information from the JEDEC-Information to configure the Interface
@@ -318,8 +323,6 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	geometry[0].count = FlashSize / (4096 / 1024);
 	FlashSize *= 1024;	// Convert kBytes to bytes
 
-	// changing the clock sourece requires reinit
-//	FLEXSPI_Init (base, &config);
 	FLEXSPI_SetFlashConfig (base, &DeviceConfig, FlexSPI_Helper::port);	// Configure flash settings according to serial flash feature.
 
 	if (lut != nullptr)

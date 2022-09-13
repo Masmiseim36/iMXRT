@@ -1,92 +1,97 @@
 <!DOCTYPE CrossStudio_Package_Description_File>
-<package name="iMXRT" author="Rowley Associates Ltd" cpu_manufacturer="NXP" cpu_family="iMXRT" version="4.4.3" crossstudio_versions="8:4.8-" dependencies="CMSIS" build_version="crossworks_v4" >
+<package crossstudio_versions="8:4.8-" version="4.4.3" dependencies="CMSIS" cpu_family="iMXRT" author="Rowley Associates Ltd" name="iMXRT" cpu_manufacturer="NXP" build_version="crossworks_v4" >
 	<group title="System Solutions">
-		<file title="iMXRT Loader Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader.hzp" />
-		<file title="iMX RT Samples" file_name="$(SamplesDir)/iMXRT/iMXRT.hzp" />
+		<file title="iMXRT Loader Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader.hzp"/>
+		<file title="iMXRT Loader2 Solution" file_name="$(TargetsDir)/iMXRT/Loader2/Loader.hzp"/>
+		<file title="iMXRT Samples" file_name="$(SamplesDir)/iMXRT/iMXRT.hzp"/>
 	</group>
 	<targets>
 		<category name="iMXRT1011">
-			<cpu name="MIMXRT1011CAE4A" />
-			<cpu name="MIMXRT1011DAE5A" />
+			<cpu name="MIMXRT1011CAE4A"/>
+			<cpu name="MIMXRT1011DAE5A"/>
 		</category>
 		<category name="iMXRT1015">
-			<cpu name="MIMXRT1015CAF4A" />
-			<cpu name="MIMXRT1015DAF5A" />
+			<cpu name="MIMXRT1015CAF4A"/>
+			<cpu name="MIMXRT1015DAF5A"/>
 		</category>
 		<category name="iMXRT1020">
-			<cpu name="MIMXRT1021CAG4A" /> 
-			<cpu name="MIMXRT1021CAF4A" />
-			<cpu name="MIMXRT1021DAG5A" /> 
-			<cpu name="MIMXRT1021DAF5A" />
-			<cpu name="MIMXRT1024CAG4A" />
-			<cpu name="MIMXRT1024DAG5A" />
+			<cpu name="MIMXRT1021CAG4A"/>
+			<cpu name="MIMXRT1021CAF4A"/>
+			<cpu name="MIMXRT1021DAG5A"/>
+			<cpu name="MIMXRT1021DAF5A"/>
+		</category>
+		<category name="iMXRT1024">
+			<cpu name="MIMXRT1024CAG4A"/>
+			<cpu name="MIMXRT1024CAG4B"/>
+			<cpu name="MIMXRT1024DAG5A"/>
+			<cpu name="MIMXRT1024DAG5B"/>
 		</category>
 		<category name="iMXRT1050">
-			<cpu name="MIMXRT1051CVL5A" />
-			<cpu name="MIMXRT1051CVL5B" />
-			<cpu name="MIMXRT1051CVJ5B" />
-			<cpu name="MIMXRT1051DVL6A" />
-			<cpu name="MIMXRT1051DVL6B" />
-			<cpu name="MIMXRT1051DVJ6B" />
-			<cpu name="MIMXRT1052CVL5A" />
-			<cpu name="MIMXRT1052CVL5B" />
-			<cpu name="MIMXRT1052CVJ5B" />
-			<cpu name="MIMXRT1052DVL6A" />
-			<cpu name="MIMXRT1052DVL6B" />
-			<cpu name="MIMXRT1052DVJ6B" />
+			<cpu name="MIMXRT1051CVL5A"/>
+		<cpu name="MIMXRT1051CVL5B"/>
+			<cpu name="MIMXRT1051CVJ5B"/>
+			<cpu name="MIMXRT1051DVL6A"/>
+			<cpu name="MIMXRT1051DVL6B"/>
+			<cpu name="MIMXRT1051DVJ6B"/>
+			<cpu name="MIMXRT1052CVL5A"/>
+			<cpu name="MIMXRT1052CVL5B"/>
+			<cpu name="MIMXRT1052CVJ5B"/>
+			<cpu name="MIMXRT1052DVL6A"/>
+			<cpu name="MIMXRT1052DVL6B"/>
+			<cpu name="MIMXRT1052DVJ6B"/>
 		</category>
 		<category name="iMXRT1060">
-			<cpu name="MIMXRT1061CVJ5A" />
-			<cpu name="MIMXRT1061CVL5A" />
-			<cpu name="MIMXRT1061DVL6A" />
-			<cpu name="MIMXRT1061XVN5B" />
-			<cpu name="MIMXRT1062CVJ5A" />
-			<cpu name="MIMXRT1062CVL5A" />
-			<cpu name="MIMXRT1062DVJ6A" />
-			<cpu name="MIMXRT1062DVL6A" />
-			<cpu name="MIMXRT1062DVN6B" />
-			<cpu name="MIMXRT1062XVN5B" />
+			<cpu name="MIMXRT1061CVJ5A"/>
+			<cpu name="MIMXRT1061CVL5A"/>
+			<cpu name="MIMXRT1061DVL6A"/>
+			<cpu name="MIMXRT1061XVN5B"/>
+			<cpu name="MIMXRT1062CVJ5A"/>
+			<cpu name="MIMXRT1062CVL5A"/>
+			<cpu name="MIMXRT1062DVJ6A"/>
+			<cpu name="MIMXRT1062DVL6A"/>
+			<cpu name="MIMXRT1062DVN6B"/>
+			<cpu name="MIMXRT1062XVN5B"/>
 		</category>
 		<category name="iMXRT1064">
-			<cpu name="MIMXRT1064CVL5A" />
-			<cpu name="MIMXRT1064DVL6A" />
+			<cpu name="MIMXRT1064CVL5A"/>
+			<cpu name="MIMXRT1064DVL6A"/>
 		</category>
 		<category name="iMXRT1160">
-			<cpu name="MIMXRT1165CVM5A" />
-			<cpu name="MIMXRT1165DVM6A" />
-			<cpu name="MIMXRT1165XVM5A" />
-			<cpu name="MIMXRT1166CVM5A" />
-			<cpu name="MIMXRT1166DVM6A" />
-			<cpu name="MIMXRT1166XVM5A" />
+			<cpu name="MIMXRT1165CVM5A"/>
+			<cpu name="MIMXRT1165DVM6A"/>
+			<cpu name="MIMXRT1165XVM5A"/>
+			<cpu name="MIMXRT1166CVM5A"/>
+			<cpu name="MIMXRT1166DVM6A"/>
+			<cpu name="MIMXRT1166XVM5A"/>
 		</category>
 		<category name="iMXRT1170">
-			<cpu name="MIMXRT1171AVM8A" />
-			<cpu name="MIMXRT1171CVM8A" />
-			<cpu name="MIMXRT1171DVMAA" />
-			<cpu name="MIMXRT1172AVM8A" />
-			<cpu name="MIMXRT1172CVM8A" />
-			<cpu name="MIMXRT1172DVMAA" />
-			<cpu name="MIMXRT1173CVM8A_cm7" />
-			<cpu name="MIMXRT1173CVM8A_cm4" />
-			<cpu name="MIMXRT1175AVM8A_cm7" />
-			<cpu name="MIMXRT1175CVM8A_cm7" />
-			<cpu name="MIMXRT1175DVMAA_cm7" />
-			<cpu name="MIMXRT1175AVM8A_cm4" />
-			<cpu name="MIMXRT1175CVM8A_cm4" />
-			<cpu name="MIMXRT1175DVMAA_cm4" />
-			<cpu name="MIMXRT1176AVM8A_cm7" />
-			<cpu name="MIMXRT1176CVM8A_cm7" />
-			<cpu name="MIMXRT1176DVMAA_cm7" />
-			<cpu name="MIMXRT1176AVM8A_cm4" />
-			<cpu name="MIMXRT1176CVM8A_cm4" />
-			<cpu name="MIMXRT1176DVMAA_cm4" />
+			<cpu name="MIMXRT1171AVM8A"/>
+			<cpu name="MIMXRT1171CVM8A"/>
+			<cpu name="MIMXRT1171DVMAA"/>
+			<cpu name="MIMXRT1172AVM8A"/>
+			<cpu name="MIMXRT1172CVM8A"/>
+			<cpu name="MIMXRT1172DVMAA"/>
+			<cpu name="MIMXRT1173CVM8A_cm7"/>
+			<cpu name="MIMXRT1173CVM8A_cm4"/>
+			<cpu name="MIMXRT1175AVM8A_cm7"/>
+			<cpu name="MIMXRT1175CVM8A_cm7"/>
+			<cpu name="MIMXRT1175DVMAA_cm7"/>
+			<cpu name="MIMXRT1175AVM8A_cm4"/>
+			<cpu name="MIMXRT1175CVM8A_cm4"/>
+			<cpu name="MIMXRT1175DVMAA_cm4"/>
+			<cpu name="MIMXRT1176AVM8A_cm7"/>
+			<cpu name="MIMXRT1176CVM8A_cm7"/>
+			<cpu name="MIMXRT1176DVMAA_cm7"/>
+			<cpu name="MIMXRT1176AVM8A_cm4"/>
+			<cpu name="MIMXRT1176CVM8A_cm4"/>
+			<cpu name="MIMXRT1176DVMAA_cm4"/>
 		</category>
 	</targets>
   <documentation>
     <section name="Creating iMXRT Projects">
       <h5>To create a new iMXRT project</h5>
       <ul>
-        <li>Select the <b>File &gt; New &gt; New Project</b> menu item.</li>
+    <li>Select the <b>File > New > New Project</b> menu item.</li>
         <li>Select the appropriate <b>Generic iMXRT</b> from the <b>Categories</b> list.</li>
         <li>Select the required project template type from the <b>Templates</b> list.</li>
         <li>Set the required project name and location directory.</li>
@@ -100,12 +105,12 @@
       </ul>
       <h5>To build and debug an application the runs in Flash memory</h5>
       <ul>
-        <li>Select the project to work on by using the <b>Project &gt; Set Active Project</b> menu option.</li>
-        <li>Select the configuration you require by using the <b>Build &gt; Set Active Build Configuration</b> menu option.</li>
+        <li>Select the project to work on by using the <b>Project > Set Active Project</b> menu option.</li>
+        <li>Select the configuration you require by using the <b>Build > Set Active Build Configuration</b> menu option.</li>
         <li>Right click on the project node in the project explorer and select the <b>FlexSPI (HYPER|QuadSPI)</b> placement property.</li>
-        <li>Build the project by using the <b>Build &gt; Build Project</b> menu option.</li>
+        <li>Build the project by using the <b>Build > Build Project</b> menu option.</li>
         <li>Connect to the appropriate target in the target window.</li>
-        <li>Download and start debugging the current project by using <b>Debug &gt; Start Debugging</b>.</li>
+        <li>Download and start debugging the current project by using <b>Debug > Start Debugging</b>.</li>
       </ul>
       <h5>To make the application startup from reset</h5>
       <ul>

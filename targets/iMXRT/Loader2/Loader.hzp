@@ -343,6 +343,10 @@
         <file file_name="iMXRT600/fsl_iopctl.h" />
         <file file_name="iMXRT600/fsl_power.c" />
         <file file_name="iMXRT600/fsl_power.h" />
+        <file file_name="fsl_usart.c" />
+        <file file_name="fsl_usart.h" />
+        <file file_name="fsl_flexcomm.c" />
+        <file file_name="fsl_flexcomm.h" />
         <file file_name="iMXRT600/placement.xml">
           <configuration Name="Common" file_type="Section Placement" />
         </file>
@@ -587,5 +591,6 @@
       <file file_name="$(StudioDir)/include/libmem.h" />
       <file file_name="$(StudioDir)/include/libmem_loader.h" />
     </folder>
+    <configuration Name="600" arm_target_interface_type="SWD" />
   </project>
 </solution>
