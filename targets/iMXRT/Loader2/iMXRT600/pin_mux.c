@@ -141,7 +141,7 @@ void BOARD_InitQuadSPIPins (void)
 {
     GPIO_PortInit (GPIO, 1);
     GPIO_PortInit (GPIO, 2);
-        /* Define the init structure for the reset pin*/
+    /* Define the init structure for the reset pin*/
     gpio_pin_config_t reset_config = {
         kGPIO_DigitalOutput,
         1,

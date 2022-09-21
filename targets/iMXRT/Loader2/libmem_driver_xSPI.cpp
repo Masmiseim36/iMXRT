@@ -26,10 +26,10 @@ OF SUCH DAMAGE. */
 #include "fsl_flexspi.h"
 #include "fsl_common.h"
 #include "fsl_clock.h"
-#include "DebugPrint.h"
 #if __has_include("fsl_power.h")
 	#include "fsl_power.h"
 #endif
+#include "DebugPrint.h"
 
 #include "libmem_LUT_Generic.h"
 #include "libmem_LUT_Adesto.h"
@@ -129,12 +129,12 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
 		   defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || \
 		   defined(MIMXRT1064_SERIES))
-		const clock_usb_pll_config_t g_ccmConfigUsbPll = {.loopDivider = 0U, .src=0};
-		CLOCK_InitUsb1Pll (&g_ccmConfigUsbPll);	// PLL3 --> USB1-PLL
+		const clock_usb_pll_config_t configUsbPll = {.loopDivider = 0U, .src=0};
+		CLOCK_InitUsb1Pll (&configUsbPll);		// PLL3 --> USB1-PLL
 		CLOCK_InitUsb1Pfd (kCLOCK_Pfd0, 18);	// Set PLL3 PFD0 clock 480MHZ (480*18/24). PLL3 --> USB1-PLL --> PLL480
 		uint32_t SourceClock_Hz = CLOCK_GetUsb1PfdFreq (kCLOCK_Pfd0);
 
-		uint32_t ClockDiv = 6;
+		uint32_t ClockDiv = 6; // flexspi clock divide by six --> 80Mz.
 		uint32_t ClockHz = SourceClock_Hz / ClockDiv;
 		clock_div_t FlexSPIDiv = kCLOCK_FlexspiDiv;
 		switch (base->GetBaseAddr())
@@ -160,7 +160,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			default:
 				break;
 		}
-		CLOCK_SetDiv (FlexSPIDiv, ClockDiv-1);	// flexspi clock divide by six --> 80Mz.
+		CLOCK_SetDiv (FlexSPIDiv, ClockDiv-1);
 	#elif (defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
 		   defined(MIMXRT1171_SERIES)     || defined(MIMXRT1172_SERIES)     || defined(MIMXRT1173_cm7_SERIES) || defined(MIMXRT1173_cm4_SERIES) || \
 		   defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1175_cm4_SERIES) || defined(MIMXRT1176_cm7_SERIES) || defined(MIMXRT1176_cm4_SERIES))

@@ -99,12 +99,6 @@ int main (uint32_t flags, uint32_t param)
 	BOARD_ConfigMPU     ();
 	BOARD_BootClockGate ();
 	BOARD_BootClockRUN  ();
-	#if ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
-		 (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
-		 (defined MIMXRT1064_SERIES))
-		const clock_usb_pll_config_t ConfigUsbPll = {.loopDivider = 0U, .src = 0U};
-		CLOCK_InitUsb1Pll   (&ConfigUsbPll);
-	#endif
 	#if defined FSL_FEATURE_SOC_IOMUXC_COUNT && FSL_FEATURE_SOC_IOMUXC_COUNT > 0
 		CLOCK_EnableClock (kCLOCK_Iomuxc);
 	#endif
@@ -115,14 +109,6 @@ int main (uint32_t flags, uint32_t param)
 		(void)flags;
 		(void)param;
 		// some test Code, because the Loader can not be debugged while using it in real scenarios
-//		#if defined CPU_MIMXRT1015CAF4A || defined CPU_MIMXRT1021DAF5A || defined CPU_MIMXRT1062DVJ6A || defined CPU_MIMXRT1064DVL6A
-//			BOARD_InitQuadSPIPins (); 
-//			LibmemStatus res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_QuadSPI);	// Register iMX-RT internal FLASH driver
-//		#else
-//			BOARD_InitOctaSPIPins ();
-//			LibmemStatus res = Libmem_InitializeDriver_Hyperflash (FLEXSPI);	// Register iMX-RT internal FLASH driver
-//		#endif
-
 		BOARD_PerformJEDECReset (FLEXSPI);
 //		BOARD_InitQuadSPIPins ();
 		BOARD_InitOctaSPIPins ();

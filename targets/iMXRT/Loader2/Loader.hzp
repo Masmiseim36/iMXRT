@@ -5,6 +5,7 @@
     Platform="ARM"
     arm_instruction_set="Thumb"
     arm_library_instruction_set="Thumb"
+    build_intermediate_directory="out/$(ProjectName) $(Configuration)"
     c_additional_options="-fno-signed-char;-Wno-narrowing;-Wall;-Wextra;-Wmisleading-indentation;-Wshadow;-Wdouble-promotion;-Wformat=2"
     c_preprocessor_definitions="__THUMB;STARTUP_FROM_RESET=1;DISABLE_WDOG=1"
     c_preprocessor_undefinitions="__STDCPP_THREADS__"
@@ -578,7 +579,7 @@
       <file file_name="libmem_driver_xSPI.h" />
       <file file_name="libmem_driver_xSPI.cpp" />
       <file file_name="DebugPrint.h" />
-      <file file_name="DebugPrint.cpp" />
+      <file file_name="DebugPrint_LPUART.cpp" />
       <file file_name="DebugPrint_USART.cpp" />
       <file file_name="board_generic.h" />
       <file file_name="libmem_LUT_Generic.h" />

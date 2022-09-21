@@ -26,6 +26,9 @@ OF SUCH DAMAGE. */
 #include "fsl_flexspi.h"
 #include "fsl_common.h"
 #include "fsl_clock.h"
+#if __has_include("fsl_power.h")
+	#include "fsl_power.h"
+#endif
 #include "DebugPrint.h"
 #include <array>
 
@@ -207,31 +210,62 @@ static const libmem_ext_driver_functions_t DriverFunctions_Extended =
 \return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
 LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 {
-	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || \
-		 defined(MIMXRT533S_SERIES) || defined (MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES)
-		uint32_t src = 2;		// Use AUX0_PLL as clock source for the FlexSPI
-		uint32_t divider = 4;	// with a divider of four
-		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (divider - 1))
+	#if (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES) || \
+		 defined(MIMXRT533S_SERIES) || defined(MIMXRT555S_SERIES)      || defined(MIMXRT595S_cm33_SERIES))
+		constexpr uint32_t src = 2;	// Use AUX0_PLL as clock source for the FlexSPI
+		uint32_t ClockDiv = 4;		// with a divider of four
+		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (ClockDiv - 1))
 		{
-			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
+			#if !defined(FSL_SDK_DRIVER_QUICK_ACCESS_ENABLE)
+				POWER_DisablePD(kPDRUNCFG_APD_FLEXSPI_SRAM);
+				POWER_DisablePD(kPDRUNCFG_PPD_FLEXSPI_SRAM);
+				POWER_ApplyPD();
+			#endif
+
+//			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
 			CLKCTL0->FLEXSPIFCLKSEL = CLKCTL0_FLEXSPIFCLKSEL_SEL(src);			// Update flexspi clock.
 			CLKCTL0->FLEXSPIFCLKDIV |= CLKCTL0_FLEXSPIFCLKDIV_RESET_MASK;		// Reset the divider counter
-			CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV(divider - 1);
+			CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV(ClockDiv - 1);
 			while ((CLKCTL0->FLEXSPIFCLKDIV) & CLKCTL0_FLEXSPIFCLKDIV_REQFLAG_MASK)
 				;
-			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
+//			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
 		}
-	#elif (defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
-		  (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
-		  (defined MIMXRT1064_SERIES)
-		// Set flexspi root clock to 166MHZ.
-		CLOCK_InitUsb1Pfd (kCLOCK_Pfd0, 26);        // Set PLL3 PFD0 clock 332MHZ.
-		CLOCK_SetMux      (kCLOCK_FlexspiMux, 0x3); // Choose PLL3 PFD0 clock as flexspi source clock.
-		CLOCK_SetDiv      (kCLOCK_FlexspiDiv, 3);   // flexspi clock 83M, DDR mode, internal clock 42M.
-	#elif (defined MIMXRT1165_cm7_SERIES) || (defined MIMXRT1166_cm7_SERIES) || (defined MIMXRT1165_cm4_SERIES) || (defined MIMXRT1166_cm4_SERIES) || \
-		  (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1173_cm4_SERIES) || \
-		  (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm7_SERIES) || (defined MIMXRT1176_cm4_SERIES)
-		
+	#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
+		   defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || \
+		   defined(MIMXRT1064_SERIES))
+		const clock_usb_pll_config_t g_ccmConfigUsbPll = {.loopDivider = 0U, .src=0};
+		CLOCK_InitUsb1Pll (&g_ccmConfigUsbPll);	// PLL3 --> USB1-PLL
+		CLOCK_InitUsb1Pfd (kCLOCK_Pfd0, 26);	// Set PLL3 PFD0 clock 520MHZ (480*26/24). PLL3 --> USB1-PLL --> PLL480
+
+		const uint32_t ClockDiv = 4; // flexspi clock divide by two --> 260 Mz.
+		clock_div_t FlexSPIDiv = kCLOCK_FlexspiDiv;
+		switch (reinterpret_cast<uint32_t>(base))
+		{
+			case FLEXSPI_BASE:
+			/*	00 derive clock from semc_clk_root_pre
+				01 derive clock from pll3_sw_clk
+				10 derive clock from PLL2 PFD2
+				11 derive clock from PLL3 PFD0 */
+				CLOCK_SetMux (kCLOCK_FlexspiMux, 0x3); // Choose PLL3 PFD0 clock as flexspi source clock.
+				FlexSPIDiv = kCLOCK_FlexspiDiv;
+				break;
+			#ifdef FLEXSPI2
+			case FLEXSPI2_BASE:
+			/*	00 derive clock from PLL2 PFD2
+				01 derive clock from PLL3 PFD0
+				10 derive clock from PLL3 PFD1
+				11	derive clock from PLL2 (pll2_main_clk) */
+				CLOCK_SetMux (kCLOCK_Flexspi2Mux, 0x1); // Choose PLL3 PFD0 clock as flexspi source clock.
+				FlexSPIDiv = kCLOCK_Flexspi2Div;
+				break;
+			#endif
+			default:
+				break;
+		}
+		CLOCK_SetDiv (FlexSPIDiv, ClockDiv-1);
+	#elif (defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
+		   defined(MIMXRT1171_SERIES)     || defined(MIMXRT1172_SERIES)     || defined(MIMXRT1173_cm7_SERIES) || defined(MIMXRT1173_cm4_SERIES) || \
+		   defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1175_cm4_SERIES) || defined(MIMXRT1176_cm7_SERIES) || defined(MIMXRT1176_cm4_SERIES))
 		clock_root_t FlexSPIClock = kCLOCK_Root_Flexspi1;
 		clock_lpcg_t FlexSPIClockGate = kCLOCK_Flexspi1;
 		switch (reinterpret_cast<uint32_t>(base))
@@ -247,20 +281,16 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 			default:
 				return LibmemStaus_InvalidDevice;
 		}
-		CLOCK_SetRootClockDiv (FlexSPIClock, 2);
-		CLOCK_SetRootClockMux (FlexSPIClock, 0);
+		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
+		CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 528 MHz / 2 = ~264 MHz
+		CLOCK_SetRootClockMux (FlexSPIClock, 5); // ClockSource_SysPll2 --> 528 MHz
 		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
-
-//		uint32_t FlexSPI_Clock_Hz = CLOCK_GetRootClockFreq (FlexSPIClock);
-//		uint32_t SourceClock_Hz   = FlexSPI_Clock_Hz;
-//		uint32_t BusClock_Hz      = CLOCK_GetRootClockFreq (kCLOCK_Root_Bus);
-//		uint32_t FlexSPI_ClockDiv = 6;
 	#else
 		#error "unknon controller family"
 	#endif
 
-	// Get FLEXSPI default settings and configure the flexspi.
-	flexspi_config_t config;
+	// Get FLEXSPI default settings and configure the FlexSPI.
+	flexspi_config_t config {};
 	FLEXSPI_GetDefaultConfig (&config);
 
 	config.ahbConfig.enableAHBPrefetch    = true;	// Set AHB buffer size for reading data through AHB bus.

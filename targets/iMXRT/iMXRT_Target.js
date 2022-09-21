@@ -27,8 +27,10 @@ var SRC_STAT_M4CORE  = SRC + 0x290;
 var CCM           = 0x40CC0000;
 var CCM_CLOCK_ROOT_M7_CONTROL = CCM + (0 * 0x80) + 0;
 var CCM_CLOCK_ROOT_M4_CONTROL = CCM + (1 * 0x80) + 0;
+var CCM_CLOCK_ROOT_TRACE_CONTROL = CCM + (6 * 0x80) + 0;
 var CCM_LPCG      = CCM + 0x6000;
 var CCM_LPCG_LMEM = CCM_LPCG + (27 * 0x20); // Index 27 with offset size of 32
+var CCM_LPCG_Cstrace = CCM_LPCG + (42 * 0x20); // Index 42 with offset size of 32
 
 var LMEM       = 0xE0082000;
 var LMEM_PSCCR = LMEM + 0x800;
@@ -126,32 +128,6 @@ function GetPartName ()
 	{
 		case "MIMXRT633":
 		case "MIMXRT685_cm33":
-			var reg = TargetInterface.idcode ();
-			TargetInterface.message ("Connect - JTAG-ID code: 0x" + reg.toString(16));
-
-			// AP2: Debug Access port for the Debug Mailbox.
-			// compare the Reference Manual in Chapter: "48.5.1 Debug subsystem"
-			// The Debugger Mailbox Access Port (DM AP) offers a register based mailbox accessible by both CPUs and the device debug port DP of the MCU.
-			// This port is always enabled and external world can send and receive data to and from ROM. This port is used to implement NXP Debug Authentication Protocol.
-			reg = TargetInterface.getDebugRegister (0x020000FC);
-			TargetInterface.message ("Connect - AP2-ID code: 0x" + reg.toString(16));
-
-
-			TargetInterface.setDebugRegister (0x02000000, 0x21);  // RESYNCH_REQ | CHIP_RESET_REQ
-			do
-			{
-				reg = TargetInterface.getDebugRegister (0x02000000);
-				TargetInterface.message ("GetPartName - CSW: 0x" + reg.toString(16));
-			}
-			while (reg != 0);
-
-			TargetInterface.setDebugRegister (0x02000004, 0x07);	// Write DM START_DBG_SESSION to REQUEST register
-			do
-			{
-				reg = TargetInterface.getDebugRegister (0x02000008);
-				TargetInterface.message ("GetPartName - REQUEST: 0x" + reg.toString(16));
-			}
-			while (reg != 0);
 			break;
 		case "MIMXRT1011":
 		case "MIMXRT1015":
@@ -331,6 +307,32 @@ function Reset ()
 	{
 		case "MIMXRT633":
 		case "MIMXRT685_cm33":
+/*			TargetInterface.message ("Reset external flash");
+			TargetInterface.pokeUint32 (0x40004130, 0x130);
+			TargetInterface.pokeUint32 (0x40021044, 0x4);
+			TargetInterface.pokeUint32 (0x40020074, 0x4);
+			TargetInterface.pokeUint32 (0x40102008, 0x1000);
+			TargetInterface.pokeUint32 (0x40102288, 0x1000);
+			TargetInterface.delay (10);
+			TargetInterface.pokeUint32 (0x40102208, 0x1000);
+
+			TargetInterface.message ("Set watch point");
+			TargetInterface.pokeUint32 (0xE0001020, 0x50002034);
+			TargetInterface.pokeUint32 (0xE0001028, 0x00000814);
+
+			TargetInterface.message ("Execute SYSRESETREQ via AIRCR");
+			TargetInterface.pokeUint32 (0xE000ED0C, 0x05FA0004);
+
+			TargetInterface.delay (100);
+
+			if (TargetInterface.isStopped ())
+			{
+				TargetInterface.message ("Clear watch point");
+				TargetInterface.pokeUint32 (0xE0001020, 0x00000000);
+				TargetInterface.pokeUint32 (0xE0001028, 0x00000000);
+			}
+			else */
+				TargetInterface.resetAndStop (1000);
 			break;
 		case "MIMXRT1011":
 		case "MIMXRT1015":
@@ -421,7 +423,45 @@ function DcDc_Init_10xx ()
 
 function EnableTrace (traceInterfaceType)
 {
-	// TODO: Enable trace
+	if (traceInterfaceType == "ETB" || traceInterfaceType == "SWO")
+	{
+		TargetInterface.message ("## Trace with '" + traceInterfaceType + "' not supported");
+	}
+	else if (traceInterfaceType == "TracePort")
+	{
+		TargetInterface.message ("## EnableTrace with 'TracePort'");
+		var IOMUXC                = 0x400E8000;
+		var IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x10;
+		var IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x254;
+
+/*		var TracePin0_Offset   = 0x20C; // IOMUXC_GPIO_DISP_B2_02_ARM_TRACE00
+		var TracePin1_Offset   = 0x210; // IOMUXC_GPIO_DISP_B2_03_ARM_TRACE01
+		var TracePin2_Offset   = 0x214; // IOMUXC_GPIO_DISP_B2_04_ARM_TRACE02
+		var TracePin3_Offset   = 0x218; // IOMUXC_GPIO_DISP_B2_05_ARM_TRACE03
+		var TracePinClk_Offset = 0x21C; // IOMUXC_GPIO_DISP_B2_06_ARM_TRACE_CLK
+
+		// Configure the IOMUX for the trace interface. First set the Mux configuration
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + TracePin0_Offset,   3);
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + TracePin1_Offset,   3);
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + TracePin2_Offset,   3);
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + TracePin3_Offset,   3);
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + TracePinClk_Offset, 3);
+
+		// now set the PAD configuration
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + TracePin0_Offset,   0);
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + TracePin1_Offset,   0);
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + TracePin2_Offset,   0);
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + TracePin3_Offset,   0);
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + TracePinClk_Offset, 0);
+
+		// Set trace_clk_root to SYS_PLL2_CLK / 4: CLOCK_ROOT0 = mux(7), div(3)
+		TargetInterface.pokeUint32 (CCM_CLOCK_ROOT_TRACE_CONTROL, 0x703);
+
+		// Enable clock gate
+		TargetInterface.pokeUint32 (CCM_LPCG_Cstrace, 1); */
+	}
+	else
+		TargetInterface.message ("## Unknown Trace type '" + traceInterfaceType + "'");
 }
 
 function GetProjectPartName ()
