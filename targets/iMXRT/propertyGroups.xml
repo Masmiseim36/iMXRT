@@ -84,6 +84,56 @@
 			<cdefine name="CPU_MIMXRT1024DAG5A" />
 		</groupEntry>
 
+		<groupEntry name="MIMXRT1041DFP6B" aka="MIMXRT1041xxx6B" family="iMXRT1040">
+			<property name="macros" value="DeviceName=MIMXRT1041;Family=iMXRT1040;Core=CM7" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT104x.xml" />
+			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
+			<property name="arm_core_type" value="Cortex-M7" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1041DFP6B" />
+		</groupEntry>
+		<groupEntry name="MIMXRT1041XFP5B" aka="MIMXRT1041xxx5B" family="iMXRT1040">
+			<property name="macros" value="DeviceName=MIMXRT1041;Family=iMXRT1040;Core=CM7" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT104x.xml" />
+			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
+			<property name="arm_core_type" value="Cortex-M7" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1041XFP5B" />
+		</groupEntry>
+		<groupEntry name="MIMXRT1041XJM5B" aka="MIMXRT1041xxx5B" family="iMXRT1040">
+			<property name="macros" value="DeviceName=MIMXRT1041;Family=iMXRT1040;Core=CM7" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT104x.xml" />
+			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
+			<property name="arm_core_type" value="Cortex-M7" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1041XJM5B" />
+		</groupEntry>
+
+		<groupEntry name="MIMXRT1042DFP6B" aka="MIMXRT1042xxx6B" family="iMXRT1040">
+			<property name="macros" value="DeviceName=MIMXRT1042;Family=iMXRT1040;Core=CM7" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT104x.xml" />
+			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
+			<property name="arm_core_type" value="Cortex-M7" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1042DFP6B" />
+		</groupEntry>
+		<groupEntry name="MIMXRT1042DFP6B" aka="MIMXRT1042XFP5B" family="iMXRT1040">
+			<property name="macros" value="DeviceName=MIMXRT1042;Family=iMXRT1040;Core=CM7" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT104x.xml" />
+			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
+			<property name="arm_core_type" value="Cortex-M7" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1042XFP5B" />
+		</groupEntry>
+		<groupEntry name="MIMXRT1042DFP6B" aka="MIMXRT1042XJM5B" family="iMXRT1040">
+			<property name="macros" value="DeviceName=MIMXRT1042;Family=iMXRT1040;Core=CM7" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT104x.xml" />
+			<property name="arm_simulator_memory_simulation_parameter" value="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;RAM;0x80000000;0x02000000;0x60000000;0x04000000" />
+			<property name="arm_core_type" value="Cortex-M7" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1042XJM5B" />
+		</groupEntry>
+
 		<groupEntry name="MIMXRT1051CVL5A" aka="MIMXRT1051xxx5A" family="iMXRT1050">
 			<property name="macros" value="DeviceName=MIMXRT1051;Family=iMXRT1050;Core=CM7" />
 			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/MemoryMap_MIMXRT105x.xml" />

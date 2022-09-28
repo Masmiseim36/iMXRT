@@ -133,6 +133,8 @@ function GetPartName ()
 		case "MIMXRT1015":
 		case "MIMXRT1021":
 		case "MIMXRT1024":
+		case "MIMXRT1041":
+		case "MIMXRT1042":
 		case "MIMXRT1051":
 		case "MIMXRT1052":
 		case "MIMXRT1061":
@@ -338,6 +340,8 @@ function Reset ()
 		case "MIMXRT1015":
 		case "MIMXRT1021":
 		case "MIMXRT1024":
+		case "MIMXRT1041":
+		case "MIMXRT1042":
 		case "MIMXRT1051":
 		case "MIMXRT1052":
 		case "MIMXRT1061":
@@ -508,6 +512,8 @@ function FlexRAM_Restore ()
 		case "MIMXRT1024":
 			TargetInterface.pokeUint32 (IOMUXC_GPR_GPR17, 0x5FA5);		// 128 KByte OCRAM - 64 kByte ITCM - 64 kByte DTCM
 			break;
+		case "MIMXRT1041":
+		case "MIMXRT1042":
 		case "MIMXRT1051":
 		case "MIMXRT1052":
 		case "MIMXRT1061":
@@ -588,6 +594,8 @@ function Clock_Init ()
 		case "MIMXRT1024":
 			Clock_Init_1021 ();
 			break;
+		case "MIMXRT1041":
+		case "MIMXRT1042":
 		case "MIMXRT1051":
 		case "MIMXRT1052":
 		case "MIMXRT1061":

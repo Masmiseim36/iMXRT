@@ -1997,8 +1997,12 @@
         <Enum name="TCM_RWAIT_EN_1" start="0x1" description="TCM read wait mode: Read RAM accesses are expected to be finished in 2-cycles." />
       </BitField>
       <BitField start="2" size="1" name="FORCE_CLK_ON" description="Force RAM Clock Always On" />
+      <BitField start="3" size="29" name="Reserved" description="Reserved" />
     </Register>
     <Register start="+0x10" size="4" name="INT_STATUS" access="Read/Write" description="Interrupt Status Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="Reserved0" description="Reserved" />
+      <BitField start="1" size="1" name="Reserved1" description="Reserved" />
+      <BitField start="2" size="1" name="Reserved2" description="Reserved" />
       <BitField start="3" size="1" name="ITCM_ERR_STATUS" description="ITCM Access Error Status">
         <Enum name="ITCM_ERR_STATUS_0" start="0" description="ITCM access error does not happen" />
         <Enum name="ITCM_ERR_STATUS_1" start="0x1" description="ITCM access error happens." />
@@ -2011,8 +2015,12 @@
         <Enum name="OCRAM_ERR_STATUS_0" start="0" description="OCRAM access error does not happen" />
         <Enum name="OCRAM_ERR_STATUS_1" start="0x1" description="OCRAM access error happens." />
       </BitField>
+      <BitField start="6" size="26" name="Reserved" description="Reserved" />
     </Register>
     <Register start="+0x14" size="4" name="INT_STAT_EN" access="Read/Write" description="Interrupt Status Enable Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="Reserved0" description="Reserved" />
+      <BitField start="1" size="1" name="Reserved1" description="Reserved" />
+      <BitField start="2" size="1" name="Reserved2" description="Reserved" />
       <BitField start="3" size="1" name="ITCM_ERR_STAT_EN" description="ITCM Access Error Status Enable">
         <Enum name="ITCM_ERR_STAT_EN_0" start="0" description="Masked" />
         <Enum name="ITCM_ERR_STAT_EN_1" start="0x1" description="Enabled" />
@@ -2025,8 +2033,12 @@
         <Enum name="OCRAM_ERR_STAT_EN_0" start="0" description="Masked" />
         <Enum name="OCRAM_ERR_STAT_EN_1" start="0x1" description="Enabled" />
       </BitField>
+      <BitField start="6" size="26" name="Reserved" description="Reserved" />
     </Register>
     <Register start="+0x18" size="4" name="INT_SIG_EN" access="Read/Write" description="Interrupt Enable Register" reset_value="0" reset_mask="0xFFFFFFFF">
+      <BitField start="0" size="1" name="Reserved0" description="Reserved" />
+      <BitField start="1" size="1" name="Reserved1" description="Reserved" />
+      <BitField start="2" size="1" name="Reserved2" description="Reserved" />
       <BitField start="3" size="1" name="ITCM_ERR_SIG_EN" description="ITCM Access Error Interrupt Enable">
         <Enum name="ITCM_ERR_SIG_EN_0" start="0" description="Masked" />
         <Enum name="ITCM_ERR_SIG_EN_1" start="0x1" description="Enabled" />
@@ -2039,6 +2051,7 @@
         <Enum name="OCRAM_ERR_SIG_EN_0" start="0" description="Masked" />
         <Enum name="OCRAM_ERR_SIG_EN_1" start="0x1" description="Enabled" />
       </BitField>
+      <BitField start="6" size="26" name="Reserved" description="Reserved" />
     </Register>
   </RegisterGroup>
   <RegisterGroup name="EWM" start="0x400B4000" description="EWM">

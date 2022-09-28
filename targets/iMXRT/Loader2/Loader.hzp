@@ -99,6 +99,15 @@
     linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
     macros="DeviceName=MIMXRT1024" />
   <configuration
+    Name="1040"
+    Target="MIMXRT1042DFP6B"
+    arm_fpu_type="FPv5-D16"
+    c_preprocessor_definitions="CPU_MIMXRT1042DFP6B"
+    c_user_include_directories=".;./iMXRT1040/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT104x.xml"
+    macros="DeviceName=MIMXRT1042" />
+  <configuration
     Name="1050"
     Target="MIMXRT1052DVJ6B"
     arm_fpu_type="FPv5-D16"
@@ -202,6 +211,14 @@
     build_output_file_name="Loader_iMXRT1024_CM7.elf"
     inherited_configurations="CM7;1024;Release" />
   <configuration
+    Name="MIMXRT1040_Debug"
+    build_output_file_name="Loader_iMXRT1040_CM7_Debug.elf"
+    inherited_configurations="CM7;1040;Debug" />
+  <configuration
+    Name="MIMXRT1040_Release"
+    build_output_file_name="Loader_iMXRT1040_CM7.elf"
+    inherited_configurations="CM7;1040;Release" />
+  <configuration
     Name="MIMXRT1050_Debug"
     build_output_file_name="Loader_iMXRT1050_CM7_Debug.elf"
     inherited_configurations="CM7;1050;Debug" />
@@ -268,7 +285,7 @@
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
       arm_target_loader_reset_after_download="No"
-      batch_build_configurations="MIMXRT600_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release"
+      batch_build_configurations="MIMXRT600_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1040_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
       c_user_include_directories=".;./.."
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
@@ -437,6 +454,28 @@
         <file file_name="fsl_lpuart.c" />
         <file file_name="fsl_lpuart.h" />
         <file file_name="../MemoryMap_MIMXRT102x.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
+      </folder>
+      <folder Name="iMXRT1040">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1040" build_exclude_from_build="No" />
+        <file file_name="iMXRT1040/fsl_clock.h" />
+        <file file_name="iMXRT1040/fsl_iomuxc.h" />
+        <file file_name="iMXRT1040/fsl_clock.c" />
+        <file file_name="iMXRT1040/clock_config.c" />
+        <file file_name="iMXRT1040/clock_config.h" />
+        <file file_name="iMXRT1040/pin_mux.c" />
+        <file file_name="iMXRT1040/board.h" />
+        <file file_name="iMXRT1040/fsl_gpio.c" />
+        <file file_name="iMXRT1040/fsl_gpio.h" />
+        <file file_name="fsl_cache.c" />
+        <file file_name="fsl_cache.h" />
+        <file file_name="fsl_dmamux.c" />
+        <file file_name="fsl_dmamux.h" />
+        <file file_name="fsl_lpuart.c" />
+        <file file_name="fsl_lpuart.h" />
+        <file file_name="../MemoryMap_MIMXRT104x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
       </folder>

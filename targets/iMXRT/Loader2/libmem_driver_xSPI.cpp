@@ -127,8 +127,8 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 		uint32_t ClockHz = CLOCK_GetFlexspiClkFreq ();
 		//uint32_t SourceClock_Hz = ClockHz * ClockDiv;
 	#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
-		   defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || \
-		   defined(MIMXRT1064_SERIES))
+		   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
+		   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
 		const clock_usb_pll_config_t configUsbPll = {.loopDivider = 0U, .src=0};
 		CLOCK_InitUsb1Pll (&configUsbPll);		// PLL3 --> USB1-PLL
 		CLOCK_InitUsb1Pfd (kCLOCK_Pfd0, 18);	// Set PLL3 PFD0 clock 480MHZ (480*18/24). PLL3 --> USB1-PLL --> PLL480
@@ -296,8 +296,8 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			DeviceConfig.flexspiRootClk = CLOCK_GetFlexspiClkFreq ();
 			config.rxSampleClock = kFLEXSPI_ReadSampleClkLoopbackInternally; // To achieve high speeds - always use DQS
 		#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
-			   defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || \
-			   defined(MIMXRT1064_SERIES))
+			   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
+			   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
 			ClockDiv = 2;
 			CLOCK_SetDiv (FlexSPIDiv, ClockDiv-1);	// flexspi clock divide by two --> 240 Mz.
 			DeviceConfig.flexspiRootClk = SourceClock_Hz / ClockDiv;

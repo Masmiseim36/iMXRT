@@ -231,8 +231,8 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 //			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
 		}
 	#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
-		   defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || \
-		   defined(MIMXRT1064_SERIES))
+		   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
+		   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
 		const clock_usb_pll_config_t g_ccmConfigUsbPll = {.loopDivider = 0U, .src=0};
 		CLOCK_InitUsb1Pll (&g_ccmConfigUsbPll);	// PLL3 --> USB1-PLL
 		CLOCK_InitUsb1Pfd (kCLOCK_Pfd0, 26);	// Set PLL3 PFD0 clock 520MHZ (480*26/24). PLL3 --> USB1-PLL --> PLL480

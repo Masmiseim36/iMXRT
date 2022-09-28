@@ -220,7 +220,7 @@ ISR_HANDLER2 PWM1_3               // 121: PWM1_3_IRQHandler               - PWM1
 ISR_HANDLER2 PWM1_FAULT           // 122: PWM1_FAULT_IRQHandler           - PWM1 fault or reload error interrupt
 ISR_RESERVED                      // 123:                                 - Reserved interrupt
 ISR_HANDLER2 FLEXSPI              // 124: FLEXSPI_IRQHandler              - FlexSPI0 interrupt
-ISR_HANDLER2 SEMC                 // 125: SEMC_IRQHandler                 - Reserved interrupt
+ISR_HANDLER2 SEMC                 // 125: SEMC_IRQHandler                 - SEMC interrupt
 ISR_HANDLER2 USDHC1               // 126: USDHC1_IRQHandler               - USDHC1 interrupt
 ISR_HANDLER2 USDHC2               // 127: USDHC2_IRQHandler               - USDHC2 interrupt
 ISR_RESERVED                      // 128:                                 - Reserved interrupt
