@@ -154,8 +154,8 @@ namespace Macronix
 		0,	// Dummy to fill a block of four
 	};
 
-
-	constexpr uint32_t DummyCycles   = 12;	// Number of dummy cycles after Read Command for Macronix-Flash - Set 0x04 To the Config
+	// Number of dummy cycles after Read Command for Macronix-Flash - Set 0x04 To the Config
+	constexpr uint32_t DummyCycles   = 12;	// Compare "Dummy Cycle and Frequency Table (MHz)" in the Datasheet
 
 	// LookUp Table for Macronix MX25UM-Family Octa-Flash devices in Octa configuration with DDR
 	constexpr FlexSPI_LUT LUT_OctaSPI_DDR

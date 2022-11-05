@@ -25,6 +25,45 @@ OF SUCH DAMAGE. */
 
 namespace Macronix
 {
+	namespace MX25UW
+	{
+		enum DummyCycles
+		{
+			DummyCycles_20 = 0,
+			DummyCycles_18,
+			DummyCycles_16,
+			DummyCycles_14,
+			DummyCycles_12,
+			DummyCycles_10,
+			DummyCycles_8,
+			DummyCycles_6
+		};
+
+		constexpr DummyCycles GetDummyCycles (void)
+		{
+			switch (Macronix::DummyCycles)
+			{
+				case 20:
+					return DummyCycles_20;
+				case 18:
+					return DummyCycles_18;
+				case 16:
+					return DummyCycles_16;
+				case 14:
+					return DummyCycles_14;
+				case 12:
+					return DummyCycles_12;
+				case 10:
+					return DummyCycles_10;
+				case 8:
+					return DummyCycles_8;
+				case 6:
+					return DummyCycles_6;
+				default:
+					static_assert("Invalid dummy cycle configuration");
+			}
+		}
+	}
 	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &Info)
 	{
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
@@ -127,12 +166,12 @@ namespace Macronix
 			}
 
 			// Switch to OSPI-Mode
-			// Write to status/control register 2 to set Dummy Cycles to 12
+			// Write to status/control register 2 to set Dummy Cycles
 			// Compare "Dummy Cycle and Frequency Table (MHz)" in the Datasheet
 			status_t stat = flexSPI.WriteEnable (0);	// send write-enable 
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
-			stat = flexSPI.WriteRegister (0x0300U, 0x04, LUT_WriteConfigReg_Macronix);
+			stat = flexSPI.WriteRegister (0x0300U, MX25UW::GetDummyCycles(), LUT_WriteConfigReg_Macronix);
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
 
