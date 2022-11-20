@@ -76,7 +76,8 @@
 	/* CPU specific feature definitions */
 	#include "MIMXRT1021_features.h"
 
-#elif (defined(CPU_MIMXRT1024CAG4A) || defined(CPU_MIMXRT1024DAG5A))
+#elif (defined(CPU_MIMXRT1024CAG4A) || defined(CPU_MIMXRT1024CAG4B) || defined(CPU_MIMXRT1024DAG5A) || \
+	defined(CPU_MIMXRT1024DAG5B))
 	#define MIMXRT1024_SERIES
 	/* CMSIS-style register definitions */
 	#include "MIMXRT1024.h"
@@ -113,8 +114,8 @@
 	/* CPU specific feature definitions */
 	#include "MIMXRT1052_features.h"
 
-#elif (defined(CPU_MIMXRT1061CVJ5A) || defined(CPU_MIMXRT1061CVL5A) || defined(CPU_MIMXRT1061DVJ6A) || \
-	defined(CPU_MIMXRT1061DVL6A))
+#elif (defined(CPU_MIMXRT1061CVJ5A) || defined(CPU_MIMXRT1061CVL5A) || defined(CPU_MIMXRT1061DVJ6A) || defined(CPU_MIMXRT1061DVL6A) || \
+	   defined(CPU_MIMXRT1061CVJ5B) || defined(CPU_MIMXRT1061CVL5B) || defined(CPU_MIMXRT1061DVJ6B) || defined(CPU_MIMXRT1061DVL6B) )
 	#define MIMXRT1061_SERIES
 	/* CMSIS-style register definitions */
 	#include "MIMXRT1061.h"
@@ -128,8 +129,8 @@
 	/* CPU specific feature definitions */
 	#include "MIMXRT1061X_features.h"
 
-#elif (defined(CPU_MIMXRT1062CVJ5A) || defined(CPU_MIMXRT1062CVL5A) || defined(CPU_MIMXRT1062DVJ6A) || \
-	defined(CPU_MIMXRT1062DVL6A))
+#elif (defined(CPU_MIMXRT1062CVJ5A) || defined(CPU_MIMXRT1062CVL5A) || defined(CPU_MIMXRT1062DVJ6A) || defined(CPU_MIMXRT1062DVL6A) || \
+	   defined(CPU_MIMXRT1062CVJ5B) || defined(CPU_MIMXRT1062CVL5B) || defined(CPU_MIMXRT1062DVJ6B) || defined(CPU_MIMXRT1062DVL6B))
 	#define MIMXRT1062_SERIES
 	/* CMSIS-style register definitions */
 	#include "MIMXRT1062.h"
