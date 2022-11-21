@@ -43,8 +43,8 @@ OF SUCH DAMAGE. */
 		BOARD_InitUARTPins ();
 
 		#if ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
-			 (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || \
-			 (defined MIMXRT1064_SERIES))
+			 (defined MIMXRT1041_SERIES) || (defined MIMXRT1042_SERIES) || (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || \
+			 (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || (defined MIMXRT1064_SERIES))
 			uint32_t ClockFrequency = 0;
 			if (CLOCK_GetMux (kCLOCK_UartMux) == 0) // --> PLL3 div6 80M
 				ClockFrequency = (CLOCK_GetPllFreq (kCLOCK_PllUsb1) / 6U) / (CLOCK_GetDiv(kCLOCK_UartDiv) + 1U);
