@@ -24,7 +24,7 @@ extern "C"
 	#include <libmem.h>
 	#include <libmem_loader.h>
 }
-#include <stdio.h>
+#include <cstdio>
 
 #include "board.h"
 #include "fsl_common.h"
@@ -36,7 +36,7 @@ extern "C"
 #include "DebugPrint.h"
 
 
-enum LibmemStatus Init_Libmem (enum MemoryType, FlexSPI_Helper *base);
+enum LibmemStatus Init_Libmem (enum MemoryType memoryType, FlexSPI_Helper *base);
 void InitOctaSPIPins (FlexSPI_Helper *base);
 void InitQuadSPIPins (FlexSPI_Helper *base);
 
@@ -51,7 +51,7 @@ uint32_t Compare (const uint32_t *MemPointer, uint32_t Comp, size_t size)
 	return ErrorCounter;
 }
 
-uint32_t Compare (const uint32_t *MemPointer, uint32_t *pComp, size_t size)
+uint32_t Compare (const uint32_t *MemPointer, const uint32_t *pComp, size_t size)
 {
 	uint32_t ErrorCounter = 0;
 	for (size_t i=0; i<size/sizeof(uint32_t); i++)
@@ -64,14 +64,14 @@ uint32_t Compare (const uint32_t *MemPointer, uint32_t *pComp, size_t size)
 
 void ExecuteTest (uint32_t *MemPointer)
 {
-	static uint32_t buffer[4096];
-	memset (buffer, 0, sizeof(buffer));
+	static std::array<uint32_t, 4096> buffer;
+	memset (buffer.data (), 0, sizeof(buffer));
 	for (size_t i=0; i<sizeof(buffer)/sizeof(buffer[0]); i++)
-		buffer[i] = (uint32_t)(((uint32_t *)buffer) + i);
+		buffer[i] = reinterpret_cast<uint32_t>((buffer.data ()) + i);
 
 	uint8_t *erase_start = 0;
 	size_t erase_size = 0;
-	LibmemStatus_t res = static_cast<LibmemStatus_t>(libmem_erase ((uint8_t *)MemPointer, sizeof(buffer), &erase_start, &erase_size));
+	LibmemStatus_t res = static_cast<LibmemStatus_t>(libmem_erase (reinterpret_cast<uint8_t *>(MemPointer), sizeof(buffer), &erase_start, &erase_size));
 	if (res != LIBMEM_STATUS_SUCCESS)
 		DebugPrintf ("Error '%s' occurred\r\n", Libmem_GetErrorString (res));
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
@@ -81,10 +81,10 @@ void ExecuteTest (uint32_t *MemPointer)
 	if (ErrorCounter > 0)
 		DebugPrintf ("Invalid memory-chunks on erase: %d\r\n", ErrorCounter);
 
-	res = static_cast<LibmemStatus_t>(libmem_write ((uint8_t *)MemPointer, (uint8_t *)buffer, sizeof(buffer)));
+	res = static_cast<LibmemStatus_t>(libmem_write ((uint8_t *)MemPointer, (uint8_t *)&buffer[0], sizeof(buffer)));
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
-	ErrorCounter = Compare (MemPointer, buffer, sizeof (buffer));
+	ErrorCounter = Compare (MemPointer, &buffer[0], sizeof (buffer));
 	if (ErrorCounter > 0)
 		DebugPrintf ("Invalid memory-chunks on write %d\r\n", ErrorCounter);
 }
@@ -156,7 +156,7 @@ int main (uint32_t flags, uint32_t param)
 			#endif
 			)
 			{
-				// No valid option for an Flash-memory-Interface selected
+				// No valid option for an Flash-memory-interface selected
 				char ErrorString[64];
 				sprintf (ErrorString, "No valid Interface selected. Parameter: 0x%X\r\n", param);
 				DebugPrint (ErrorString);
@@ -210,14 +210,14 @@ int main (uint32_t flags, uint32_t param)
 
 
 
-enum LibmemStatus Init_Libmem (MemoryType MemType, FlexSPI_Helper *base)
+enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
 {
 	enum LibmemStatus status;
 	uint32_t Trials = 0;
 
 	BOARD_PerformJEDECReset (base);
 
-	switch (MemType)
+	switch (memoryType)
 	{
 		case MemType_Hyperflash:
 			do
@@ -241,14 +241,14 @@ enum LibmemStatus Init_Libmem (MemoryType MemType, FlexSPI_Helper *base)
 				// Init for Octal-SPI with DDR
 				DebugPrint ("Init Loader for Octal-SPI (DDR)\r\n");
 
-				/* A small delay is need here */
+				// A small delay is need here
 				for(int i=0; i<1000000; i++)
 				{
 					__asm__ volatile("nop");
 				}
 
 				InitOctaSPIPins (base);
-				status =  Libmem_InitializeDriver_xSPI (base, MemType);
+				status =  Libmem_InitializeDriver_xSPI (base, memoryType);
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
@@ -264,7 +264,7 @@ enum LibmemStatus Init_Libmem (MemoryType MemType, FlexSPI_Helper *base)
 				// Init for Octal-SPI with DDR
 				DebugPrint ("Init Loader for Quad-SPI-DDR\r\n");
 				InitQuadSPIPins (base);
-				status =  Libmem_InitializeDriver_xSPI (base, MemType);
+				status =  Libmem_InitializeDriver_xSPI (base, memoryType);
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
@@ -279,7 +279,7 @@ enum LibmemStatus Init_Libmem (MemoryType MemType, FlexSPI_Helper *base)
 				// Init for Quad-SPI
 				DebugPrint ("Init Loader for Quad-SPI\r\n");
 				InitQuadSPIPins (base);
-				status =  Libmem_InitializeDriver_xSPI (base, MemType);
+				status =  Libmem_InitializeDriver_xSPI (base, memoryType);
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;

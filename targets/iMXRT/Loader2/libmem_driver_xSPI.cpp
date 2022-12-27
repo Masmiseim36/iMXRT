@@ -40,7 +40,7 @@ static flexspi_device_config_t DeviceConfig
 {
 	.flexspiRootClk       = 0, // SPI root clock (will be set up later)
 	.isSck2Enabled        = false,
-	.flashSize            = BOARD_FLASH_SIZE / 1024, // expressed in KByte, will be reset after read the JEDEC Information
+	.flashSize            = BOARD_FLASH_SIZE / 1024, // expressed in KByte, will be reset after read the JEDEC information
 	.CSIntervalUnit       = kFLEXSPI_CsIntervalUnit1SckCycle,
 	.CSInterval           = 2,
 	.CSHoldTime           = 3,
@@ -97,10 +97,10 @@ static const libmem_ext_driver_functions_t DriverFunctions_Extended
 
 
 /*! Libmem_InitializeDriver_xSPI:
-\brief Initialize the FlexSPI Interface for using as a SPI-Interface
+\brief Initialize the FlexSPI interface for using as a SPI-interface
 \param FlashHandle The handle which should be initialized
 \param base The Flex-SPI-base to use
-\param MemType The Type of SPI-Interface to use if possible
+\param MemType The Type of SPI-interface to use if possible
 \return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
 LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryType MemType)
 {
@@ -240,7 +240,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 		}
 		else
 		{
-			status_t stat = base->SendCommand (0, LUT_EnterQPI_Atmel); // Enter QuadSPI Mode
+			status_t stat = base->SendCommand (0, LUT_EnterQPI_Atmel); // Enter QuadSPI mode
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
 			lut = &Generic::LUT_QuadSPI;
@@ -268,7 +268,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	else if (Info.ManufactureID == ManufactureID_Lucent)
 	{
 		DebugPrint ("Found Lucent Flash\r\n");
-		status_t stat = base->SendCommand (0, LUT_EnterQPI_ISSI); // Enter QuadSPI Mode
+		status_t stat = base->SendCommand (0, LUT_EnterQPI_ISSI); // Enter QuadSPI mode
 		if (stat != kStatus_Success)
 			return LibmemStaus_Error;
 
@@ -284,7 +284,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	if (res != LibmemStaus_Success)
 		return res;
 
-	// Reconfigure the Interface according to the gathered Flash-Information and configuration
+	// Reconfigure the interface according to the gathered flash information and configuration
 	if (MemType == MemType_OctaSPI_DDR || MemType == MemType_QuadSPI_DDR)
 	{
 		#if (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES) || \
@@ -317,7 +317,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 		FLEXSPI_Init (base, &config); // changing the clock requires reinitialization
 	}
 
-	// Use the size information from the JEDEC-Information to configure the Interface
+	// Use the size information from the JEDEC-information to configure the interface
 	uint32_t FlashSize = CalculateCapacity_KBytes (Info.Capacity);
 	DeviceConfig.flashSize = FlashSize;
 	geometry[0].count = FlashSize / (4096 / 1024);
@@ -377,11 +377,11 @@ static status_t ReadJEDEC (FlexSPI_Helper *base, struct DeviceInfo *Info)
 	if (status != kStatus_Success)
 		return status;
 
-	// Sanity Check of the data, first byte must not be zero or 0xFF
+	// Sanity check of the data, first byte must not be zero or 0xFF
 	if (Identification[0] == 0 || Identification[0] == 0xFF)
 		return kStatus_Fail;	// got no ID-Code: No Flash available
 	
-	// Check if all Data are identical
+	// Check if all data are identical
 	size_t Index = sizeof(Identification)/sizeof(Identification[0]);
 	while (--Index>0 && Identification[0]==Identification[Index])
 		;
@@ -498,7 +498,7 @@ static int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 Write Data to a Flash-Page
 \param h Handle to the Flash-Driver
 \param Destination Address to write the Data to. This Address is in the Address-Range of the Controller
-\param Source Address of the Array with the Data to write
+\param Source Address of the Array with the data to write
 \return static int LibmemStaus_Success when the write operation was successfully, otherwise LibmemStaus_Error */
 static int ProgramPage (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr)
 {
