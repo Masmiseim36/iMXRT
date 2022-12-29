@@ -25,8 +25,8 @@ var SRC_CTRL_M4CORE  = SRC + 0x284;
 var SRC_STAT_M4CORE  = SRC + 0x290;
 
 var CCM           = 0x40CC0000;
-var CCM_CLOCK_ROOT_M7_CONTROL = CCM + (0 * 0x80) + 0;
-var CCM_CLOCK_ROOT_M4_CONTROL = CCM + (1 * 0x80) + 0;
+var CCM_CLOCK_ROOT_M7_CONTROL    = CCM + (0 * 0x80) + 0;
+var CCM_CLOCK_ROOT_M4_CONTROL    = CCM + (1 * 0x80) + 0;
 var CCM_CLOCK_ROOT_TRACE_CONTROL = CCM + (6 * 0x80) + 0;
 var CCM_LPCG      = CCM + 0x6000;
 var CCM_LPCG_LMEM = CCM_LPCG + (27 * 0x20); // Index 27 with offset size of 32
@@ -57,7 +57,7 @@ function OnTargetStop_11xx ()
 		return; // only necessary on M4-Core
 
 	TargetInterface.message ("## Target " + DeviceName + " has been stopped");
-	// Invalidate the Data Cache
+	// Invalidate the data cache
 	var LMEM_PSCCR_ENCACHE_MASK = 0x00000001;
 //	var LMEM_PSCCR_ENWRBUF_MASK = 0x00000002;
 //	var LMEM_PSCCR_INVW0_MASK   = 0x01000000;
@@ -66,7 +66,7 @@ function OnTargetStop_11xx ()
 	var LMEM_PSCCR_PUSHW1_MASK  = 0x08000000;
 	var LMEM_PSCCR_GO_MASK      = 0x80000000;
 
-	// Check if the Cache is clockgated
+	// Check if the cache is clockgated
 	var CCM_LPCG_LmemDirect = TargetInterface.peekUint32 (CCM_LPCG_LMEM);
 	if (CCM_LPCG_LmemDirect == 0)
 	{
@@ -118,60 +118,24 @@ function GetPartName ()
 
 	var PART = "";
 
-	if (TargetInterface.implementation() == "j-link")
+	if (TargetInterface.implementation () != "j-link")
 	{
-		TargetInterface.message ("## get part name of " + DeviceName + " with J-Link done");
-		return PART;
-	}
-
-	switch (DeviceName)
-	{
-		case "MIMXRT633":
-		case "MIMXRT685_cm33":
-			break;
-		case "MIMXRT1011":
-		case "MIMXRT1015":
-		case "MIMXRT1021":
-		case "MIMXRT1024":
-		case "MIMXRT1041":
-		case "MIMXRT1042":
-		case "MIMXRT1051":
-		case "MIMXRT1052":
-		case "MIMXRT1061":
-		case "MIMXRT1062":
-		case "MIMXRT1064":
-			// Do nothing
-			break;
-		case "MIMXRT1171_cm7":
-		case "MIMXRT1172_cm7":
-			// ToDo: read the chip silicon version
-/*			var MiscDifproc = TargetInterface.peekUint32 (0x40C84800); // ANADIG_MISC-->MISC_DIFPROG (Chip Silicon Version Register)
-			MiscDifproc &= 0x00FFFF00;
-			MiscDifproc >>= 8;
-			PART = "MIMXRT" + MiscDifproc.toString(16)); */
-			break;
-		case "MIMXRT1165_cm7":
-		case "MIMXRT1166_cm7":
-		case "MIMXRT1173_cm7":
-		case "MIMXRT1175_cm7":
-		case "MIMXRT1176_cm7":
-			// ToDo: read the chip silicon version
-/*			var MiscDifproc = TargetInterface.peekUint32 (0x40C84800); // ANADIG_MISC-->MISC_DIFPROG (Chip Silicon Version Register)
-			MiscDifproc &= 0x00FFFF00;
-			MiscDifproc >>= 8;
-			PART = "MIMXRT" + MiscDifproc.toString(16)); */
-			break;
-		case "MIMXRT1165_cm4":
-		case "MIMXRT1166_cm4":
-		case "MIMXRT1173_cm4":
-		case "MIMXRT1175_cm4":
-		case "MIMXRT1176_cm4":
+		if (TargetInterface.getProjectProperty ("Target").indexOf ("_cm4") != -1)
+		{
 			Release_11xx_M4 ();	// Enable the M4 Core
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
-			break;
-		default:
-			TargetInterface.message ("GetPartName - unknown Device: " + DeviceName);
-			break;
+		}
+	}
+
+	if (TargetInterface.getProjectProperty ("Target").indexOf ("MIMXRT11") != -1)
+	{
+		// Read the chip silicon version
+		var MISC_DIFPROG = 0x40C84800
+		var ChipID = TargetInterface.peekUint32 (MISC_DIFPROG); // ANADIG_MISC-->MISC_DIFPROG (Chip Silicon Version Register)
+		ChipID &= 0x00FFFF00;
+		ChipID >>= 8;
+		TargetInterface.message ("#### Device detected: MIMXRT" + ChipID.toString(16));
+/*		PART = "MIMXRT" + ChipID.toString(16); */
 	}
 
 	TargetInterface.message ("## get part name of " + DeviceName + " done");
@@ -181,10 +145,11 @@ function GetPartName ()
 
 function MatchPartName (name)
 {
+	TargetInterface.message ("## MatchPartName with " + name);
 	var partName = GetPartName ();
 
 	if (partName == "")
-		return false;
+		return true;
 
 	return partName.substring (0, 6) == name.substring (0, 6);
 }
@@ -433,36 +398,137 @@ function EnableTrace (traceInterfaceType)
 	}
 	else if (traceInterfaceType == "TracePort")
 	{
-		TargetInterface.message ("## EnableTrace with 'TracePort'");
-		var IOMUXC                = 0x400E8000;
-		var IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x10;
-		var IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x254;
+		var DeviceName = GetProjectPartName ();
 
-/*		var TracePin0_Offset   = 0x20C; // IOMUXC_GPIO_DISP_B2_02_ARM_TRACE00
-		var TracePin1_Offset   = 0x210; // IOMUXC_GPIO_DISP_B2_03_ARM_TRACE01
-		var TracePin2_Offset   = 0x214; // IOMUXC_GPIO_DISP_B2_04_ARM_TRACE02
-		var TracePin3_Offset   = 0x218; // IOMUXC_GPIO_DISP_B2_05_ARM_TRACE03
-		var TracePinClk_Offset = 0x21C; // IOMUXC_GPIO_DISP_B2_06_ARM_TRACE_CLK
+		TargetInterface.message ("## EnableTrace with 'TracePort' on " + DeviceName);
 
-		// Configure the IOMUX for the trace interface. First set the Mux configuration
-		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + TracePin0_Offset,   3);
-		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + TracePin1_Offset,   3);
-		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + TracePin2_Offset,   3);
-		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + TracePin3_Offset,   3);
-		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + TracePinClk_Offset, 3);
+		if (TargetInterface.getProjectProperty ("Target").indexOf ("MIMXRT10") != -1)
+		{
+			var IOMUXC                = 0x401F8000;
+			var IOMUXC_SW_MUX_CTL_PAD = IOMUXC;
+			var IOMUXC_SW_PAD_CTL_PAD = IOMUXC;
 
-		// now set the PAD configuration
-		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + TracePin0_Offset,   0);
-		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + TracePin1_Offset,   0);
-		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + TracePin2_Offset,   0);
-		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + TracePin3_Offset,   0);
-		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + TracePinClk_Offset, 0);
+			if (DeviceName == "MIMXRT1011")
+			{
+				IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x10;
+				IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0xC0;
 
-		// Set trace_clk_root to SYS_PLL2_CLK / 4: CLOCK_ROOT0 = mux(7), div(3)
-		TargetInterface.pokeUint32 (CCM_CLOCK_ROOT_TRACE_CONTROL, 0x703);
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x30, 7);		// Trace clock mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x30, 0xF1);	// Trace clock pin config  Speed 200 MHz - Fast_Slew_Rate
 
-		// Enable clock gate
-		TargetInterface.pokeUint32 (CCM_LPCG_Cstrace, 1); */
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x38, 7);		// Trace Pin0 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x38, 0xF1);	// Trace Pin0 pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x78, 7);		// Trace Pin1 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x78, 0xF1);	// Trace Pin1 pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x7C, 7);		// Trace Pin2 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x7C, 0xF1);	// Trace Pin2 pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x80, 7);		// Trace Pin3 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x80, 0xF1);	// Trace Pin3 pin config  Speed 200 MHz - Fast_Slew_Rate
+			}
+			else if (DeviceName == "MIMXRT1015")
+			{
+				IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x24;
+				IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x198;
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0xC0, 6);		// Trace clock mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0xC0, 0xF1);	// Trace clock pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0xC8, 6);		// Trace Pin0 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0xC8, 0xF1);	// Trace Pin0 pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0xCC, 6);		// Trace Pin1 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0xCC, 0xF1);	// Trace Pin1 pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0xD0, 6);		// Trace Pin2 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0xD0, 0xF1);	// Trace Pin2 pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0xD4, 6);		// Trace Pin3 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0xD4, 0xF1);	// Trace Pin3 pin config  Speed 200 MHz - Fast_Slew_Rate
+			}
+			else if (DeviceName == "MIMXRT1021" || DeviceName == "MIMXRT1024")
+			{
+				IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x14;
+				IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x188;
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0xD0, 6);		// Trace clock mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0xD0, 0xF1);	// Trace clock pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0xD8, 6);		// Trace Pin0 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0xD8, 0xF1);	// Trace Pin0 pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0xDC, 6);		// Trace Pin1 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0xDC, 0xF1);	// Trace Pin1 pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0xE0, 6);		// Trace Pin2 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0xE0, 0xF1);	// Trace Pin2 pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0xE4, 6);		// Trace Pin3 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0xE4, 0xF1);	// Trace Pin3 pin config  Speed 200 MHz - Fast_Slew_Rate
+			}
+			else /* 1040, 1050, 1060 */
+			{
+				IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x14;
+				IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x204;
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x158, 2);		// Trace clock mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x158, 0xF1);	// Trace clock pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x138, 3);		// Trace Pin0 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x138, 0xF1);	// Trace Pin0 pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x13C, 3);		// Trace Pin1 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x13C, 0xF1);	// Trace Pin1 pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x140, 3);		// Trace Pin2 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x140, 0xF1);	// Trace Pin2 pin config  Speed 200 MHz - Fast_Slew_Rate
+
+				TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x144, 3);		// Trace Pin3 mux config
+				TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x144, 0xF1);	// Trace Pin3 pin config  Speed 200 MHz - Fast_Slew_Rate
+			}
+
+			var CCM        = 0x400FC000;
+			var CCM_CBCMR  = CCM + 0x18;
+			var CCM_CSCDR1 = CCM + 0x24;
+			var CCM_CCGR0  = CCM + 0x68;
+			// Use PLL2 as clock Source for the trace clock
+			AlterRegister (CCM_CBCMR, 0xC000, 0);
+			// Set the divider to four (which is the default) to get the maximum frequency of 132 MHz
+			AlterRegister (CCM_CSCDR1, 0x1E000000, 0x6000000);
+			// Clock Gate the trace-clock
+			AlterRegister (CCM_CCGR0, 0, 0xC00000);
+		}
+		else if (TargetInterface.getProjectProperty ("Target").indexOf ("MIMXRT11") != -1)
+		{
+			var IOMUXC                = 0x400E8000;
+			var IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x10;
+			var IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x254;
+
+			TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x21C, 3);		// Trace clock mux config
+			TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x21C, 0);		// Trace clock pin config
+
+			TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x20C, 3);		// Trace Pin0 mux config
+			TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x20C, 0);		// Trace Pin0 pin config
+
+			TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x210, 3);		// Trace Pin1 mux config
+			TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x210, 0);		// Trace Pin1 pin config
+
+			TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x214, 3);		// Trace Pin2 mux config
+			TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x214, 0);		// Trace Pin2 pin config
+
+			TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x218, 3);		// Trace Pin3 mux config
+			TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x218, 0);		// Trace Pin3 pin config
+
+			// Set trace_clk_root to SYS_PLL2_CLK / 4: CLOCK_ROOT0 = mux(7), div(3)
+			TargetInterface.pokeUint32 (CCM_CLOCK_ROOT_TRACE_CONTROL, 0x703);
+
+			// Enable clock gate
+			TargetInterface.pokeUint32 (CCM_LPCG_Cstrace, 1); 
+		}
+		else
+			return;
 	}
 	else
 		TargetInterface.message ("## Unknown Trace type '" + traceInterfaceType + "'");
