@@ -109,8 +109,14 @@ static const libmem_ext_driver_functions_t DriverFunctions_Extended
 LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryType MemType)
 {
 	#if (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES))
-		constexpr uint32_t src = 2;	// Use AUX0_PLL as clock source for the FlexSPI
-		uint32_t ClockDiv = 4;		// with a divider of four
+		// Clock Source
+		// 0 --> Main Clock.
+		// 1 --> Main PLL Clock (main_pll_clk).
+		// 2 --> AUX0 PLL clock (aux0_pll_clk).
+		// 3 --> FFRO Clock.
+		// 4 --> AUX1 PLL clock (aux1_pll_clk).
+		constexpr uint32_t src = 1;	// Use AUX0_PLL as clock source for the FlexSPI
+		uint32_t ClockDiv = 9;		// with a divider of four
 		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (ClockDiv - 1))
 		{
 			#if !defined(FSL_SDK_DRIVER_QUICK_ACCESS_ENABLE)
@@ -340,7 +346,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 				return LibmemStaus_Error;
 			config.rxSampleClock = kFLEXSPI_ReadSampleClkLoopbackInternally; // To achieve high speeds - always use DQS
 		#elif (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES))
-			ClockDiv = 2;
+			ClockDiv = 9;
 			CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV(ClockDiv - 1);
 			while ((CLKCTL0->FLEXSPIFCLKDIV) & CLKCTL0_FLEXSPIFCLKDIV_REQFLAG_MASK)
 				;

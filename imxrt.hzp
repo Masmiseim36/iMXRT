@@ -52,6 +52,7 @@
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1160_CM4.elf" />
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1170_CM7.elf" />
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1170_CM4.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT600_M33.elf" />
       </folder>
       <file file_name="targets/iMXRT/core_cm7.h" />
       <file file_name="targets/iMXRT/fsl_device_registers.h" />

@@ -135,7 +135,7 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 	#ifdef DEBUG
 		// some test Code, because the Loader can not be debugged while using it in real scenarios
 		#if defined FLEXSPI
-			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI), MemType_QuadSPI); // MemType_Hyperflash
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI), MemType_QuadSPI); // MemType_Hyperflash - MemType_OctaSPI_DDR - MemType_QuadSPI
 		#endif
 		#if defined FLEXSPI0
 			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI0), MemType_OctaSPI_DDR);

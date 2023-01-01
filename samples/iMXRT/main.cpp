@@ -62,7 +62,7 @@ void Sleep (uint32_t Milliseconds)
 
 
 int main (void)
-{	
+{
 	SystemCoreClockUpdate ();
     if (debug_enabled ())
 		debug_printf ("System-Clock is %d Hz\r\n", SystemCoreClock);

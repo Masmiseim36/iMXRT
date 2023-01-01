@@ -46,7 +46,6 @@ enum LUT_CommandOffsets
 	LUT_EnterQPI_ISSI   = 12,
 
 	LUT_WriteStatusReg_Adesto    = 8,
-	LUT_WriteConfigReg_Macronix  = 9,
 };
 
 

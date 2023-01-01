@@ -25,7 +25,7 @@ OF SUCH DAMAGE. */
 
 namespace Macronix
 {
-	namespace MX25UW
+	namespace MX25UW // also correct for MX25UM
 	{
 		enum DummyCycles
 		{
@@ -63,7 +63,10 @@ namespace Macronix
 					static_assert("Invalid dummy cycle configuration");
 			}
 		}
-	}
+	} // namespace MX25UW
+
+
+	static MemoryType tryDetectMemoryType = MemType_Invalid;
 	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &Info)
 	{
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
@@ -101,7 +104,40 @@ namespace Macronix
 
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, Generic::LUT_SPI, 4);
 
+		// We were able to read the JEDEC ID via octaspi-DDR, so we are in tis mode
+		tryDetectMemoryType = MemType_OctaSPI_DDR;
+
 		return status;
+	}
+
+	// Some Debug Code
+	uint32_t CheckRegisters (FlexSPI_Helper &flexSPI)
+	{
+		uint32_t value[32];
+		flexspi_transfer_t flashXfer
+		{
+			0,					// deviceAddress	- Operation device address.
+			kFLEXSPI_PortB1,						// port				- Operation port
+			kFLEXSPI_Read,				// cmdType			- Execution command type.
+			static_cast<uint8_t>(7),	// seqIndex			- Sequence ID for command.
+			1,							// SeqNumber		- Sequence number for command.
+			value,						// data				- Data buffer.
+			sizeof(value)							// dataSize			- Data size in bytes.
+		};
+		FLEXSPI_TransferBlocking (&flexSPI, &flashXfer);
+
+		flexSPI.ReadRegister (0x000, value[0], (LUT_CommandOffsets)10);
+		flexSPI.ReadRegister (0x200, value[1], (LUT_CommandOffsets)10);
+		flexSPI.ReadRegister (0x300, value[2], (LUT_CommandOffsets)10);
+		flexSPI.ReadRegister (0x400, value[3], (LUT_CommandOffsets)10);
+		flexSPI.ReadRegister (0x500, value[4], (LUT_CommandOffsets)10);
+		flexSPI.ReadRegister (0x800, value[5], (LUT_CommandOffsets)10);
+		flexSPI.ReadRegister (0xC00, value[6], (LUT_CommandOffsets)10);
+		flexSPI.ReadRegister (0xD00, value[7], (LUT_CommandOffsets)10);
+		flexSPI.ReadRegister (0xE00, value[8], (LUT_CommandOffsets)10);
+		flexSPI.ReadRegister (0xF00, value[9], (LUT_CommandOffsets)10);
+
+		return value[0];
 	}
 
 	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, [[maybe_unused]] DeviceInfo &Info, [[maybe_unused]] flexspi_config_t &config,  [[maybe_unused]]flexspi_device_config_t &DeviceConfig)
@@ -116,6 +152,8 @@ namespace Macronix
 		}
 		else if (memType == MemType_QuadSPI)
 		{
+			flexSPI.UpdateLUT (LUT_QuadSPI);
+
 			uint32_t StateReg{};
 			status_t stat = flexSPI.ReadStatusRegister (0, StateReg);
 			if (stat != kStatus_Success)
@@ -140,8 +178,6 @@ namespace Macronix
 				stat = flexSPI.WriteRegister (0U, StateReg, LUT_WriteStatusReg, 2);
 				if (stat != kStatus_Success)
 					return LibmemStaus_Error;
-
-				flexSPI.UpdateLUT (LUT_QuadSPI);
 			}
 		}
 		else
@@ -152,25 +188,29 @@ namespace Macronix
 			{
 				case MemType_OctaSPI_DDR:
 					// Enter Octal-Mode with DDR.
-					// DDR is not working. Fall back to SDR
 					Status = 2;
 					lut = &LUT_OctaSPI_DDR;
 					break;
 				case MemType_OctaSPI:
-					Status = 0x1U;
+					Status = 1;
 					lut = &LUT_OctaSPI;
 					break;
 				default:
 					return LibmemStaus_Error;
 			}
 
+			if (tryDetectMemoryType == MemType_OctaSPI_DDR)
+				flexSPI.UpdateLUT (0, LUT_OctaSPI_DDR); // Load the Octa-SPI LUT if we are already in this mode
+			else
+				flexSPI.UpdateLUT (LUT_SPI);
+
 			// Switch to OSPI-Mode
 			// Write to status/control register 2 to set Dummy Cycles
-			// Compare "Dummy Cycle and Frequency Table (MHz)" in the Datasheet
+			// Compare "Dummy Cycle and Frequency Table (MHz)" in the datasheet
 			status_t stat = flexSPI.WriteEnable (0);	// send write-enable 
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
-			stat = flexSPI.WriteRegister (0x0300U, MX25UW::GetDummyCycles(), LUT_WriteConfigReg_Macronix);
+			stat = flexSPI.WriteRegister (0x0300U, MX25UW::GetDummyCycles(), static_cast<LUT_CommandOffsets>(Command::WriteConfiguration2));
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
 
@@ -178,7 +218,7 @@ namespace Macronix
 			stat = flexSPI.WriteEnable (0);	// send write-enable 
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
-			stat = flexSPI.WriteRegister (0x0U, Status, LUT_WriteConfigReg_Macronix);
+			stat = flexSPI.WriteRegister (0x0U, Status, static_cast<LUT_CommandOffsets>(Command::WriteConfiguration2));
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
 
@@ -190,4 +230,4 @@ namespace Macronix
 
 		return LibmemStaus_Success;
 	}
-}
+} // namespace Macronix
