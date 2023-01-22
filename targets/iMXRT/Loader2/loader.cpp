@@ -89,11 +89,11 @@ void ExecuteTest (uint32_t *MemPointer)
 		DebugPrintf ("Invalid memory-chunks on write %d\r\n", ErrorCounter);
 }
 
-
+static constexpr uint32_t FourMegabyteOffset = 4 * 1024 * 1024;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmain"
-int main (uint32_t flags, uint32_t param)
+int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 {
 #pragma GCC diagnostic pop
 	BOARD_ConfigMPU     ();
@@ -106,8 +106,6 @@ int main (uint32_t flags, uint32_t param)
 	DebugPrint ("Hello iMXRT Loader\r\n");
 
 	#ifdef DEBUG
-		(void)flags;
-		(void)param;
 		// some test Code, because the Loader can not be debugged while using it in real scenarios
 		BOARD_PerformJEDECReset (FLEXSPI);
 //		BOARD_InitQuadSPIPins ();
@@ -123,7 +121,7 @@ int main (uint32_t flags, uint32_t param)
 		}
 		if (res == LibmemStaus_Success)
 		{
-			ExecuteTest ((uint32_t *)(FLASH_START_ADDRESS + 0x40000));		// Testcode
+			ExecuteTest ((uint32_t *)(FLASH_START_ADDRESS + FourMegabyteOffset));
 		}
 
 		#if defined FLEXSPI2
@@ -137,12 +135,12 @@ int main (uint32_t flags, uint32_t param)
 				res = Libmem_InitializeDriver_xSPI (FLEXSPI2, MemType_QuadSPI);
 			}
 			if (res == LibmemStaus_Success)
-				ExecuteTest ((uint32_t *)(FLASH2_START_ADDRESS + 0x40000));	// Testcode
+				ExecuteTest ((uint32_t *)(FLASH2_START_ADDRESS + FourMegabyteOffset));
 		#endif
 
 	#else
 		enum LibmemStatus res = LibmemStaus_Success;
-		if (flags & LIBMEM_RPC_LOADER_FLAG_PARAM)
+		if (param != 0)
 		{
 			DebugPrintf ("libmem Parameter: 0x%X\r\n", param);
 			// Register iMX-RT internal FLASH driver
@@ -167,7 +165,7 @@ int main (uint32_t flags, uint32_t param)
 		}
 		else
 		{
-			DebugPrint ("No libmem Parameter. Load default settings\r\n");
+			DebugPrintf ("No or invalid libmem parameter: 0x%X\r\n", param);
 		}
 	#endif
 

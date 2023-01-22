@@ -487,7 +487,7 @@ uint32_t CLOCK_GetClockRootFreq(clock_root_t clockRoot)
 bool CLOCK_EnableUsbhs0Clock(clock_usb_src_t src, uint32_t freq)
 {
     (void)src;
-	(void)freq;
+    (void)freq;
     uint32_t i;
     CCM->CCGR6 |= CCM_CCGR6_CG0_MASK;
     USB->USBCMD |= USBHS_USBCMD_RST_MASK;
@@ -514,7 +514,7 @@ bool CLOCK_EnableUsbhs0Clock(clock_usb_src_t src, uint32_t freq)
 bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
 {
     (void)src;
-	(void)freq;
+    (void)freq;
     static const clock_usb_pll_config_t g_ccmConfigUsbPll = {.loopDivider = 0U};
     if ((CCM_ANALOG->PLL_USB1 & CCM_ANALOG_PLL_USB1_ENABLE_MASK) != 0U)
     {

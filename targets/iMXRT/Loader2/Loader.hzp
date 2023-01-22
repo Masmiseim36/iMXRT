@@ -55,6 +55,14 @@
     linker_section_placement_macros="RAM_NAME=SRAM_data"
     property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml" />
   <configuration
+    Name="500"
+    Target="MIMXRT595SFAWC_cm33"
+    c_preprocessor_definitions="CPU_MIMXRT595SFAWC_cm33"
+    c_user_include_directories=".;./iMXRT500/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT500.xml"
+    macros="DeviceName=MIMXRT595S_cm33;Family=iMXRT500" />
+  <configuration
     Name="600"
     Target="MIMXRT685SFVKB_cm33"
     c_preprocessor_definitions="CPU_MIMXRT685SFVKB_cm33"
@@ -170,6 +178,14 @@
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT117x_cm4.xml"
     macros="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170" />
+  <configuration
+    Name="MIMXRT500_Debug"
+    build_output_file_name="Loader_iMXRT500_M33_Debug.elf"
+    inherited_configurations="CM33;500;Debug" />
+  <configuration
+    Name="MIMXRT500_Release"
+    build_output_file_name="Loader_iMXRT500_M33.elf"
+    inherited_configurations="CM33;500;Release" />
   <configuration
     Name="MIMXRT600_Debug"
     build_output_file_name="Loader_iMXRT600_M33_Debug.elf"
