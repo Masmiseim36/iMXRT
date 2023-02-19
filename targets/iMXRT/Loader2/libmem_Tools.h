@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2022 Markus Klein
+Copyright (C) 2019-2023 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -30,22 +30,11 @@ OF SUCH DAMAGE. */
 extern "C"
 {
 #endif
-
-	#ifndef FlexSPI_AMBA_BASE
-		#define FlexSPI_AMBA_BASE FlexSPI1_AMBA_BASE 
-		#define FLEXSPI FLEXSPI1
-		#define FLEXSPI_BASE FLEXSPI1_BASE
-	#endif
-
 	enum FlashParmeter
 	{
 		HYPERFLASH_PAGE_SIZE = 512U,
 		QSPIFLASH_PAGE_SIZE  = 256U,
 //		FLASH_SECTORE_SIZE   = 0x40000,	// 4096U,
-		FLASH_START_ADDRESS  = FlexSPI_AMBA_BASE,
-		#if defined FLEXSPI2
-		FLASH2_START_ADDRESS = FlexSPI2_AMBA_BASE,
-		#endif
 	};
 
 	/*! Capacity:
@@ -65,8 +54,6 @@ extern "C"
 	};
 
 	uint32_t libmem_CalculateOffset         (libmem_driver_handle_t *handle, uint8_t *Addr);
-	uint8_t *libmem_GetBaseAddress          (FLEXSPI_Type *base);
-	uint8_t *libmem_GetAliasBaseAddress     (FLEXSPI_Type *base);
 	const char * Libmem_GetErrorString      (int Error);
 	uint_least32_t CalculateCapacity_KBytes (enum Capacity c);
 

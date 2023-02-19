@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2022 Markus Klein
+Copyright (C) 2019-2023 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -70,7 +70,7 @@ IOMUXC_GPIO_SD_B1_05_FLEXSPI1_B_DQS  */
 
 /** BOARD_InitQuadSPIPins
 Set pin muxing and configure electrical properties for QSPI */
-void BOARD_InitQuadSPIPins (void)
+void BOARD_InitQuadSPI1Pins (void)
 {
 	CLOCK_EnableClock (kCLOCK_Iomuxc);
 
@@ -98,7 +98,7 @@ void BOARD_InitQuadSPIPins (void)
 
 /** BOARD_InitOctaSPIPins
 Set pin muxing and configure electrical properties for Hyperflash/OctaSPI */ 
-void BOARD_InitOctaSPIPins (void)
+void BOARD_InitOctaSPI1Pins (void)
 {
 	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B2_00_FLEXSPI1_B_DATA03, 1U);
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B2_00_FLEXSPI1_B_DATA03, IOMUXC_SW_PAD_CTL_PAD_PUS_MASK | IOMUXC_SW_PAD_CTL_PAD_DSE_MASK);
@@ -115,7 +115,7 @@ void BOARD_InitOctaSPIPins (void)
 	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B2_04_FLEXSPI1_B_SCLK, 1U);
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B2_04_FLEXSPI1_B_SCLK, IOMUXC_SW_PAD_CTL_PAD_PUS_MASK | IOMUXC_SW_PAD_CTL_PAD_DSE_MASK);
 
-	BOARD_InitQuadSPIPins ();
+	BOARD_InitQuadSPI1Pins ();
 }
 
 void BOARD_PerformJEDECReset_FlexSPI1 (void)

@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2022 Markus Klein
+Copyright (C) 2019-2023 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -22,6 +22,7 @@ OF SUCH DAMAGE. */
 
 #include "libmem_driver_Hyperflash.h"
 #include "libmem_Tools.h"
+#include "FlexSPI_Helper.h"
 #include "fsl_device_registers.h"
 #include "fsl_flexspi.h"
 #include "fsl_common.h"
@@ -67,7 +68,10 @@ static flexspi_device_config_t deviceconfig =
 	.ARDSeqNumber         = 1,
 	.AHBWriteWaitUnit     = kFLEXSPI_AhbWriteWaitUnit2AhbCycle,
 	.AHBWriteWaitInterval = 20,
-	.enableWriteMask      = false
+	.enableWriteMask      = false,
+	#if defined(FSL_FEATURE_FLEXSPI_HAS_ERRATA_051426) && (FSL_FEATURE_FLEXSPI_HAS_ERRATA_051426)
+		.isFroClockSource = false //!<  \brief Is FRO clock source or not.
+	#endif
 };
 
 /*! LUT_HyperFlash:  */
@@ -210,8 +214,7 @@ static const libmem_ext_driver_functions_t DriverFunctions_Extended =
 \return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
 LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 {
-	#if (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES) || \
-		 defined(MIMXRT533S_SERIES) || defined(MIMXRT555S_SERIES)      || defined(MIMXRT595S_cm33_SERIES))
+	#if (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES))
 		constexpr uint32_t src = 2;	// Use AUX0_PLL as clock source for the FlexSPI
 		uint32_t ClockDiv = 4;		// with a divider of four
 		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (ClockDiv - 1))
@@ -223,10 +226,47 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 			#endif
 
 //			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
-			CLKCTL0->FLEXSPIFCLKSEL = CLKCTL0_FLEXSPIFCLKSEL_SEL(src);			// Update flexspi clock.
+			CLKCTL0->FLEXSPIFCLKSEL  = CLKCTL0_FLEXSPIFCLKSEL_SEL(src);			// Update flexspi clock.
 			CLKCTL0->FLEXSPIFCLKDIV |= CLKCTL0_FLEXSPIFCLKDIV_RESET_MASK;		// Reset the divider counter
-			CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV(ClockDiv - 1);
+			CLKCTL0->FLEXSPIFCLKDIV  = CLKCTL0_FLEXSPIFCLKDIV_DIV(ClockDiv - 1);
 			while ((CLKCTL0->FLEXSPIFCLKDIV) & CLKCTL0_FLEXSPIFCLKDIV_REQFLAG_MASK)
+				;
+//			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
+		}
+	#elif (defined(MIMXRT533S_SERIES)  || defined(MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES))
+		constexpr uint32_t src = 2;	// Use AUX0_PLL as clock source for the FlexSPI
+		uint32_t ClockDiv = 4;		// with a divider of four
+		if (base == FLEXSPI0 && 
+			(CLKCTL0->FLEXSPI0FCLKSEL != CLKCTL0_FLEXSPI0FCLKSEL_SEL(src) || (CLKCTL0->FLEXSPI0FCLKDIV & CLKCTL0_FLEXSPI0FCLKDIV_DIV_MASK) != (ClockDiv - 1)))
+		{
+			#if !defined(FSL_SDK_DRIVER_QUICK_ACCESS_ENABLE)
+				POWER_DisablePD(kPDRUNCFG_APD_FLEXSPI0_SRAM);
+				POWER_DisablePD(kPDRUNCFG_PPD_FLEXSPI0_SRAM);
+				POWER_ApplyPD();
+			#endif
+
+//			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
+			CLKCTL0->FLEXSPI0FCLKSEL  = CLKCTL0_FLEXSPI0FCLKSEL_SEL(src);			// Update flexspi clock.
+			CLKCTL0->FLEXSPI0FCLKDIV |= CLKCTL0_FLEXSPI0FCLKDIV_RESET_MASK;		// Reset the divider counter
+			CLKCTL0->FLEXSPI0FCLKDIV  = CLKCTL0_FLEXSPI0FCLKDIV_DIV(ClockDiv - 1);
+			while ((CLKCTL0->FLEXSPI0FCLKDIV) & CLKCTL0_FLEXSPI0FCLKDIV_REQFLAG_MASK)
+				;
+//			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
+		}
+		else if (base == FLEXSPI1 &&
+			(CLKCTL0->FLEXSPI1FCLKSEL != CLKCTL0_FLEXSPI1FCLKSEL_SEL(src) || (CLKCTL0->FLEXSPI1FCLKDIV & CLKCTL0_FLEXSPI1FCLKDIV_DIV_MASK) != (ClockDiv - 1)))
+		{
+			#if !defined(FSL_SDK_DRIVER_QUICK_ACCESS_ENABLE)
+				POWER_DisablePD(kPDRUNCFG_APD_FLEXSPI1_SRAM);
+				POWER_DisablePD(kPDRUNCFG_PPD_FLEXSPI1_SRAM);
+				POWER_ApplyPD();
+			#endif
+
+//			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
+			CLKCTL0->FLEXSPI1FCLKSEL  = CLKCTL0_FLEXSPI1FCLKSEL_SEL(src);			// Update flexspi clock.
+			CLKCTL0->FLEXSPI1FCLKDIV |= CLKCTL0_FLEXSPI1FCLKDIV_RESET_MASK;		// Reset the divider counter
+			CLKCTL0->FLEXSPI1FCLKDIV  = CLKCTL0_FLEXSPI1FCLKDIV_DIV(ClockDiv - 1);
+			while ((CLKCTL0->FLEXSPI1FCLKDIV) & CLKCTL0_FLEXSPI1FCLKDIV_REQFLAG_MASK)
 				;
 //			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
 		}
@@ -270,7 +310,7 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 		clock_lpcg_t FlexSPIClockGate = kCLOCK_Flexspi1;
 		switch (reinterpret_cast<uint32_t>(base))
 		{
-			case FLEXSPI_BASE:
+			case FLEXSPI1_BASE:
 				FlexSPIClock = kCLOCK_Root_Flexspi1;
 				FlexSPIClockGate = kCLOCK_Flexspi1;
 				break;
@@ -297,7 +337,9 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 	config.ahbConfig.enableReadAddressOpt = true;	// Allow AHB read start address do not follow the alignment requirement.
 	config.ahbConfig.enableAHBBufferable  = true;
 	config.ahbConfig.enableAHBCachable    = true;
-	config.enableSckBDiffOpt              = true;	// enable diff clock and DQS
+	#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT)
+		config.enableSckBDiffOpt          = true;	// enable diff clock and DQS
+	#endif
 	config.rxSampleClock                  = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;
 	#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
 		config.enableCombination          = true;
@@ -311,12 +353,12 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 
 	static uint8_t write_buffer[HYPERFLASH_PAGE_SIZE];
 	LibmemDriver *FlashHandle = LibmemDriver::GetDriver ();
-//	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, nullptr, &DriverFunctions, &DriverFunctions_Extended);
-	libmem_register_driver (FlashHandle, libmem_GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, nullptr, &DriverFunctions, nullptr);
+//	libmem_register_driver (FlashHandle, GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, nullptr, &DriverFunctions, &DriverFunctions_Extended);
+	libmem_register_driver (FlashHandle, GetBaseAddress(base), BOARD_FLASH_SIZE, geometry, nullptr, &DriverFunctions, nullptr);
 	int err = libmem_driver_paged_write_init (&FlashHandle->PageWriteControlBlock, write_buffer, HYPERFLASH_PAGE_SIZE, ProgramPage, 4, 0);
 	FlashHandle->user_data = (uint32_t)base;
 
-	uint8_t *AliasAddress = libmem_GetAliasBaseAddress (base);
+	uint8_t *AliasAddress = GetAliasBaseAddress (base);
 	if (AliasAddress != nullptr && err == LIBMEM_STATUS_SUCCESS)
 	{
 		FlashHandle = LibmemDriver::GetDriver ();

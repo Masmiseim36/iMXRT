@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2022 Markus Klein
+Copyright (C) 2019-2023 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -34,62 +34,88 @@ extern "C"
 #include "libmem_driver_xSPI.h"
 #include "pin_mux.h"
 #include "DebugPrint.h"
+#include "FlexSPI_Helper.h"
 
 
 enum LibmemStatus Init_Libmem (enum MemoryType memoryType, FlexSPI_Helper *base);
-void InitOctaSPIPins (FlexSPI_Helper *base);
-void InitQuadSPIPins (FlexSPI_Helper *base);
 
-uint32_t Compare (const uint32_t *MemPointer, uint32_t Comp, size_t size)
+uint32_t Compare (const uint32_t *memPointer, uint32_t Comp, size_t size)
 {
 	uint32_t ErrorCounter = 0;
 	for (size_t i=0; i<size/sizeof(uint32_t); i++)
 	{
-		if (MemPointer[i] != Comp)
+		if (memPointer[i] != Comp)
 			ErrorCounter++;
 	}
 	return ErrorCounter;
 }
 
-uint32_t Compare (const uint32_t *MemPointer, const uint32_t *pComp, size_t size)
+uint32_t Compare (const uint32_t *memPointer, const uint32_t *pComp, size_t size)
 {
 	uint32_t ErrorCounter = 0;
 	for (size_t i=0; i<size/sizeof(uint32_t); i++)
 	{
-		if (MemPointer[i] != pComp[i])
+		if (memPointer[i] != pComp[i])
 			ErrorCounter++;
 	}
 	return ErrorCounter;
 }
 
-void ExecuteTest (uint32_t *MemPointer)
+void ExecuteTest (uint32_t *memPointer)
 {
 	static std::array<uint32_t, 4096> buffer;
-	memset (buffer.data (), 0, sizeof(buffer));
-	for (size_t i=0; i<sizeof(buffer)/sizeof(buffer[0]); i++)
-		buffer[i] = reinterpret_cast<uint32_t>((buffer.data ()) + i);
 
 	uint8_t *erase_start = 0;
 	size_t erase_size = 0;
-	LibmemStatus_t res = static_cast<LibmemStatus_t>(libmem_erase (reinterpret_cast<uint8_t *>(MemPointer), sizeof(buffer), &erase_start, &erase_size));
+	LibmemStatus_t res = static_cast<LibmemStatus_t>(libmem_erase (reinterpret_cast<uint8_t *>(memPointer), sizeof(buffer), &erase_start, &erase_size));
 	if (res != LIBMEM_STATUS_SUCCESS)
 		DebugPrintf ("Error '%s' occurred\r\n", Libmem_GetErrorString (res));
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
 	// Check if everything is erased
-	uint32_t ErrorCounter = Compare (MemPointer, 0xFFFFFFFF, erase_size);
+	libmem_read (reinterpret_cast<uint8_t *>(buffer.data()), reinterpret_cast<const uint8_t *>(memPointer), buffer.size());
+	uint32_t ErrorCounter = Compare (memPointer, 0xFFFFFFFF, erase_size);
 	if (ErrorCounter > 0)
 		DebugPrintf ("Invalid memory-chunks on erase: %d\r\n", ErrorCounter);
 
-	res = static_cast<LibmemStatus_t>(libmem_write ((uint8_t *)MemPointer, (uint8_t *)&buffer[0], sizeof(buffer)));
+	// Initialize the array with test data
+	for (size_t i=0; i<sizeof(buffer)/sizeof(buffer[0]); i++)
+		buffer[i] = reinterpret_cast<uint32_t>((buffer.data ()) + i);
+	res = static_cast<LibmemStatus_t>(libmem_write ((uint8_t *)memPointer, (uint8_t *)&buffer[0], sizeof(buffer)));
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
-	ErrorCounter = Compare (MemPointer, &buffer[0], sizeof (buffer));
+	ErrorCounter = Compare (memPointer, &buffer[0], sizeof (buffer));
 	if (ErrorCounter > 0)
 		DebugPrintf ("Invalid memory-chunks on write %d\r\n", ErrorCounter);
 }
 
-static constexpr uint32_t FourMegabyteOffset = 4 * 1024 * 1024;
+//static constexpr uint32_t FourMegabyteOffset = 4 * 1024 * 1024;
+static constexpr uint32_t TwoMegabyteOffset = 2 * 1024 * 1024;
+
+void InitializeAndTest (FlexSPI_Helper *base, MemoryType type)
+{
+	PerformJEDECReset (base);
+	InitializeSpiPins (base, type);
+
+	LibmemStatus_t res {LibmemStaus_Success};
+	if (type == MemType_Hyperflash)
+		res = Libmem_InitializeDriver_Hyperflash (base);
+	else
+		res = Libmem_InitializeDriver_xSPI (base, type);
+	if (res != LibmemStaus_Success)
+	{
+		PerformJEDECReset (base);
+		InitializeSpiPins (base, type);
+		if (type == MemType_Hyperflash)
+			res = Libmem_InitializeDriver_Hyperflash (base);
+		else
+			res = Libmem_InitializeDriver_xSPI (base, type);
+	}
+	if (res == LibmemStaus_Success)
+	{
+		ExecuteTest ((uint32_t *)(GetBaseAddress (base) + TwoMegabyteOffset));
+	}
+}
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmain"
@@ -105,54 +131,55 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 	ConfigUart ();
 	DebugPrint ("Hello iMXRT Loader\r\n");
 
+	enum LibmemStatus res {LibmemStaus_Success};
 	#ifdef DEBUG
 		// some test Code, because the Loader can not be debugged while using it in real scenarios
-		BOARD_PerformJEDECReset (FLEXSPI);
-//		BOARD_InitQuadSPIPins ();
-		BOARD_InitOctaSPIPins ();
-//		LibmemStatus_t res = Libmem_InitializeDriver_Hyperflash (FLEXSPI);
-		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_OctaSPI_DDR);
-//		LibmemStatus_t res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_QuadSPI);
-		if (res != LibmemStaus_Success)
-		{
-			BOARD_PerformJEDECReset (FLEXSPI);
-			BOARD_InitOctaSPIPins ();
-			res = Libmem_InitializeDriver_xSPI (FLEXSPI, MemType_OctaSPI_DDR);
-		}
-		if (res == LibmemStaus_Success)
-		{
-			ExecuteTest ((uint32_t *)(FLASH_START_ADDRESS + FourMegabyteOffset));
-		}
-
+		#if defined FLEXSPI
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI), MemType_QuadSPI); // MemType_Hyperflash
+		#endif
+		#if defined FLEXSPI0
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI0), MemType_OctaSPI_DDR);
+		#endif
+		#if defined FLEXSPI1
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI1), MemType_OctaSPI_DDR);
+		#endif
 		#if defined FLEXSPI2
-			BOARD_PerformJEDECReset (FLEXSPI2);
-			BOARD_InitQuadSPI2Pins ();
-			res = Libmem_InitializeDriver_xSPI (FLEXSPI2, MemType_QuadSPI);
-			if (res != LibmemStaus_Success)
-			{
-				BOARD_PerformJEDECReset (FLEXSPI2);
-				BOARD_InitQuadSPI2Pins ();
-				res = Libmem_InitializeDriver_xSPI (FLEXSPI2, MemType_QuadSPI);
-			}
-			if (res == LibmemStaus_Success)
-				ExecuteTest ((uint32_t *)(FLASH2_START_ADDRESS + FourMegabyteOffset));
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI2), MemType_QuadSPI);
 		#endif
 
 	#else
-		enum LibmemStatus res = LibmemStaus_Success;
 		if (param != 0)
 		{
 			DebugPrintf ("libmem Parameter: 0x%X\r\n", param);
 			// Register iMX-RT internal FLASH driver
-			LibmemStatus_t res1 = Init_Libmem ((enum MemoryType)(param & 0x0F), static_cast<FlexSPI_Helper *>(FLEXSPI));
-			#if defined FLEXSPI2
-				LibmemStatus_t res2 = Init_Libmem ((enum MemoryType)((param & 0xF0) >> 4), static_cast<FlexSPI_Helper *>(FLEXSPI2));
+			#if defined FLEXSPI
+				// devices with a single FlexSPI interface or two interfaces (imxRT106x)
+				res = Init_Libmem ((MemoryType)(param & 0x0F), static_cast<FlexSPI_Helper *>(FLEXSPI));
+				#if defined FLEXSPI2
+					LibmemStatus res2 = Init_Libmem ((MemoryType)((param & 0xF0) >> 4), static_cast<FlexSPI_Helper *>(FLEXSPI2));
+				#endif
+				if (res == LibmemStatus_InvalidMemoryType
+				#if defined FLEXSPI2
+					&& res2 == LibmemStatus_InvalidMemoryType
+				#endif
+				)
+			#elif defined FLEXSPI0
+				// devices with one or two FlexSPI Interfaces counting from zero
+				LibmemStatus res0 = Init_Libmem ((MemoryType)(param & 0x0F), static_cast<FlexSPI_Helper *>(FLEXSPI0));
+				#if defined FLEXSPI1
+					LibmemStatus_t res1 = Init_Libmem ((MemoryType)((param & 0xF0) >> 4), static_cast<FlexSPI_Helper *>(FLEXSPI1));
+				#endif
+				if (res0 == LibmemStatus_InvalidMemoryType 
+				#if defined FLEXSPI1
+					&& res1 == LibmemStatus_InvalidMemoryType
+				#endif
+				)
+			#elif defined FLEXSPI1
+				// devices with two FlexSPI Interfaces counting from one
+				LibmemStatus res1 = Init_Libmem ((MemoryType)(param & 0x0F), static_cast<FlexSPI_Helper *>(FLEXSPI1));
+				LibmemStatus res2 = Init_Libmem ((MemoryType)((param & 0xF0) >> 4), static_cast<FlexSPI_Helper *>(FLEXSPI2));
+				if (res1 == LibmemStatus_InvalidMemoryType && res2 == LibmemStatus_InvalidMemoryType)
 			#endif
-			if (res1 == LibmemStatus_InvalidMemoryType 
-			#if defined FLEXSPI2
-				&& res2 == LibmemStatus_InvalidMemoryType
-			#endif
-			)
 			{
 				// No valid option for an Flash-memory-interface selected
 				char ErrorString[64];
@@ -166,26 +193,22 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 		else
 		{
 			DebugPrintf ("No or invalid libmem parameter: 0x%X\r\n", param);
+			return LIBMEM_STATUS_INVALID_PARAMETER;
 		}
 	#endif
 
 	// Start loader
-	if (res == LIBMEM_STATUS_SUCCESS)
-	{
-		#if defined INITIALIZE_TCM_SECTIONS
-			DebugPrint ("Start RPC loader\r\n");
-			//extern uint8_t __DTCM_segment_start__;
-			extern uint8_t __DTCM_segment_used_end__;
-			extern uint8_t __DTCM_segment_end__;
-			res = static_cast<LibmemStatus_t>(libmem_rpc_loader_start (&__DTCM_segment_used_end__, &__DTCM_segment_end__ - 1));
-		#else
-			extern uint8_t __SRAM_data_segment_used_end__;
-			extern uint8_t __SRAM_data_segment_end__;
-			res = static_cast<LibmemStatus_t>(libmem_rpc_loader_start (&__SRAM_data_segment_used_end__, &__SRAM_data_segment_end__ - 1));
-		#endif
-	}
-	else
-		DebugPrint ("Libmem Driver coudn't be loaded\r\n");
+	DebugPrint ("Start RPC loader\r\n");
+	#if defined INITIALIZE_TCM_SECTIONS
+		//extern uint8_t __DTCM_segment_start__;
+		extern uint8_t __DTCM_segment_used_end__;
+		extern uint8_t __DTCM_segment_end__;
+		res = static_cast<LibmemStatus>(libmem_rpc_loader_start (&__DTCM_segment_used_end__, &__DTCM_segment_end__ - 1));
+	#else
+		extern uint8_t __SRAM_data_segment_used_end__;
+		extern uint8_t __SRAM_data_segment_end__;
+		res = static_cast<LibmemStatus>(libmem_rpc_loader_start (&__SRAM_data_segment_used_end__, &__SRAM_data_segment_end__ - 1));
+	#endif
 
 	// Terminate loader and return error String if an Error occurred
 	if (res == LIBMEM_STATUS_SUCCESS)
@@ -213,7 +236,7 @@ enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
 	enum LibmemStatus status;
 	uint32_t Trials = 0;
 
-	BOARD_PerformJEDECReset (base);
+	PerformJEDECReset (base);
 
 	switch (memoryType)
 	{
@@ -227,7 +250,7 @@ enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
-					BOARD_PerformJEDECReset (base);
+					PerformJEDECReset (base);
 				}
 			}
 			while (status != LibmemStaus_Success && Trials < 3);
@@ -238,19 +261,16 @@ enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
 			{
 				// Init for Octal-SPI with DDR
 				DebugPrint ("Init Loader for Octal-SPI (DDR)\r\n");
-
 				// A small delay is need here
-				for(int i=0; i<1000000; i++)
-				{
+				for (int i=0; i<1000000; i++)
 					__asm__ volatile("nop");
-				}
 
 				InitOctaSPIPins (base);
 				status =  Libmem_InitializeDriver_xSPI (base, memoryType);
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
-					BOARD_PerformJEDECReset (base);
+					PerformJEDECReset (base);
 				}
 			}
 			while (status != LibmemStaus_Success && Trials < 3);
@@ -266,7 +286,7 @@ enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
-					BOARD_PerformJEDECReset (base);
+					PerformJEDECReset (base);
 				}
 			}
 			while (status != LibmemStaus_Success && Trials < 3);
@@ -281,7 +301,7 @@ enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
 				if (status != LibmemStaus_Success)
 				{
 					Trials ++;
-					BOARD_PerformJEDECReset (base);
+					PerformJEDECReset (base);
 				}
 			}
 			while (status != LibmemStaus_Success && Trials < 3);
@@ -290,38 +310,4 @@ enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
 			return LibmemStatus_InvalidMemoryType;
 	}
 	return status;
-}
-
-void InitOctaSPIPins (FlexSPI_Helper *base)
-{
-	switch (base->GetBaseAddr())
-	{
-		case FLEXSPI_BASE:
-			BOARD_InitOctaSPIPins ();
-			break;
-		#ifdef FLEXSPI2
-		case FLEXSPI2_BASE:
-			BOARD_InitOctaSPI2Pins ();
-			break;
-		#endif
-		default:
-			return;
-	}
-}
-
-void InitQuadSPIPins (FlexSPI_Helper *base)
-{
-	switch (base->GetBaseAddr())
-	{
-		case FLEXSPI_BASE:
-			BOARD_InitQuadSPIPins ();
-			break;
-		#ifdef FLEXSPI2
-		case FLEXSPI2_BASE:
-			BOARD_InitQuadSPI2Pins ();
-			break;
-		#endif
-		default:
-			return;
-	}
 }

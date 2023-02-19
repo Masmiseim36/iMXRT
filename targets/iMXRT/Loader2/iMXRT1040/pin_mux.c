@@ -106,7 +106,7 @@ void BOARD_InitOctaSPIPins (void)
 	BOARD_InitQuadSPIPins ();
 }
 
-void BOARD_PerformJEDECReset_FlexSPI1 (void)
+void BOARD_PerformJEDECReset_FlexSPI (void)
 {
 	gpio_pin_config_t jreset_pin_config = 
 	{

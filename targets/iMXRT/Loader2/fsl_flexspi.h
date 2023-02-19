@@ -636,6 +636,8 @@ static inline void FLEXSPI_GetDataLearningPhase(FLEXSPI_Type *base, uint8_t *por
     {
         *portBPhase = (uint8_t)((base->STS0 & FLEXSPI_STS0_DATALEARNPHASEB_MASK) >> FLEXSPI_STS0_DATALEARNPHASEB_SHIFT);
     }
+#else
+    (void)portBPhase;
 #endif
 }
 #endif

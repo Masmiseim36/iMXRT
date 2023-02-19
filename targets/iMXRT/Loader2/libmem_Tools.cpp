@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2022 Markus Klein
+Copyright (C) 2019-2023 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -35,33 +35,6 @@ uint32_t libmem_CalculateOffset (libmem_driver_handle_t *handle, uint8_t *Addr)
 {
 	return Addr - handle->start;
 }
-uint8_t *libmem_GetBaseAddress (FLEXSPI_Type *base)
-{
-	switch (reinterpret_cast<uint32_t>(base))
-	{
-		case FLEXSPI_BASE:
-			return reinterpret_cast<uint8_t *>(FlexSPI_AMBA_BASE);
-		#ifdef FLEXSPI2
-		case FLEXSPI2_BASE:
-			return reinterpret_cast<uint8_t *>(FlexSPI2_AMBA_BASE);
-		#endif
-		default:
-			return nullptr;
-	}
-}
-
-uint8_t *libmem_GetAliasBaseAddress (FLEXSPI_Type *base)
-{
-	#if defined FlexSPI1_ALIAS_BASE && __CORTEX_M == 4
-		if (reinterpret_cast<uint32_t>(base) == FLEXSPI1_BASE)
-			return reinterpret_cast<uint8_t *>(FlexSPI1_ALIAS_BASE);
-	#else
-		(void)base;
-	#endif
-
-	return nullptr;
-}
-
 
 /*! Libmem_GetErrorString:
 \brief Return an Error String for printing to the user

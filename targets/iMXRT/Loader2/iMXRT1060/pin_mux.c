@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2022 Markus Klein
+Copyright (C) 2019-2023 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -96,7 +96,7 @@ void BOARD_InitOctaSPIPins (void)
 	BOARD_InitQuadSPIPins ();
 }
 
-void BOARD_PerformJEDECReset_FlexSPI1 (void)
+void BOARD_PerformJEDECReset_FlexSPI (void)
 {
 	gpio_pin_config_t jreset_pin_config = 
 	{

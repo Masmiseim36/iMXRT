@@ -13,6 +13,7 @@
 #include "fsl_common.h"
 #include "fsl_reset.h"
 #include "fsl_gpio.h"
+#include "board_generic.h"
 
 /*******************************************************************************
  * Definitions
@@ -25,30 +26,30 @@
 #define BOARD_DEBUG_UART_TYPE     kSerialPort_Uart
 #define BOARD_DEBUG_UART_BASEADDR (uint32_t) USART0
 #define BOARD_DEBUG_UART_INSTANCE 0U
+#define DEBUG_CONSOLE_UART_INDEX  BOARD_DEBUG_UART_INSTANCE
 #define BOARD_DEBUG_UART_CLK_FREQ CLOCK_GetFlexcommClkFreq(0)
-#define BOARD_DEBUG_UART_FRG_CLK \
-    (&(const clock_frg_clk_config_t){0U, kCLOCK_FrgPllDiv, 255U, 0U}) /*!< Select FRG0 mux as frg_pll */
+#define BOARD_DEBUG_UART_FRG_CLK (&(const clock_frg_clk_config_t){0U, kCLOCK_FrgPllDiv, 255U, 0U}) /*!< Select FRG0 mux as frg_pll */
 #define BOARD_DEBUG_UART_CLK_ATTACH kFRG_to_FLEXCOMM0
 #define BOARD_UART_IRQ_HANDLER      FLEXCOMM0_IRQHandler
 #define BOARD_UART_IRQ              FLEXCOMM0_IRQn
 
 #if BOARD_I3C_CODEC
-#define BOARD_CODEC_I2C_BASEADDR   I3C0
-#define BOARD_CODEC_I2C_INSTANCE   0
-#define BOARD_CODEC_I2C_CLOCK_FREQ CLOCK_GetI3cClkFreq()
+	#define BOARD_CODEC_I2C_BASEADDR   I3C0
+	#define BOARD_CODEC_I2C_INSTANCE   0
+	#define BOARD_CODEC_I2C_CLOCK_FREQ CLOCK_GetI3cClkFreq()
 #else
-#define BOARD_CODEC_I2C_BASEADDR   I2C4
-#define BOARD_CODEC_I2C_INSTANCE   4
-#define BOARD_CODEC_I2C_CLOCK_FREQ CLOCK_GetFlexcommClkFreq(4)
+	#define BOARD_CODEC_I2C_BASEADDR   I2C4
+	#define BOARD_CODEC_I2C_INSTANCE   4
+	#define BOARD_CODEC_I2C_CLOCK_FREQ CLOCK_GetFlexcommClkFreq(4)
 #endif
 
 #define BOARD_FLEXSPI_PSRAM FLEXSPI1
 #ifndef BOARD_ENABLE_PSRAM_CACHE
-#define BOARD_ENABLE_PSRAM_CACHE 1
+	#define BOARD_ENABLE_PSRAM_CACHE 1
 #endif
 
 #ifndef BOARD_DEBUG_UART_BAUDRATE
-#define BOARD_DEBUG_UART_BAUDRATE 115200
+	#define BOARD_DEBUG_UART_BAUDRATE 115200
 #endif /* BOARD_DEBUG_UART_BAUDRATE */
 
 /* PCA9420 */
@@ -65,26 +66,26 @@
 #define LOGIC_LED_OFF 0U
 
 #ifndef BOARD_LED_RED_GPIO
-#define BOARD_LED_RED_GPIO GPIO
+	#define BOARD_LED_RED_GPIO GPIO
 #endif
 #define BOARD_LED_RED_GPIO_PORT 0U
 #ifndef BOARD_LED_RED_GPIO_PIN
-#define BOARD_LED_RED_GPIO_PIN 14U
+	#define BOARD_LED_RED_GPIO_PIN 14U
 #endif
 
 #ifndef BOARD_LED_GREEN_GPIO
-#define BOARD_LED_GREEN_GPIO GPIO
+	#define BOARD_LED_GREEN_GPIO GPIO
 #endif
 #define BOARD_LED_GREEN_GPIO_PORT 1U
 #ifndef BOARD_LED_GREEN_GPIO_PIN
-#define BOARD_LED_GREEN_GPIO_PIN 0U
+	#define BOARD_LED_GREEN_GPIO_PIN 0U
 #endif
 #ifndef BOARD_LED_BLUE_GPIO
-#define BOARD_LED_BLUE_GPIO GPIO
+	#define BOARD_LED_BLUE_GPIO GPIO
 #endif
 #define BOARD_LED_BLUE_GPIO_PORT 3U
 #ifndef BOARD_LED_BLUE_GPIO_PIN
-#define BOARD_LED_BLUE_GPIO_PIN 17U
+	#define BOARD_LED_BLUE_GPIO_PIN 17U
 #endif
 
 #ifndef BOARD_FLASH_RESET_GPIO

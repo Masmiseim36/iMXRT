@@ -264,20 +264,3 @@ void BOARD_BootClockGate (void)
 		CCM->CCGR6 = 0xFFFFFFFFU;
 	#endif
 }
-
-void BOARD_PerformJEDECReset (FLEXSPI_Type *base)
-{
-	switch (reinterpret_cast<uint32_t>(base))
-	{
-		case FLEXSPI_BASE:
-			BOARD_PerformJEDECReset_FlexSPI1();
-			break;
-		#ifdef FLEXSPI2
-		case FLEXSPI2_BASE:
-			BOARD_PerformJEDECReset_FlexSPI2();
-			break;
-		#endif
-		default:
-			return;
-	}
-}

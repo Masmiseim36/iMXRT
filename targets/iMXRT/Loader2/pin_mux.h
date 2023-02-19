@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2022 Markus Klein
+Copyright (C) 2019-2023 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -47,19 +47,27 @@ extern "C" {
 
 
 	void BOARD_InitUARTPins    (void);
-	void BOARD_InitQuadSPIPins (void);
-	void BOARD_InitOctaSPIPins (void);
 
-	void BOARD_PerformJEDECReset_FlexSPI1 (void);
-
+	#if defined FLEXSPI
+		void BOARD_InitQuadSPIPins (void);
+		void BOARD_InitOctaSPIPins (void);
+		void BOARD_PerformJEDECReset_FlexSPI (void);
+	#endif
+	#if defined FLEXSPI0
+		void BOARD_InitQuadSPI0Pins (void);
+		void BOARD_InitOctaSPI0Pins (void);
+		void BOARD_PerformJEDECReset_FlexSPI0 (void);
+	#endif
+	#if defined FLEXSPI1
+		void BOARD_InitQuadSPI1Pins (void);
+		void BOARD_InitOctaSPI1Pins (void);
+		void BOARD_PerformJEDECReset_FlexSPI1 (void);
+	#endif
 	#if defined FLEXSPI2
 		void BOARD_InitQuadSPI2Pins (void);
 		void BOARD_InitOctaSPI2Pins (void);
 		void BOARD_PerformJEDECReset_FlexSPI2 (void);
 	#endif
-
-
-	void BOARD_PerformJEDECReset (FLEXSPI_Type *base);
 
 #if defined(__cplusplus)
 }
