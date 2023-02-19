@@ -30964,13 +30964,13 @@
       <BitField name="PRI_12(DebugMonitor)" start="4" size="4" description="Priority of system handler 12 (DebugMonitor)" />
     </Register>
     <Register name="SHCSR" start="0xe000ed24" description="System Handler Control and State Register">
-      <BitField name="USGFAULTENA" start="18" size="1" description="UsageFault enable Bit" />
+      <BitField name="USGFAULTENA" start="18" size="1" description="UsageFault Enable Bit" />
       <BitField name="BUSFAULTENA" start="17" size="1" description="BusFault Enable Bit" />
       <BitField name="MEMFAULTENA" start="16" size="1" description="MemManage Enable Bit" />
       <BitField name="SVCALLPENDED" start="15" size="1" description="SVCall Pending Bit" />
-      <BitField name="BUSFAULTPENDED" start="14" size="1" description="BusFault Exception Pending Bit" />
-      <BitField name="MEMFAULTPENDED" start="13" size="1" description="MemManage Exception Pending Bit" />
-      <BitField name="USGFAULTPENDED" start="12" size="1" description="UsageFault Exception Pending Bit" />
+      <BitField name="BUSFAULTPENDED" start="14" size="1" description="BusFault Exception Pended Bit" />
+      <BitField name="MEMFAULTPENDED" start="13" size="1" description="MemManage Exception Pended Bit" />
+      <BitField name="USGFAULTPENDED" start="12" size="1" description="UsageFault Exception Pended Bit" />
       <BitField name="SYSTICKACT" start="11" size="1" description="SysTick Exception Active Bit" />
       <BitField name="PENDSVACT" start="10" size="1" description="PendSV Exception Active Bit" />
       <BitField name="MONITORACT" start="8" size="1" description="Debug Monitor Active Bit" />
