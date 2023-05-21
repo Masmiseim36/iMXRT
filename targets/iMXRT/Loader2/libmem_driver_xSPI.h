@@ -47,13 +47,16 @@ enum LUT_CommandOffsets
 
 	LUT_WriteStatusReg_Adesto    = 8,
 	LUT_WriteConfigReg_Macronix  = 9,
-	LUT_WriteConfigReg_Winbond   = 11,
 };
 
 
 class FlexSPI_Helper: public FLEXSPI_Type
 {
 public:
+	void UpdateLUT (const FlexSPI_LUT &lut)
+	{
+		::FLEXSPI_UpdateLUT (this, 0, &lut.front(), lut.size());
+	}
 	void UpdateLUT (uint32_t index, const FlexSPI_LUT &lut)
 	{
 		::FLEXSPI_UpdateLUT (this, index, &lut.front()+index, lut.size()-index);

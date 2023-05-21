@@ -96,9 +96,9 @@ namespace Generic
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 
-		// (11) Write Status Register-2  (Winbond) --> compare @LUT_CommandOffsets
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x31, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 8),
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_1PAD, 0x01, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
+		// (11) free
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 
@@ -187,8 +187,8 @@ namespace ISSI
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 
-		// (2) free
-		0,	// Dummy to fill a block of four
+		// (2) Read ID --> compare @LUT_CommandOffsets
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x9F, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_1PAD, 24),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four

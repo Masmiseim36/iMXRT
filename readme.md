@@ -15,6 +15,7 @@ This package enhances the original package by
 - Enabling debugging in the external-SDRAM-memory
 - Added a loader (in Source code) which supports different Flash memory targets
 - Added sample code for booting from external Flash
+- Adding support for iMXRT1040
 
 The following Controllers are supported:
 
@@ -22,13 +23,12 @@ The following Controllers are supported:
 - [iMXRT1015](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1015-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1015)
 - [iMXRT1020](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1020-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1020)
 - [iMXRT1024](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1024-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1024)
+- [iMXRT1040](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1040-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1040)
 - [iMXRT1050](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1050-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1050)
 - [iMXRT1060](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1060-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1060)
 - [iMXRT1064](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1064-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1064)
 - [iMXRT1160](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1160-crossover-high-performance-mcu-with-arm-cortex-m7-and-cortex-m4-cores:i.MX-RT1160)
 - [iMXRT1170](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1170-crossover-mcu-family-first-ghz-mcu-with-arm-cortex-m7-and-cortex-m4-cores:i.MX-RT1170)
-
-** Do not use for iMXRT1040 Controller, the QSPI-Flash of the evaluation board is not supported **
 
 ## Build and Install
 
@@ -76,3 +76,5 @@ The lowest Nibble of the parameter is used to configure the first FlexSPI-Interf
   * IS25LP064A-JBLE
   * IS25WP064A-JBLE
   * IS25WP128-JBLE
+* Winbond
+  * W25Q64JV

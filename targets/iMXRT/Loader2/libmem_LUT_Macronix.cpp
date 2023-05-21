@@ -104,18 +104,17 @@ namespace Macronix
 		return status;
 	}
 
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info, [[maybe_unused]] flexspi_config_t &config,  [[maybe_unused]]flexspi_device_config_t &DeviceConfig)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, [[maybe_unused]] DeviceInfo &Info, [[maybe_unused]] flexspi_config_t &config,  [[maybe_unused]]flexspi_device_config_t &DeviceConfig)
 	{
-		(void)Info;
-		if (MemType == MemType_Invalid || MemType == MemType_Hyperflash)
+		if (memType == MemType_Invalid || memType == MemType_Hyperflash)
 			return LibmemStaus_Error;
 
 		DebugPrint ("Found Macronix Flash\r\n");
-		if (MemType == MemType_SPI)
+		if (memType == MemType_SPI)
 		{
 			flexSPI.UpdateLUT (0, LUT_SPI);
 		}
-		else if (MemType == MemType_QuadSPI)
+		else if (memType == MemType_QuadSPI)
 		{
 			uint32_t StateReg{};
 			status_t stat = flexSPI.ReadStatusRegister (0, StateReg);
@@ -142,14 +141,14 @@ namespace Macronix
 				if (stat != kStatus_Success)
 					return LibmemStaus_Error;
 
-				flexSPI.UpdateLUT (0, LUT_QuadSPI);
+				flexSPI.UpdateLUT (LUT_QuadSPI);
 			}
 		}
 		else
 		{
 			uint8_t Status = 0;
 			const FlexSPI_LUT *lut = nullptr;
-			switch (MemType)
+			switch (memType)
 			{
 				case MemType_OctaSPI_DDR:
 					// Enter Octal-Mode with DDR.
@@ -183,7 +182,7 @@ namespace Macronix
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
 
-			flexSPI.UpdateLUT (0, *lut);
+			flexSPI.UpdateLUT (*lut);
 
 //			config.ahbConfig.enableReadAddressOpt = false;
 			config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;// To achieve high speeds - always use DQS

@@ -28,7 +28,7 @@ OF SUCH DAMAGE. */
 
 namespace Macronix
 {
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info, flexspi_config_t &config, flexspi_device_config_t &DeviceConfig);
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, DeviceInfo &Info, flexspi_config_t &config, flexspi_device_config_t &DeviceConfig);
 	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &Info);
 	
 	// LUT for Macronix SPI
@@ -97,7 +97,7 @@ namespace Macronix
 		// (0) Read Array --> compare @LUT_CommandOffsets
 		// Read with 4READ
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xEB, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 24),
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD,   6, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 0x08),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD,    6, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 0x08),
 		// Read with QREAD
 	//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x6B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 24),
 	//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_1PAD, 0x08, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 128),

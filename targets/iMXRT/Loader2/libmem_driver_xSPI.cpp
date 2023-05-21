@@ -34,6 +34,7 @@ OF SUCH DAMAGE. */
 #include "libmem_LUT_Generic.h"
 #include "libmem_LUT_Adesto.h"
 #include "libmem_LUT_Macronix.h"
+#include "libmem_LUT_Winbond.h"
 
 
 static flexspi_device_config_t DeviceConfig
@@ -291,18 +292,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	}
 	else if (Info.ManufactureID == ManufactureID_Nexcom)	// Winbond
 	{
-		DebugPrint ("Found Nexcom Flash\r\n");
-		// send write-enable 
-		status_t stat = base->WriteEnable (0);
-		if (stat != kStatus_Success)
-			return LibmemStaus_Error;
-
-		// Write to status/control register 2 to switch to enter quad-Mode
-		stat = base->WriteRegister (0, 2, LUT_WriteConfigReg_Winbond);
-		if (stat != kStatus_Success)
-			return LibmemStaus_Error;
-
-		lut = &Generic::LUT_QuadSPI;
+		res = Winbond::Initialize (*base, MemType, Info, config, DeviceConfig);
 	}
 	else if (Info.ManufactureID == ManufactureID_Macronix)
 	{
@@ -387,8 +377,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	FLEXSPI_SetFlashConfig (base, &DeviceConfig, FlexSPI_Helper::port);	// Configure flash settings according to serial flash feature.
 
 	if (lut != nullptr)
-		// Update the LUT
-		FLEXSPI_UpdateLUT (base, 0, &lut->front(), lut->size());
+		base->UpdateLUT (*lut); // Update the LUT
 
 	FLEXSPI_SoftwareReset (base);
 	status_t stat = base->WaitBusBusy ();

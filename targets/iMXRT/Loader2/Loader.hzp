@@ -643,11 +643,13 @@
       <file file_name="DebugPrint_LPUART.cpp" />
       <file file_name="DebugPrint_USART.cpp" />
       <file file_name="board_generic.h" />
-      <file file_name="libmem_LUT_Generic.h" />
       <file file_name="libmem_LUT_Adesto.h" />
       <file file_name="libmem_LUT_Adesto.cpp" />
+      <file file_name="libmem_LUT_Generic.h" />
       <file file_name="libmem_LUT_Macronix.h" />
       <file file_name="libmem_LUT_Macronix.cpp" />
+      <file file_name="libmem_LUT_Winbond.h" />
+      <file file_name="libmem_LUT_Winbond.cpp" />
       <file file_name="FlexSPI_Helper.h" />
     </folder>
     <folder Name="libmem">
