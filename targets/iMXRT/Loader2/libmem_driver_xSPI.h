@@ -43,7 +43,6 @@ enum LUT_CommandOffsets
 	LUT_ReturnSPI       = 7,
 	LUT_WriteStatusReg  = 8,
 	LUT_EnterQPI_Atmel  = 10,
-	LUT_EnterQPI_ISSI   = 12,
 
 	LUT_WriteStatusReg_Adesto    = 8,
 };
@@ -142,6 +141,56 @@ public:
 			0							// dataSize			- Data size in bytes.
 		};
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
+	}
+
+	/*! ReadJEDEC
+	\brief Read the JEDEC Device informations
+	\param base The Flex-SPI-base to use
+	\param info The read Device informations from the flash memory
+	\return status_t Status of the Operation - kStatus_Success when successfully */
+	status_t ReadJEDEC (struct DeviceInfo *info)
+	{
+		uint8_t Identification[16] {0U};
+
+		flexspi_transfer_t flashXfer
+		{
+			0,
+			FlexSPI_Helper::port,
+			kFLEXSPI_Read,
+			LUT_ReadJEDEC_ID,
+			1,
+			(uint32_t *)Identification,
+			sizeof(Identification),
+		};
+
+		status_t status = FLEXSPI_TransferBlocking (this, &flashXfer);
+		if (status != kStatus_Success)
+			return status;
+
+		// Sanity check of the data, first byte must not be zero or 0xFF
+		if (Identification[0] == 0 || Identification[0] == 0xFF)
+			return kStatus_Fail;	// got no ID-Code: No Flash available
+	
+		// Check if all data are identical
+		size_t Index = sizeof(Identification)/sizeof(Identification[0]);
+		while (--Index>0 && Identification[0]==Identification[Index])
+			;
+		if (Index == 0)
+			return kStatus_Fail;	// Data is all identical. Got some transfer error
+
+
+		int i=0;
+		for (; i<8; i++)
+		{
+			if (Identification[i] != ManufactureID_NEXT_MARKER)
+				break;
+		}
+
+		info->ManufactureID = static_cast<SerialFlash_ManufactureID>(((i+1)<<8U) | Identification[i]);
+		info->Type          = Identification[i+1];
+		info->Capacity      = static_cast<Capacity>(Identification[i+2]);
+
+		return status;
 	}
 
 	/*! WriteEnable:

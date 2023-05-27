@@ -65,16 +65,19 @@ The lowest Nibble of the parameter is used to configure the first FlexSPI-Interf
 
 * Adesto
   * AT25SF128A-SHB-T
-  * ATXP032
+  * ATXP032 (OctaSPI DDR)
 * CYPRESS
   * S26KS512SDPBHI020
 * Macronix
   * MX25L6433F
-  * MX25UW6345G
-  * MX25UM51345G
+  * MX25UW6345G (OctaSPI DDR)
+  * MX25UM51345G (OctaSPI DDR)
 * ISSI
-  * IS25LP064A-JBLE
-  * IS25WP064A-JBLE
-  * IS25WP128-JBLE
+  * IS25LP064A
+  * IS25WP064A
+  * IS25WP128
+  * IS25LX064/032 (OctaSPI DDR)
+  * IS25WX064/032 (OctaSPI DDR)
 * Winbond
+  * W25Q32JV-IQ/JQ
   * W25Q64JV

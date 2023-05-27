@@ -19,9 +19,9 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE. */
 
-#include "libmem_LUT_Macronix.h"
+#include "FlexSPI_Macronix.h"
 #include "DebugPrint.h"
-#include "libmem_LUT_Generic.h"
+#include "FlexSPI_Generic.h"
 
 namespace Macronix
 {
@@ -67,7 +67,7 @@ namespace Macronix
 
 
 	static MemoryType tryDetectMemoryType = MemType_Invalid;
-	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &Info)
+	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &info)
 	{
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
 
@@ -86,6 +86,7 @@ namespace Macronix
 		if (status != kStatus_Success)
 			return status;
 
+		// Sanity check of the data, first byte must not be zero or 0xFF
 		if (Identification[0] == 0 || Identification[0] == 0xFF)
 			return kStatus_Fail;	// got no ID-Code: No Flash available
 
@@ -96,10 +97,10 @@ namespace Macronix
 				break;
 		}
 
-		Info.ManufactureID = (SerialFlash_ManufactureID)(((i+1)<<8) | Identification[i]);
-		Info.Type          = Identification[i+1];
-//		Info.Capacity      = (Capacity)Identification[i+3];
-		Info.Capacity      = (Capacity)(Identification[i+3] & 0x1F);
+		info.ManufactureID = (SerialFlash_ManufactureID)(((i+1)<<8) | Identification[i]);
+		info.Type          = Identification[i+1];
+//		info.Capacity      = (Capacity)Identification[i+3];
+		info.Capacity      = (Capacity)(Identification[i+3] & 0x1F);
 
 
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, Generic::LUT_SPI, 4);
@@ -205,7 +206,7 @@ namespace Macronix
 				flexSPI.UpdateLUT (LUT_SPI);
 
 			// Switch to OSPI-Mode
-			// Write to status/control register 2 to set Dummy Cycles
+			// Write to status/control register 2 to set dummy cycles
 			// Compare "Dummy Cycle and Frequency Table (MHz)" in the datasheet
 			status_t stat = flexSPI.WriteEnable (0);	// send write-enable 
 			if (stat != kStatus_Success)

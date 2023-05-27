@@ -19,8 +19,8 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE. */
 
-#ifndef XSPI_LUT_MACRONIX_H_
-#define XSPI_LUT_MACRONIX_H_
+#ifndef FLEXSPI_MACRONIX_H_
+#define FLEXSPI_MACRONIX_H_
 
 #include "libmem_driver_xSPI.h"
 #include "FlexSPI_Helper.h"
@@ -194,9 +194,9 @@ namespace Macronix
 		0,
 
 		// (2) Read JEDEC ID --> compare @Command
-		FLEXSPI_LUT_SEQ(kFLEXSPI_Command_DDR,          kFLEXSPI_8PAD, 0x9F, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x60),
-		FLEXSPI_LUT_SEQ(kFLEXSPI_Command_RADDR_DDR,    kFLEXSPI_8PAD, 0x20, kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, 0x16),
-		FLEXSPI_LUT_SEQ(kFLEXSPI_Command_READ_DDR,     kFLEXSPI_8PAD, 0x04, kFLEXSPI_Command_STOP,        kFLEXSPI_8PAD, 0x0),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x9F, kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x60),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 0x20, kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, 0x16),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 0x04, kFLEXSPI_Command_STOP,        kFLEXSPI_8PAD, 0x0),
 		0,	// Dummy to fill a block of four
 
 		// (3) Write Enable --> compare @Command
@@ -265,9 +265,9 @@ namespace Macronix
 		0,
 
 		// (2) Read JEDEC ID --> compare @Command
-		FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR,          kFLEXSPI_8PAD, 0x9F, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x60),
-		FLEXSPI_LUT_SEQ(kFLEXSPI_Command_RADDR_SDR,    kFLEXSPI_8PAD, 0x20, kFLEXSPI_Command_DUMMY_SDR,   kFLEXSPI_8PAD, 0x16),
-		FLEXSPI_LUT_SEQ(kFLEXSPI_Command_READ_SDR,     kFLEXSPI_8PAD, 0x04, kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0x0),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,          kFLEXSPI_8PAD, 0x9F, kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x60),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_RADDR_SDR,    kFLEXSPI_8PAD, 0x20, kFLEXSPI_Command_DUMMY_SDR,   kFLEXSPI_8PAD, 0x16),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_SDR,     kFLEXSPI_8PAD, 0x04, kFLEXSPI_Command_STOP,        kFLEXSPI_1PAD, 0x0),
 		0,	// Dummy to fill a block of four
 
 		// (3) Write Enable --> compare @Command
@@ -320,4 +320,4 @@ namespace Macronix
 	};
 }
 
-#endif // XSPI_LUT_MACRONIX_H_
+#endif // FLEXSPI_MACRONIX_H_

@@ -31,10 +31,11 @@ OF SUCH DAMAGE. */
 #endif
 #include "DebugPrint.h"
 
-#include "libmem_LUT_Generic.h"
-#include "libmem_LUT_Adesto.h"
-#include "libmem_LUT_Macronix.h"
-#include "libmem_LUT_Winbond.h"
+#include "FlexSPI_Generic.h"
+#include "FlexSPI_Adesto.h"
+#include "FlexSPI_Macronix.h"
+#include "FlexSPI_Winbond.h"
+#include "FlexSPI_ISSI.h"
 
 
 static flexspi_device_config_t DeviceConfig
@@ -68,7 +69,7 @@ static libmem_geometry_t geometry[]
 	{0, 0} 
 };
 
-static status_t ReadJEDEC     (FlexSPI_Helper *base, struct DeviceInfo *Info);
+static status_t ReadJEDEC     (FlexSPI_Helper *base, struct DeviceInfo *info);
 static status_t EraseChip     (FlexSPI_Helper *base);
 static int EraseSector        (libmem_driver_handle_t *h, libmem_sector_info_t *si);
 static int ProgramPage        (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr);
@@ -262,31 +263,35 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 
 
 	// Get the JEDEC Informations
-	DeviceInfo Info {};
-	status_t status = ReadJEDEC (base, &Info);
-	if (status != kStatus_Success || Info.ManufactureID == ManufactureID_UNDEF)
+	DeviceInfo info {};
+	status_t status = ReadJEDEC (base, &info);
+	if (status != kStatus_Success || info.ManufactureID == ManufactureID_UNDEF)
 	{
-		status = Macronix::TryDetect (*base, Info);
-		if (status != kStatus_Success || Info.ManufactureID == ManufactureID_UNDEF)
+		status = Macronix::TryDetect (*base, info);
+		if (status != kStatus_Success || info.ManufactureID == ManufactureID_UNDEF)
 		{
-			DebugPrint ("JEDEC read Error\r\n");
-			return LibmemStaus_InvalidDevice;
+			status = ISSI::TryDetect (*base, info);
+			if (status != kStatus_Success || info.ManufactureID == ManufactureID_UNDEF)
+			{
+				DebugPrint ("JEDEC read Error\r\n");
+				return LibmemStaus_InvalidDevice;
+			}
 		}
 	}
 
 	// Check for the Manufacture-ID and adapt the Configuration
 	const FlexSPI_LUT *lut = nullptr;
 	LibmemStatus_t res = LibmemStaus_Success;
-	if (Info.ManufactureID == ManufactureID_AdestoTechnologies)
+	if (info.ManufactureID == ManufactureID_AdestoTechnologies)
 	{
-		res = Adesto::Initialize (*base, MemType, Info, config, DeviceConfig);
+		res = Adesto::Initialize (*base, MemType, info, config, DeviceConfig);
 	}
-	else if (Info.ManufactureID == ManufactureID_Atmel)
+	else if (info.ManufactureID == ManufactureID_Atmel)
 	{
 		DebugPrint ("Found Atmel Flash\r\n");
-		if (Info.Type == 0xA8)
+		if (info.Type == 0xA8)
 		{
-			res = Adesto::Initialize (*base, MemType, Info, config, DeviceConfig);
+			res = Adesto::Initialize (*base, MemType, info, config, DeviceConfig);
 		}
 		else
 		{
@@ -296,23 +301,17 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			lut = &Generic::LUT_QuadSPI;
 		}
 	}
-	else if (Info.ManufactureID == ManufactureID_Nexcom)	// Winbond
+	else if (info.ManufactureID == ManufactureID_Nexcom)	// Winbond
 	{
-		res = Winbond::Initialize (*base, MemType, Info, config, DeviceConfig);
+		res = Winbond::Initialize (*base, MemType, info, config, DeviceConfig);
 	}
-	else if (Info.ManufactureID == ManufactureID_Macronix)
+	else if (info.ManufactureID == ManufactureID_Macronix)
 	{
-		res = Macronix::Initialize (*base, MemType, Info, config, DeviceConfig);
+		res = Macronix::Initialize (*base, MemType, info, config, DeviceConfig);
 	}
-	else if (Info.ManufactureID == ManufactureID_Lucent)
+	else if (info.ManufactureID == ManufactureID_Lucent)	// ISSI
 	{
-		DebugPrint ("Found Lucent Flash\r\n");
-		status_t stat = base->SendCommand (0, LUT_EnterQPI_ISSI); // Enter QuadSPI mode
-		if (stat != kStatus_Success)
-			return LibmemStaus_Error;
-
-		config.rxSampleClock = kFLEXSPI_ReadSampleClkLoopbackFromDqsPad;
-		lut = &ISSI::LUT_QuadSPI;
+		res = ISSI::Initialize (*base, MemType, info, config, DeviceConfig);
 	}
 	else
 	{
@@ -375,7 +374,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	}
 
 	// Use the size information from the JEDEC-information to configure the interface
-	uint32_t FlashSize = CalculateCapacity_KBytes (Info.Capacity);
+	uint32_t FlashSize = CalculateCapacity_KBytes (info.Capacity);
 	DeviceConfig.flashSize = FlashSize;
 	geometry[0].count = FlashSize / (4096 / 1024);
 	FlashSize *= 1024;	// Convert kBytes to bytes
@@ -414,77 +413,41 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 /*! ReadJEDEC
 \brief Read the JEDEC Device informations
 \param base The Flex-SPI-base to use
-\param Info The read Device informations from the flash memory
+\param info The read Device informations from the flash memory
 \return status_t Status of the Operation - kStatus_Success when successfully */
-static status_t ReadJEDEC (FlexSPI_Helper *base, struct DeviceInfo *Info)
+static status_t ReadJEDEC (FlexSPI_Helper *base, struct DeviceInfo *info)
 {
-	uint8_t Identification[16] {0U};
-
-	flexspi_transfer_t flashXfer;
-	flashXfer.deviceAddress = 0;
-	flashXfer.port          = FlexSPI_Helper::port;
-	flashXfer.cmdType       = kFLEXSPI_Read;
-	flashXfer.SeqNumber     = 1;
-	flashXfer.seqIndex      = LUT_ReadJEDEC_ID;
-	flashXfer.data          = (uint32_t *)Identification;
-	flashXfer.dataSize      = sizeof(Identification);
-
-	status_t status = FLEXSPI_TransferBlocking (base, &flashXfer);
-	if (status != kStatus_Success)
-		return status;
-
-	// Sanity check of the data, first byte must not be zero or 0xFF
-	if (Identification[0] == 0 || Identification[0] == 0xFF)
-		return kStatus_Fail;	// got no ID-Code: No Flash available
-	
-	// Check if all data are identical
-	size_t Index = sizeof(Identification)/sizeof(Identification[0]);
-	while (--Index>0 && Identification[0]==Identification[Index])
-		;
-	if (Index == 0)
-		return kStatus_Fail;	// Data is all identical. Got some transfer error
-
-
-	int i=0;
-	for (; i<8; i++)
-	{
-		if (Identification[i] != ManufactureID_NEXT_MARKER)
-			break;
-	}
-
-	Info->ManufactureID = (enum SerialFlash_ManufactureID)(((i+1)<<8U) | Identification[i]);
-	Info->Type          = Identification[i+1];
-	Info->Capacity      = (enum Capacity)Identification[i+2];
-	switch (Info->ManufactureID)
+	status_t status = base->ReadJEDEC (info);
+	switch (info->ManufactureID)
 	{
 		case ManufactureID_AdestoTechnologies:
-			switch (Info->Type & 0x1FU)
+			switch (info->Type & 0x1FU)
 			{
 				case 0x06:
-					Info->Capacity = Capacity_16MBit;
+					info->Capacity = Capacity_16MBit;
 					break;
 				case 0x07:
-					Info->Capacity = Capacity_32MBit;
+					info->Capacity = Capacity_32MBit;
 					break;
 				case 0x08:
-					Info->Capacity = Capacity_64MBit;
+					info->Capacity = Capacity_64MBit;
 					break;
 				case 0x09:
-					Info->Capacity = Capacity_128MBit;
+					info->Capacity = Capacity_128MBit;
 					break;
 			}
 			break;
 		case ManufactureID_Macronix:
-			Info->Capacity = (enum Capacity)(Identification[i+2] & 0x1F);
+			info->Capacity = static_cast<Capacity>(info->Capacity & 0x1F);
 			break;
 		case ManufactureID_Atmel:
-			switch (Info->Type)
+			switch (info->Type)
 			{
 				case  0x89:	// AT25SF128A
-					Info->Capacity = Capacity_128MBit;
+					info->Capacity = Capacity_128MBit;
 					break;
 				case  0xA8:	// ATXP064
-					Info->Capacity = Capacity_64MBit;
+					info->Capacity = Capacity_64MBit;
 					break;
 			}
 			break;
@@ -652,13 +615,30 @@ The LIBMEM driver's read extended function.
 \return int The LIBMEM status result */
 static int libmem_Read (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
 {
-	(void)h;
-
 	DebugPrintf ("Read at 0x%x, size: %d\r\n", src, size);
-	if (size)
-		memcpy (dest, src, size);
+	if (size == 0)
+		return LibmemStaus_InvalidParameter;
+//	memcpy (dest, src, size);
+
+	flexspi_transfer_t flashXfer
+	{
+		(uint32_t)src,		  // Operation device address.
+		FlexSPI_Helper::port, // Operation port.
+		kFLEXSPI_Read,		  // Execution command type.
+		LUT_ReadArray,		  // Sequence ID for command.
+		1,					  // Sequence number for command.
+		(uint32_t *)dest,	  // Data buffer.
+		size				  // Data size in bytes.
+	};
+
+	FlexSPI_Helper *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
+	status_t status = FLEXSPI_TransferBlocking (base, &flashXfer);
+	if (status != kStatus_Success)
+		return status;
+
 	return LibmemStaus_Success;
 }
+
 
 /*! libmem_CRC32:
 The LIBMEM driver's crc32 extended function.
@@ -667,11 +647,24 @@ The LIBMEM driver's crc32 extended function.
 \param size  The size of the address range in bytes.
 \param crc   The initial CRC-32 value.
 \return uint32_t The computed CRC-32 value. */
-static uint32_t libmem_CRC32 (libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc)
+static uint32_t libmem_CRC32 ([[maybe_unused]]libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc)
 {
-	(void)h;
-	crc = libmem_crc32_direct (start, size, crc);
 	DebugPrintf ("Calculate CRC from 0x%X, size 0x%X, calculated CRC: 0x%X\r\n", start, size, crc);
+	static uint8_t page_buffer[4096];
+	static constexpr size_t BufferSize = sizeof (page_buffer);
+
+	while (size >= BufferSize)
+	{
+		libmem_Read(h, page_buffer, (uint8_t*)start, BufferSize);
+		crc = libmem_crc32_direct(page_buffer,  BufferSize, crc);
+		start += BufferSize;
+		size  -= BufferSize;
+	}
+	if (size)
+	{
+		libmem_Read(h, page_buffer, (uint8_t*)start, BufferSize);
+		crc = libmem_crc32_direct(page_buffer, size, crc);
+	}
 	return crc;
 }
 

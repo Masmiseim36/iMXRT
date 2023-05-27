@@ -19,12 +19,35 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE. */
 
-#include "libmem_LUT_Winbond.h"
+#include "FlexSPI_Winbond.h"
 #include "DebugPrint.h"
-#include "libmem_LUT_Generic.h"
+#include "FlexSPI_Generic.h"
 
 namespace Winbond
 {
+	// Memory Type + Capacity
+	// W25Q32JV-IQ/JQ		- 0x40'16
+	// W25Q32JW-IQ/FW		- 0x60'16
+	// W25Q32JV-IM*/JM*		- 0x70'16
+	// W25Q32JW-IM			- 0x80'16
+
+	// W25Q64JV-IQ/JQ		- 0x40'17
+	// W25Q64JV-IM/JM		- 0x70'17 - 0x80'17
+
+	// W25Q128JV-IN/IQ/JQ	- 0x40'18
+	// W25Q128JW-IQ/JQ		- 0x60'18
+	// W25Q128JV-IM*/JM*	- 0x70'18
+	// W25Q128JW-IM/JM*		- 0x80'18
+
+	// W25Q256JV-IQ/IN/JQ	- 0x40'19
+	// W25Q256JW			- 0x60'19
+	// W25Q256JV-IM*/JM*	- 0x70'19
+	// W25Q256JW-IM			- 0x80'19
+
+	// W25Q512JV-IQ/IN		- 0x40'20
+	// W25Q512NW-IQ/IN		- 0x60'20
+	// W25Q512NW-IM			- 0x80'20
+	
 	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, [[maybe_unused]] MemoryType memType, DeviceInfo &info, [[maybe_unused]] flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &deviceConfig)
 	{
 		DebugPrint ("Found Winbond (Nexcom) Flash\r\n");

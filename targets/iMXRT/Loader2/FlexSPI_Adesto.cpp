@@ -19,9 +19,9 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE. */
 
-#include "libmem_LUT_Adesto.h"
+#include "FlexSPI_Adesto.h"
 #include "DebugPrint.h"
-#include "libmem_LUT_Generic.h"
+#include "FlexSPI_Generic.h"
 
 namespace Adesto
 {

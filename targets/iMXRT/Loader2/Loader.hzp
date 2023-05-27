@@ -643,14 +643,16 @@
       <file file_name="DebugPrint_LPUART.cpp" />
       <file file_name="DebugPrint_USART.cpp" />
       <file file_name="board_generic.h" />
-      <file file_name="libmem_LUT_Adesto.h" />
-      <file file_name="libmem_LUT_Adesto.cpp" />
-      <file file_name="libmem_LUT_Generic.h" />
-      <file file_name="libmem_LUT_Macronix.h" />
-      <file file_name="libmem_LUT_Macronix.cpp" />
-      <file file_name="libmem_LUT_Winbond.h" />
-      <file file_name="libmem_LUT_Winbond.cpp" />
+      <file file_name="FlexSPI_Adesto.h" />
+      <file file_name="FlexSPI_Adesto.cpp" />
+      <file file_name="FlexSPI_Generic.h" />
       <file file_name="FlexSPI_Helper.h" />
+      <file file_name="FlexSPI_ISSI.h" />
+      <file file_name="FlexSPI_ISSI.cpp" />
+      <file file_name="FlexSPI_Macronix.h" />
+      <file file_name="FlexSPI_Macronix.cpp" />
+      <file file_name="FlexSPI_Winbond.h" />
+      <file file_name="FlexSPI_Winbond.cpp" />
     </folder>
     <folder Name="libmem">
       <file file_name="$(StudioDir)/include/libmem.h" />
