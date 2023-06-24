@@ -69,7 +69,6 @@ static libmem_geometry_t geometry[]
 	{0, 0} 
 };
 
-static status_t ReadJEDEC     (FlexSPI_Helper *base, struct DeviceInfo *info);
 static status_t EraseChip     (FlexSPI_Helper *base);
 static int EraseSector        (libmem_driver_handle_t *h, libmem_sector_info_t *si);
 static int ProgramPage        (libmem_driver_handle_t *h, uint8_t *dest_addr, const uint8_t *src_addr);
@@ -261,62 +260,48 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	FLEXSPI_UpdateLUT      (base, 0, &Generic::LUT_SPI.front(), Generic::LUT_SPI.size()); // Update LUT table
 	FLEXSPI_SoftwareReset  (base);                                        // Do software reset.
 
-
 	// Get the JEDEC Informations
 	DeviceInfo info {};
-	status_t status = ReadJEDEC (base, &info);
+	status_t status {};
+	static const std::array<status_t (*) (FlexSPI_Helper &, DeviceInfo &), 3> JedecReader
+	{
+		[](FlexSPI_Helper &b, DeviceInfo &i){return b.ReadJEDEC (&i);},
+		Macronix::TryDetect,
+		ISSI::TryDetect
+	};
+	for (auto reader : JedecReader)
+	{
+		status = reader (*base, info);
+		if (status == kStatus_Success && info.ManufactureID != ManufactureID_UNDEF)
+			break;
+	}
+
 	if (status != kStatus_Success || info.ManufactureID == ManufactureID_UNDEF)
 	{
-		status = Macronix::TryDetect (*base, info);
-		if (status != kStatus_Success || info.ManufactureID == ManufactureID_UNDEF)
-		{
-			status = ISSI::TryDetect (*base, info);
-			if (status != kStatus_Success || info.ManufactureID == ManufactureID_UNDEF)
-			{
-				DebugPrint ("JEDEC read Error\r\n");
-				return LibmemStaus_InvalidDevice;
-			}
-		}
+		DebugPrint ("JEDEC read Error\r\n");
+		return LibmemStaus_InvalidDevice;
 	}
 
 	// Check for the Manufacture-ID and adapt the Configuration
-	const FlexSPI_LUT *lut = nullptr;
 	LibmemStatus_t res = LibmemStaus_Success;
-	if (info.ManufactureID == ManufactureID_AdestoTechnologies)
+	switch (info.ManufactureID)
 	{
-		res = Adesto::Initialize (*base, MemType, info, config, DeviceConfig);
-	}
-	else if (info.ManufactureID == ManufactureID_Atmel)
-	{
-		DebugPrint ("Found Atmel Flash\r\n");
-		if (info.Type == 0xA8)
-		{
+		case ManufactureID_AdestoTechnologies:
+		case ManufactureID_Atmel:		// Renesas
 			res = Adesto::Initialize (*base, MemType, info, config, DeviceConfig);
-		}
-		else
-		{
-			status_t stat = base->SendCommand (0, LUT_EnterQPI_Atmel); // Enter QuadSPI mode
-			if (stat != kStatus_Success)
-				return LibmemStaus_Error;
-			lut = &Generic::LUT_QuadSPI;
-		}
-	}
-	else if (info.ManufactureID == ManufactureID_Nexcom)	// Winbond
-	{
-		res = Winbond::Initialize (*base, MemType, info, config, DeviceConfig);
-	}
-	else if (info.ManufactureID == ManufactureID_Macronix)
-	{
-		res = Macronix::Initialize (*base, MemType, info, config, DeviceConfig);
-	}
-	else if (info.ManufactureID == ManufactureID_Lucent)	// ISSI
-	{
-		res = ISSI::Initialize (*base, MemType, info, config, DeviceConfig);
-	}
-	else
-	{
-		DebugPrint ("unknown Flash-memory\r\n");
-		return LibmemStaus_InvalidDevice;
+			break;
+		case ManufactureID_Nexcom:		// Winbond
+			res = Winbond::Initialize (*base, MemType, info, config, DeviceConfig);
+			break;
+		case ManufactureID_Macronix:	// Macronix
+			res = Macronix::Initialize (*base, MemType, info, config, DeviceConfig);
+			break;
+		case ManufactureID_Lucent:		// ISSI
+			res = ISSI::Initialize (*base, MemType, info, config, DeviceConfig);
+			break;
+		default:
+			DebugPrint ("unknown Flash-memory\r\n");
+			return LibmemStaus_InvalidDevice;
 	}
 
 	if (res != LibmemStaus_Success)
@@ -381,9 +366,6 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 
 	FLEXSPI_SetFlashConfig (base, &DeviceConfig, FlexSPI_Helper::port);	// Configure flash settings according to serial flash feature.
 
-	if (lut != nullptr)
-		base->UpdateLUT (*lut); // Update the LUT
-
 	FLEXSPI_SoftwareReset (base);
 	status_t stat = base->WaitBusBusy ();
 	if (stat != kStatus_Success)
@@ -407,55 +389,6 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 		DebugPrint ("### Add Driver for Alias\r\n");
 	}
 	return static_cast<LibmemStatus_t>(err);
-}
-
-
-/*! ReadJEDEC
-\brief Read the JEDEC Device informations
-\param base The Flex-SPI-base to use
-\param info The read Device informations from the flash memory
-\return status_t Status of the Operation - kStatus_Success when successfully */
-static status_t ReadJEDEC (FlexSPI_Helper *base, struct DeviceInfo *info)
-{
-	status_t status = base->ReadJEDEC (info);
-	switch (info->ManufactureID)
-	{
-		case ManufactureID_AdestoTechnologies:
-			switch (info->Type & 0x1FU)
-			{
-				case 0x06:
-					info->Capacity = Capacity_16MBit;
-					break;
-				case 0x07:
-					info->Capacity = Capacity_32MBit;
-					break;
-				case 0x08:
-					info->Capacity = Capacity_64MBit;
-					break;
-				case 0x09:
-					info->Capacity = Capacity_128MBit;
-					break;
-			}
-			break;
-		case ManufactureID_Macronix:
-			info->Capacity = static_cast<Capacity>(info->Capacity & 0x1F);
-			break;
-		case ManufactureID_Atmel:
-			switch (info->Type)
-			{
-				case  0x89:	// AT25SF128A
-					info->Capacity = Capacity_128MBit;
-					break;
-				case  0xA8:	// ATXP064
-					info->Capacity = Capacity_64MBit;
-					break;
-			}
-			break;
-		default:
-			break;
-	}
-
-	return status;
 }
 
 

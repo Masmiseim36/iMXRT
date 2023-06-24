@@ -81,3 +81,4 @@ The lowest Nibble of the parameter is used to configure the first FlexSPI-Interf
 * Winbond
   * W25Q32JV-IQ/JQ
   * W25Q64JV
+  * W25Q512NWEIQ

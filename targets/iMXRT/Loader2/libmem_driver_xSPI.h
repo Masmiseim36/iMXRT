@@ -39,10 +39,7 @@ enum LUT_CommandOffsets
 	LUT_EraseSector     = 5,	// BLOCK_ERASE_4K
 	LUT_EraseChip       = 6,
 
-	LUT_EnterQPI        = 7,
-	LUT_ReturnSPI       = 7,
 	LUT_WriteStatusReg  = 8,
-	LUT_EnterQPI_Atmel  = 10,
 
 	LUT_WriteStatusReg_Adesto    = 8,
 };

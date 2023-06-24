@@ -25,6 +25,74 @@ OF SUCH DAMAGE. */
 
 namespace Winbond
 {
+	struct StatusRegister1
+	{
+		uint32_t Busy                  : 1; // Erase / Write in progress
+		uint32_t WriteEnableLatch      : 1;
+		uint32_t BlockProtectBits      : 4;
+		uint32_t TopBottomProtectBit   : 1;
+		uint32_t StatusRegisterProtect : 1;
+		uint32_t Reserved              :24;
+
+		status_t Read (FlexSPI_Helper &flexSPI)
+		{
+			return flexSPI.ReadRegister (0, *this, static_cast<LUT_CommandOffsets>(Command::ReadStatus1));
+		}
+
+		operator uint32_t& ()
+		{
+			return reinterpret_cast<uint32_t&>(*this);
+		}
+	};
+
+	struct StatusRegister2
+	{
+		uint32_t StatusRegisterProtect1   : 1;
+		uint32_t QuadEnable               : 1;
+		uint32_t SfdpLockBit              : 1;
+		uint32_t SecurityRegisterLockBits : 3;
+		uint32_t ComplementProtect        : 1;
+		uint32_t SuspendStatus            : 1;
+		uint32_t Reserved                 :24;
+
+		status_t Read (FlexSPI_Helper &flexSPI)
+		{
+			return flexSPI.ReadRegister (0, *this, static_cast<LUT_CommandOffsets>(Command::ReadStatus2));
+		}
+
+		status_t Write (FlexSPI_Helper &flexSPI)
+		{
+			status_t stat = flexSPI.WriteEnable (0); // send write-enable 
+			if (stat != kStatus_Success)
+				return LibmemStaus_Error;
+			return flexSPI.WriteRegister (0, *this, static_cast<LUT_CommandOffsets>(Command::WriteStatus2));
+		}
+
+		operator uint32_t& ()
+		{
+			return reinterpret_cast<uint32_t&>(*this);
+		}
+	};
+
+	struct StatusRegister3
+	{
+		uint32_t CurrentAddressMode    : 1;
+		uint32_t PowerUpAddressMode    : 1;
+		uint32_t WriteProtectSelection : 1;
+		uint32_t Reserved1             : 2;
+		uint32_t OutputDriverStrength  : 2;
+		uint32_t Reserved              :25;
+
+		status_t Read (FlexSPI_Helper &flexSPI)
+		{
+			return flexSPI.ReadRegister (0, *this, static_cast<LUT_CommandOffsets>(Command::ReadStatus2));
+		}
+
+		operator uint32_t& ()
+		{
+			return reinterpret_cast<uint32_t&>(*this);
+		}
+	};
 	// Memory Type + Capacity
 	// W25Q32JV-IQ/JQ		- 0x40'16
 	// W25Q32JW-IQ/FW		- 0x60'16
@@ -48,29 +116,71 @@ namespace Winbond
 	// W25Q512NW-IQ/IN		- 0x60'20
 	// W25Q512NW-IM			- 0x80'20
 	
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, [[maybe_unused]] MemoryType memType, DeviceInfo &info, [[maybe_unused]] flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &deviceConfig)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, DeviceInfo &info, [[maybe_unused]] flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &deviceConfig)
 	{
+		if (memType != MemType_QuadSPI && memType != MemType_SPI)
+			return LibmemStaus_Error;
+
+		// Adjust JEDEC information
+		switch (static_cast<uint32_t>(info.Capacity))
+		{
+			case 0x16: info.Capacity = Capacity_32MBit;  break;
+			case 0x17: info.Capacity = Capacity_64MBit;  break;
+			case 0x18: info.Capacity = Capacity_128MBit; break;
+			case 0x19: info.Capacity = Capacity_256MBit; break;
+			case 0x20: info.Capacity = Capacity_512MBit; break;
+			default:
+				return LibmemStaus_Error;
+		}
 		DebugPrint ("Found Winbond (Nexcom) Flash\r\n");
 		if (info.Capacity <= Capacity_128MBit)
 			flexSPI.UpdateLUT (Winbond::LUT_QuadSPI_24Bit);
 		else
 			flexSPI.UpdateLUT (Winbond::LUT_QuadSPI_32Bit);
 
-		status_t stat = flexSPI.WriteEnable (0); // send write-enable 
-		if (stat != kStatus_Success)
-			return LibmemStaus_Error;
+		StatusRegister1 statReg1;
+		status_t stat = statReg1.Read (flexSPI);
 
-		uint32_t value{};
-		stat = flexSPI.ReadRegister (0, value, static_cast<LUT_CommandOffsets>(Command::ReadStatus1));
-		DebugPrintf ("Winbond status register 1: 0x: %x", value);
-		stat = flexSPI.ReadRegister (0, value, static_cast<LUT_CommandOffsets>(Command::ReadStatus2));
-		DebugPrintf ("Winbond status register 2: 0x: %x", value);
-		stat = flexSPI.ReadRegister (0, value, static_cast<LUT_CommandOffsets>(Command::ReadStatus3));
-		DebugPrintf ("Winbond status register 3: 0x: %x", value);
-		// Write to status/control register 2 to switch to enter quad-Mode
-//		stat = flexSPI->WriteRegister (0, 2, static_cast<LUT_CommandOffsets>(Command::WriteStatus2));
+		// Check for SPI / QSPI Mode
+		StatusRegister2 statReg2;
+		stat = statReg2.Read (flexSPI);
 		if (stat != kStatus_Success)
 			return LibmemStaus_Error;
+		if (statReg2.QuadEnable == 0 && memType == MemType_QuadSPI)
+		{
+			// Enable Quad Mode
+			statReg2.QuadEnable = 1;
+			stat = statReg2.Write (flexSPI);
+			if (stat != kStatus_Success)
+				return LibmemStaus_Error;
+		}
+		else if (statReg2.QuadEnable == 1 && memType == MemType_SPI)
+		{
+			// Disable Quad Mode
+			statReg2.QuadEnable = 0;
+			stat = statReg2.Write (flexSPI);
+			if (stat != kStatus_Success)
+				return LibmemStaus_Error;
+		}
+
+		// Check the Address Mode (3-byte or 4-byte)
+		StatusRegister3 statReg3;
+		stat = statReg3.Read (flexSPI);
+		if (info.Capacity > Capacity_128MBit && statReg3.CurrentAddressMode == 0)
+		{
+			// Enable 4byte mode
+			stat = flexSPI.SendCommand (0, static_cast<LUT_CommandOffsets>(Command::Enter4ByteMode));
+			if (stat != kStatus_Success)
+				return LibmemStaus_Error;
+		}
+		if (info.Capacity <= Capacity_128MBit && statReg3.CurrentAddressMode == 1)
+		{
+			// Enable 3 byte mode
+			stat = flexSPI.SendCommand (0, static_cast<LUT_CommandOffsets>(Command::Exit4ByteMode));
+			if (stat != kStatus_Success)
+				return LibmemStaus_Error;
+		}
+		stat = statReg3.Read (flexSPI);
 
 		return LibmemStaus_Success;
 	}

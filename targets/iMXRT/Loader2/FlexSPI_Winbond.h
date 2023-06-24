@@ -42,7 +42,10 @@ namespace Winbond
 		ReadStatus2     =  7,
 		WriteStatus1    =  8,
 		WriteStatus2    =  9,
-		ReadStatus3     = 10
+		ReadStatus3     = 10,
+
+		Enter4ByteMode  = 11, // 32-bit LUT only
+		Exit4ByteMode   = 11, // 24-bit LUT only
 	};
 
 	// LUT for Winbond Quad SPI with 24-Bit Addressing
@@ -114,6 +117,12 @@ namespace Winbond
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
+
+		// (11) Exit 4-Byte Address Mode --> compare @CommandOffsets
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xE9, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0x00),
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
 	};
 
 
@@ -123,7 +132,7 @@ namespace Winbond
 		// (0) Fast Read Quad I/O --> compare @CommandOffsets
 		// Read with 4READ
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xEB, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 32),
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD,    4, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 0x08),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD,    6, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 0x08),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 		
@@ -146,7 +155,7 @@ namespace Winbond
 		0,	// Dummy to fill a block of four
 
 		// (4) Page Program --> compare @CommandOffsets
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x32, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 32),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x34, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 32),
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR, kFLEXSPI_4PAD, 255,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
@@ -183,6 +192,12 @@ namespace Winbond
 
 		// (10) Read Status Register 3 --> compare @CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x15, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_1PAD, 0x04),
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (11) Enter 4-Byte Address Mode --> compare @CommandOffsets
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xB7, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0x00),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four

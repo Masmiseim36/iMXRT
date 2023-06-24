@@ -206,7 +206,7 @@ namespace ISSI
 	//// Number of dummy cycles after Read Command for ISSI-Flash
 	//constexpr uint32_t DummyCycles   = 16;	// Compare "Table 6.8 Maximum Clock Frequencies – SDR and DDR Read Starting at 4-Byte Address" in the Datasheet
 
-	// LUT for ISSI Quad SPI with 32-Bit Addressing
+	// LUT for ISSI Octa SPI with 32-Bit Addressing
 	constexpr FlexSPI_LUT LUT_OctaSPI_DDR
 	{
 		// (0) Read Array --> compare @Command

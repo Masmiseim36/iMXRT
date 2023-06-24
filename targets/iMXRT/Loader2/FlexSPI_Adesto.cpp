@@ -64,24 +64,21 @@ namespace Adesto
 
 	static constexpr std::array <const FlexSPI_LUT *, 7> LUT
 	{
-		nullptr,					// unused
-		nullptr,					// unused
-		&Adesto::LUT_OctaSPI_DDR,	// Octa SPI with DDR
-		&Adesto::LUT_OctaSPI,		// Octa SPI without DDR
-		&Adesto::LUT_QuadSPI_DDR,	// Quad SPI with DDR
-		&Adesto::LUT_QuadSPI,		// Quad SPI without DDR
-		&Generic::LUT_SPI,			// SPI
+		nullptr,				// unused
+		nullptr,				// unused
+		&ATXP::LUT_OctaSPI_DDR,	// Octa SPI with DDR
+		&ATXP::LUT_OctaSPI,		// Octa SPI without DDR
+		&ATXP::LUT_QuadSPI_DDR,	// Quad SPI with DDR
+		&ATXP::LUT_QuadSPI,		// Quad SPI without DDR
+		&Generic::LUT_SPI,		// SPI
 	};
 
-	static constexpr uint8_t CtrlReg_Byte3Value (((DummyCycles - 8U) >> 1U) | 0x10U);
-
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, const MemoryType MemType, DeviceInfo &Info, flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &DeviceConfig)
+	LibmemStatus_t InitializeOcta (FlexSPI_Helper &flexSPI, const MemoryType memType, DeviceInfo &info, flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &deviceConfig)
 	{
-		(void)Info;
-		if (MemType == MemType_Invalid || MemType == MemType_Hyperflash)
+		(void)info;
+		if (memType == MemType_Invalid || memType == MemType_Hyperflash)
 			return LibmemStaus_Error;
 
-		DebugPrint ("Found Adesto Flash\r\n");
 		// Unlock all sectors
 		UnprotectAll (flexSPI);
 
@@ -91,24 +88,68 @@ namespace Adesto
 			return LibmemStaus_Error;
 
 		// Write to status/control register 2 to switch to chosen memory-Type
-		uint32_t Value = 0x00U | (static_cast<uint32_t>(StatusReg2[MemType]) << 8U) | (static_cast<uint32_t>(CtrlReg_Byte3Value) << 16U);
-		stat = flexSPI.WriteRegister (1, Value, LUT_WriteStatusReg_Adesto, 3);
+		static constexpr uint8_t CtrlReg_Byte3Value (((ATXP::DummyCycles - 8U) >> 1U) | 0x10U);
+		uint32_t value = 0x00U | (static_cast<uint32_t>(StatusReg2[memType]) << 8U) | (static_cast<uint32_t>(CtrlReg_Byte3Value) << 16U);
+		stat = flexSPI.WriteRegister (1, value, LUT_WriteStatusReg_Adesto, 3);
 		if (stat != kStatus_Success)
 			return LibmemStaus_Error;
 
-/*		stat = flexSPI.SendCommand (0, LUT_EnterQPI);
-		if (stat != kStatus_Success)
-			return LibmemStaus_Error;
-*/
-		flexSPI.UpdateLUT (0, *LUT[MemType]);
+		flexSPI.UpdateLUT (*LUT[memType]);
 
 		config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;// To achieve high speeds - always use DQS
 
-/*		DeviceConfig.CSInterval    = 5;
-		DeviceConfig.CSHoldTime    = 2;
-		DeviceConfig.CSSetupTime   = 4;
-		DeviceConfig.dataValidTime = 1;
+/*		deviceConfig.CSInterval    = 5;
+		deviceConfig.CSHoldTime    = 2;
+		deviceConfig.CSSetupTime   = 4;
+		deviceConfig.dataValidTime = 1;
 */
+		return LibmemStaus_Success;
+	}
+
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, const MemoryType memType, DeviceInfo &info, flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &deviceConfig)
+	{
+		DebugPrint ("Found Atmel/Adesto/Renesas Flash\r\n");
+		if (info.Type == 0xA8 || info.ManufactureID == ManufactureID_AdestoTechnologies)
+		{
+			// Adjust JEDEC information
+			switch (info.Type & 0x1FU)
+			{
+				case 0x06:
+					info.Capacity = Capacity_16MBit;
+					break;
+				case 0x07:
+					info.Capacity = Capacity_32MBit;
+					break;
+				case 0x08:	// ATXP064 --> 0xA8
+					info.Capacity = Capacity_64MBit;
+					break;
+				case 0x09:
+					info.Capacity = Capacity_128MBit;
+					break;
+			}
+			return InitializeOcta (flexSPI, memType, info, config, deviceConfig);
+		}
+		else
+		{
+			// Adjust JEDEC information
+			switch (info.Type)
+			{
+				case 0x87: // AT25SF321B
+					info.Capacity = Capacity_32MBit;
+					break;
+				case 0x88:	// AT25QF641B
+					info.Capacity = Capacity_64MBit;
+					break;
+				case 0x89:	// AT25SF128A
+					info.Capacity = Capacity_128MBit;
+					break;
+			}
+
+			flexSPI.UpdateLUT (AT25::LUT_QuadSPI);
+			status_t stat = flexSPI.SendCommand (0, static_cast<LUT_CommandOffsets>(AT25::Command::EnterQpiMode)); // Enter QuadSPI mode
+			if (stat != kStatus_Success)
+				return LibmemStaus_Error;
+		}
 		return LibmemStaus_Success;
 	}
 }

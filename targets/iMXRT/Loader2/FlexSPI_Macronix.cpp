@@ -141,12 +141,16 @@ namespace Macronix
 		return value[0];
 	}
 
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, [[maybe_unused]] DeviceInfo &Info, [[maybe_unused]] flexspi_config_t &config,  [[maybe_unused]]flexspi_device_config_t &DeviceConfig)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, DeviceInfo &info, [[maybe_unused]] flexspi_config_t &config,  [[maybe_unused]]flexspi_device_config_t &DeviceConfig)
 	{
 		if (memType == MemType_Invalid || memType == MemType_Hyperflash)
 			return LibmemStaus_Error;
 
 		DebugPrint ("Found Macronix Flash\r\n");
+
+		// Adjust JEDEC information
+		info.Capacity = static_cast<Capacity>(info.Capacity & 0x1F);
+
 		if (memType == MemType_SPI)
 		{
 			flexSPI.UpdateLUT (0, LUT_SPI);
