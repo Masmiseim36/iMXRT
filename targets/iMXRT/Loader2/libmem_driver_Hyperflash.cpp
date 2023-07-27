@@ -323,8 +323,27 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 		}
 		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
 		CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 528 MHz / 2 = ~264 MHz
-		CLOCK_SetRootClockMux (FlexSPIClock, 5); // ClockSource_SysPll2 --> 528 MHz
+		CLOCK_SetRootClockMux (FlexSPIClock, kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll2Out); // ClockSource_SysPll2 --> 528 MHz
 		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
+	#elif (defined(MIMXRT1181_SERIES)     || defined(MIMXRT1182_SERIES)     || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1187_cm33_SERIES) ||\
+		   defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
+			[[maybe_unused]]uint32_t ClockHz{};
+			switch (reinterpret_cast<uint32_t>(base))
+			{
+				case FLEXSPI1_BASE:
+					CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi1, 2); // --> 392,7s MHz / 2 = ~196,35 MHz
+					CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi1, kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll3Pfd0); // ClockSource_SysPll2 --> 392,7s MHz
+					ClockHz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi1);
+					break;
+				case FLEXSPI2_BASE:
+					CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi2, 2); // --> 392,7s MHz / 2 = ~196,35 MHz
+					CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi2, kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll3Pfd2); // ClockSource_SysPll2 --> 392,7s MHz
+					ClockHz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi2);
+					break;
+				default:
+					return LibmemStaus_InvalidDevice;
+			}
+
 	#else
 		#error "unknon controller family"
 	#endif

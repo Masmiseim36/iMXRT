@@ -7,9 +7,9 @@
 
 /*! \brief perform a JEDEC reset on the given interface 
 \param base The Base Address of the FlexSPI interface */
-inline void PerformJEDECReset (const FLEXSPI_Type *base)
+inline void PerformJEDECReset (FLEXSPI_Type *base)
 {
-	switch (reinterpret_cast<uint32_t>(base)) // ToDo: switch (base->GetBaseAddr())
+	switch (reinterpret_cast<uint32_t>(base)) // ToDo: switch (base->GetBaseAddr ())
 	{
 		#ifdef FLEXSPI
 		case FLEXSPI_BASE:
@@ -38,9 +38,9 @@ inline void PerformJEDECReset (const FLEXSPI_Type *base)
 
 /*! \brief Initialize the pins of the given FlexSPI interface for being used as an octal SPI interface.
 \param base The Base Address of the FlexSPI interface */
-inline void InitOctaSPIPins (const FLEXSPI_Type *base)
+inline void InitOctaSPIPins (FLEXSPI_Type *base)
 {
-	switch (reinterpret_cast<uint32_t>(base)) // ToDo: switch (base->GetBaseAddr())
+	switch (reinterpret_cast<uint32_t>(base)) // ToDo: switch (base->GetBaseAddr ())
 	{
 		#if defined FLEXSPI
 		case FLEXSPI_BASE:
@@ -69,9 +69,9 @@ inline void InitOctaSPIPins (const FLEXSPI_Type *base)
 
 /*! \brief Initialize the pins of the given FlexSPI interface for being used as an quad SPI interface.
 \param base The Base Address of the FlexSPI interface */
-inline void InitQuadSPIPins (const FLEXSPI_Type *base)
+inline void InitQuadSPIPins (FLEXSPI_Type *base)
 {
-	switch (reinterpret_cast<uint32_t>(base)) // ToDo: switch (base->GetBaseAddr())
+	switch (reinterpret_cast<uint32_t>(base)) // ToDo: switch (base->GetBaseAddr ())
 	{
 		#if defined FLEXSPI
 		case FLEXSPI_BASE:
@@ -122,7 +122,7 @@ inline void InitializeSpiPins (FLEXSPI_Type *base, MemoryType type)
 
 inline uint8_t *GetBaseAddress (FLEXSPI_Type *base)
 {
-	switch (reinterpret_cast<uint32_t>(base))
+	switch (reinterpret_cast<uint32_t>(base)) // ToDo: switch (base->GetBaseAddr ())
 	{
 		#ifdef FLEXSPI
 		case FLEXSPI_BASE:
@@ -145,16 +145,51 @@ inline uint8_t *GetBaseAddress (FLEXSPI_Type *base)
 	}
 }
 
-inline uint8_t *GetAliasBaseAddress (FLEXSPI_Type *base)
+inline uint8_t *GetAliasBaseAddress (const FLEXSPI_Type *base)
 {
 	#if defined FlexSPI1_ALIAS_BASE && __CORTEX_M == 4
-		if (reinterpret_cast<uint32_t>(base) == FLEXSPI1_BASE)
+		if (reinterpret_cast<uint32_t>(base) == FLEXSPI1_BASE)  // ToDo: switch (base->GetBaseAddr ())
 			return reinterpret_cast<uint8_t *>(FlexSPI1_ALIAS_BASE);
 	#else
 		(void)base;
 	#endif
 
 	return nullptr;
+}
+
+inline int GetPortWidth ([[maybe_unused]]const FLEXSPI_Type *base)
+{
+	#if (defined(MIMXRT533S_SERIES)  || defined(MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES))
+		return 8;
+	#elif (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES))
+		return 8;
+	#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
+		   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
+		   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
+		return 4;
+	#elif (defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
+		   defined(MIMXRT1171_SERIES)     || defined(MIMXRT1172_SERIES)     || defined(MIMXRT1173_cm7_SERIES) || defined(MIMXRT1173_cm4_SERIES) || \
+		   defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1175_cm4_SERIES) || defined(MIMXRT1176_cm7_SERIES) || defined(MIMXRT1176_cm4_SERIES))
+			switch (reinterpret_cast<uint32_t>(base))
+			{
+				case FLEXSPI1_BASE:
+					return 4;
+				case FLEXSPI2_BASE:
+					return 8;
+			}
+	#elif (defined(MIMXRT1181_SERIES)     || defined(MIMXRT1182_SERIES)     || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1187_cm33_SERIES) ||\
+		   defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
+			switch (reinterpret_cast<uint32_t>(base))
+			{
+				case FLEXSPI1_BASE:
+					return 8;
+				case FLEXSPI2_BASE:
+					return 4;
+			}
+	#else
+		#error "unknon controller family"
+	#endif
+	return 0;
 }
 
 #endif // FLEX_SPI_HELPER_H_

@@ -6,7 +6,7 @@
 		<ProgramSection alignment="0x1000" load="Yes" name=".boot_hdr.ivt"       keep="Yes" />
 		<ProgramSection                    load="Yes" name=".boot_hdr.boot_data" keep="Yes" />
 		<ProgramSection                    load="Yes" name=".boot_hdr.dcd_data"  keep="Yes" />
-		<ProgramSection alignment="0x1000" load="Yes" name=".vectors" address_symbol="__VECTOR_TABLE" />
+		<ProgramSection alignment="0x1000" load="Yes" name=".vectors" address_symbol="__VECTOR_TABLE" start="__FLASH_BASE + $(VECTOR_OFFSET:0x2000)" />
 		<ProgramSection alignment="4"      load="Yes" name=".init" />
 		<ProgramSection alignment="4"      load="Yes" name=".init_rodata" />
 		<ProgramSection alignment="4"      load="Yes" name=".fast"       runin=".fast_run" />

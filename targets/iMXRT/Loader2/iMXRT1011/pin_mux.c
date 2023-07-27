@@ -30,6 +30,7 @@ OF SUCH DAMAGE. */
 Set pin muxing and configure electrical properties for the UART */
 void BOARD_InitUARTPins (void)
 {
+	CLOCK_EnableClock   (kCLOCK_Iomuxc);
 	IOMUXC_SetPinMux    (IOMUXC_GPIO_10_LPUART1_TXD, 0U);
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_10_LPUART1_TXD, BOARD_UartPinConfig);
 
@@ -42,6 +43,7 @@ void BOARD_InitUARTPins (void)
 Set pin muxing and configure electrical properties for QSPI */
 void BOARD_InitQuadSPIPins (void)
 {
+	CLOCK_EnableClock   (kCLOCK_Iomuxc);
 	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_12_FLEXSPI_A_DQS, 1U);
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_12_FLEXSPI_A_DQS, BOARD_FlexSPIPinConfig);
 

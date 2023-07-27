@@ -362,6 +362,10 @@ _vectors_ram:
 reset_handler:
   mov r8, r0
   mov r9, r1
+#if __ARM_ARCH >= 8 /* Cortex M33 */
+  ldr r0, =__stack_start__
+  msr msplim, r0
+#endif
 #ifndef __NO_SYSTEM_INIT
   ldr r0, =__stack_end__
   mov sp, r0

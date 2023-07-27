@@ -125,15 +125,12 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 	BOARD_ConfigMPU     ();
 	BOARD_BootClockGate ();
 	BOARD_BootClockRUN  ();
-	#if defined FSL_FEATURE_SOC_IOMUXC_COUNT && FSL_FEATURE_SOC_IOMUXC_COUNT > 0
-		CLOCK_EnableClock (kCLOCK_Iomuxc);
-	#endif
 	ConfigUart ();
 	DebugPrint ("Hello iMXRT Loader\r\n");
 
 	enum LibmemStatus res {LibmemStaus_Success};
 	#ifdef DEBUG
-		// some test Code, because the Loader can not be debugged while using it in real scenarios
+		// some test code, because the loader can not be debugged while using it in real scenarios
 		#if defined FLEXSPI
 			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI), MemType_QuadSPI); // MemType_Hyperflash - MemType_OctaSPI_DDR - MemType_QuadSPI
 		#endif
@@ -146,11 +143,10 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 		#if defined FLEXSPI2
 			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI2), MemType_QuadSPI);
 		#endif
-
 	#else
 		if (param != 0)
 		{
-			DebugPrintf ("libmem Parameter: 0x%X\r\n", param);
+			DebugPrintf ("libmem parameter: 0x%X\r\n", param);
 			// Register iMX-RT internal FLASH driver
 			#if defined FLEXSPI
 				// devices with a single FlexSPI interface or two interfaces (imxRT106x)
@@ -183,12 +179,11 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 			{
 				// No valid option for an Flash-memory-interface selected
 				char ErrorString[64];
-				sprintf (ErrorString, "No valid Interface selected. Parameter: 0x%X\r\n", param);
+				sprintf (ErrorString, "No valid interface selected. Parameter: 0x%X\r\n", param);
 				DebugPrint (ErrorString);
 				libmem_rpc_loader_exit (LIBMEM_STATUS_NO_DRIVER, ErrorString);
 				return LIBMEM_STATUS_INVALID_DEVICE;
 			}
-
 		}
 		else
 		{

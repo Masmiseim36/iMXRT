@@ -30,6 +30,10 @@ The following Controllers are supported:
 - [iMXRT1064](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1064-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1064)
 - [iMXRT1160](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1160-crossover-high-performance-mcu-with-arm-cortex-m7-and-cortex-m4-cores:i.MX-RT1160)
 - [iMXRT1170](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1170-crossover-mcu-family-first-ghz-mcu-with-arm-cortex-m7-and-cortex-m4-cores:i.MX-RT1170)
+- [iMXRT1180](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1180-crossover-mcu-with-tsn-switch-and-edgelock:i.MX-RT1180)  
+  Limited functionality:
+  - Native dual-core debugging is not yet possible
+  - the controller must be reset manually after each debugging process
 
 ## Build and Install
 
@@ -82,4 +86,5 @@ The lowest Nibble of the parameter is used to configure the first FlexSPI-Interf
 * Winbond
   * W25Q32JV-IQ/JQ
   * W25Q64JV
+  * W25Q128JW
   * W25Q512NWEIQ

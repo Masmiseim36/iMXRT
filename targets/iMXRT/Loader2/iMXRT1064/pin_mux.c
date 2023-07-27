@@ -28,6 +28,7 @@ OF SUCH DAMAGE. */
 Set pin muxing and configure electrical properties for the UART */
 void BOARD_InitUARTPins (void)
 {
+	CLOCK_EnableClock   (kCLOCK_Iomuxc);
 	IOMUXC_SetPinMux    (IOMUXC_GPIO_AD_B0_12_LPUART1_TX, 0U);
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_AD_B0_12_LPUART1_TX, BOARD_UartPinConfig);
 
@@ -40,6 +41,7 @@ void BOARD_InitUARTPins (void)
 Set pin muxing and configure electrical properties for QSPI */
 void BOARD_InitQuadSPIPins (void)
 {
+	CLOCK_EnableClock   (kCLOCK_Iomuxc);
 	// alternative pin output: IOMUXC_GPIO_AD_B1_09_FLEXSPIA_DQS
 	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_05_FLEXSPIA_DQS, 1U);
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_05_FLEXSPIA_DQS, BOARD_FlexSPIPinConfig);
@@ -139,6 +141,7 @@ void BOARD_PerformJEDECReset_FlexSPI (void)
 Set pin muxing and configure electrical properties for QSPI */
 void BOARD_InitQuadSPI2Pins (void)
 {
+	CLOCK_EnableClock   (kCLOCK_Iomuxc);
 	IOMUXC_SetPinMux    (IOMUXC_GPIO_EMC_23_FLEXSPI2_A_DQS, 1U);
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_EMC_23_FLEXSPI2_A_DQS, BOARD_FlexSPIPinConfig);
 

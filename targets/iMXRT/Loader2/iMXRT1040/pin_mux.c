@@ -30,6 +30,7 @@ processor_version: 0.12.11
 Set pin muxing and configure electrical properties for the UART */
 void BOARD_InitUARTPins (void)
 {
+	CLOCK_EnableClock   (kCLOCK_Iomuxc);
 	IOMUXC_SetPinMux    (IOMUXC_GPIO_AD_B0_12_LPUART1_TX, 0U); 
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_AD_B0_12_LPUART1_TX, 0x10B0U); 
 
@@ -50,6 +51,7 @@ IOMUXC_GPIO_SD_B1_05_FLEXSPIB_SS0_B */
 Set pin muxing and configure electrical properties for QSPI */
 void BOARD_InitQuadSPIPins (void)
 {
+	CLOCK_EnableClock   (kCLOCK_Iomuxc);
 	// alternative pin output: IOMUXC_GPIO_AD_B1_09_FLEXSPIA_DQS
 	IOMUXC_SetPinMux    (IOMUXC_GPIO_SD_B1_05_FLEXSPIA_DQS, 1U);
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_05_FLEXSPIA_DQS, BOARD_FlexSPIPinConfig);
@@ -156,6 +158,7 @@ IOMUXC_GPIO_EMC_22_FLEXSPI2_A_SS1_B */
 Set pin muxing and configure electrical properties for QSPI */
 void BOARD_InitQuadSPI2Pins (void)
 {
+	CLOCK_EnableClock   (kCLOCK_Iomuxc);
 	IOMUXC_SetPinMux    (IOMUXC_GPIO_EMC_23_FLEXSPI2_A_DQS, 1U);
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_EMC_23_FLEXSPI2_A_DQS, BOARD_FlexSPIPinConfig);
 

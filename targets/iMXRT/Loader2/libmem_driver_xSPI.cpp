@@ -235,6 +235,24 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
 
 		uint32_t ClockHz = CLOCK_GetRootClockFreq (FlexSPIClock);
+	#elif (defined(MIMXRT1181_SERIES)     || defined(MIMXRT1182_SERIES)     || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1187_cm33_SERIES) ||\
+		   defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
+		uint32_t ClockHz{};
+		switch (reinterpret_cast<uint32_t>(base))
+		{
+			case FLEXSPI1_BASE:
+				CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi1, 4); // --> 392,7s MHz / 4 = ~98,18 MHz
+				CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi1, kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll3Pfd0); // ClockSource_SysPll2 --> 392,7s MHz
+				ClockHz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi1);
+				break;
+			case FLEXSPI2_BASE:
+				CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi2, 4); // --> 392,7s MHz / 4 = ~98,18 MHz
+				CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi2, kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll3Pfd2); // ClockSource_SysPll2 --> 392,7s MHz
+				ClockHz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi2);
+				break;
+			default:
+				return LibmemStaus_InvalidDevice;
+		}
 	#else
 		#error "unknon controller family"
 	#endif
@@ -247,7 +265,8 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	// Need to set the combination-enable option. This options combines 8 data lines from FlexSPI channel A with
 	// 4 data lines from FlexSPI channel B to form an 8-line bus for octal. On this SoC this is the only way to enable octal.
 	#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
-		config.enableCombination          = (MemType == MemType_OctaSPI_DDR || MemType == MemType_OctaSPI);	// Only true when using Octa-Mode
+		if (GetPortWidth (base) != 8)
+			config.enableCombination      = (MemType == MemType_OctaSPI_DDR || MemType == MemType_OctaSPI);	// Only true when using Octa-Mode
 	#endif
 	config.ahbConfig.enableAHBPrefetch    = true;	// Enable AHB prefetching
 	config.ahbConfig.enableAHBBufferable  = true;
@@ -352,6 +371,23 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 528 MHz / 2 = ~264 MHz
 			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
 			DeviceConfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
+		#elif (defined(MIMXRT1181_SERIES)     || defined(MIMXRT1182_SERIES)     || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1187_cm33_SERIES) ||\
+			   defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
+			switch (reinterpret_cast<uint32_t>(base))
+			{
+				case FLEXSPI1_BASE:
+					CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi1, 2); // --> 392,7s MHz / 2 = ~196,35 MHz
+					CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi1, kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll3Pfd0); // ClockSource_SysPll2 --> 392,7s MHz
+					ClockHz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi1);
+					break;
+				case FLEXSPI2_BASE:
+					CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi2, 2); // --> 392,7s MHz / 2 = ~196,35 MHz
+					CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi2, kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll3Pfd2); // ClockSource_SysPll2 --> 392,7s MHz
+					ClockHz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi2);
+					break;
+				default:
+					return LibmemStaus_InvalidDevice;
+			}
 		#else
 			#error "unknon controller family"
 		#endif
@@ -379,7 +415,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	int err = libmem_driver_paged_write_init (&FlashHandle->PageWriteControlBlock, write_buffer, QSPIFLASH_PAGE_SIZE, ProgramPage, 4, 0);
 	FlashHandle->user_data = (uint32_t)base;
 
-	uint8_t *AliasAddress = GetAliasBaseAddress (base);
+	uint8_t *AliasAddress = base->GetAliasBaseAddress ();
 	if (AliasAddress != nullptr && err == LIBMEM_STATUS_SUCCESS)
 	{
 		FlashHandle = LibmemDriver::GetDriver ();

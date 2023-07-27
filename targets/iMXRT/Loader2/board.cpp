@@ -162,7 +162,7 @@
 			 *      Use MACROS defined in core_cm7.h:
 			 * ARM_MPU_AP_NONE/ARM_MPU_AP_PRIV/ARM_MPU_AP_URO/ARM_MPU_AP_FULL/ARM_MPU_AP_PRO/ARM_MPU_AP_RO
 			 * Combine TypeExtField/IsShareable/IsCacheable/IsBufferable to configure MPU memory access attributes.
-			 *  TypeExtField  IsShareable  IsCacheable  IsBufferable   Memory Attribtue    Shareability        Cache
+			 *  TypeExtField  IsShareable  IsCacheable  IsBufferable   Memory Attribute    Shareability        Cache
 			 *     0             x           0           0             Strongly Ordered    shareable
 			 *     0             x           0           1              Device             shareable
 			 *     0             0           1           0              Normal             not shareable   Outer and inner write through no write allocate
@@ -243,9 +243,17 @@
 	#endif
 #else
 	#warning " MPU for ARMv8 Architecture not supported"
+	#include "cm33/fsl_cache.h"
 	void BOARD_ConfigMPU (void)
 	{
-		// ToDo
+		#if defined XCACHE_PC
+			// Disable code & system cache
+			XCACHE_DisableCache (XCACHE_PC);
+			XCACHE_DisableCache (XCACHE_PS);
+		#endif
+
+		// Disable MPU
+		ARM_MPU_Disable ();
 	}
 #endif
 

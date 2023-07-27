@@ -35,10 +35,11 @@ var CCM_LPCG_Cstrace = CCM_LPCG + (42 * 0x20); // Index 42 with offset size of 3
 var LMEM       = 0xE0082000;
 var LMEM_PSCCR = LMEM + 0x800;
 
-var IOMUXC_LPSR_GPR  = 0x40C0C000;
-var IOMUXC_LPSR_GPR0 = IOMUXC_LPSR_GPR + 0x0;
-var IOMUXC_LPSR_GPR1 = IOMUXC_LPSR_GPR + 0x4;
-var IOMUXC_LPSR_GPR2 = IOMUXC_LPSR_GPR + 0x8;
+var IOMUXC_LPSR_GPR   = 0x40C0C000;
+var IOMUXC_LPSR_GPR0  = IOMUXC_LPSR_GPR + 0x0;
+var IOMUXC_LPSR_GPR1  = IOMUXC_LPSR_GPR + 0x4;
+var IOMUXC_LPSR_GPR2  = IOMUXC_LPSR_GPR + 0x8;
+var IOMUXC_LPSR_GPR26 = IOMUXC_LPSR_GPR + (4 * 26);
 var IOMUXC_LPSR_GPR26 = IOMUXC_LPSR_GPR + (4 * 26);
 
 var IOMUXC_GPR       = 0x400E4000;
@@ -106,8 +107,40 @@ function Connect ()
 {
 	var DeviceName = GetProjectPartName ();
 	TargetInterface.message ("## Connect to " + DeviceName);
+
+	switch (DeviceName)
+	{
+		case "MIMXRT1181":
+		case "MIMXRT1182":
+		case "MIMXRT1187_cm33":
+		case "MIMXRT1189_cm33":
+//			TargetInterface.setDeviceTypeProperty ("MIMXRT1189xxxx_M33");
+			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // LPC Solution
+			break;
+		case "MIMXRT1187_cm7":
+		case "MIMXRT1189_cm7":
+//			TargetInterface.setDeviceTypeProperty ("MCIMXRT1180_M7");
+			if (TargetInterface.implementation() == "j-link")
+				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2);
+			else
+				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // LPC Solution
+			break;
+		default:
+			// The other member of the family work with the default.
+	}
+
+
 	TargetInterface.message ("## Connect to " + DeviceName + " - done");
 }
+
+function FillMemory (address, size, value)
+{
+	var fillData = new Array (size/4);
+	for (var i=0; i<size/4; i++)
+		fillData[i] = value;
+	TargetInterface.pokeMultUint32 (address, fillData);
+}
+
 
 // This function is used to return the controller type as a string
 // we use it also to do some initializations as this function is called right before
@@ -123,21 +156,47 @@ function GetPartName ()
 	{
 		if (TargetInterface.getProjectProperty ("Target").indexOf ("_cm4") != -1)
 		{
-			Release_11xx_M4 ();	// Enable the M4 Core
+			Release_11xx_M4 ();	// Enable M4 core
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
+		}
+
+		switch (DeviceName)
+		{
+			case "MIMXRT1181":
+			case "MIMXRT1182":
+			case "MIMXRT1187_cm33":
+			case "MIMXRT1189_cm33":
+				// Invalidate and disable XCACHEs
+//				TargetInterface.pokeUint32 (0x44400000, 0x85000000);
+//				TargetInterface.pokeUint32 (0x44400800, 0x85000000);
+
+				TargetInterface.resetDebugInterface ();
+				break;
+			case "MIMXRT1187_cm7":
+			case "MIMXRT1189_cm7":
+				TargetInterface.resetDebugInterface ();
+				Release_118x_M7 (); // Enable M7 core
+				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2);
+			break;
 		}
 	}
 
 	if (TargetInterface.getProjectProperty ("Target").indexOf ("MIMXRT11") != -1)
 	{
 		// Read the chip silicon version
-		var MISC_DIFPROG = 0x40C84800
-		var ChipID = TargetInterface.peekUint32 (MISC_DIFPROG); // ANADIG_MISC-->MISC_DIFPROG (Chip Silicon Version Register)
+		var ANADIG_MISC_DIFPROG = 0x40C84000 + 0x800;
+		if (TargetInterface.getProjectProperty ("Target").indexOf ("MIMXRT118") != -1)
+		{
+			ANADIG_MISC_DIFPROG = 0x44480000 + 0x4800;
+			TargetInterface.message ("#### 1180 device???");
+		}
+		var ChipID = TargetInterface.peekUint32 (ANADIG_MISC_DIFPROG); // ANADIG_MISC-->MISC_DIFPROG (Chip Silicon Version Register)
 		ChipID &= 0x00FFFF00;
 		ChipID >>= 8;
 		TargetInterface.message ("#### Device detected: MIMXRT" + ChipID.toString(16));
 /*		PART = "MIMXRT" + ChipID.toString(16); */
 	}
+	// 1180 --> 0x44484800
 
 	TargetInterface.message ("## get part name of " + DeviceName + " done");
 
@@ -208,6 +267,84 @@ function Release_11xx_M7 ()
 		scr |= 2;
 		TargetInterface.pokeUint32 (SRC_SCR, scr);
 	}
+}
+
+
+function Release_118x_M7 ()
+{
+	TargetInterface.message ("************* Begin Operations to Enable CM7 ***********************");
+
+	// Clock Preparation
+	TargetInterface.message ("******** Prepare Clock *********");
+	TargetInterface.pokeUint32 (0x54484310, 0x007901F2);	// ANADIG_OSC->OSC_RC24M_CTRL
+	TargetInterface.pokeUint32 (0x54484320, 0x40000014);	// ANADIG_OSC->OSC_24M_CTRL
+	TargetInterface.pokeUint32 (0x54450080, 0x0);			// CCM->CLOCK_ROOT1_CONTROL
+	TargetInterface.delay (50);
+	TargetInterface.pokeUint32 (0x54484680, 0x105);
+	TargetInterface.delay (50);
+	TargetInterface.pokeUint32 (0x54484710, 0x70);
+	TargetInterface.pokeUint32 (0x54484000, 0x400020a6);
+	TargetInterface.delay (50);
+	// check 54484000
+	TargetInterface.pokeUint32 (0x54484000, 0x000060a6);
+
+	// DCDC_SetVDD1P0BuckModeTargetVoltage(DCDC, kDCDC_1P0Target1P1V);
+	TargetInterface.pokeUint32 (0x5452000C, 0x980000);
+	TargetInterface.pokeUint32 (0x54520024, 0x100C14);
+
+	// M7 Clk
+	TargetInterface.pokeUint32 (0x54450000, 0x201);      // CCM->CLOCK_ROOT0_CONTROL
+
+	// VTOR
+	TargetInterface.pokeUint32 (0x544F0080, 0x10);
+
+	// Release CM7
+	TargetInterface.pokeUint32 (0x54460010, 0x1);
+
+	// DMA initialization
+	TargetInterface.message ("******** DMA operation *********");
+	InitCM7DMA (0x303C0000);
+	InitCM7DMA (0x303E0000);
+	InitCM7DMA (0x30400000);
+	InitCM7DMA (0x30420000);
+
+	// Making Landing Zone
+	TargetInterface.message ("******** Creating Landing Zone *********");
+	TargetInterface.pokeUint32 (0x303C0000, 0x20000000);
+	TargetInterface.pokeUint32 (0x303C0004, 0x00000009);
+	TargetInterface.pokeUint32 (0x303C0008, 0xE7FEE7FE);
+	TargetInterface.peekUint32 (0x303C0000);
+	TargetInterface.peekUint32 (0x303C0004);
+	TargetInterface.peekUint32 (0x303C0008);
+
+	// Trigger S401 - EdgeLock APC Request
+	TargetInterface.message ("******** S401 Trigger *********");
+	TargetInterface.pokeUint32 (0x57520200, 0x17d20106);
+	var resp1 = TargetInterface.peekUint32 (0x57520280);
+	var resp2 = TargetInterface.peekUint32 (0x57520284);
+	TargetInterface.message ("RESP1 : " + resp1);  
+	TargetInterface.message ("RESP2 : " + resp2);  
+
+	// Deassert CM7 Wait
+	TargetInterface.message ("******** Kickoff CM7 *********");
+	TargetInterface.pokeUint32 (0x544F0080, 0x0);
+}
+
+function InitCM7DMA (targetAddr)
+{
+	TargetInterface.pokeUint32 (0x52010020, 0x20200000);	// DMA4->TCD[0].SADDR
+	TargetInterface.pokeUint32 (0x52010030, targetAddr);	// DMA4->TCD[0].DADDR
+	TargetInterface.pokeUint32 (0x52010028, 0x00020000);	// DMA4->TCD[0].NBYTES_MLOFFNO
+	TargetInterface.pokeUint16 (0x52010036, 0x1);			// DMA4->TCD[0].ELINKNO
+	TargetInterface.pokeUint16 (0x5201003E, 0x1);			// DMA4->TCD[0].BITER_ELINKNO
+	TargetInterface.pokeUint16 (0x52010026, 0x0303);		// DMA4->TCD[0].ATTR
+	TargetInterface.pokeUint16 (0x52010024, 0x0);			// DMA4->TCD[0].SOFF
+	TargetInterface.pokeUint16 (0x52010034, 0x8);			// DMA4->TCD[0].DOFF
+	TargetInterface.pokeUint32 (0x52010000, 0x7);			// DMA4->TDC[0].CH_CSR
+	TargetInterface.pokeUint16 (0x5201003C, 0x8);			// DMA4->TCD[0].CSR
+	TargetInterface.pokeUint32 (0x5201003C, 0x9);			// DMA4->TCD[0].CSR
+	TargetInterface.delay (50);
+	TargetInterface.pokeUint32 (0x52010000, 0x40000006);
 }
 
 function Reset_11xx_M4 ()
@@ -343,6 +480,23 @@ function Reset ()
 			TargetInterface.stop ();
 			if (!TargetInterface.isStopped ())
 				TargetInterface.stop ();
+			break;
+		case "MIMXRT1181":
+		case "MIMXRT1182":
+		case "MIMXRT1187_cm33":
+		case "MIMXRT1189_cm33":
+			TargetInterface.resetAndStop (1000);
+			FillMemory (0x1FFE0000, 0x20000, 0); // ITCM
+			FillMemory (0x20000000, 0x20000, 0); // DTCM
+			FillMemory (0xE000E180, 0x40,    0xFFFFFFFF); // NVIC_ICER
+			FillMemory (0xE000E280, 0x40,    0xFFFFFFFF); // NVIC_ICPR
+			break;
+		case "MIMXRT1187_cm7":
+		case "MIMXRT1189_cm7":
+			TargetInterface.stop ();
+			// Disable pending interrupts
+			FillMemory (0xE000E180, 0x40,    0xFFFFFFFF); // NVIC_ICER
+			FillMemory (0xE000E280, 0x40,    0xFFFFFFFF); // NVIC_ICPR
 			break;
 		default:
 			TargetInterface.message ("## Reset - unknown Device: " + DeviceName);
@@ -616,14 +770,47 @@ function FlexRAM_Restore ()
 		case "MIMXRT1176_cm4":
 			// Ignore the M4-Core which has no FlexRAM
 			break;
+		case "MIMXRT1181":
+		case "MIMXRT1182":
+		case "MIMXRT1187_cm33":
+		case "MIMXRT1189_cm33":
+//			var BLK_CTRL_S_AONMIX = 0x444F0000;
+//			var BLK_CTRL_S_AONMIX_M33_CFG = BLK_CTRL_S_AONMIX + 0x60;
+			// BLK_CTRL_S_AONMIX --> M33_CFG[TCM_SIZE]
+			// * 00 = REGULAR_TCM: 128kB Code TCM and 128kB Sys TCM (default)
+			// * 01 = DOUBLE_CODE_TCM. 256kB Code TCM and 0 Sys TCM
+			// * 10 = DOUBLE_SYS_TCM. 256kB Sys TCM and 0 Code TCM
+			// * 11 = Reserved
+//			AlterRegister (BLK_CTRL_S_AONMIX_M33_CFG, 0x3 << 3, 0);
+			break;
+		case "MIMXRT1187_cm7":
+		case "MIMXRT1189_cm7":
+//			var BLK_CTRL_S_AONMIX = 0x444F0000;
+//			var BLK_CTRL_S_AONMIX_M7_CFG = BLK_CTRL_S_AONMIX + 0x80
+			// BLK_CTRL_S_AONMIX --> M7_CFG[TCM_SIZE]
+			// * 000b - Regular TCM, 256 KB ITCM and 256 KB DTCM (default)
+			// * 001b - Double ITCM, 512 KB ITCM
+			// * 010b - Double DTCM, 512 KB DTCM
+			// * 100b - HALF ITCM, 128 KB ITCM and 384 KB DTCM
+			// * 101b - HALF DTCM, 384 KB ITCM and 128 KB DTCM
+			// * 011b - Reserved
+			// * 110b - Reserved
+			// * 111b - Reserved
+//			AlterRegister (BLK_CTRL_S_AONMIX_M7_CFG, 0x7, 0);
+			break;
 		default:
 			TargetInterface.message ("FlexRAM_Restore - unknown Device: " + DeviceName);
 			return;
 	}
 
-	var gpr16 = TargetInterface.peekUint32 (IOMUXC_GPR_GPR16);
-	gpr16 |= (1 << 2);	// Set FLEXRAM_BANK_CFG_SEL Flag to use FLEXRAM_BANK_CFG configuration
-	TargetInterface.pokeUint32 (IOMUXC_GPR_GPR16, gpr16);
+	if (TargetInterface.getProjectProperty ("Target").indexOf ("MIMXRT118") == -1)
+	{
+		var gpr16 = TargetInterface.peekUint32 (IOMUXC_GPR_GPR16);
+		gpr16 |= (1 << 2);	// Set FLEXRAM_BANK_CFG_SEL Flag to use FLEXRAM_BANK_CFG configuration
+		TargetInterface.pokeUint32 (IOMUXC_GPR_GPR16, gpr16);
+	}
+
+	TargetInterface.message ("## FlexRAM_Restore - done");
 
 	TargetInterface.message ("## FlexRAM_Restore - done");
 }
@@ -681,6 +868,12 @@ function Clock_Init ()
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
 			Clock_Init_117x ();
+			break;
+		case "MIMXRT1181":
+		case "MIMXRT1182":
+		case "MIMXRT1187_cm33":
+		case "MIMXRT1189_cm33":
+			Clock_Init_118x ();
 			break;
 		default:
 			TargetInterface.message ("Clock_Init - unknown Device: " + DeviceName);
@@ -768,15 +961,8 @@ function Clock_Init_117x ()
 		return;
 	}
 
-	val = TargetInterface.peekUint32 (0x40C84270);			// ANADIG_PLL->PLL_528_PFD
-	val |= 0x80808080;
-	TargetInterface.pokeUint32 (0x40C84270, val);
-
-	val = TargetInterface.peekUint32 (0x40C84240);			// ANADIG_PLL->PPLL_528_CTRL
-	val &= ~(0x802000);
-	val |= 0x40000000;
-	TargetInterface.pokeUint32 (0x40C84240, val);			// ANADIG_PLL->PLL_528_CTRL
-
+	AlterRegister (0x40C84270, 0, 0x80808080);				// ANADIG_PLL->PLL_528_PFD
+	AlterRegister (0x40C84240, 0x802000, 0x40000000);		// ANADIG_PLL->PPLL_528_CTRL
 	TargetInterface.pokeUint32 (0x40C84280, 0);				// ANADIG_PLL->PLL_528_MFN
 	TargetInterface.pokeUint32 (0x40C84290, 22);			// ANADIG_PLL->PLL_528_MFI
 	TargetInterface.pokeUint32 (0x40C842A0, 0x0FFFFFFF);	// ANADIG_PLL->PLL_528_MFD
@@ -784,15 +970,10 @@ function Clock_Init_117x ()
 	TargetInterface.pokeUint32 (0x40C84240, 0x8 | 0x40000000); // ANADIG_PLL->PLL_528_CTRL
 	TargetInterface.delay (30);
 
-	val = TargetInterface.peekUint32 (0x40C84240);			// ANADIG_PLL_PLL_528_CTRL
-	val |= 0x800000 | 0x800;
-	TargetInterface.pokeUint32 (0x40C84240, val);			// ANADIG_PLL->PLL_528_CTRL
+	AlterRegister (0x40C84240, 0, 0x800000 | 0x800);		// ANADIG_PLL_PLL_528_CTRL
 	TargetInterface.delay (250);
 
-	val = TargetInterface.peekUint32 (0x40C84240);			// ANADIG_PLL->PLL_528_CTRL
-	val &= ~0x800;
-	TargetInterface.pokeUint32 (0x40C84240, val);			// ANADIG_PLL->PLL_528_CTRL
-
+	AlterRegister (0x40C84240, 0x800, 0);					// ANADIG_PLL->PLL_528_CTRL
 	do
 	{
 		val = TargetInterface.peekUint32 (0x40C84240);		// ANADIG_PLL->PLL_528_CTRL
@@ -814,18 +995,13 @@ function Clock_Init_117x ()
 		val |= 0x8000;
 		TargetInterface.pokeUint32 (0x40C84270, val);		// ANADIG_PLL->PLL_528_PFD
 
-		val = TargetInterface.peekUint32 (0x40C84270);		// ANADIG_PLL->PLL_528_PFD
-		val &= ~0x3F00;
-		val |= 16 << 8;
-		TargetInterface.pokeUint32 (0x40C84270, val);		// ANADIG_PLL->PLL_528_PFD
+		AlterRegister (0x40C84270, 0x3F00, 16 << 8);		// ANADIG_PLL->PLL_528_PFD
 
 		val = TargetInterface.peekUint32 (0x40C84250);		// ANADIG_PLL->PLL_528_UPDATE
 		val ^= 0x4;
 		TargetInterface.pokeUint32 (0x40C84250, val);		// ANADIG_PLL->PLL_528_UPDATE
 
-		val = TargetInterface.peekUint32 (0x40C84270);		// ANADIG_PLL->PLL_528_PFD
-		val &= ~0x8000;
-		TargetInterface.pokeUint32 (0x40C84270, val);		// ANADIG_PLL->PLL_528_PFD
+		AlterRegister (0x40C84270, 0x8000, 0);				// ANADIG_PLL->PLL_528_PFD
 		do
 		{
 			val = TargetInterface.peekUint32 (0x40C84270) & 0x4000;	  // ANADIG_PLL->PLL_528_PFD
@@ -844,6 +1020,41 @@ function Clock_Init_117x ()
 	// Use sys pll2 pfd1 divided by 3: 198Mhz
 	val = 0x602;
 	TargetInterface.pokeUint32 (reg, val);
+}
+
+function Clock_Init_118x () 
+{
+	////////// Initialize System PLL1 //////////
+	AlterRegister (0x44484180, 0, 0x10000); // ANATOP_PllBypass ETHERNET_PLL true
+	AlterRegister (0x44484100, 0, 0x2000);  // ANATOP_SysPll1SwEnClk
+
+	// ANATOP_PllConfigure
+	TargetInterface.pokeUint32 (0x444841a0, 0x0aaaaaaa);
+	TargetInterface.pokeUint32 (0x444841b0, 0x0fffffff);
+	AlterRegister (0x44484180, 0x7F, (0x29 & 0x7F) | 0x400000);
+	TargetInterface.delay (100);
+	AlterRegister (0x44484180, 0, 0x4000 | 0x2000);
+
+	// ANATOP_PllToggleHoldRingOff
+	AlterRegister (0x44484180, 0, 0x2000);
+	TargetInterface.delay (225);
+	AlterRegister (0x44484180, 0x2000, 0);
+
+	// ANATOP_SysPll1WaitStable
+	var val = 0;
+	do
+	{
+		val = TargetInterface.peekUint32 (0x44484100);
+	} while ((val & 0x20000000) != 0x20000000);
+
+	AlterRegister (0x44484180, 0, 0x8000);    // ANATOP_PllEnableClk
+	AlterRegister (0x44484100, 0x4000, 0);    // ANATOP_SysPll1Gate
+	AlterRegister (0x44484100, 0, 0x2000000); // ANATOP_SysPll1Div2En
+	AlterRegister (0x44484100, 0, 0x4000000); // ANATOP_SysPll1Div5En
+	AlterRegister (0x44484180, 0x10000, 0);   // ANATOP_PllBypass ETHERNET_PLL false
+
+	// Set SEMC root clock
+	TargetInterface.pokeUint32 (0x44451580, 0x204); // Use sys pll1 divided by 5: 200Mhz
 }
 
 function Clock_Restore_117x () 
@@ -907,6 +1118,12 @@ function SDRAM_Init ()
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
 			SDRAM_Init_1170 ();
+			break;
+		case "MIMXRT1181":
+		case "MIMXRT1182":
+		case "MIMXRT1187_cm33":
+		case "MIMXRT1189_cm33":
+			SDRAM_Init_1180 ();
 			break;
 		default:
 			TargetInterface.message ("SDRAM_Init - unknown Device: " + DeviceName);
@@ -1086,7 +1303,23 @@ function SDRAM_Init_1170 ()
 	var IOMUXC                = 0x400E8000;
 	var IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x10;
 	var IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x254;
+	var SEMC                  = 0x400D4000;
 
+	SDRAM_Init_11xx (IOMUXC_SW_MUX_CTL_PAD, IOMUXC_SW_PAD_CTL_PAD, SEMC, 32, 64);
+}
+
+function SDRAM_Init_1180 ()
+{
+	var IOMUXC                = 0x42A10000;
+	var IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x10;
+	var IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x258;
+	var SEMC                  = 0x42910000;
+
+	SDRAM_Init_11xx (IOMUXC_SW_MUX_CTL_PAD, IOMUXC_SW_PAD_CTL_PAD, SEMC, 16, 32);
+}
+
+function SDRAM_Init_11xx (IOMUXC_SW_MUX_CTL_PAD, IOMUXC_SW_PAD_CTL_PAD, SEMC, bits, sizeInMbytes)
+{
 	// Configure the IOMUX for the SDRAM interface. First set the Mux configuration
 	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x000, 0x00000000); // IOMUXC_GPIO_EMC_B1_00_SEMC_DATA00
 	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x004, 0x00000000); // IOMUXC_GPIO_EMC_B1_01_SEMC_DATA01
@@ -1128,29 +1361,32 @@ function SDRAM_Init_1170 ()
 	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x094, 0x00000000); // IOMUXC_GPIO_EMC_B1_37_SEMC_DATA15
 	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x098, 0x00000000); // IOMUXC_GPIO_EMC_B1_38_SEMC_DM01
 	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x09C, 0x00000010); // IOMUXC_GPIO_EMC_B1_39_SEMC_DQS	-	EMC_39, DQS PIN, enable SION
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0A0, 0x00000000); // IOMUXC_GPIO_EMC_B1_40_SEMC_RDY
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0A4, 0x00000000); // IOMUXC_GPIO_EMC_B1_41_SEMC_CSX00
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0A8, 0x00000000); // IOMUXC_GPIO_EMC_B2_00_SEMC_DATA16
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0AC, 0x00000000); // IOMUXC_GPIO_EMC_B2_01_SEMC_DATA17
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0B0, 0x00000000); // IOMUXC_GPIO_EMC_B2_02_SEMC_DATA18
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0B4, 0x00000000); // IOMUXC_GPIO_EMC_B2_03_SEMC_DATA19
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0B8, 0x00000000); // IOMUXC_GPIO_EMC_B2_04_SEMC_DATA20
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0BC, 0x00000000); // IOMUXC_GPIO_EMC_B2_05_SEMC_DATA21
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0C0, 0x00000000); // IOMUXC_GPIO_EMC_B2_06_SEMC_DATA22
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0C4, 0x00000000); // IOMUXC_GPIO_EMC_B2_07_SEMC_DATA23
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0C8, 0x00000000); // IOMUXC_GPIO_EMC_B2_08_SEMC_DM02
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0CC, 0x00000000); // IOMUXC_GPIO_EMC_B2_09_SEMC_DATA24
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0D0, 0x00000000); // IOMUXC_GPIO_EMC_B2_10_SEMC_DATA25
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0D4, 0x00000000); // IOMUXC_GPIO_EMC_B2_11_SEMC_DATA26
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0D8, 0x00000000); // IOMUXC_GPIO_EMC_B2_12_SEMC_DATA27
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0DC, 0x00000000); // IOMUXC_GPIO_EMC_B2_13_SEMC_DATA28
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0E0, 0x00000000); // IOMUXC_GPIO_EMC_B2_14_SEMC_DATA29
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0E4, 0x00000000); // IOMUXC_GPIO_EMC_B2_15_SEMC_DATA30
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0E8, 0x00000000); // IOMUXC_GPIO_EMC_B2_16_SEMC_DATA31
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0EC, 0x00000000); // IOMUXC_GPIO_EMC_B2_17_SEMC_DM03
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0F0, 0x00000000); // IOMUXC_GPIO_EMC_B2_18_SEMC_DQS4
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0F4, 0x00000000); // IOMUXC_GPIO_EMC_B2_19_SEMC_CLKX00
-	TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0F8, 0x00000000); // IOMUXC_GPIO_EMC_B2_20_SEMC_CLKX01
+	if (bits == 32)
+	{
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0A0, 0x00000000); // IOMUXC_GPIO_EMC_B1_40_SEMC_RDY
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0A4, 0x00000000); // IOMUXC_GPIO_EMC_B1_41_SEMC_CSX00
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0A8, 0x00000000); // IOMUXC_GPIO_EMC_B2_00_SEMC_DATA16
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0AC, 0x00000000); // IOMUXC_GPIO_EMC_B2_01_SEMC_DATA17
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0B0, 0x00000000); // IOMUXC_GPIO_EMC_B2_02_SEMC_DATA18
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0B4, 0x00000000); // IOMUXC_GPIO_EMC_B2_03_SEMC_DATA19
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0B8, 0x00000000); // IOMUXC_GPIO_EMC_B2_04_SEMC_DATA20
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0BC, 0x00000000); // IOMUXC_GPIO_EMC_B2_05_SEMC_DATA21
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0C0, 0x00000000); // IOMUXC_GPIO_EMC_B2_06_SEMC_DATA22
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0C4, 0x00000000); // IOMUXC_GPIO_EMC_B2_07_SEMC_DATA23
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0C8, 0x00000000); // IOMUXC_GPIO_EMC_B2_08_SEMC_DM02
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0CC, 0x00000000); // IOMUXC_GPIO_EMC_B2_09_SEMC_DATA24
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0D0, 0x00000000); // IOMUXC_GPIO_EMC_B2_10_SEMC_DATA25
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0D4, 0x00000000); // IOMUXC_GPIO_EMC_B2_11_SEMC_DATA26
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0D8, 0x00000000); // IOMUXC_GPIO_EMC_B2_12_SEMC_DATA27
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0DC, 0x00000000); // IOMUXC_GPIO_EMC_B2_13_SEMC_DATA28
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0E0, 0x00000000); // IOMUXC_GPIO_EMC_B2_14_SEMC_DATA29
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0E4, 0x00000000); // IOMUXC_GPIO_EMC_B2_15_SEMC_DATA30
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0E8, 0x00000000); // IOMUXC_GPIO_EMC_B2_16_SEMC_DATA31
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0EC, 0x00000000); // IOMUXC_GPIO_EMC_B2_17_SEMC_DM03
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0F0, 0x00000000); // IOMUXC_GPIO_EMC_B2_18_SEMC_DQS4
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0F4, 0x00000000); // IOMUXC_GPIO_EMC_B2_19_SEMC_CLKX00
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + 0x0F8, 0x00000000); // IOMUXC_GPIO_EMC_B2_20_SEMC_CLKX01
+	}
 
 	// now set the PAD configuration
 	// PDRV = 1b (normal); PULL = 10b (PD)
@@ -1194,38 +1430,69 @@ function SDRAM_Init_1170 ()
 	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x094, 0x00000008); // IOMUXC_GPIO_EMC_B1_37_SEMC_DATA15
 	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x098, 0x00000008); // IOMUXC_GPIO_EMC_B1_38_SEMC_DM01
 	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x09c, 0x00000008); // IOMUXC_GPIO_EMC_B1_39_SEMC_DQS	-	EMC_39, DQS PIN, enable SION
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0a0, 0x00000008); // IOMUXC_GPIO_EMC_B1_40_SEMC_RDY
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0a4, 0x00000008); // IOMUXC_GPIO_EMC_B1_41_SEMC_CSX00
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0a8, 0x00000008); // IOMUXC_GPIO_EMC_B2_00_SEMC_DATA16
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0ac, 0x00000008); // IOMUXC_GPIO_EMC_B2_01_SEMC_DATA17
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0b0, 0x00000008); // IOMUXC_GPIO_EMC_B2_02_SEMC_DATA18
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0b4, 0x00000008); // IOMUXC_GPIO_EMC_B2_03_SEMC_DATA19
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0b8, 0x00000008); // IOMUXC_GPIO_EMC_B2_04_SEMC_DATA20
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0bc, 0x00000008); // IOMUXC_GPIO_EMC_B2_05_SEMC_DATA21
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0c0, 0x00000008); // IOMUXC_GPIO_EMC_B2_06_SEMC_DATA22
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0c4, 0x00000008); // IOMUXC_GPIO_EMC_B2_07_SEMC_DATA23
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0c8, 0x00000008); // IOMUXC_GPIO_EMC_B2_08_SEMC_DM02
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0cc, 0x00000008); // IOMUXC_GPIO_EMC_B2_09_SEMC_DATA24
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0d0, 0x00000008); // IOMUXC_GPIO_EMC_B2_10_SEMC_DATA25
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0d4, 0x00000008); // IOMUXC_GPIO_EMC_B2_11_SEMC_DATA26
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0d8, 0x00000008); // IOMUXC_GPIO_EMC_B2_12_SEMC_DATA27
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0dc, 0x00000008); // IOMUXC_GPIO_EMC_B2_13_SEMC_DATA28
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0e0, 0x00000008); // IOMUXC_GPIO_EMC_B2_14_SEMC_DATA29
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0e4, 0x00000008); // IOMUXC_GPIO_EMC_B2_15_SEMC_DATA30
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0e8, 0x00000008); // IOMUXC_GPIO_EMC_B2_16_SEMC_DATA31
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x1ac, 0x00000008); // IOMUXC_GPIO_EMC_B2_17_SEMC_DM03
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x1b0, 0x00000008); // IOMUXC_GPIO_EMC_B2_18_SEMC_DQS4
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x1b4, 0x00000008); // IOMUXC_GPIO_EMC_B2_19_SEMC_CLKX00
-	TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x1b8, 0x00000008); // IOMUXC_GPIO_EMC_B2_20_SEMC_CLKX01
+	if (bits == 32)
+	{
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0a0, 0x00000008); // IOMUXC_GPIO_EMC_B1_40_SEMC_RDY
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0a4, 0x00000008); // IOMUXC_GPIO_EMC_B1_41_SEMC_CSX00
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0a8, 0x00000008); // IOMUXC_GPIO_EMC_B2_00_SEMC_DATA16
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0ac, 0x00000008); // IOMUXC_GPIO_EMC_B2_01_SEMC_DATA17
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0b0, 0x00000008); // IOMUXC_GPIO_EMC_B2_02_SEMC_DATA18
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0b4, 0x00000008); // IOMUXC_GPIO_EMC_B2_03_SEMC_DATA19
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0b8, 0x00000008); // IOMUXC_GPIO_EMC_B2_04_SEMC_DATA20
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0bc, 0x00000008); // IOMUXC_GPIO_EMC_B2_05_SEMC_DATA21
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0c0, 0x00000008); // IOMUXC_GPIO_EMC_B2_06_SEMC_DATA22
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0c4, 0x00000008); // IOMUXC_GPIO_EMC_B2_07_SEMC_DATA23
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0c8, 0x00000008); // IOMUXC_GPIO_EMC_B2_08_SEMC_DM02
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0cc, 0x00000008); // IOMUXC_GPIO_EMC_B2_09_SEMC_DATA24
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0d0, 0x00000008); // IOMUXC_GPIO_EMC_B2_10_SEMC_DATA25
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0d4, 0x00000008); // IOMUXC_GPIO_EMC_B2_11_SEMC_DATA26
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0d8, 0x00000008); // IOMUXC_GPIO_EMC_B2_12_SEMC_DATA27
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0dc, 0x00000008); // IOMUXC_GPIO_EMC_B2_13_SEMC_DATA28
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0e0, 0x00000008); // IOMUXC_GPIO_EMC_B2_14_SEMC_DATA29
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0e4, 0x00000008); // IOMUXC_GPIO_EMC_B2_15_SEMC_DATA30
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x0e8, 0x00000008); // IOMUXC_GPIO_EMC_B2_16_SEMC_DATA31
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x1ac, 0x00000008); // IOMUXC_GPIO_EMC_B2_17_SEMC_DM03
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x1b0, 0x00000008); // IOMUXC_GPIO_EMC_B2_18_SEMC_DQS4
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x1b4, 0x00000008); // IOMUXC_GPIO_EMC_B2_19_SEMC_CLKX00
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + 0x1b8, 0x00000008); // IOMUXC_GPIO_EMC_B2_20_SEMC_CLKX01
+	}
 
-	// Configure SDR Controller Registers/
-	var SEMC = 0x400D4000;
-	TargetInterface.pokeUint32 (SEMC + 0x00, 0x10000004); // MCR
-	TargetInterface.pokeUint32 (SEMC + 0x08, 0x00030524); // BMCR0
-	TargetInterface.pokeUint32 (SEMC + 0x0C, 0x06030524); // BMCR1
-	TargetInterface.pokeUint32 (SEMC + 0x10, 0x8000001D); // BR0, 64MB
-
-	TargetInterface.pokeUint32 (SEMC + 0x40, 0x00000F32); // SDRAMCR0, 32bit
+	// Configure SDR Controller Registers
+	TargetInterface.pokeUint32 (SEMC + 0x00, 0x10000004); // MCR 
+	TargetInterface.pokeUint32 (SEMC + 0x08, 0x00030524); // BMCR0								 - 1170: 0x00030524 - 1180: 0x00000081
+	TargetInterface.pokeUint32 (SEMC + 0x0C, 0x06030524); // BMCR1								 - 1170: 0x06030524 - 1180: 0x00000081
+	switch (sizeInMbytes)
+	{
+		case 1:
+			TargetInterface.pokeUint32 (SEMC + 0x10, 0x80000010); // BR0, 1MB
+			break;
+		case 2:
+			TargetInterface.pokeUint32 (SEMC + 0x10, 0x80000013); // BR0, 2MB
+			break;
+		case 4:
+			TargetInterface.pokeUint32 (SEMC + 0x10, 0x80000015); // BR0, 4MB
+			break;
+		case 8:
+			TargetInterface.pokeUint32 (SEMC + 0x10, 0x80000017); // BR0, 8MB
+			break;
+		case 16:
+			TargetInterface.pokeUint32 (SEMC + 0x10, 0x80000019); // BR0, 16MB
+			break;
+		case 32:
+			TargetInterface.pokeUint32 (SEMC + 0x10, 0x8000001B); // BR0, 32MB
+			break;
+		case 64:
+			TargetInterface.pokeUint32 (SEMC + 0x10, 0x8000001D); // BR0, 64MB
+			break;
+		case 128:
+			TargetInterface.pokeUint32 (SEMC + 0x10, 0x8000001F); // BR0, 128MB
+			break;
+			
+	}
+	if (bits == 32)
+		TargetInterface.pokeUint32 (SEMC + 0x40, 0x00000F32); // SDRAMCR0, 32bit
+	else
+		TargetInterface.pokeUint32 (SEMC + 0x40, 0x00000F31); // SDRAMCR0, 16bit
 	TargetInterface.pokeUint32 (SEMC + 0x44, 0x00772A22); // SDRAMCR1
 	TargetInterface.pokeUint32 (SEMC + 0x48, 0x00010A0D); // SDRAMCR2
 	TargetInterface.pokeUint32 (SEMC + 0x4C, 0x21210408); // SDRAMCR3
@@ -1234,7 +1501,7 @@ function SDRAM_Init_1170 ()
 	TargetInterface.pokeUint32 (SEMC + 0x94, 0x00000002); // IPCR1
 	TargetInterface.pokeUint32 (SEMC + 0x98, 0x00000000); // IPCR2
 
-	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000F); // IPCMD, SD_CC_IPREA - Prechargeall
+	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000F); // IPCMD, SD_CC_IPREA - Precharge all
 	SDRAM_WaitIpCmdDone        (SEMC);
 	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000C); // IPCMD, SD_CC_IAF - AutoRefresh
 	SDRAM_WaitIpCmdDone        (SEMC);
@@ -1244,8 +1511,8 @@ function SDRAM_Init_1170 ()
 	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000A); // IPCMD, SD_CC_IMS - Modeset
 	SDRAM_WaitIpCmdDone        (SEMC);
 
-	TargetInterface.pokeUint32 (SEMC + 0x150, 0x00000017); // DCCR - Delay Chain Control Register
-	TargetInterface.pokeUint32 (SEMC + 0x4C, 0x21210409); // enable SDRAM self refresh after initialization done.
+	TargetInterface.pokeUint32 (SEMC + 0x150, 0x00000017); // DCCR - Delay Chain Control Register    - 1170: 0x00000017 - 1180: 0x0000000B
+	TargetInterface.pokeUint32 (SEMC + 0x4C,  0x21210409); // SDRAMCR3, enable SDRAM self refresh after initialization done.
 }
 
 

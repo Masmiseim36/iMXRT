@@ -42,20 +42,38 @@ OF SUCH DAMAGE. */
 	{
 		BOARD_InitUARTPins ();
 
-		#if ((defined MIMXRT1011_SERIES) || (defined MIMXRT1015_SERIES) || (defined MIMXRT1021_SERIES) || (defined MIMXRT1024_SERIES) || \
-			 (defined MIMXRT1041_SERIES) || (defined MIMXRT1042_SERIES) || (defined MIMXRT1051_SERIES) || (defined MIMXRT1052_SERIES) || \
-			 (defined MIMXRT1061_SERIES) || (defined MIMXRT1062_SERIES) || (defined MIMXRT1064_SERIES))
+		#if (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
+			 defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
+			 defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
 			uint32_t ClockFrequency = 0;
 			if (CLOCK_GetMux (kCLOCK_UartMux) == 0) // --> PLL3 div6 80M
 				ClockFrequency = (CLOCK_GetPllFreq (kCLOCK_PllUsb1) / 6U) / (CLOCK_GetDiv(kCLOCK_UartDiv) + 1U);
 			else
 				ClockFrequency = CLOCK_GetOscFreq() / (CLOCK_GetDiv(kCLOCK_UartDiv) + 1U);
-		#elif (defined MIMXRT1165_cm7_SERIES) || (defined MIMXRT1166_cm7_SERIES) || (defined MIMXRT1165_cm4_SERIES) || (defined MIMXRT1166_cm4_SERIES) || \
-			  (defined MIMXRT1171_SERIES)     || (defined MIMXRT1172_SERIES)     || \
-			  (defined MIMXRT1173_cm7_SERIES) || (defined MIMXRT1175_cm7_SERIES) || (defined MIMXRT1176_cm7_SERIES) || \
-			  (defined MIMXRT1173_cm4_SERIES) || (defined MIMXRT1175_cm4_SERIES) || (defined MIMXRT1176_cm4_SERIES)
+		#elif (defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
+			   defined(MIMXRT1171_SERIES)     || defined(MIMXRT1172_SERIES)     || \
+			   defined(MIMXRT1173_cm7_SERIES) || defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1176_cm7_SERIES) || \
+			   defined(MIMXRT1173_cm4_SERIES) || defined(MIMXRT1175_cm4_SERIES) || defined(MIMXRT1176_cm4_SERIES))
 			// Configure Lpuartx using SysPll2
 			static const clock_root_t RootClocks [] = {static_cast<clock_root_t>(0x7F), kCLOCK_Root_Lpuart1, kCLOCK_Root_Lpuart2, kCLOCK_Root_Lpuart3, kCLOCK_Root_Lpuart4, kCLOCK_Root_Lpuart5, kCLOCK_Root_Lpuart6, kCLOCK_Root_Lpuart7, kCLOCK_Root_Lpuart8, kCLOCK_Root_Lpuart9, kCLOCK_Root_Lpuart10, kCLOCK_Root_Lpuart11, kCLOCK_Root_Lpuart12};
+			static const clock_ip_name_t clocks [] = LPUART_CLOCKS;
+
+			clock_root_config_t rootCfg {};
+			rootCfg.mux = 6;
+			rootCfg.div = 21;
+			CLOCK_SetRootClock (RootClocks[BOARD_DEBUG_UART_INSTANCE], &rootCfg);
+			CLOCK_ControlGate  (clocks[BOARD_DEBUG_UART_INSTANCE], kCLOCK_On);
+
+			uint32_t ClockFrequency = CLOCK_GetRootClockFreq (RootClocks[BOARD_DEBUG_UART_INSTANCE]);
+		#elif (defined(MIMXRT1181_SERIES)     || defined(MIMXRT1182_SERIES)     || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1187_cm33_SERIES) ||\
+				 defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
+			// Configure Lpuartx using SysPll2
+			static const clock_root_t RootClocks [] 
+			{
+ 				static_cast<clock_root_t>(0x7F), kCLOCK_Root_Lpuart0102, kCLOCK_Root_Lpuart0102, kCLOCK_Root_Lpuart0304, kCLOCK_Root_Lpuart0304,
+				kCLOCK_Root_Lpuart0506, kCLOCK_Root_Lpuart0506, kCLOCK_Root_Lpuart0708, kCLOCK_Root_Lpuart0708, kCLOCK_Root_Lpuart0910,
+				kCLOCK_Root_Lpuart0910, kCLOCK_Root_Lpuart1112, kCLOCK_Root_Lpuart1112
+			};
 			static const clock_ip_name_t clocks [] = LPUART_CLOCKS;
 
 			clock_root_config_t rootCfg {};

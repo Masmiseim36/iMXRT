@@ -71,6 +71,16 @@ public:
 	{
 		return reinterpret_cast<uint32_t>(this);
 	}
+	
+	inline uint8_t *GetAliasBaseAddress ()
+	{
+		#if defined FlexSPI1_ALIAS_BASE && __CORTEX_M == 4
+			if (this->GetBaseAddr () == FLEXSPI1_BASE)
+				return reinterpret_cast<uint8_t *>(FlexSPI1_ALIAS_BASE);
+		#endif
+
+		return nullptr;
+	}
 
 	static constexpr flexspi_port_t port =
 	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || \

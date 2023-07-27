@@ -43,32 +43,36 @@
     linker_section_placement_file="../placement_tcm.xml" />
   <configuration
     Name="CM33"
-    Placement="SRAM"
     arm_architecture="v8M_Mainline"
     arm_core_type="Cortex-M33"
     arm_fpu_type="FPv5-SP-D16"
     arm_v8M_has_cmse="Yes"
     arm_v8M_has_dsp="Yes"
-    hidden="Yes"
-    linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
-    linker_section_placement_macros="RAM_NAME=SRAM_data"
-    property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml" />
+    hidden="Yes" />
   <configuration
     Name="500"
+    Placement="SRAM"
     Target="MIMXRT595SFAWC_cm33"
     c_preprocessor_definitions="CPU_MIMXRT595SFAWC_cm33"
     c_user_include_directories=".;./iMXRT500/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT500.xml"
-    macros="DeviceName=MIMXRT595S_cm33;Family=iMXRT500" />
+    linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
+    linker_section_placement_macros="RAM_NAME=SRAM_data"
+    macros="DeviceName=MIMXRT595S_cm33;Family=iMXRT500"
+    property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml" />
   <configuration
     Name="600"
+    Placement="SRAM"
     Target="MIMXRT685SFVKB_cm33"
     c_preprocessor_definitions="CPU_MIMXRT685SFVKB_cm33"
     c_user_include_directories=".;./iMXRT600/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT600.xml"
-    macros="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
+    linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
+    linker_section_placement_macros="RAM_NAME=SRAM_data"
+    macros="DeviceName=MIMXRT685S_cm33;Family=iMXRT600"
+    property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml" />
   <configuration
     Name="1011"
     Target="MIMXRT1011xxx5A"
@@ -177,6 +181,25 @@
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT117x_cm4.xml"
     macros="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170;Core=CM4" />
+  <configuration
+    Name="1180_CM7"
+    Target="MIMXRT1189CVM8B_cm7"
+    arm_fpu_type="FPv5-D16"
+    c_preprocessor_definitions="CPU_MIMXRT1189CVM8B_cm7"
+    c_user_include_directories=".;./iMXRT1180/.;./iMXRT1180/cm7/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT118x_cm7.xml"
+    macros="DeviceName=MIMXRT1189_cm7;Family=iMXRT1180;Core=CM7" />
+  <configuration
+    Name="1180_CM33"
+    Placement="TCM"
+    Target="MIMXRT1189CVM8B_cm33"
+    c_preprocessor_definitions="CPU_MIMXRT1189CVM8B_cm33"
+    c_user_include_directories=".;./iMXRT1180/.;./iMXRT1180_cm33/."
+    hidden="Yes"
+    linker_memory_map_file="../MemoryMap_MIMXRT118x_cm33.xml"
+    linker_section_placement_file="../placement_tcm.xml"
+    macros="DeviceName=MIMXRT1189_cm33;Family=iMXRT1180;Core=CM33" />
   <configuration
     Name="MIMXRT500_Debug"
     build_output_file_name="Loader_iMXRT500_M33_Debug.elf"
@@ -289,6 +312,22 @@
     Name="MIMXRT1170_CM4_Release"
     build_output_file_name="Loader_iMXRT1170_CM4.elf"
     inherited_configurations="CM4;1170_CM4;Release" />
+  <configuration
+    Name="MIMXRT1180_CM7_Debug"
+    build_output_file_name="Loader_iMXRT1180_CM7_Debug.elf"
+    inherited_configurations="CM7;1180_CM7;Debug" />
+  <configuration
+    Name="MIMXRT1180_CM7_Release"
+    build_output_file_name="Loader_iMXRT1180_CM7.elf"
+    inherited_configurations="CM7;1180_CM7;Release" />
+  <configuration
+    Name="MIMXRT1180_CM33_Debug"
+    build_output_file_name="Loader_iMXRT1180_CM33_Debug.elf"
+    inherited_configurations="CM33;1180_CM33;Debug" />
+  <configuration
+    Name="MIMXRT1180_CM33_Release"
+    build_output_file_name="Loader_iMXRT1180_CM33.elf"
+    inherited_configurations="CM33;1180_CM33;Release" />
   <project Name="Loader">
     <configuration
       CMSIS_CORE="Yes"
@@ -300,7 +339,7 @@
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
       arm_target_loader_reset_after_download="No"
-      batch_build_configurations="MIMXRT500_Release;MIMXRT600_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1040_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release"
+      batch_build_configurations="MIMXRT500_Release;MIMXRT600_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1040_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release;MIMXRT1180_CM7_Release;MIMXRT1180_CM33_Release"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
       c_user_include_directories=".;./.."
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
@@ -620,6 +659,47 @@
         <file file_name="fsl_dmamux.h" />
         <file file_name="fsl_lpuart.c" />
         <file file_name="fsl_lpuart.h" />
+      </folder>
+      <folder Name="iMXRT1180">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1180_CM7" build_exclude_from_build="No" />
+        <configuration Name="1180_CM33" build_exclude_from_build="No" />
+        <file file_name="iMXRT1180/fsl_clock.c" />
+        <file file_name="iMXRT1180/fsl_clock.h" />
+        <file file_name="iMXRT1180/fsl_dcdc.c" />
+        <file file_name="iMXRT1180/fsl_dcdc.h" />
+        <file file_name="iMXRT1180/fsl_iomuxc.h" />
+        <file file_name="iMXRT1180/fsl_pmu.c" />
+        <file file_name="iMXRT1180/fsl_pmu.h" />
+        <file file_name="iMXRT1180/board.h" />
+        <file file_name="iMXRT1180/clock_config.c" />
+        <file file_name="iMXRT1180/clock_config.h" />
+        <file file_name="iMXRT1180/pin_mux.c" />
+        <file file_name="iMXRT1180/fsl_rgpio.c" />
+        <file file_name="iMXRT1180/fsl_rgpio.h" />
+        <file file_name="iMXRT1180/fsl_misc.h" />
+        <file file_name="fsl_lpuart.c" />
+        <file file_name="fsl_lpuart.h" />
+        <folder Name="cm33">
+          <file file_name="iMXRT1180/cm33/fsl_cache.c" />
+          <file file_name="iMXRT1180/cm33/fsl_cache.h" />
+          <configuration
+            Name="MIMXRT1180_CM7_Debug"
+            build_exclude_from_build="Yes" />
+          <configuration
+            Name="MIMXRT1180_CM7_Release"
+            build_exclude_from_build="Yes" />
+        </folder>
+        <folder Name="cm7">
+          <file file_name="iMXRT1180/cm7/fsl_cache.c" />
+          <file file_name="iMXRT1180/cm7/fsl_cache.h" />
+          <configuration
+            Name="MIMXRT1180_CM33_Debug"
+            build_exclude_from_build="Yes" />
+          <configuration
+            Name="MIMXRT1180_CM33_Release"
+            build_exclude_from_build="Yes" />
+        </folder>
       </folder>
       <folder Name="CM4">
         <file file_name="iMXRT1170/cm4/fsl_cache.c" />
