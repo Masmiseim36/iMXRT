@@ -14,8 +14,9 @@ This package enhances the original package by
 - Using the latest CMSIS-Files and register-descriptions provided by NXP
 - Enabling debugging in the external-SDRAM-memory
 - Added a loader (in Source code) which supports different Flash memory targets
-- Added sample code for booting from external Flash
 - Adding support for iMXRT1040
+
+Sample code for booting from external Flash can be found in this repositorry: https://github.com/Masmiseim36/Coremark_iMXRT
 
 The following Controllers are supported:
 

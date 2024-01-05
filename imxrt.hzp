@@ -10,17 +10,6 @@
     <folder Name="packages">
       <file file_name="packages/iMXRT_package.xml" />
     </folder>
-    <folder Name="samples">
-      <file file_name="samples/iMXRT/flexspi_boot.c" />
-      <file file_name="samples/iMXRT/flexspi_boot.h" />
-      <file file_name="samples/iMXRT/flexspi_flash.h" />
-      <file file_name="samples/iMXRT/flexspi_flash_Hyperflash.c" />
-      <file file_name="samples/iMXRT/flexspi_flash_OSPI_Adesto.c" />
-      <file file_name="samples/iMXRT/flexspi_flash_OSPI_Macronix.c" />
-      <file file_name="samples/iMXRT/flexspi_flash_QSPI.c" />
-      <file file_name="samples/iMXRT/iMXRT.hzp" />
-      <file file_name="samples/iMXRT/main.cpp" />
-    </folder>
     <folder Name="targets">
       <folder Name="Device">
         <folder Name="101x">
@@ -294,5 +283,4 @@
   </project>
   <import file_name="targets/iMXRT/Loader2/Loader.hzp" />
   <import file_name="targets/iMXRT/Loader/Loader.hzp" />
-  <import file_name="samples/iMXRT/iMXRT.hzp" />
 </solution>
