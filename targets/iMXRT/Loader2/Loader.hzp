@@ -5,6 +5,7 @@
     Platform="ARM"
     arm_instruction_set="Thumb"
     arm_library_instruction_set="Thumb"
+    arm_target_interface_type="SWD"
     build_intermediate_directory="out/$(ProjectName) $(Configuration)"
     c_additional_options="-fno-signed-char;-Wno-narrowing;-Wall;-Wextra;-Wmisleading-indentation;-Wshadow;-Wdouble-promotion;-Wformat=2"
     c_preprocessor_definitions="__THUMB;STARTUP_FROM_RESET=1;DISABLE_WDOG=1"
@@ -31,7 +32,6 @@
     Placement="TCM"
     arm_architecture="v7EM"
     arm_core_type="Cortex-M7"
-    arm_simulator_memory_simulation_parameter="RAM;0x00000000;0x00020000;RAM;0x20000000;0x00020000;RAM;0x20200000;0x00040000;ROM;0x60000000;0x00040000"
     hidden="Yes"
     linker_section_placement_file="../placement_tcm.xml" />
   <configuration
@@ -39,7 +39,6 @@
     Placement="TCM"
     arm_architecture="v7EM"
     arm_core_type="Cortex-M4"
-    arm_simulator_memory_simulation_parameter="ROM;0x08000000;0x04000000;RAM;0x1FFE0000;0x00010000;RAM;0x20000000;0x00010000;RAM;0x20240000;0x00080000;ROM;0x30000000;0x04000000"
     hidden="Yes"
     linker_section_placement_file="../placement_tcm.xml" />
   <configuration
@@ -48,7 +47,6 @@
     arm_architecture="v8M_Mainline"
     arm_core_type="Cortex-M33"
     arm_fpu_type="FPv5-SP-D16"
-    arm_simulator_memory_simulation_parameter="ROM;0x08000000;0x08000000;RAM;0x00000000;0x00480000;RAM;0x10000000;0x00480000;RAM;0x20000000;0x00480000;RAM;0x30000000;0x00480000"
     arm_v8M_has_cmse="Yes"
     arm_v8M_has_dsp="Yes"
     hidden="Yes"
@@ -169,7 +167,7 @@
     c_user_include_directories=".;./iMXRT1170/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT117x_cm7.xml"
-    macros="DeviceName=MIMXRT1176_cm7;Family=iMXRT1170" />
+    macros="DeviceName=MIMXRT1176_cm7;Family=iMXRT1170;Core=CM7" />
   <configuration
     Name="1170_CM4"
     Target="MIMXRT1176DVMAA_cm4"
@@ -178,7 +176,7 @@
     c_user_include_directories=".;./iMXRT1170/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT117x_cm4.xml"
-    macros="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170" />
+    macros="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170;Core=CM4" />
   <configuration
     Name="MIMXRT500_Debug"
     build_output_file_name="Loader_iMXRT500_M33_Debug.elf"

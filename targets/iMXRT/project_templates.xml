@@ -7,6 +7,8 @@
 		<propertygroup name="Placement" value="TCM" choose="Yes" />
 		<property name="arm_architecture" value="v7EM" />
 		<property name="arm_fpu_abi" value="Hard" />
+		<property name="arm_target_interface_type" value="SWD" />
+		<property name="arm_target_loader_reset_after_download" value="No" />
 		<property name="debug_startup_completion_point" value="main" />
 		<property name="target_connect_script" value="Connect()" />
 		<property name="target_get_partname_script" value="GetPartName()" />
@@ -14,8 +16,6 @@
 		<property name="target_stop_script" value="OnTargetStop_11xx()" />
 		<property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
 		<property name="target_trace_initialize_script" value="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
-		<property name="arm_target_loader_reset_after_download" value="No" />
-		<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT" />
 		<property name="arm_linker_stack_size" value="1024" />
 		<property name="arm_linker_heap_size" value="1024" />
 		<property name="linker_output_format" />
@@ -28,6 +28,7 @@
 		<property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/$(DeviceName)_registers.xml"/>
 		<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family)_$(Core).elf" configuration="Flash" />
 		<propertygroup name="CMSIS_CORE" value="Yes" />
+		<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT" />
 		<folder name="Source Files" filter="c;cpp;cxx;cc;h;s;asm;inc">
 			<file name="main.c" source="$(StudioDir)/samples/Shared/main.c" />
 		</folder>
@@ -48,6 +49,7 @@
 		<propertygroup name="Placement" value="TCM" choose="Yes" />
 		<property name="arm_architecture" value="v7EM" />
 		<property name="arm_fpu_abi" value="Hard" />
+		<property name="arm_target_interface_type" value="SWD" />
 		<property name="debug_startup_completion_point" value="main" />
 		<property name="target_connect_script" value="Connect()" />
 		<property name="target_get_partname_script" value="GetPartName()" />

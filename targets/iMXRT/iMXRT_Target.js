@@ -1,6 +1,6 @@
 /*****************************************************************************
  * Original work Copyright (c) 2016 Rowley Associates Limited.               *
- * Modified work Copyright (C) 2019-2022 Markus Klein                        *
+ * Modified work Copyright (C) 2019-2024 Markus Klein                        *
  *                                                                           *
  * This file may be distributed under the terms of the License Agreement     *
  * provided with this software.                                              *
@@ -39,6 +39,7 @@ var IOMUXC_LPSR_GPR  = 0x40C0C000;
 var IOMUXC_LPSR_GPR0 = IOMUXC_LPSR_GPR + 0x0;
 var IOMUXC_LPSR_GPR1 = IOMUXC_LPSR_GPR + 0x4;
 var IOMUXC_LPSR_GPR2 = IOMUXC_LPSR_GPR + 0x8;
+var IOMUXC_LPSR_GPR26 = IOMUXC_LPSR_GPR + (4 * 26);
 
 var IOMUXC_GPR       = 0x400E4000;
 var IOMUXC_GPR_GPR0  = IOMUXC_GPR;
@@ -90,7 +91,7 @@ function OnTargetStop_11xx ()
 	{
 		psccr = TargetInterface.peekUint32 (LMEM_PSCCR);
 	}
-	while ((pscr & LMEM_PSCCR_GO_MASK) != 0);	// Wait until the cache command completes
+	while ((psccr & LMEM_PSCCR_GO_MASK) != 0);	// Wait until the cache command completes
 
 	// As a precaution clear the bits to avoid inadvertently re-running this command.
 	psccr &= ~(LMEM_PSCCR_PUSHW0_MASK | LMEM_PSCCR_PUSHW1_MASK);
@@ -567,6 +568,7 @@ function FlexRAM_Restore ()
 	var IOMUXC_GPR_GPR16 = IOMUXC_GPR + 0x40;
 	var IOMUXC_GPR_GPR17 = IOMUXC_GPR + 0x44;
 	var DeviceName = GetProjectPartName ();
+	TargetInterface.message ("## FlexRAM_Restore on " + DeviceName);
 
 	switch (DeviceName)
 	{
@@ -620,8 +622,10 @@ function FlexRAM_Restore ()
 	}
 
 	var gpr16 = TargetInterface.peekUint32 (IOMUXC_GPR_GPR16);
-	gpr16 |= (1 << 2);	// Set FLEXRAM_BANK_CFG_SEL Flag to use FLEXRAM_BANK_CFG config
+	gpr16 |= (1 << 2);	// Set FLEXRAM_BANK_CFG_SEL Flag to use FLEXRAM_BANK_CFG configuration
 	TargetInterface.pokeUint32 (IOMUXC_GPR_GPR16, gpr16);
+
+	TargetInterface.message ("## FlexRAM_Restore - done");
 }
 
 function ClockGate_EnableAll_10xx ()
@@ -873,13 +877,13 @@ function SDRAM_WaitIpCmdDone (SEMC)
 	while ((reg & 0x3) == 0);
 
 	TargetInterface.pokeUint32 (SEMC + 0x3C,0x00000003); // clear IPCMDERR and IPCMDDONE bits
-	TargetInterface.message ("SDRAM_WaitIpCmdDone");
+	TargetInterface.message ("### SDRAM_WaitIpCmdDone");
 }
 
 function SDRAM_Init ()
 {
 	var DeviceName = GetProjectPartName ();
-	TargetInterface.message ("SDRAM interface initialize for " + DeviceName);
+	TargetInterface.message ("## SDRAM interface initialize for " + DeviceName);
 	switch (DeviceName)
 	{
 		case "MIMXRT1011":
@@ -909,7 +913,7 @@ function SDRAM_Init ()
 			return;
 	}
 
-	TargetInterface.message ("SDRAM_Init - Done");
+	TargetInterface.message ("## SDRAM_Init - Done");
 }
 
 function SDRAM_Init_10xx ()
@@ -1230,14 +1234,14 @@ function SDRAM_Init_1170 ()
 	TargetInterface.pokeUint32 (SEMC + 0x94, 0x00000002); // IPCR1
 	TargetInterface.pokeUint32 (SEMC + 0x98, 0x00000000); // IPCR2
 
-	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000F); // IPCMD, SD_CC_IPREA
+	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000F); // IPCMD, SD_CC_IPREA - Prechargeall
 	SDRAM_WaitIpCmdDone        (SEMC);
-	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000C); // SD_CC_IAF
+	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000C); // IPCMD, SD_CC_IAF - AutoRefresh
 	SDRAM_WaitIpCmdDone        (SEMC);
-	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000C); // SD_CC_IAF
+	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000C); // IPCMD, SD_CC_IAF - AutoRefresh
 	SDRAM_WaitIpCmdDone        (SEMC);
 	TargetInterface.pokeUint32 (SEMC + 0xA0, 0x00000033); // IPTXDAT
-	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000A); // SD_CC_IMS
+	TargetInterface.pokeUint32 (SEMC + 0x9C, 0xA55A000A); // IPCMD, SD_CC_IMS - Modeset
 	SDRAM_WaitIpCmdDone        (SEMC);
 
 	TargetInterface.pokeUint32 (SEMC + 0x150, 0x00000017); // DCCR - Delay Chain Control Register
@@ -1259,6 +1263,7 @@ function FLEXSPI_Init (FlexSPI)
 	var FlexSPI1 = 0x402A8000;
 	var FlexSPI2 = 0x402A4000;
 
+	var DeviceName = GetProjectPartName ();
 	switch (DeviceName)
 	{
 		case "MIMXRT1011":
