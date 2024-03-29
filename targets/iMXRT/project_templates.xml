@@ -25,7 +25,7 @@
 		<property name="linker_scanf_fmt_level" />
 		<property name="linker_scanf_fp_enabled" />
 		<property name="linker_scanf_character_group_matching_enabled" />
-		<property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/$(DeviceName)_registers.xml"/>
+		<property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/$(DeviceName)_Registers.xml"/>
 		<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family)_$(Core).elf" configuration="Flash" />
 		<propertygroup name="CMSIS_CORE" value="Yes" />
 		<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT" />
