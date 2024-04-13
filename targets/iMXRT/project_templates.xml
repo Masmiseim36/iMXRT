@@ -33,6 +33,8 @@
 			<file name="main.c" source="$(StudioDir)/samples/Shared/main.c" />
 		</folder>
 		<folder name="System Files">
+			<property name="default_code_section" value=".init" />
+			<property name="default_const_section" value=".init_rodata" />
 			<file name="$(StudioDir)/source/thumb_crt0.s" expand="no" />
 			<file name="$(TargetsDir)/iMXRT/startup_$(DeviceName).s" expand="no" />
 			<file name="$(TargetsDir)/iMXRT/system_$(DeviceName).h" expand="no" />
