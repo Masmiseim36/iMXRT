@@ -151,7 +151,7 @@ namespace ISSI
 				status_t stat = flexSPI.WriteEnable (0);	// send write-enable 
 				if (stat != kStatus_Success)
 					return LibmemStaus_Error;
-				stat = flexSPI.WriteRegister (1, DummyCycles, static_cast<LUT_CommandOffsets>(Command::WriteConfigNonVolatile_SPI));
+				stat = flexSPI.WriteRegister (1, DummyCycles_Octa, static_cast<LUT_CommandOffsets>(Command::WriteConfigNonVolatile_SPI));
 				if (stat != kStatus_Success)
 					return LibmemStaus_Error;
 

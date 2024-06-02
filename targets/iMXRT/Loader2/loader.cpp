@@ -41,24 +41,24 @@ enum LibmemStatus Init_Libmem (enum MemoryType memoryType, FlexSPI_Helper *base)
 
 uint32_t Compare (const uint32_t *memPointer, uint32_t Comp, size_t size)
 {
-	uint32_t ErrorCounter = 0;
+	uint32_t errorCounter = 0;
 	for (size_t i=0; i<size/sizeof(uint32_t); i++)
 	{
 		if (memPointer[i] != Comp)
-			ErrorCounter++;
+			errorCounter++;
 	}
-	return ErrorCounter;
+	return errorCounter;
 }
 
 uint32_t Compare (const uint32_t *memPointer, const uint32_t *pComp, size_t size)
 {
-	uint32_t ErrorCounter = 0;
+	uint32_t errorCounter = 0;
 	for (size_t i=0; i<size/sizeof(uint32_t); i++)
 	{
 		if (memPointer[i] != pComp[i])
-			ErrorCounter++;
+			errorCounter++;
 	}
-	return ErrorCounter;
+	return errorCounter;
 }
 
 void ExecuteTest (uint32_t *memPointer)
@@ -74,9 +74,9 @@ void ExecuteTest (uint32_t *memPointer)
 
 	// Check if everything is erased
 	libmem_read (reinterpret_cast<uint8_t *>(buffer.data()), reinterpret_cast<const uint8_t *>(memPointer), buffer.size());
-	uint32_t ErrorCounter = Compare (memPointer, 0xFFFFFFFF, erase_size);
-	if (ErrorCounter > 0)
-		DebugPrintf ("Invalid memory-chunks on erase: %d\r\n", ErrorCounter);
+	uint32_t errorCounter = Compare (memPointer, 0xFFFFFFFF, erase_size);
+	if (errorCounter > 0)
+		DebugPrintf ("Invalid memory-chunks on erase: %d\r\n", errorCounter);
 
 	// Initialize the array with test data
 	for (size_t i=0; i<sizeof(buffer)/sizeof(buffer[0]); i++)
@@ -84,9 +84,9 @@ void ExecuteTest (uint32_t *memPointer)
 	res = static_cast<LibmemStatus_t>(libmem_write ((uint8_t *)memPointer, (uint8_t *)&buffer[0], sizeof(buffer)));
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
-	ErrorCounter = Compare (memPointer, &buffer[0], sizeof (buffer));
-	if (ErrorCounter > 0)
-		DebugPrintf ("Invalid memory-chunks on write %d\r\n", ErrorCounter);
+	errorCounter = Compare (memPointer, &buffer[0], sizeof (buffer));
+	if (errorCounter > 0)
+		DebugPrintf ("Invalid memory-chunks on write %d\r\n", errorCounter);
 }
 
 //static constexpr uint32_t FourMegabyteOffset = 4 * 1024 * 1024;

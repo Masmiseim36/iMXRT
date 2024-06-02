@@ -204,25 +204,25 @@ namespace ISSI
 	};
 
 	//// Number of dummy cycles after Read Command for ISSI-Flash
-	//constexpr uint32_t DummyCycles   = 16;	// Compare "Table 6.8 Maximum Clock Frequencies – SDR and DDR Read Starting at 4-Byte Address" in the Datasheet
+	constexpr uint32_t DummyCycles_Octa   = 16;	// Compare "Table 6.8 Maximum Clock Frequencies – SDR and DDR Read Starting at 4-Byte Address" in the Datasheet
 
 	// LUT for ISSI Octa SPI with 32-Bit Addressing
 	constexpr FlexSPI_LUT LUT_OctaSPI_DDR
 	{
 		// (0) Read Array --> compare @Command
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xFD, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 32),
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_RWDS_DDR,   kFLEXSPI_8PAD, DummyCycles, kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 128),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_RWDS_DDR, kFLEXSPI_8PAD, DummyCycles_Octa, kFLEXSPI_Command_READ_DDR, kFLEXSPI_8PAD, 128),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 
 		// (1) Read Status --> compare @Command
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x05, kFLEXSPI_Command_DUMMY_DDR, kFLEXSPI_8PAD,  DummyCycles),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x05, kFLEXSPI_Command_DUMMY_DDR, kFLEXSPI_8PAD,  DummyCycles_Octa),
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 1,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 
 		// (2) Read JEDEC ID --> compare @Command
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x9F, kFLEXSPI_Command_DUMMY_RWDS_DDR,   kFLEXSPI_8PAD, 4),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x9F, kFLEXSPI_Command_DUMMY_RWDS_DDR, kFLEXSPI_8PAD, 4),
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 0x04, kFLEXSPI_Command_STOP,        kFLEXSPI_8PAD, 0x0),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
@@ -253,13 +253,13 @@ namespace ISSI
 
 		// (7) Read Configuration volatile
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x85, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 32),
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD,  DummyCycles,  kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 1),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD,  DummyCycles_Octa,  kFLEXSPI_Command_READ_DDR, kFLEXSPI_8PAD, 1),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 
 		// (8) Read Configuration non-volatile
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xB5, kFLEXSPI_Command_RADDR_DDR,   kFLEXSPI_8PAD, 32),
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, DummyCycles, kFLEXSPI_Command_READ_DDR, kFLEXSPI_8PAD, 8),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, DummyCycles_Octa, kFLEXSPI_Command_READ_DDR, kFLEXSPI_8PAD, 8),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 
@@ -283,7 +283,7 @@ namespace ISSI
 
 		// (12) Read Configuration volatile - SPI
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x85, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 24),
-		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR,   kFLEXSPI_1PAD, DummyCycles,  kFLEXSPI_Command_READ_SDR,    kFLEXSPI_1PAD, 8),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR,   kFLEXSPI_1PAD, DummyCycles_Octa, kFLEXSPI_Command_READ_SDR, kFLEXSPI_1PAD, 8),
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 

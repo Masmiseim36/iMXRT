@@ -157,11 +157,12 @@ namespace Macronix
 		}
 		else if (memType == MemType_QuadSPI)
 		{
-			flexSPI.UpdateLUT (LUT_QuadSPI);
+			flexSPI.UpdateLUT (LUT_SPI);
 
-			uint32_t StateReg{};
-			status_t stat = flexSPI.ReadStatusRegister (0, StateReg);
-			if (stat != kStatus_Success)
+			// read and check the status register
+			uint32_t stateReg{};
+			status_t status = flexSPI.ReadStatusRegister (0, stateReg);
+			if (status != kStatus_Success)
 				return LibmemStaus_Error;
 
 			enum StatusFlags
@@ -171,33 +172,46 @@ namespace Macronix
 				QuadEnable      = 1U << 6U
 			};
 
-			if ((StateReg & QuadEnable) == 0)
+			if ((stateReg & QuadEnable) == 0)
 			{
-				StateReg |= QuadEnable;	// Enable Quad Mode (Status Register)
-	
-				stat = flexSPI.WriteEnable (0);
-				if (stat != kStatus_Success)
+				stateReg |= QuadEnable;	// Enable quad-mode
+
+				status = flexSPI.WriteEnable (0);
+				if (status != kStatus_Success)
 					return LibmemStaus_Error;
 
-				// Write to status register 1 / control register to enable QuadSPI
-				stat = flexSPI.WriteRegister (0U, StateReg, LUT_WriteStatusReg, 2);
-				if (stat != kStatus_Success)
+				// Write to status register and control register to enable QuadSPI
+				status = flexSPI.WriteRegister (0U, stateReg, LUT_WriteStatusReg, 1);
+				if (status != kStatus_Success)
 					return LibmemStaus_Error;
 			}
+
+			// Check the addressing mode
+			const FlexSPI_LUT *lut = &LUT_QuadSPI;
+			if (info.Capacity > Capacity_128MBit)	// We can not address this with 24-Bit
+			{
+				status = flexSPI.SendCommand (0, static_cast<LUT_CommandOffsets>(Command::EnterFourByteMode));
+				if (status != kStatus_Success)
+					return LibmemStaus_Error;
+				lut = &LUT_QuadSPI_32Bit;
+			}
+
+			// set the new Look-Up-Table
+			flexSPI.UpdateLUT (*lut);
 		}
-		else
+		else /* Octa SPI */
 		{
-			uint8_t Status = 0;
+			uint8_t stateReg = 0;
 			const FlexSPI_LUT *lut = nullptr;
 			switch (memType)
 			{
 				case MemType_OctaSPI_DDR:
 					// Enter Octal-Mode with DDR.
-					Status = 2;
+					stateReg = 2;
 					lut = &LUT_OctaSPI_DDR;
 					break;
 				case MemType_OctaSPI:
-					Status = 1;
+					stateReg = 1;
 					lut = &LUT_OctaSPI;
 					break;
 				default:
@@ -212,19 +226,19 @@ namespace Macronix
 			// Switch to OSPI-Mode
 			// Write to status/control register 2 to set dummy cycles
 			// Compare "Dummy Cycle and Frequency Table (MHz)" in the datasheet
-			status_t stat = flexSPI.WriteEnable (0);	// send write-enable 
-			if (stat != kStatus_Success)
+			status_t status = flexSPI.WriteEnable (0);	// send write-enable 
+			if (status != kStatus_Success)
 				return LibmemStaus_Error;
-			stat = flexSPI.WriteRegister (0x0300U, MX25UW::GetDummyCycles(), static_cast<LUT_CommandOffsets>(Command::WriteConfiguration2));
-			if (stat != kStatus_Success)
+			status = flexSPI.WriteRegister (0x0300U, MX25UW::GetDummyCycles(), static_cast<LUT_CommandOffsets>(Command::WriteConfiguration2));
+			if (status != kStatus_Success)
 				return LibmemStaus_Error;
 
 			// Write to status/control register 2 to switch to chosen interface-Type
-			stat = flexSPI.WriteEnable (0);	// send write-enable 
-			if (stat != kStatus_Success)
+			status = flexSPI.WriteEnable (0);	// send write-enable 
+			if (status != kStatus_Success)
 				return LibmemStaus_Error;
-			stat = flexSPI.WriteRegister (0x0U, Status, static_cast<LUT_CommandOffsets>(Command::WriteConfiguration2));
-			if (stat != kStatus_Success)
+			status = flexSPI.WriteRegister (0x0U, stateReg, static_cast<LUT_CommandOffsets>(Command::WriteConfiguration2));
+			if (status != kStatus_Success)
 				return LibmemStaus_Error;
 
 			flexSPI.UpdateLUT (*lut);
