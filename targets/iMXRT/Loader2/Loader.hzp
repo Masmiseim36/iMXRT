@@ -25,7 +25,8 @@
     c_preprocessor_definitions="NDEBUG=1"
     gcc_debugging_level="None"
     gcc_omit_frame_pointer="Yes"
-    gcc_optimization_level="Level 1"
+    gcc_optimization_level="Optimize For Size"
+    link_time_optimization="Yes"
     hidden="Yes" />
   <configuration
     Name="CM7"
@@ -368,7 +369,11 @@
       <file file_name="$(ProjectDir)/../iMXRT_Target.js">
         <configuration Name="Common" file_type="Target Script" />
       </file>
-      <configuration Name="Common" gcc_c_language_standard="gnu11" />
+      <configuration
+        Name="Common"
+        gcc_c_language_standard="gnu11"
+        default_code_section=".init"
+        default_const_section=".rodata_init" />
     </folder>
     <folder Name="drivers">
       <file file_name="fsl_common.c" />
@@ -736,6 +741,5 @@
       <file file_name="$(StudioDir)/include/libmem.h" />
       <file file_name="$(StudioDir)/include/libmem_loader.h" />
     </folder>
-    <configuration Name="600" arm_target_interface_type="SWD" />
   </project>
 </solution>

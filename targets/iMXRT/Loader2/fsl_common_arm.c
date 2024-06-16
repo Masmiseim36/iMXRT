@@ -176,7 +176,7 @@ static void DelayLoop(uint32_t count)
 {
     __ASM volatile("    MOV    R0, %0" : : "r"(count));
     __ASM volatile(
-        "loop:                          \n"
+        "1:                          \n"
 #if defined(__GNUC__) && !defined(__ARMCC_VERSION)
         "    SUB    R0, R0, #1          \n"
 #else
@@ -184,7 +184,7 @@ static void DelayLoop(uint32_t count)
 #endif
         "    CMP    R0, #0              \n"
 
-        "    BNE    loop                \n"
+        "    BNE    1b                  \n"
         :
         :
         : "r0");

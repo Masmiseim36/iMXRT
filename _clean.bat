@@ -39,6 +39,7 @@ del /f /q *.map
 del /f /q *.ind
 del /f /q *.ld
 del /f /q *_Debug.elf
+del /f /q *_lto.txt
 cd ..
 cd ..
 cd ..
