@@ -3,7 +3,6 @@
 	<group title="System Solutions">
 		<file title="iMXRT Loader Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader.hzp"/>
 		<file title="iMXRT Loader2 Solution" file_name="$(TargetsDir)/iMXRT/Loader2/Loader.hzp"/>
-		<file title="iMXRT Samples" file_name="$(SamplesDir)/iMXRT/iMXRT.hzp"/>
 	</group>
 	<targets>
 		<category name="iMXRT1011">
@@ -26,9 +25,19 @@
 			<cpu name="MIMXRT1024DAG5A"/>
 			<cpu name="MIMXRT1024DAG5B"/>
 		</category>
+		<category name="iMXRT1040">
+			<cpu name="MIMXRT1041XFP5B"/>
+			<cpu name="MIMXRT1041XJM5B"/>
+			<cpu name="MIMXRT1041DFP6B"/>
+			<cpu name="MIMXRT1041DJM6B"/>
+			<cpu name="MIMXRT1042XFP5B"/>
+			<cpu name="MIMXRT1042XJM5B"/>
+			<cpu name="MIMXRT1042DFP6B"/>
+			<cpu name="MIMXRT1042DJM6B"/>
+		</category>
 		<category name="iMXRT1050">
 			<cpu name="MIMXRT1051CVL5A"/>
-		<cpu name="MIMXRT1051CVL5B"/>
+			<cpu name="MIMXRT1051CVL5B"/>
 			<cpu name="MIMXRT1051CVJ5B"/>
 			<cpu name="MIMXRT1051DVL6A"/>
 			<cpu name="MIMXRT1051DVL6B"/>
@@ -55,6 +64,9 @@
 		<category name="iMXRT1064">
 			<cpu name="MIMXRT1064CVL5A"/>
 			<cpu name="MIMXRT1064DVL6A"/>
+			<cpu name="MIMXRT1064DVL6B"/>
+			<cpu name="MIMXRT1064DVJ6A"/>
+			<cpu name="MIMXRT1064DVJ6B"/>
 		</category>
 		<category name="iMXRT1160">
 			<cpu name="MIMXRT1165CVM5A"/>
@@ -85,6 +97,17 @@
 			<cpu name="MIMXRT1176AVM8A_cm4"/>
 			<cpu name="MIMXRT1176CVM8A_cm4"/>
 			<cpu name="MIMXRT1176DVMAA_cm4"/>
+		</category>
+		<category name="iMXRT1180">
+			<cpu name="MIMXRT1181XVP2B"/>
+			<cpu name="MIMXRT1181CVP2B"/>
+			<cpu name="MIMXRT1182XVP2B"/>
+			<cpu name="MIMXRT1182CVP2B"/>
+			<cpu name="MIMXRT1187XVM8B"/>
+			<cpu name="MIMXRT1187CVM8B"/>
+			<cpu name="MIMXRT1187AVM8B"/>
+			<cpu name="MIMXRT1189XVM8B"/>
+			<cpu name="MIMXRT1189CVM8B"/>
 		</category>
 	</targets>
   <documentation>
