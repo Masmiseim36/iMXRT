@@ -39,18 +39,19 @@ The following Controllers are supported:
 
 ## Build and Install
 
-The Package is provided unpacked and has to be packed before it can be installed. For this open the Project File located in the root of the project with the Crossworks IDE (File imxrt.hzp). Then “compile" it like a normal project (Build -> Build iMXRT). This will create the CPU-Support package in the root-Folder of the project (-> iMXRT.hzq).
-To install the new created package, go to Tools -> Packages -> Manually Install Packages and choose the new File.
+The Package is provided unpacked and has to be packed before it can be installed. For this open the Project File located in the root of the project with the Crossworks IDE (File [imxrtext.hzp](imxrtext.hzp)). Then “compile" it like a normal project (Build -> Build iMXRT). This will create the CPU-Support package in the root-Folder of the project (-> iMXRText.hzq).
+To install the new created package, go to Tools -> Packages -> Manually Install Packages and choose the new File.  
 ![Package Manager](./doc/Menu_PackageManagerManual.png)  
-:grey_exclamation: Uninstall a possibly already existing iMXRT-CPU-Support package before installing the new one. The Folder Structure and the predefined macros are different, those packages are not compatible to each other. :grey_exclamation:
+Although the support package is based on the original Rowley package, it is no longer compatible with it due to changes in the internal structure. However, both packages can be installed in parallel and do not affect each other.  
+Existing projects must either be newly created in order to use this CPU support package, or can be rewritten if you have the appropriate know-how.
 
 ## The Loader
 
 ### How it works
 
-The iMXRT is flashless, therefore you need to add external Flash to run the code from. You get Flash memory with different Interfaces (SPI, QSPI, OSPI, HyperInteface) and these interfaces speak often different dialects. To get access to those memories you need a software which configures the memory interface according the used Memory. This is done by the Loader.
-The Loader is transmitted by the development Environment to the Internal-RAM of the controller and is executed there like a ‘normal’ application. After the Loader has initialized the interface, the Program Code is transmitted via the JTAG/SWD interface to the unused areas of the internal RAM and then written to the Flash memory by the Loader.
-The Development-Environment instructs the Loader which interface should be used. This information is passed with the second parameter of the main function and is loaded via JTAG/SWD before executing the Loader
+The iMXRT is flashless, therefore you need to add external flash to run the code from. There are flash memories with different interfaces (SPI, QSPI, OSPI, HyperInteface) with different protocol dialects often used. To get access to those memories you need a software which configures the memory interface according the used Memory. This is done by the Loader.
+The Loader is transferred by the development Environment to the Internal-RAM of the controller and is executed there like a ‘normal’ application. After the Loader has initialized the interface, the program code is transferred via the JTAG/SWD interface to the unused areas of the internal RAM and then written to the flash memory by the loader.
+The Development-Environment tells the Loader which interface should be used. This information is passed with the second parameter of the main function and is loaded via JTAG/SWD before executing the Loader
 The following options are supported:
 
 ```C

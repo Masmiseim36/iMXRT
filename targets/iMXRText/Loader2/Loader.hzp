@@ -344,7 +344,7 @@
       arm_target_loader_default_loader=""
       arm_target_loader_reset_after_download="No"
       batch_build_configurations="MIMXRT500_Release;MIMXRT600_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1040_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release;MIMXRT1180_CM7_Release;MIMXRT1180_CM33_Release"
-      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
+      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRText;$(PackagesDir)/libraries/libmem_drivers"
       c_user_include_directories=".;./.."
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
       debug_startup_completion_point="main"
