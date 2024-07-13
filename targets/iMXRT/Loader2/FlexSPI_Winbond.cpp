@@ -132,7 +132,7 @@ namespace Winbond
 			default:
 				return LibmemStaus_Error;
 		}
-		DebugPrint ("Found Winbond (Nexcom) Flash\r\n");
+		DebugPrintf ("Found Winbond (Nexcom) Flash with %d KByte\r\n", CalculateCapacity_KBytes(info.Capacity));
 		if (info.Capacity <= Capacity_128MBit)
 			flexSPI.UpdateLUT (Winbond::LUT_QuadSPI_24Bit);
 		else

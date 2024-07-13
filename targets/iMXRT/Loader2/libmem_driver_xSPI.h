@@ -22,11 +22,9 @@ OF SUCH DAMAGE. */
 #ifndef _LIBMEM_DRIVER_XSPI_H_
 #define _LIBMEM_DRIVER_XSPI_H_
 
-#include "libmem.h"
 #include "libmem_Tools.h"
 #include "fsl_device_registers.h"
 #include "fsl_flexspi.h"
-#include <array>
 
 enum LUT_CommandOffsets
 {
@@ -78,6 +76,14 @@ public:
 			if (this->GetBaseAddr () == FLEXSPI1_BASE)
 				return reinterpret_cast<uint8_t *>(FlexSPI1_ALIAS_BASE);
 		#endif
+		#if defined FlexSPI1_AMBA_BASE_NS
+			if (this->GetBaseAddr () == FLEXSPI1_BASE)
+				return reinterpret_cast<uint8_t *>(FlexSPI1_AMBA_BASE_NS);
+		#endif
+		#if defined FlexSPI2_AMBA_BASE_NS
+			if (this->GetBaseAddr () == FLEXSPI2_BASE)
+				return reinterpret_cast<uint8_t *>(FlexSPI2_AMBA_BASE_NS);
+		#endif
 
 		return nullptr;
 	}
@@ -90,7 +96,7 @@ public:
 		kFLEXSPI_PortA1;
 	#endif
 
-	status_t WriteRegister (uint32_t Address, uint32_t value, enum LUT_CommandOffsets cmd, size_t size  = 1)
+	status_t WriteRegister (uint32_t Address, uint32_t value, LUT_CommandOffsets cmd, size_t size  = 1)
 	{
 		flexspi_transfer_t flashXfer
 		{
@@ -105,7 +111,7 @@ public:
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
 	}
 
-	status_t ReadRegister (uint32_t Address, uint32_t &value, enum LUT_CommandOffsets cmd)
+	status_t ReadRegister (uint32_t Address, uint32_t &value, LUT_CommandOffsets cmd)
 	{
 		flexspi_transfer_t flashXfer
 		{
@@ -135,7 +141,7 @@ public:
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
 	}
 
-	status_t SendCommand (uint32_t Address, enum LUT_CommandOffsets cmd)
+	status_t SendCommand (uint32_t Address, LUT_CommandOffsets cmd)
 	{
 		flexspi_transfer_t flashXfer
 		{
@@ -155,7 +161,7 @@ public:
 	\param base The Flex-SPI-base to use
 	\param info The read Device informations from the flash memory
 	\return status_t Status of the Operation - kStatus_Success when successfully */
-	status_t ReadJEDEC (struct DeviceInfo *info)
+	status_t ReadJEDEC (DeviceInfo *info)
 	{
 		uint8_t Identification[16] {0U};
 

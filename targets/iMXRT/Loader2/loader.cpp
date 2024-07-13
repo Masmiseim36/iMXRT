@@ -194,16 +194,19 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 
 	// Start loader
 	DebugPrint ("Start RPC loader\r\n");
+	#pragma GCC diagnostic push
+	#pragma GCC diagnostic ignored "-Warray-bounds"
 	#if defined INITIALIZE_TCM_SECTIONS
 		//extern uint8_t __DTCM_segment_start__;
-		extern uint8_t __DTCM_segment_used_end__;
-		extern uint8_t __DTCM_segment_end__;
-		res = static_cast<LibmemStatus>(libmem_rpc_loader_start (&__DTCM_segment_used_end__, &__DTCM_segment_end__ - 1));
+		extern uint8_t __DTCM_segment_used_end__[];
+		extern uint8_t __DTCM_segment_end__[];
+		res = static_cast<LibmemStatus>(libmem_rpc_loader_start (__DTCM_segment_used_end__, __DTCM_segment_end__ - 1));
 	#else
-		extern uint8_t __SRAM_data_segment_used_end__;
-		extern uint8_t __SRAM_data_segment_end__;
-		res = static_cast<LibmemStatus>(libmem_rpc_loader_start (&__SRAM_data_segment_used_end__, &__SRAM_data_segment_end__ - 1));
+		extern uint8_t __SRAM_data_segment_used_end__[];
+		extern uint8_t __SRAM_data_segment_end__[];
+		res = static_cast<LibmemStatus>(libmem_rpc_loader_start (__SRAM_data_segment_used_end__, __SRAM_data_segment_end__ - 1));
 	#endif
+	#pragma GCC diagnostic pop
 
 	// Terminate loader and return error String if an Error occurred
 	if (res == LIBMEM_STATUS_SUCCESS)

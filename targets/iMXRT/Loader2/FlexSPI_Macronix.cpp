@@ -67,7 +67,7 @@ namespace Macronix
 
 
 	static MemoryType tryDetectMemoryType = MemType_Invalid;
-	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &info)
+	status_t TryDetect (FlexSPI_Helper &flexSPI, DeviceInfo &info)
 	{
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
 
@@ -117,13 +117,13 @@ namespace Macronix
 		uint32_t value[32];
 		flexspi_transfer_t flashXfer
 		{
-			0,					// deviceAddress	- Operation device address.
-			kFLEXSPI_PortB1,						// port				- Operation port
+			0,							// deviceAddress	- Operation device address.
+			kFLEXSPI_PortB1,			// port				- Operation port
 			kFLEXSPI_Read,				// cmdType			- Execution command type.
 			static_cast<uint8_t>(7),	// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
 			value,						// data				- Data buffer.
-			sizeof(value)							// dataSize			- Data size in bytes.
+			sizeof(value)				// dataSize			- Data size in bytes.
 		};
 		FLEXSPI_TransferBlocking (&flexSPI, &flashXfer);
 
@@ -141,7 +141,7 @@ namespace Macronix
 		return value[0];
 	}
 
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, DeviceInfo &info, [[maybe_unused]] flexspi_config_t &config,  [[maybe_unused]]flexspi_device_config_t &DeviceConfig)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, DeviceInfo &info, [[maybe_unused]] flexspi_config_t &config,  [[maybe_unused]]flexspi_device_config_t &deviceConfig)
 	{
 		if (memType == MemType_Invalid || memType == MemType_Hyperflash)
 			return LibmemStaus_Error;

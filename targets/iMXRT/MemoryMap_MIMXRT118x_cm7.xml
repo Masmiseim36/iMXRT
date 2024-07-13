@@ -1,10 +1,10 @@
 <!DOCTYPE Board_Memory_Definition_File>
 <Root name="iMXRT" >
-	<MemorySegment name="FlexSPI"         start="$(FlexSPISTART:0x28000000)"        size="$(FlexSPISIZE:0x04000000)"             access="ReadOnly"/>
-	<MemorySegment name="FlexSPI_Secure"  start="$(FlexSPISecureSTART:0x38000000)"  size="$(FlexSPISecureSIZE:0x04000000)"       access="ReadOnly"/>
+	<MemorySegment name="FlexSPI_NS"      start="$(FlexSPISTART_NS:0x38000000)"     size="$(FlexSPISIZE_NS:0x04000000)"       access="ReadOnly"/> <!-- Not Secure -->
+	<MemorySegment name="FlexSPI"         start="$(FlexSPISTART:0x28000000)"        size="$(FlexSPISIZE:0x04000000)"          access="ReadOnly"/> <!-- Secure -->
 
-	<MemorySegment name="FlexSPI2"        start="$(FlexSPI2START:0x04000000)"       size="$(FlexSPI2SIZE:0x04000000)"            access="ReadOnly"/>
-	<MemorySegment name="FlexSPI2_Secure" start="$(FlexSPI2SecureSTART:0x14000000)" size="$(FlexSPI2SecureSIZE:0x04000000)"      access="ReadOnly"/>
+	<MemorySegment name="FlexSPI2_NS"     start="$(FlexSPI2START_NS:0x14000000)"    size="$(FlexSPI2SIZE_NS:0x04000000)"      access="ReadOnly"/> <!-- Not Secure -->
+	<MemorySegment name="FlexSPI2"        start="$(FlexSPI2START:0x04000000)"       size="$(FlexSPI2SIZE:0x04000000)"         access="ReadOnly"/> <!-- Secure -->
 
 	<MemorySegment name="OCRAM"           start="$(OCRAMSTART:0x20480000)"          size="$(OCRAMSIZE:0x000C0000)"/>     <!-- OCRAM 1+2 combined -->
 	<MemorySegment name="OCRAM1"          start="$(OCRAM1START:0x20480000)"         size="$(OCRAM1SIZE:0x00080000)"/>    <!-- OCRAM1 -->

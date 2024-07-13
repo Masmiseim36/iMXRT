@@ -38,7 +38,7 @@ OF SUCH DAMAGE. */
 #include "FlexSPI_ISSI.h"
 
 
-static flexspi_device_config_t DeviceConfig
+static flexspi_device_config_t deviceconfig
 {
 	.flexspiRootClk       = 0, // SPI root clock (will be set up later)
 	.isSck2Enabled        = false,
@@ -136,7 +136,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 		uint32_t ClockHz = CLOCK_GetFlexspiClkFreq ();
 		//uint32_t SourceClock_Hz = ClockHz * ClockDiv;
 	#elif (defined(MIMXRT533S_SERIES)  || defined(MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES))
-		constexpr uint32_t src = 2;	// Use AUX0_PLL as clock source for the FlexSPI
+		constexpr uint32_t src {2};	// Use AUX0_PLL as clock source for the FlexSPI
 		uint32_t ClockDiv {4};		// with a divider of four
 		uint32_t ClockHz  {};
 		if (base == FLEXSPI0 && 
@@ -149,7 +149,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			#endif
 
 //			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
-			CLKCTL0->FLEXSPI0FCLKSEL  = CLKCTL0_FLEXSPI0FCLKSEL_SEL(src);			// Update flexspi clock.
+			CLKCTL0->FLEXSPI0FCLKSEL  = CLKCTL0_FLEXSPI0FCLKSEL_SEL(src);		// Update flexspi clock.
 			CLKCTL0->FLEXSPI0FCLKDIV |= CLKCTL0_FLEXSPI0FCLKDIV_RESET_MASK;		// Reset the divider counter
 			CLKCTL0->FLEXSPI0FCLKDIV  = CLKCTL0_FLEXSPI0FCLKDIV_DIV(ClockDiv - 1);
 			while ((CLKCTL0->FLEXSPI0FCLKDIV) & CLKCTL0_FLEXSPI0FCLKDIV_REQFLAG_MASK)
@@ -167,7 +167,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			#endif
 
 //			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
-			CLKCTL0->FLEXSPI1FCLKSEL  = CLKCTL0_FLEXSPI1FCLKSEL_SEL(src);			// Update flexspi clock.
+			CLKCTL0->FLEXSPI1FCLKSEL  = CLKCTL0_FLEXSPI1FCLKSEL_SEL(src);		// Update flexspi clock.
 			CLKCTL0->FLEXSPI1FCLKDIV |= CLKCTL0_FLEXSPI1FCLKDIV_RESET_MASK;		// Reset the divider counter
 			CLKCTL0->FLEXSPI1FCLKDIV  = CLKCTL0_FLEXSPI1FCLKDIV_DIV(ClockDiv - 1);
 			while ((CLKCTL0->FLEXSPI1FCLKDIV) & CLKCTL0_FLEXSPI1FCLKDIV_REQFLAG_MASK)
@@ -175,14 +175,13 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 //			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
 			ClockHz = CLOCK_GetFlexspiClkFreq (1);
 		}
-		//uint32_t SourceClock_Hz = ClockHz * ClockDiv;
 	#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
 		   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
 		   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
 		const clock_usb_pll_config_t configUsbPll = {.loopDivider = 0U, .src=0};
 		CLOCK_InitUsb1Pll (&configUsbPll);		// PLL3 --> USB1-PLL
 		CLOCK_InitUsb1Pfd (kCLOCK_Pfd0, 18);	// Set PLL3 PFD0 clock 480MHZ (480*18/24). PLL3 --> USB1-PLL --> PLL480
-		uint32_t SourceClock_Hz = CLOCK_GetUsb1PfdFreq (kCLOCK_Pfd0);
+		const uint32_t SourceClock_Hz = CLOCK_GetUsb1PfdFreq (kCLOCK_Pfd0);
 
 		uint32_t ClockDiv = 6; // flexspi clock divide by six --> 80Mz.
 		uint32_t ClockHz = SourceClock_Hz / ClockDiv;
@@ -256,7 +255,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	#else
 		#error "unknon controller family"
 	#endif
-	DeviceConfig.flexspiRootClk = ClockHz;
+	deviceconfig.flexspiRootClk = ClockHz;
 
 	// Get FLEXSPI default settings and configure the FlexSPI.
 	flexspi_config_t config {};
@@ -275,7 +274,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	config.rxSampleClock                  = kFLEXSPI_ReadSampleClkLoopbackInternally;
 
 	FLEXSPI_Init           (base, &config);
-	FLEXSPI_SetFlashConfig (base, &DeviceConfig, FlexSPI_Helper::port);   // Configure flash settings according to serial flash feature.
+	FLEXSPI_SetFlashConfig (base, &deviceconfig, FlexSPI_Helper::port);   // Configure flash settings according to serial flash feature.
 	FLEXSPI_UpdateLUT      (base, 0, &Generic::LUT_SPI.front(), Generic::LUT_SPI.size()); // Update LUT table
 	FLEXSPI_SoftwareReset  (base);                                        // Do software reset.
 
@@ -307,16 +306,16 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 	{
 		case ManufactureID_AdestoTechnologies:
 		case ManufactureID_Atmel:		// Renesas
-			res = Adesto::Initialize (*base, MemType, info, config, DeviceConfig);
+			res = Adesto::Initialize (*base, MemType, info, config, deviceconfig);
 			break;
 		case ManufactureID_Nexcom:		// Winbond
-			res = Winbond::Initialize (*base, MemType, info, config, DeviceConfig);
+			res = Winbond::Initialize (*base, MemType, info, config, deviceconfig);
 			break;
 		case ManufactureID_Macronix:	// Macronix
-			res = Macronix::Initialize (*base, MemType, info, config, DeviceConfig);
+			res = Macronix::Initialize (*base, MemType, info, config, deviceconfig);
 			break;
 		case ManufactureID_Lucent:		// ISSI
-			res = ISSI::Initialize (*base, MemType, info, config, DeviceConfig);
+			res = ISSI::Initialize (*base, MemType, info, config, deviceconfig);
 			break;
 		default:
 			DebugPrint ("unknown Flash-memory\r\n");
@@ -333,35 +332,35 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			ClockDiv = 2;
 			if (base == FLEXSPI0)
 			{
-				CLKCTL0->FLEXSPI0FCLKDIV = CLKCTL0_FLEXSPI0FCLKDIV_DIV(ClockDiv - 1);
+				CLKCTL0->FLEXSPI0FCLKDIV = CLKCTL0_FLEXSPI0FCLKDIV_DIV (ClockDiv - 1);
 				while ((CLKCTL0->FLEXSPI0FCLKDIV) & CLKCTL0_FLEXSPI0FCLKDIV_REQFLAG_MASK)
 					;
-				DeviceConfig.flexspiRootClk = CLOCK_GetFlexspiClkFreq (0);
+				deviceconfig.flexspiRootClk = CLOCK_GetFlexspiClkFreq (0);
 			}
 			else if (base == FLEXSPI1)
 			{
-				CLKCTL0->FLEXSPI1FCLKDIV = CLKCTL0_FLEXSPI1FCLKDIV_DIV(ClockDiv - 1);
+				CLKCTL0->FLEXSPI1FCLKDIV = CLKCTL0_FLEXSPI1FCLKDIV_DIV (ClockDiv - 1);
 				while ((CLKCTL0->FLEXSPI1FCLKDIV) & CLKCTL0_FLEXSPI1FCLKDIV_REQFLAG_MASK)
 					;
-				DeviceConfig.flexspiRootClk = CLOCK_GetFlexspiClkFreq (1);
+				deviceconfig.flexspiRootClk = CLOCK_GetFlexspiClkFreq (1);
 			}
 			else
 				return LibmemStaus_Error;
 			config.rxSampleClock = kFLEXSPI_ReadSampleClkLoopbackInternally; // To achieve high speeds - always use DQS
 		#elif (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES))
 			ClockDiv = 9;
-			CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV(ClockDiv - 1);
+			CLKCTL0->FLEXSPIFCLKDIV = CLKCTL0_FLEXSPIFCLKDIV_DIV (ClockDiv - 1);
 			while ((CLKCTL0->FLEXSPIFCLKDIV) & CLKCTL0_FLEXSPIFCLKDIV_REQFLAG_MASK)
 				;
-			DeviceConfig.flexspiRootClk = CLOCK_GetFlexspiClkFreq ();
+			deviceconfig.flexspiRootClk = CLOCK_GetFlexspiClkFreq ();
 			config.rxSampleClock = kFLEXSPI_ReadSampleClkLoopbackInternally; // To achieve high speeds - always use DQS
 		#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
 			   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
 			   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
 			ClockDiv = 2;
-			CLOCK_SetDiv (FlexSPIDiv, ClockDiv-1);	// flexspi clock divide by two --> 240 Mz.
-			DeviceConfig.flexspiRootClk = SourceClock_Hz / ClockDiv;
-			DeviceConfig.flexspiRootClk = ClockHz;
+			CLOCK_SetDiv (FlexSPIDiv, ClockDiv-1);	// flexspi clock divide by two --> 240 MHz.
+			deviceconfig.flexspiRootClk = SourceClock_Hz / ClockDiv;
+			deviceconfig.flexspiRootClk = ClockHz;
 		#elif (defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
 			   defined(MIMXRT1171_SERIES)     || defined(MIMXRT1172_SERIES)     || \
 			   defined(MIMXRT1173_cm7_SERIES) || defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1176_cm7_SERIES) || \
@@ -370,7 +369,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			CLOCK_SetRootClockMux (FlexSPIClock, 5); // ClockSource_SysPll2 --> 528 MHz
 			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 528 MHz / 2 = ~264 MHz
 			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
-			DeviceConfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
+			deviceconfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
 		#elif (defined(MIMXRT1181_SERIES)     || defined(MIMXRT1182_SERIES)     || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1187_cm33_SERIES) ||\
 			   defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
 			switch (reinterpret_cast<uint32_t>(base))
@@ -396,11 +395,11 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 
 	// Use the size information from the JEDEC-information to configure the interface
 	uint32_t FlashSize = CalculateCapacity_KBytes (info.Capacity);
-	DeviceConfig.flashSize = FlashSize;
+	deviceconfig.flashSize = FlashSize;
 	geometry[0].count = FlashSize / (4096 / 1024);
 	FlashSize *= 1024;	// Convert kBytes to bytes
 
-	FLEXSPI_SetFlashConfig (base, &DeviceConfig, FlexSPI_Helper::port);	// Configure flash settings according to serial flash feature.
+	FLEXSPI_SetFlashConfig (base, &deviceconfig, FlexSPI_Helper::port);	// Configure flash settings according to serial flash feature.
 
 	FLEXSPI_SoftwareReset (base);
 	status_t stat = base->WaitBusBusy ();
@@ -429,7 +428,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 
 
 /*! EraseChip:
-Erase the whole-Flash-memory
+\brief Erase the whole-Flash-memory
 \param base The FlexSPI-Interface where the Flash is located which should be erased
 \return static status_t Status of the Operation - kStatus_Success when successfully */
 [[maybe_unused]] static status_t EraseChip (FlexSPI_Helper *base)
@@ -448,7 +447,7 @@ Erase the whole-Flash-memory
 }
 
 /*! EraseSector:
-Erase a sector of the Flash-Memory
+\brief Erase a sector of the Flash-Memory
 \param h Handle to the Flash-Driver
 \param si Information about the sector which should be erased
 \return static int LibmemStaus_Success when the erase operation was successfully, otherwise LibmemStaus_Error */
@@ -483,7 +482,7 @@ static int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 }
 
 /*! ProgramPage:
-Write Data to a Flash-Page
+\brief Write Data to a Flash-Page
 \param h Handle to the Flash-Driver
 \param Destination Address to write the Data to. This Address is in the Address-Range of the Controller
 \param Source Address of the Array with the data to write
@@ -532,7 +531,7 @@ static int ProgramPage (libmem_driver_handle_t *h, uint8_t *dest_addr, const uin
 }
 
 /*! libmem_ProgramPage:
-The LIBMEM driver's write function.
+\brief The LIBMEM driver's write function.
 \param h    A pointer to the handle of the LIBMEM driver.
 \param dest A pointer to the memory address in memory range handled by driver to write data to.
 \param src  pointer to the memory address to read data from.
@@ -546,7 +545,7 @@ static int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const u
 }
 
 /*! libmem_EraseSector:
-The LIBMEM driver's erase function
+\brief The LIBMEM driver's erase function
 \param h           A pointer to the handle of the LIBMEM driver.
 \param start       A pointer to the initial memory address in memory range handled by driver to erase.
 \param size        The number of bytes to erase.
@@ -565,7 +564,7 @@ static int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t
 }
 
 /*! libmem_Flush:
-The LIBMEM driver's flush function.
+\brief The LIBMEM driver's flush function.
 \param h    A pointer to the handle of the LIBMEM driver. 
 \return int The LIBMEM status result */
 static int libmem_Flush (libmem_driver_handle_t *h)
@@ -576,7 +575,7 @@ static int libmem_Flush (libmem_driver_handle_t *h)
 }
 
 /*! libmem_Read:
-The LIBMEM driver's read extended function.
+\brief The LIBMEM driver's read extended function.
 \param h    A pointer to the handle of the LIBMEM driver.
 \param dest A pointer to the initial memory address to write data to.
 \param src  A pointer to the initial memory address in the memory range handled by the driver to read data from.
@@ -610,7 +609,7 @@ static int libmem_Read (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t 
 
 
 /*! libmem_CRC32:
-The LIBMEM driver's crc32 extended function.
+\brief The LIBMEM driver's crc32 extended function.
 \param h     A pointer to the handle of the LIBMEM driver.
 \param start A pointer to the start of the address range.
 \param size  The size of the address range in bytes.
@@ -636,5 +635,4 @@ static uint32_t libmem_CRC32 ([[maybe_unused]]libmem_driver_handle_t *h, const u
 	}
 	return crc;
 }
-
 

@@ -49,8 +49,7 @@ enum FlashCommands
 	LUT_EraseChip   = 12
 };
 
-/*! deviceconfig:  */
-static flexspi_device_config_t deviceconfig =
+static flexspi_device_config_t deviceconfig
 {
 	.flexspiRootClk       = 42 * 1000 * 1000, // 42MHZ SPI serial clock
 	.isSck2Enabled        = false,
@@ -168,7 +167,7 @@ constexpr FlexSPI_LUT LUT_HyperFlash =
 
 
 // Define the structure of the Flash (Sector Count and Size)
-static const libmem_geometry_t geometry[] =
+static const libmem_geometry_t geometry[]
 { // count - size
 	{100, 0x40000},
 	{0, 0} 
@@ -187,7 +186,7 @@ static uint32_t libmem_CRC32  (libmem_driver_handle_t *h, const uint8_t *start, 
 
 
 /*! DriverFunctions:  */
-static const libmem_driver_functions_t DriverFunctions =
+static const libmem_driver_functions_t DriverFunctions
 {
 	libmem_ProgramPage,
 	nullptr,
@@ -198,7 +197,7 @@ static const libmem_driver_functions_t DriverFunctions =
 };
 
 /*! DriverFunctionsExt:  */
-static const libmem_ext_driver_functions_t DriverFunctions_Extended =
+static const libmem_ext_driver_functions_t DriverFunctions_Extended
 {
 	nullptr,
 	libmem_Read,
@@ -208,15 +207,21 @@ static const libmem_ext_driver_functions_t DriverFunctions_Extended =
 
 
 /*! Libmem_InitializeDriver_Hyperflash:
-\brief Initialize the FlexSPI Interface for using as a SPI-Interface
+\brief Initialize the FlexSPI interface for using as a SPI-interface
 \param FlashHandle The handle which should be initialized
 \param base The Flex-SPI-base to use
 \return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
 LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 {
 	#if (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES))
-		constexpr uint32_t src = 2;	// Use AUX0_PLL as clock source for the FlexSPI
-		uint32_t ClockDiv = 4;		// with a divider of four
+		// Clock Source
+		// 0 --> Main Clock.
+		// 1 --> Main PLL Clock (main_pll_clk).
+		// 2 --> AUX0 PLL clock (aux0_pll_clk).
+		// 3 --> FFRO Clock.
+		// 4 --> AUX1 PLL clock (aux1_pll_clk).
+		constexpr uint32_t src = 1;	// Use AUX0_PLL as clock source for the FlexSPI
+		uint32_t ClockDiv = 9;		// with a divider of four
 		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (ClockDiv - 1))
 		{
 			#if !defined(FSL_SDK_DRIVER_QUICK_ACCESS_ENABLE)
@@ -233,9 +238,12 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 				;
 //			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
 		}
+		uint32_t ClockHz = CLOCK_GetFlexspiClkFreq ();
+		//uint32_t SourceClock_Hz = ClockHz * ClockDiv;
 	#elif (defined(MIMXRT533S_SERIES)  || defined(MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES))
-		constexpr uint32_t src = 2;	// Use AUX0_PLL as clock source for the FlexSPI
-		uint32_t ClockDiv = 4;		// with a divider of four
+		constexpr uint32_t src {2};	// Use AUX0_PLL as clock source for the FlexSPI
+		uint32_t ClockDiv {4};		// with a divider of four
+		uint32_t ClockHz  {};
 		if (base == FLEXSPI0 && 
 			(CLKCTL0->FLEXSPI0FCLKSEL != CLKCTL0_FLEXSPI0FCLKSEL_SEL(src) || (CLKCTL0->FLEXSPI0FCLKDIV & CLKCTL0_FLEXSPI0FCLKDIV_DIV_MASK) != (ClockDiv - 1)))
 		{
@@ -246,12 +254,13 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 			#endif
 
 //			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
-			CLKCTL0->FLEXSPI0FCLKSEL  = CLKCTL0_FLEXSPI0FCLKSEL_SEL(src);			// Update flexspi clock.
+			CLKCTL0->FLEXSPI0FCLKSEL  = CLKCTL0_FLEXSPI0FCLKSEL_SEL(src);		// Update flexspi clock.
 			CLKCTL0->FLEXSPI0FCLKDIV |= CLKCTL0_FLEXSPI0FCLKDIV_RESET_MASK;		// Reset the divider counter
 			CLKCTL0->FLEXSPI0FCLKDIV  = CLKCTL0_FLEXSPI0FCLKDIV_DIV(ClockDiv - 1);
 			while ((CLKCTL0->FLEXSPI0FCLKDIV) & CLKCTL0_FLEXSPI0FCLKDIV_REQFLAG_MASK)
 				;
 //			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
+			ClockHz = CLOCK_GetFlexspiClkFreq (0);
 		}
 		else if (base == FLEXSPI1 &&
 			(CLKCTL0->FLEXSPI1FCLKSEL != CLKCTL0_FLEXSPI1FCLKSEL_SEL(src) || (CLKCTL0->FLEXSPI1FCLKDIV & CLKCTL0_FLEXSPI1FCLKDIV_DIV_MASK) != (ClockDiv - 1)))
@@ -263,21 +272,24 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 			#endif
 
 //			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
-			CLKCTL0->FLEXSPI1FCLKSEL  = CLKCTL0_FLEXSPI1FCLKSEL_SEL(src);			// Update flexspi clock.
+			CLKCTL0->FLEXSPI1FCLKSEL  = CLKCTL0_FLEXSPI1FCLKSEL_SEL(src);		// Update flexspi clock.
 			CLKCTL0->FLEXSPI1FCLKDIV |= CLKCTL0_FLEXSPI1FCLKDIV_RESET_MASK;		// Reset the divider counter
 			CLKCTL0->FLEXSPI1FCLKDIV  = CLKCTL0_FLEXSPI1FCLKDIV_DIV(ClockDiv - 1);
 			while ((CLKCTL0->FLEXSPI1FCLKDIV) & CLKCTL0_FLEXSPI1FCLKDIV_REQFLAG_MASK)
 				;
 //			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
+			ClockHz = CLOCK_GetFlexspiClkFreq (1);
 		}
 	#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
 		   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
 		   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
-		const clock_usb_pll_config_t g_ccmConfigUsbPll = {.loopDivider = 0U, .src=0};
-		CLOCK_InitUsb1Pll (&g_ccmConfigUsbPll);	// PLL3 --> USB1-PLL
+		const clock_usb_pll_config_t configUsbPll = {.loopDivider = 0U, .src=0};
+		CLOCK_InitUsb1Pll (&configUsbPll);		// PLL3 --> USB1-PLL
 		CLOCK_InitUsb1Pfd (kCLOCK_Pfd0, 26);	// Set PLL3 PFD0 clock 520MHZ (480*26/24). PLL3 --> USB1-PLL --> PLL480
+		const uint32_t SourceClock_Hz = CLOCK_GetUsb1PfdFreq (kCLOCK_Pfd0);
 
-		const uint32_t ClockDiv = 4; // flexspi clock divide by two --> 260 Mz.
+		const uint32_t ClockDiv = 4; // flexspi clock divide by two --> 130 Mz.
+		uint32_t ClockHz = SourceClock_Hz / ClockDiv;
 		clock_div_t FlexSPIDiv = kCLOCK_FlexspiDiv;
 		switch (reinterpret_cast<uint32_t>(base))
 		{
@@ -322,31 +334,33 @@ LibmemStatus_t Libmem_InitializeDriver_Hyperflash (FLEXSPI_Type *base)
 				return LibmemStaus_InvalidDevice;
 		}
 		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_Off);	// The module clock must be disabled during clock switch in order to avoid glitch
-		CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 528 MHz / 2 = ~264 MHz
-		CLOCK_SetRootClockMux (FlexSPIClock, kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll2Out); // ClockSource_SysPll2 --> 528 MHz
+		CLOCK_SetRootClockDiv (FlexSPIClock, 4); // --> 396 MHz / 4 = ~100 MHz
+		CLOCK_SetRootClockMux (FlexSPIClock, 6); // ClockSource_SysPll2Pfd2 --> 396 MHz  -  SYSPLL2=528 MHz
 		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
+
+		uint32_t ClockHz = CLOCK_GetRootClockFreq (FlexSPIClock);
 	#elif (defined(MIMXRT1181_SERIES)     || defined(MIMXRT1182_SERIES)     || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1187_cm33_SERIES) ||\
 		   defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
-			[[maybe_unused]]uint32_t ClockHz{};
-			switch (reinterpret_cast<uint32_t>(base))
-			{
-				case FLEXSPI1_BASE:
-					CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi1, 2); // --> 392,7s MHz / 2 = ~196,35 MHz
-					CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi1, kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll3Pfd0); // ClockSource_SysPll2 --> 392,7s MHz
-					ClockHz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi1);
-					break;
-				case FLEXSPI2_BASE:
-					CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi2, 2); // --> 392,7s MHz / 2 = ~196,35 MHz
-					CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi2, kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll3Pfd2); // ClockSource_SysPll2 --> 392,7s MHz
-					ClockHz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi2);
-					break;
-				default:
-					return LibmemStaus_InvalidDevice;
-			}
-
+		uint32_t ClockHz{};
+		switch (reinterpret_cast<uint32_t>(base))
+		{
+			case FLEXSPI1_BASE:
+				CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi1, 4); // --> 392,7s MHz / 4 = ~98,18 MHz
+				CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi1, kCLOCK_FLEXSPI1_ClockRoot_MuxSysPll3Pfd0); // ClockSource_SysPll2 --> 392,7s MHz
+				ClockHz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi1);
+				break;
+			case FLEXSPI2_BASE:
+				CLOCK_SetRootClockDiv (kCLOCK_Root_Flexspi2, 4); // --> 392,7s MHz / 4 = ~98,18 MHz
+				CLOCK_SetRootClockMux (kCLOCK_Root_Flexspi2, kCLOCK_FLEXSPI2_ClockRoot_MuxSysPll3Pfd2); // ClockSource_SysPll2 --> 392,7s MHz
+				ClockHz = CLOCK_GetRootClockFreq (kCLOCK_Root_Flexspi2);
+				break;
+			default:
+				return LibmemStaus_InvalidDevice;
+		}
 	#else
 		#error "unknon controller family"
 	#endif
+	deviceconfig.flexspiRootClk = ClockHz;
 
 	// Get FLEXSPI default settings and configure the FlexSPI.
 	flexspi_config_t config {};

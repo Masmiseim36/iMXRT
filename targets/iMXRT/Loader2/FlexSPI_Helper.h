@@ -145,13 +145,19 @@ inline uint8_t *GetBaseAddress (FLEXSPI_Type *base)
 	}
 }
 
-inline uint8_t *GetAliasBaseAddress (const FLEXSPI_Type *base)
+inline uint8_t *GetAliasBaseAddress ([[maybe_unused]]const FLEXSPI_Type *base)
 {
 	#if defined FlexSPI1_ALIAS_BASE && __CORTEX_M == 4
 		if (reinterpret_cast<uint32_t>(base) == FLEXSPI1_BASE)  // ToDo: switch (base->GetBaseAddr ())
 			return reinterpret_cast<uint8_t *>(FlexSPI1_ALIAS_BASE);
-	#else
-		(void)base;
+	#endif
+	#if defined FlexSPI1_AMBA_BASE_NS
+		if (reinterpret_cast<uint32_t>(base) == FLEXSPI1_BASE)  // ToDo: switch (base->GetBaseAddr ())
+			return reinterpret_cast<uint8_t *>(FlexSPI1_AMBA_BASE_NS);
+	#endif
+	#if defined FlexSPI2_AMBA_BASE_NS
+		if (reinterpret_cast<uint32_t>(base) == FLEXSPI2_BASE)  // ToDo: switch (base->GetBaseAddr ())
+			return reinterpret_cast<uint8_t *>(FlexSPI2_AMBA_BASE_NS);
 	#endif
 
 	return nullptr;

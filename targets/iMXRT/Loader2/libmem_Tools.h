@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2023 Markus Klein
+Copyright (C) 2019-2024 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -34,7 +34,6 @@ extern "C"
 	{
 		HYPERFLASH_PAGE_SIZE = 512U,
 		QSPIFLASH_PAGE_SIZE  = 256U,
-//		FLASH_SECTORE_SIZE   = 0x40000,	// 4096U,
 	};
 
 	/*! Capacity:
@@ -71,7 +70,7 @@ extern "C"
 
 	/*! FlexSPI_LUT:
 	\brief Type for the LUT information used for different Flash types */
-	typedef std::array <uint32_t, sizeof(FLEXSPI_Type::LUT)/sizeof(FLEXSPI_Type::LUT[0])> FlexSPI_LUT;
+	using FlexSPI_LUT = std::array <uint32_t, sizeof(FLEXSPI_Type::LUT)/sizeof(FLEXSPI_Type::LUT[0])>;
 
 	/*! LibmemDriver:
 	\brief Factory for libmem drivers */

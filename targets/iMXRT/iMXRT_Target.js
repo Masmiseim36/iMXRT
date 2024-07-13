@@ -32,8 +32,15 @@ var CCM_LPCG      = CCM + 0x6000;
 var CCM_LPCG_LMEM = CCM_LPCG + (27 * 0x20); // Index 27 with offset size of 32
 var CCM_LPCG_Cstrace = CCM_LPCG + (42 * 0x20); // Index 42 with offset size of 32
 
-var LMEM       = 0xE0082000;
-var LMEM_PSCCR = LMEM + 0x800;
+var LMEM        = 0xE0082000;
+var LMEM_PCCCR  = LMEM + 0x0;   // PCode bus Cache control register   --> Instruction
+var LMEM_PCCLCR = LMEM + 0x4;   // Cache line control register
+var LMEM_PCCSAR = LMEM + 0x8;   // Cache search address register
+var LMEM_PCCCVR = LMEM + 0xC;   // Cache read/write value register
+var LMEM_PSCCR  = LMEM + 0x800; // PSystem bus Cache control register --> Data
+var LMEM_PSCLCR = LMEM + 0x804; // Cache line control register
+var LMEM_PSCSAR = LMEM + 0x808; // Cache search address register
+var LMEM_PSCCVR = LMEM + 0x80C; // Cache read/write value register
 
 var IOMUXC_LPSR_GPR   = 0x40C0C000;
 var IOMUXC_LPSR_GPR0  = IOMUXC_LPSR_GPR + 0x0;
@@ -51,7 +58,7 @@ var IOMUXC_GPR_GPR26 = IOMUXC_GPR + 0x68;
 
 
 // This function is called each time the debugger stops the target
-// If the cache is enabled, we invalidate it as the JTAG access is not cache coherent
+// If the cache is enabled, we clean the data cache as the JTAG access is not cache coherent
 function OnTargetStop_11xx ()
 {
 	var DeviceName = GetProjectPartName ();
@@ -78,8 +85,7 @@ function OnTargetStop_11xx ()
 
 	// Check if the cache is enabled
 	var psccr = TargetInterface.peekUint32 (LMEM_PSCCR);
-	psccr = psccr & LMEM_PSCCR_ENCACHE_MASK;
-	if (psccr == 0)
+	if ((psccr & LMEM_PSCCR_ENCACHE_MASK) == 0)
 	{
 		TargetInterface.message ("## OnTargetStop_11xx - cache is disabled");
 		return;	// no cache enabled, so no need to clear it
@@ -101,6 +107,90 @@ function OnTargetStop_11xx ()
 	TargetInterface.message ("## Target " + DeviceName + " has been stopped - done");
 }
 
+// This function is called each time the debugger starts the target
+// If the cache is enabled, we invalidate the code cash as the JTAG access is not cache coherent
+function InvalidateICache_LMEM ()
+{
+	var DeviceName = GetProjectPartName ();
+	if (DeviceName.slice(-4) != "_cm4")
+		return; // only necessary on M4-Core
+
+	TargetInterface.message ("## Target " + DeviceName + " has been started");
+
+	var LMEM_PCCCR_ENCACHE_MASK = 0x00000001;
+	var LMEM_PCCCR_ENWRBUF_MASK = 0x00000002;
+	var LMEM_PCCCR_INVW0_MASK   = 0x01000000;
+	var LMEM_PCCCR_INVW1_MASK   = 0x04000000;
+	var LMEM_PCCCR_PUSHW0_MASK  = 0x02000000;
+	var LMEM_PCCCR_PUSHW1_MASK  = 0x08000000;
+	var LMEM_PCCCR_GO_MASK      = 0x80000000;
+
+	// Check if the cache is clockgated
+	var CCM_LPCG_LmemDirect = TargetInterface.peekUint32 (CCM_LPCG_LMEM);
+	if (CCM_LPCG_LmemDirect == 0)
+	{
+		TargetInterface.message ("## OnTargetRun_11xx - cache is clockgated");
+		return;	// cache is clock gate, so no need to clear it
+	}
+
+	// Check if the cache is enabled
+	var pcccr = TargetInterface.peekUint32 (LMEM_PCCCR);
+	if ((pcccr & LMEM_PCCCR_ENCACHE_MASK) == 0)
+	{
+		TargetInterface.message ("## OnTargetRun_11xx - cache is disabled");
+		return;	// no cache enabled, so no need to clear it
+	}
+
+	// Enables the processor code bus to invalidate all lines in both ways.
+	// and Initiate the processor code bus code cache command.
+	pcccr |= LMEM_PCCCR_INVW0_MASK | LMEM_PCCCR_INVW1_MASK | LMEM_PCCCR_GO_MAS;
+	TargetInterface.pokeUint32 (LMEM_PCCCR, pcccr);
+
+	do
+	{
+		pcccr = TargetInterface.peekUint32 (LMEM_PCCCR);
+	}
+	while ((pcccr & LMEM_PCCCR_GO_MASK) != 0);	// Wait until the cache command completes
+
+	// As a precaution clear the bits to avoid inadvertently re-running this command.
+	pcccr &= ~(LMEM_PCCCR_INVW0_MASK | LMEM_PCCCR_INVW1_MASK);
+	TargetInterface.pokeUint32 (LMEM_PCCCR, pcccr);
+
+	TargetInterface.message ("## Target " + DeviceName + " has been started - done");
+}
+
+// The script that is called to set/clear software breakpoint instructions.
+// When executed this script has the macros $(address), $(instruction), $(size) expanded.
+// These specify the address to poke the instruction and the size of the instruction in bytes.
+function PokeInstruction (address, instruction, size)
+{
+	var DeviceName = GetProjectPartName ();
+	if (DeviceName.slice(-4) != "_cm4")
+		return; // only necessary on M4-Core
+
+	TargetInterface.message ("## PokeInstruction on " + address.toString(16));
+
+	if (size == 4)
+		TargetInterface.pokeUint32 (address, instruction);
+	else
+		TargetInterface.pokeUint16 (address, instruction);
+	if (address >= 0x20000000)
+	{
+		TargetInterface.pokeUint32 (LMEM_PSCLCR, 0x5<<24);
+		TargetInterface.pokeUint32 (LMEM_PSCSAR, address|1);
+		while (TargetInterface.peekUint32 (LMEM_PSCLCR) & 1)
+			;
+	}
+	else
+	{
+		TargetInterface.pokeUint32 (LMEM_PCCLCR, 0x5<<24);
+		TargetInterface.pokeUint32 (LMEM_PCCSAR, address|1);
+		while (TargetInterface.peekUint32 (LMEM_PCCLCR) & 1)
+			;
+	}
+}
+
+
 // Don't do any register access in this function.
 // Use GetPartName() for this.
 function Connect ()
@@ -110,6 +200,10 @@ function Connect ()
 
 	switch (DeviceName)
 	{
+		case "MIMXRT633":
+		case "MIMXRT685_cm33":
+			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0, 0x40000000, 0x00000000); // LPC Solution
+			break;
 		case "MIMXRT1181":
 		case "MIMXRT1182":
 		case "MIMXRT1187_cm33":
@@ -310,7 +404,7 @@ function Release_118x_M7 ()
 
 	// Making Landing Zone
 	TargetInterface.message ("******** Creating Landing Zone *********");
-	TargetInterface.pokeUint32 (0x303C0000, 0x20000000);
+	TargetInterface.pokeUint32 (0x303C0000, 0x20020000);
 	TargetInterface.pokeUint32 (0x303C0004, 0x00000009);
 	TargetInterface.pokeUint32 (0x303C0008, 0xE7FEE7FE);
 	TargetInterface.peekUint32 (0x303C0000);
@@ -319,9 +413,9 @@ function Release_118x_M7 ()
 
 	// Trigger S401 - EdgeLock APC Request
 	TargetInterface.message ("******** S401 Trigger *********");
-	TargetInterface.pokeUint32 (0x57520200, 0x17d20106);
-	var resp1 = TargetInterface.peekUint32 (0x57520280);
-	var resp2 = TargetInterface.peekUint32 (0x57520284);
+	TargetInterface.pokeUint32 (0x57540200, 0x17d20106); // MU_RT_S3MUA->TR[0]
+	var resp1 = TargetInterface.peekUint32 (0x57540280); // MU_RT_S3MUA->RR[0]
+	var resp2 = TargetInterface.peekUint32 (0x57540284); // MU_RT_S3MUA->RR[1]
 	TargetInterface.message ("RESP1 : " + resp1);  
 	TargetInterface.message ("RESP2 : " + resp2);  
 
@@ -809,8 +903,6 @@ function FlexRAM_Restore ()
 		gpr16 |= (1 << 2);	// Set FLEXRAM_BANK_CFG_SEL Flag to use FLEXRAM_BANK_CFG configuration
 		TargetInterface.pokeUint32 (IOMUXC_GPR_GPR16, gpr16);
 	}
-
-	TargetInterface.message ("## FlexRAM_Restore - done");
 
 	TargetInterface.message ("## FlexRAM_Restore - done");
 }
@@ -1525,7 +1617,8 @@ function AlterRegister (Addr, Clear, Set)
 	TargetInterface.pokeUint32 (Addr, temp);
 }
 
-function FLEXSPI_Init (FlexSPI)
+// Index of the FlexSPI. Depending on the device, can be one or two.
+function FlexSPI_GetBaseAddress (FlexSPI)
 {
 	var FlexSPI1 = 0x402A8000;
 	var FlexSPI2 = 0x402A4000;
@@ -1554,8 +1647,17 @@ function FLEXSPI_Init (FlexSPI)
 			FlexSPI1 = 0x400CC000;
 			FlexSPI2 = 0x400D0000;
 			break;
+		case "MIMXRT1181":
+		case "MIMXRT1182":
+		case "MIMXRT1187_cm33":
+		case "MIMXRT1189_cm33":
+		case "MIMXRT1187_cm7":
+		case "MIMXRT1189_cm7":
+			FlexSPI1 = 0x525E0000; // Non Secure: 0x425E0000
+			FlexSPI2 = 0x545E0000; // Non Secure: 0x445E0000
+			break;
 		default:
-			TargetInterface.message ("FLEXSPI_Init - unknown Device: " + DeviceName);
+			TargetInterface.message ("FlexSPI_GetBaseAddress - unknown Device: " + DeviceName);
 			return;
 	}
 
@@ -1563,15 +1665,52 @@ function FLEXSPI_Init (FlexSPI)
 	switch (FlexSPI)
 	{
 		case 1:
-			base = FlexSPI1;
-			break;
+			return FlexSPI1;
 		case 2:
-			base = FlexSPI2;
-			break;
+			return FlexSPI2;
 		default:
-			TargetInterface.message ("FLEXSPI_Init - Invalid Interface");
+			TargetInterface.message ("FlexSPI_GetBaseAddress - Invalid Interface");
 	}
 
+	return 0;
+}
+
+function FlexSPI_ModuleReset (FlexSPI)
+{
+	TargetInterface.message ("## FlexSPI_ModuleReset ");
+	var base = FlexSPI_GetBaseAddress (FlexSPI);
+	var mcr0 = TargetInterface.peekUint32 (base);
+	if ((mcr0 & 0x02) == 0)  // Module enabled
+	{
+		TargetInterface.message ("## FlexSPI_ModuleReset - Module is enabled");
+		TargetInterface.pokeUint32 (base, mcr0 | 0x1);
+		do
+		{
+			mcr0 = TargetInterface.peekUint32 (base);
+		}
+		while ((mcr0 & 0x1) != 0);
+	}
+	TargetInterface.message ("## FlexSPI_ModuleReset - done");
+}
+
+function FlexSPI_WaitBusIdle (base)
+{
+	TargetInterface.message ("## FlexSPI_WaitBusIdle ");
+	var mcr0 = TargetInterface.peekUint32 (base);
+	if ((mcr0 & 0x02) == 0)  // Module enabled
+	{
+		TargetInterface.message ("## FlexSPI_WaitBusIdle - Module is enabled");
+		do
+		{
+			mcr0 = TargetInterface.peekUint32 (base);
+		}
+		while ((mcr0 & 0x3) != 0x3);
+	}
+	TargetInterface.message ("## FlexSPI_WaitBusIdle - done");
+}
+
+function FlexSPI_Init (FlexSPI)
+{
 	var CCM = 0x400FC000;
 	var CCM_CBCMR  = CCM + 0x18;
 	var CCM_CSCMR1 = CCM + 0x1C;
@@ -1579,6 +1718,8 @@ function FLEXSPI_Init (FlexSPI)
 
 	var CCM_ANALOG = 0x400D8000;
 	var CCM_ANALOG_PFD480 = CCM_ANALOG + 0xF0;
+
+	var base = FlexSPI_GetBaseAddress (FlexSPI);
 
 	// Set flexSPI root clock to 166MHZ.
 	AlterRegister (CCM_ANALOG_PFD480, 0xBF, 0x80);	// Disable the clock output first.
@@ -1612,8 +1753,9 @@ function FLEXSPI_Init (FlexSPI)
 
 function Reset_Loader ()
 {
-	Reset ();
 	TargetInterface.message ("## Reset_Loader");
+	Reset ();
 	TargetInterface.setRegister ("r0", 1);
 	TargetInterface.setRegister ("r1", 1);
+	TargetInterface.message ("## Reset_Loader - done");
 }
