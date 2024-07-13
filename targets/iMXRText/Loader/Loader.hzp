@@ -94,7 +94,7 @@
       batch_build_configurations="MIMXRT1011_QuadSPI_4KB_SEC Release;MIMXRT1015_QuadSPI_4KB_SEC Release;MIMXRT1021_QuadSPI_4KB_SEC Release;MIMXRT105x_EcoXiP_4KB_SEC Release;MIMXRT105x_HYPER_256KB_SEC Release;MIMXRT105x_QuadSPI_4KB_SEC Release;MIMXRT1064_QSPI_4KB_SEC Release;MIMXRT106x_EcoXiP_4KB_SEC Release;MIMXRT106x_HYPER_256KB_SEC Release;MIMXRT106x_QSPI_4KB_SEC Release"
       build_output_file_name="MIMXRT1021_QuadSPI_4KB_SEC_Loader.elf"
       c_preprocessor_definitions="NO_SYSTEM_INIT;NO_VTOR_CONFIG"
-      c_user_include_directories="$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
+      c_user_include_directories="$(TargetsDir)/iMXRText;$(PackagesDir)/libraries/libmem_drivers"
       gcc_entry_point="Reset_Handler"
       linker_additional_files="$(StudioDir)/lib/libmem$(LibExt)$(LIB);$(StudioDir)/lib/libmem_loader$(LibExt)$(LIB);$(DeviceLoaderFile)"
       linker_keep_symbols="libmem_crc32"
