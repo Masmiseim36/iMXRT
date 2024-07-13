@@ -1,26 +1,26 @@
 <!DOCTYPE Board_Memory_Definition_File>
 <Root name="iMXRT" >
-	<MemorySegment name="FlexSPI"              start="$(FlexSPISTART:0x28000000)"             size="$(FlexSPISIZE:0x04000000)"             access="ReadOnly"/>
-	<MemorySegment name="FlexSPI_Secure"       start="$(FlexSPISecureSTART:0x38000000)"       size="$(FlexSPISecureSIZE:0x04000000)"       access="ReadOnly"/>
-	<MemorySegment name="FlexSPIAlias"         start="$(FlexSPIAliasSTART:0x22000000)"        size="$(FlexSPIAliasSIZE:0x04000000)"        access="ReadOnly"/>
-	<MemorySegment name="FlexSPIAlias_Secure"  start="$(FlexSPIAliasSecureSTART:0x32000000)"  size="$(FlexSPIAliasSecureSIZE:0x04000000)"  access="ReadOnly"/>
+	<MemorySegment name="FlexSPI_NS"        start="$(FlexSPISTART_NS:0x28000000)"       size="$(FlexSPISIZE_NS:0x04000000)"       access="ReadOnly"/> <!-- Not Secure -->
+	<MemorySegment name="FlexSPI"           start="$(FlexSPISTART:0x38000000)"          size="$(FlexSPISIZE:0x04000000)"          access="ReadOnly"/> <!-- Secure -->
+	<MemorySegment name="FlexSPIAlias_NS"   start="$(FlexSPIAliasSTART_NS:0x22000000)"  size="$(FlexSPIAliasSIZE_NS:0x04000000)"  access="ReadOnly"/> <!-- Not Secure -->
+	<MemorySegment name="FlexSPIAlias"      start="$(FlexSPIAliasSTART:0x32000000)"     size="$(FlexSPIAliasSIZE:0x04000000)"     access="ReadOnly"/>
 
-	<MemorySegment name="FlexSPI2"             start="$(FlexSPI2START:0x04000000)"            size="$(FlexSPI2SIZE:0x04000000)"            access="ReadOnly"/>
-	<MemorySegment name="FlexSPI2_Secure"      start="$(FlexSPI2SecureSTART:0x14000000)"      size="$(FlexSPI2SecureSIZE:0x04000000)"      access="ReadOnly"/>
-	<MemorySegment name="FlexSPI2Alias"        start="$(FlexSPI2AliasSTART:0x02000000)"       size="$(FlexSPI2AliasSIZE:0x04000000)"       access="ReadOnly"/>
-	<MemorySegment name="FlexSPI2Alias_Secure" start="$(FlexSPI2AliasSecureSTART:0x12000000)" size="$(FlexSPI2AliasSecureSIZE:0x04000000)" access="ReadOnly"/>
+	<MemorySegment name="FlexSPI2_NS"       start="$(FlexSPI2START_NS:0x04000000)"      size="$(FlexSPI2SIZE_NS:0x04000000)"      access="ReadOnly"/> <!-- Not Secure -->
+	<MemorySegment name="FlexSPI2"          start="$(FlexSPI2START:0x14000000)"         size="$(FlexSPI2SIZE:0x04000000)"         access="ReadOnly"/> <!-- Secure -->
+	<MemorySegment name="FlexSPI2Alias_NS"  start="$(FlexSPI2AliasSTART_NS:0x02000000)" size="$(FlexSPI2AliasSIZE_NS:0x04000000)" access="ReadOnly"/> <!-- Not Secure -->
+	<MemorySegment name="FlexSPI2Alias"     start="$(FlexSPI2AliasSTART:0x12000000)"    size="$(FlexSPI2AliasSIZE:0x04000000)"    access="ReadOnly"/> <!-- Secure -->
 
-	<MemorySegment name="OCRAM"                start="$(OCRAMSTART:0x20480000)"     size="$(OCRAMSIZE:0x000C0000)"/>     <!-- OCRAM 1+2 combined -->
-	<MemorySegment name="OCRAM1"               start="$(OCRAM1START:0x20480000)"    size="$(OCRAM1SIZE:0x00080000)"/>    <!-- OCRAM1 -->
-	<MemorySegment name="OCRAM2"               start="$(OCRAM2START:0x20500000)"    size="$(OCRAM2SIZE:0x00040000)"/>    <!-- OCRAM2 -->
+	<MemorySegment name="OCRAM"             start="$(OCRAMSTART:0x20480000)"            size="$(OCRAMSIZE:0x000C0000)"/>     <!-- OCRAM 1+2 combined -->
+	<MemorySegment name="OCRAM1"            start="$(OCRAM1START:0x20480000)"           size="$(OCRAM1SIZE:0x00080000)"/>    <!-- OCRAM1 -->
+	<MemorySegment name="OCRAM2"            start="$(OCRAM2START:0x20500000)"           size="$(OCRAM2SIZE:0x00040000)"/>    <!-- OCRAM2 -->
 
-	<MemorySegment name="DTCM"                 start="$(DTCMSTART:0x20000000)"      size="$(DTCMSIZE:0x00020000)"/>
-	<MemorySegment name="DTCM_Secure"          start="$(DTCMSTART:0x30000000)"      size="$(DTCMSIZE:0x00020000)"/>
-	<MemorySegment name="ITCM"                 start="$(ITCMSTART:0x0FFE0000)"      size="$(ITCMSIZE:0x00020000)"/>
-	<MemorySegment name="ITCM_secure"          start="$(ITCMSTART:0x1FFE0000)"      size="$(ITCMSIZE:0x00020000)"/>
+	<MemorySegment name="DTCM_NS"           start="$(DTCMSTART_NS:0x20000000)"          size="$(DTCMSIZE_NSA:0x00020000)"/>  <!-- Not Secure -->
+	<MemorySegment name="DTCM"              start="$(DTCMSTART:0x30000000)"             size="$(DTCMSIZE:0x00020000)"/>      <!-- Secure -->
+	<MemorySegment name="ITCM_NS"           start="$(ITCMSTART_NS:0x0FFE0000)"          size="$(ITCMSIZE_NS:0x00020000)"/>   <!-- Not Secure -->
+	<MemorySegment name="ITCM"              start="$(ITCMSTART:0x1FFE0000)"             size="$(ITCMSIZE:0x00020000)"/>      <!-- Secure -->
 
-	<MemorySegment name="SDRAM"                start="$(SDRAMSTART:0x80000000)"     size="$(SDRAMSIZE:0x02000000)"/>
-	<MemorySegment name="SDRAM_Secure"         start="$(SDRAMSTART:0x90000000)"     size="$(SDRAMSIZE:0x02000000)"/>
-	<MemorySegment name="SDRAMAlias"           start="$(SDRAMSTART:0x0C000000)"     size="$(SDRAMSIZE:0x02000000)"/>
-	<MemorySegment name="SDRAMAlias_Secure"    start="$(SDRAMSTART:0x1C000000)"     size="$(SDRAMSIZE:0x02000000)"/>
+	<MemorySegment name="SDRAM_NS"          start="$(SDRAMSTART_NS:0x80000000)"         size="$(SDRAMSIZE:0x02000000)"/>     <!-- Not Secure -->
+	<MemorySegment name="SDRAM"             start="$(SDRAMSTART:0x90000000)"            size="$(SDRAMSIZE:0x02000000)"/>     <!-- Secure -->
+	<MemorySegment name="SDRAMAlias_NS"     start="$(SDRAMAliasSTART_NS:0x0C000000)"    size="$(SDRAMSIZE:0x02000000)"/>     <!-- Not Secure -->
+	<MemorySegment name="SDRAMAlias"        start="$(SDRAMAliasSTART:0x1C000000)"       size="$(SDRAMSIZE:0x02000000)"/>     <!-- Secure -->
 </Root>

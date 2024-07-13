@@ -1,65 +1,83 @@
 <!DOCTYPE CrossStudio_Project_File>
 <solution Name="iMXRT Loader(FLM)" target="8" version="2">
   <configuration
-    Name="MIMXRT1011_QuadSPI_4KB_SEC Release"
-    inherited_configurations="MIMXRT1011_QuadSPI_4KB_SEC;Release" />
-  <configuration
     Name="MIMXRT1011_QuadSPI_4KB_SEC Debug"
     inherited_configurations="MIMXRT1011_QuadSPI_4KB_SEC;Debug" />
   <configuration
-    Name="MIMXRT1015_QuadSPI_4KB_SEC Release"
-    inherited_configurations="MIMXRT1015_QuadSPI_4KB_SEC;Release" />
+    Name="MIMXRT1011_QuadSPI_4KB_SEC Release"
+    inherited_configurations="MIMXRT1011_QuadSPI_4KB_SEC;Release" />
   <configuration
     Name="MIMXRT1015_QuadSPI_4KB_SEC Debug"
     inherited_configurations="MIMXRT1015_QuadSPI_4KB_SEC;Debug" />
   <configuration
-    Name="MIMXRT1021_QuadSPI_4KB_SEC Release"
-    inherited_configurations="MIMXRT1021_QuadSPI_4KB_SEC;Release" />
+    Name="MIMXRT1015_QuadSPI_4KB_SEC Release"
+    inherited_configurations="MIMXRT1015_QuadSPI_4KB_SEC;Release" />
   <configuration
     Name="MIMXRT1021_QuadSPI_4KB_SEC Debug"
     inherited_configurations="MIMXRT1021_QuadSPI_4KB_SEC;Debug" />
   <configuration
-    Name="MIMXRT105x_HYPER_256KB_SEC Release"
-    inherited_configurations="MIMXRT105x_HYPER_256KB_SEC;Release" />
+    Name="MIMXRT1021_QuadSPI_4KB_SEC Release"
+    inherited_configurations="MIMXRT1021_QuadSPI_4KB_SEC;Release" />
   <configuration
-    Name="MIMXRT105x_HYPER_256KB_SEC Debug"
-    inherited_configurations="MIMXRT105x_HYPER_256KB_SEC;Debug" />
+    Name="MIMXRT1024_QuadSPI_4KB_SEC Debug"
+    inherited_configurations="MIMXRT1024_QuadSPI_4KB_SEC;Debug" />
   <configuration
-    Name="MIMXRT105x_QuadSPI_4KB_SEC Release"
-    inherited_configurations="MIMXRT105x_QuadSPI_4KB_SEC;Release" />
-  <configuration
-    Name="MIMXRT105x_QuadSPI_4KB_SEC Debug"
-    inherited_configurations="MIMXRT105x_QuadSPI_4KB_SEC;Debug" />
-  <configuration
-    Name="MIMXRT105x_EcoXiP_4KB_SEC Release"
-    inherited_configurations="MIMXRT105x_EcoXiP_4KB_SEC;Release" />
+    Name="MIMXRT1024_QuadSPI_4KB_SEC Release"
+    inherited_configurations="MIMXRT1024_QuadSPI_4KB_SEC;Release" />
   <configuration
     Name="MIMXRT105x_EcoXiP_4KB_SEC Debug"
     inherited_configurations="MIMXRT105x_EcoXiP_4KB_SEC;Debug" />
   <configuration
-    Name="MIMXRT106x_HYPER_256KB_SEC Release"
-    inherited_configurations="MIMXRT106x_HYPER_256KB_SEC;Release" />
+    Name="MIMXRT105x_EcoXiP_4KB_SEC Release"
+    inherited_configurations="MIMXRT105x_EcoXiP_4KB_SEC;Release" />
   <configuration
-    Name="MIMXRT106x_HYPER_256KB_SEC Debug"
-    inherited_configurations="MIMXRT106x_HYPER_256KB_SEC;Debug" />
+    Name="MIMXRT105x_HYPER_256KB_SEC Debug"
+    inherited_configurations="MIMXRT105x_HYPER_256KB_SEC;Debug" />
   <configuration
-    Name="MIMXRT106x_QSPI_4KB_SEC Release"
-    inherited_configurations="MIMXRT106x_QSPI_4KB_SEC;Release" />
+    Name="MIMXRT105x_HYPER_256KB_SEC Release"
+    inherited_configurations="MIMXRT105x_HYPER_256KB_SEC;Release" />
   <configuration
-    Name="MIMXRT106x_QSPI_4KB_SEC Debug"
-    inherited_configurations="MIMXRT106x_QSPI_4KB_SEC;Debug" />
+    Name="MIMXRT105x_QuadSPI_4KB_SEC Debug"
+    inherited_configurations="MIMXRT105x_QuadSPI_4KB_SEC;Debug" />
   <configuration
-    Name="MIMXRT106x_EcoXiP_4KB_SEC Release"
-    inherited_configurations="MIMXRT106x_EcoXiP_4KB_SEC;Release" />
+    Name="MIMXRT105x_QuadSPI_4KB_SEC Release"
+    inherited_configurations="MIMXRT105x_QuadSPI_4KB_SEC;Release" />
   <configuration
-    Name="MIMXRT106x_EcoXiP_4KB_SEC Debug"
-    inherited_configurations="MIMXRT106x_EcoXiP_4KB_SEC;Debug" />
+    Name="MIMXRT1064_QSPI_4KB_SEC Debug"
+    inherited_configurations="MIMXRT1064_QSPI_4KB_SEC;Debug" />
   <configuration
     Name="MIMXRT1064_QSPI_4KB_SEC Release"
     inherited_configurations="MIMXRT1064_QSPI_4KB_SEC;Release" />
   <configuration
-    Name="MIMXRT1064_QSPI_4KB_SEC Debug"
-    inherited_configurations="MIMXRT1064_QSPI_4KB_SEC;Debug" />
+    Name="MIMXRT106x_EcoXiP_4KB_SEC Debug"
+    inherited_configurations="MIMXRT106x_EcoXiP_4KB_SEC;Debug" />
+  <configuration
+    Name="MIMXRT106x_EcoXiP_4KB_SEC Release"
+    inherited_configurations="MIMXRT106x_EcoXiP_4KB_SEC;Release" />
+  <configuration
+    Name="MIMXRT106x_HYPER_256KB_SEC Debug"
+    inherited_configurations="MIMXRT106x_HYPER_256KB_SEC;Debug" />
+  <configuration
+    Name="MIMXRT106x_HYPER_256KB_SEC Release"
+    inherited_configurations="MIMXRT106x_HYPER_256KB_SEC;Release" />
+  <configuration
+    Name="MIMXRT106x_QSPI_4KB_SEC Debug"
+    inherited_configurations="MIMXRT106x_QSPI_4KB_SEC;Debug" />
+  <configuration
+    Name="MIMXRT106x_QSPI_4KB_SEC Release"
+    inherited_configurations="MIMXRT106x_QSPI_4KB_SEC;Release" />
+  <configuration
+    Name="MIMXRT117x_QuadSPI_4KB_SEC Debug"
+    inherited_configurations="MIMXRT117x_QuadSPI_4KB_SEC;Debug" />
+  <configuration
+    Name="MIMXRT117x_QuadSPI_4KB_SEC Release"
+    inherited_configurations="MIMXRT117x_QuadSPI_4KB_SEC;Release" />
+  <configuration
+    Name="MIMXRT117x_QuadSPI_4KB_SEC_Alias Debug"
+    inherited_configurations="MIMXRT117x_QuadSPI_4KB_SEC_Alias;Debug" />
+  <configuration
+    Name="MIMXRT117x_QuadSPI_4KB_SEC_Alias Release"
+    inherited_configurations="MIMXRT117x_QuadSPI_4KB_SEC_Alias;Release" />
   <project Name="iMXRT Loader">
     <configuration
       CMSIS_CORE="Yes"
@@ -92,15 +110,9 @@
       gcc_optimization_level="None"
       hidden="Yes" />
     <configuration
-      Name="Release"
-      c_preprocessor_definitions="NDEBUG"
-      gcc_debugging_level="Level 1"
-      gcc_optimization_level="Optimize For Size"
-      hidden="Yes" />
-    <configuration
       Name="MIMXRT1011_QuadSPI_4KB_SEC"
       build_output_file_name="MIMXRT1011_QuadSPI_4KB_SEC_Loader.elf"
-      c_preprocessor_definitions="MIMXRT1011DAE5A;FLM_ALGORITHM_MIMXRT1011_QuadSPI_4KB_SEC"
+      c_preprocessor_definitions="CPU_MIMXRT1011DAF5A;FLM_ALGORITHM_MIMXRT1011_QuadSPI_4KB_SEC"
       debug_register_definition_file="../XML/MIMXRT1011_registers.xml"
       linker_memory_map_file="../MemoryMap_MIMXRT1011.xml"
       macros="DeviceLoaderFile=../FLM/MIMXRT1011_QuadSPI_4KB_SEC.FLM" />
@@ -119,6 +131,24 @@
       linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
       macros="DeviceLoaderFile=../FLM/MIMXRT1021_QuadSPI_4KB_SEC.FLM" />
     <configuration
+      Name="MIMXRT1024_QuadSPI_4KB_SEC"
+      arm_architecture="v7EM"
+      arm_core_type="Cortex-M7"
+      arm_linker_heap_size="0"
+      arm_linker_stack_size="1024"
+      build_output_file_name="MIMXRT1024_QuadSPI_4KB_SEC_Loader.elf"
+      c_preprocessor_definitions="CPU_MIMXRT1024CAG4A;FLM_ALGORITHM_MIMXRT1024_QuadSPI_4KB_SEC"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1024_Registers.xml"
+      linker_additional_files="$(TargetsDir)/iMXRT/FLM/MIMXRT1024_QuadSPI_4KB_SEC.FLM"
+      linker_memory_map_macros="DTCMSIZE=0x8000" />
+    <configuration
+      Name="MIMXRT105x_EcoXiP_4KB_SEC"
+      build_output_file_name="MIMXRT105x_EcoXiP_4KB_SEC_Loader.elf"
+      c_preprocessor_definitions="CPU_MIMXRT1051CVL5A;FLM_ALGORITHM_MIMXRT105x_EcoXiP_4KB_SEC"
+      debug_register_definition_file="../XML/MIMXRT1051_registers.xml"
+      linker_memory_map_file="../MemoryMap_MIMXRT105x.xml"
+      macros="DeviceLoaderFile=../FLM/MIMXRT105x_ECOXIP_4MB_SEC.FLM" />
+    <configuration
       Name="MIMXRT105x_HYPER_256KB_SEC"
       build_output_file_name="MIMXRT105x_HYPER_256KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1051CVL5A;FLM_ALGORITHM_MIMXRT105x_HYPER_256KB_SEC"
@@ -133,11 +163,18 @@
       linker_memory_map_file="../MemoryMap_MIMXRT105x.xml"
       macros="DeviceLoaderFile=../FLM/MIMXRT105x_QuadSPI_4KB_SEC.FLM" />
     <configuration
-      Name="MIMXRT105x_EcoXiP_4KB_SEC"
-      build_output_file_name="MIMXRT105x_EcoXiP_4KB_SEC_Loader.elf"
-      c_preprocessor_definitions="CPU_MIMXRT1051CVL5A;FLM_ALGORITHM_MIMXRT105x_EcoXiP_4KB_SEC"
-      debug_register_definition_file="../XML/MIMXRT1051_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT105x.xml"
+      Name="MIMXRT1064_QSPI_4KB_SEC"
+      build_output_file_name="MIMXRT1064_QSPI_4KB_SEC_Loader.elf"
+      c_preprocessor_definitions="CPU_MIMXRT1064DVJ6A;FLM_ALGORITHM_MIMXRT1064_QSPI_4KB_SEC"
+      debug_register_definition_file="../XML/MIMXRT1064_registers.xml"
+      linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
+      macros="DeviceLoaderFile=../FLM/MIMXRT1064_QSPI_4KB_SEC.FLM" />
+    <configuration
+      Name="MIMXRT106x_EcoXiP_4KB_SEC"
+      build_output_file_name="MIMXRT106x_EcoXiP_4KB_SEC_Loader.elf"
+      c_preprocessor_definitions="CPU_MIMXRT1062DVL6A;FLM_ALGORITHM_MIMXRT106x_EcoXiP_4KB_SEC"
+      debug_register_definition_file="../XML/MIMXRT1062_registers.xml"
+      linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
       macros="DeviceLoaderFile=../FLM/MIMXRT105x_ECOXIP_4MB_SEC.FLM" />
     <configuration
       Name="MIMXRT106x_HYPER_256KB_SEC"
@@ -154,39 +191,59 @@
       linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
       macros="DeviceLoaderFile=../FLM/MIMXRT106x_QSPI_4KB_SEC.FLM" />
     <configuration
-      Name="MIMXRT106x_EcoXiP_4KB_SEC"
-      build_output_file_name="MIMXRT106x_EcoXiP_4KB_SEC_Loader.elf"
-      c_preprocessor_definitions="CPU_MIMXRT1062DVL6A;FLM_ALGORITHM_MIMXRT106x_EcoXiP_4KB_SEC"
-      debug_register_definition_file="../XML/MIMXRT1062_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
-      macros="DeviceLoaderFile=../FLM/MIMXRT105x_ECOXIP_4MB_SEC.FLM" />
+      Name="MIMXRT117x_QuadSPI_4KB_SEC"
+      arm_architecture="v7EM"
+      arm_core_type="Cortex-M7"
+      arm_linker_heap_size="0"
+      arm_linker_stack_size="1024"
+      build_output_file_name="MIMXRT117x_QuadSPI_4KB_SEC_Loader.elf"
+      c_preprocessor_definitions="CPU_MIMXRT1176DVMAA_cm7;FLM_ALGORITHM_MIMXRT117x_QuadSPI_4KB_SEC"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1176_cm7_Registers.xml"
+      linker_additional_files="$(TargetsDir)/iMXRT/FLM/MIMXRT117x_QuadSPI_4KB_SEC.FLM"
+      linker_memory_map_macros="DTCMSIZE=0x8000" />
     <configuration
-      Name="MIMXRT1064_QSPI_4KB_SEC"
-      build_output_file_name="MIMXRT1064_QSPI_4KB_SEC_Loader.elf"
-      c_preprocessor_definitions="CPU_MIMXRT1064DVJ6A;FLM_ALGORITHM_MIMXRT1064_QSPI_4KB_SEC"
-      debug_register_definition_file="../XML/MIMXRT1064_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
-      macros="DeviceLoaderFile=../FLM/MIMXRT1064_QSPI_4KB_SEC.FLM" />
-    <folder Name="Source Files" filter="*.c" path="." />
-    <folder Name="System Files">
-      <file file_name="$(PackagesDir)/libraries/libmem_drivers/libmem_flm_driver.h" />
-      <file file_name="$(PackagesDir)/libraries/libmem_drivers/libmem_flm_driver.c" />
-      <file file_name="$(StudioDir)/source/thumb_crt0.s" />
-      <file file_name="loader_startup.s" />
-      <file file_name="../iMXRT_Target.js">
-        <configuration Name="Common" file_type="Reset Script" />
-      </file>
-    </folder>
+      Name="MIMXRT117x_QuadSPI_4KB_SEC_Alias"
+      arm_architecture="v7EM"
+      arm_core_type="Cortex-M4"
+      arm_linker_heap_size="0"
+      arm_linker_stack_size="1024"
+      build_output_file_name="MIMXRT117x_QuadSPI_4KB_SEC_Alias_Loader.elf"
+      c_preprocessor_definitions="CPU_MIMXRT1176DVMAA_cm4;FLM_ALGORITHM_MIMXRT117x_QuadSPI_4KB_SEC_Alias"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1176_cm4_Registers.xml"
+      linker_additional_files="$(TargetsDir)/iMXRT/FLM/MIMXRT117x_QuadSPI_4KB_SEC_Alias.FLM"
+      linker_memory_map_macros="DTCMSIZE=0x8000"
+      target_get_partname_script="EnableCM4()"
+      target_reset_script="ResetCM4()" />
+    <configuration
+      Name="Release"
+      c_preprocessor_definitions="NDEBUG"
+      gcc_debugging_level="Level 1"
+      gcc_optimization_level="Optimize For Size"
+      hidden="Yes" />
     <folder Name="FLM">
+      <configuration Name="Common" build_exclude_from_build="Yes" />
       <file file_name="../FLM/MIMXRT1011_QuadSPI_4KB_SEC.FLM" />
       <file file_name="../FLM/MIMXRT1015_QuadSPI_4KB_SEC.FLM" />
       <file file_name="../FLM/MIMXRT1021_QuadSPI_4KB_SEC.FLM" />
+      <file file_name="../FLM/MIMXRT104x_QSPI_4KB_SEC.FLM" />
       <file file_name="../FLM/MIMXRT105x_ECOXIP_4MB_SEC.FLM" />
       <file file_name="../FLM/MIMXRT105x_HYPER_256KB_SEC.FLM" />
       <file file_name="../FLM/MIMXRT105x_QuadSPI_4KB_SEC.FLM" />
-      <file file_name="../FLM/MIMXRT106x_QSPI_4KB_SEC.FLM" />
       <file file_name="../FLM/MIMXRT1064_QSPI_4KB_SEC.FLM" />
-      <configuration Name="Common" build_exclude_from_build="Yes" />
+      <file file_name="../FLM/MIMXRT106x_QSPI_4KB_SEC.FLM" />
+      <file file_name="../FLM/MIMXRT1180_EVK_FSPI1_QSPI_CM33.FLM" />
+      <file file_name="../FLM/MIMXRT1180_EVK_FSPI1_QSPI_CM7.FLM" />
+      <file file_name="../FLM/MIMXRT6XX_EVK_FLEXSPI.FLM" />
+    </folder>
+    <folder Name="Source Files" filter="*.c" path="." />
+    <folder Name="System Files">
+      <file file_name="../iMXRT_Target.js">
+        <configuration Name="Common" file_type="Reset Script" />
+      </file>
+      <file file_name="$(PackagesDir)/libraries/libmem_drivers/libmem_flm_driver.c" />
+      <file file_name="$(PackagesDir)/libraries/libmem_drivers/libmem_flm_driver.h" />
+      <file file_name="loader_startup.s" />
+      <file file_name="$(StudioDir)/source/thumb_crt0.s" />
     </folder>
   </project>
 </solution>

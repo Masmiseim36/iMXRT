@@ -78,6 +78,14 @@ public:
 			if (this->GetBaseAddr () == FLEXSPI1_BASE)
 				return reinterpret_cast<uint8_t *>(FlexSPI1_ALIAS_BASE);
 		#endif
+		#if defined FlexSPI1_AMBA_BASE_NS
+			if (this->GetBaseAddr () == FLEXSPI1_BASE)  // ToDo: switch (base->GetBaseAddr ())
+				return reinterpret_cast<uint8_t *>(FlexSPI1_AMBA_BASE_NS);
+		#endif
+		#if defined FlexSPI2_AMBA_BASE_NS
+			if (this->GetBaseAddr () == FLEXSPI2_BASE)  // ToDo: switch (base->GetBaseAddr ())
+				return reinterpret_cast<uint8_t *>(FlexSPI2_AMBA_BASE_NS);
+		#endif
 
 		return nullptr;
 	}

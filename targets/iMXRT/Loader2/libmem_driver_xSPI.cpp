@@ -359,7 +359,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryTy
 			   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
 			   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
 			ClockDiv = 2;
-			CLOCK_SetDiv (FlexSPIDiv, ClockDiv-1);	// flexspi clock divide by two --> 240 Mz.
+			CLOCK_SetDiv (FlexSPIDiv, ClockDiv-1);	// flexspi clock divide by two --> 240 MHz.
 			DeviceConfig.flexspiRootClk = SourceClock_Hz / ClockDiv;
 			DeviceConfig.flexspiRootClk = ClockHz;
 		#elif (defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \

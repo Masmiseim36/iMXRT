@@ -30870,30 +30870,30 @@
       <BitField name="ADC_ETC_ERROR" start="28" size="4" />
     </Register>
   </RegisterGroup>
-  <RegisterGroup name="SysTick" start="0xe000e010" description="24-bit System Timer">
-    <Register name="SYST_CSR" start="0xe000e010" description="SysTick Control and Status Register">
+  <RegisterGroup name="SysTick" start="0xE000E010" description="24-bit System Timer">
+    <Register name="SYST_CSR" start="0xE000E010" description="SysTick Control and Status Register">
       <BitField name="COUNTFLAG" start="16" size="1" description="Counter Flag" />
       <BitField name="CLKSOURCE" start="2" size="1" description="Timer Clock Source" />
       <BitField name="TICKINT" start="1" size="1" description="Tick Interrupt Enable" />
       <BitField name="ENABLE" start="0" size="1" description="Enable SysTick Timer" />
     </Register>
-    <Register name="SYST_RVR" start="0xe000e014" description="SysTick Reload Value Register">
+    <Register name="SYST_RVR" start="0xE000E014" description="SysTick Reload Value Register">
       <BitField name="RELOAD" start="0" size="24" description="Value to load into the SYST_CVR when the counter is enabled and when it reaches 0" />
     </Register>
-    <Register name="SYST_CVR" start="0xe000e018" description="SysTick Current Value Register Register">
+    <Register name="SYST_CVR" start="0xE000E018" description="SysTick Current Value Register Register">
       <BitField name="CURRENT" start="0" size="24" description="The current value of the SysTick counter" />
     </Register>
-    <Register name="SYST_CALIB" start="0xe000e01c" access="ReadOnly" description="SysTick Calibration Value Register">
+    <Register name="SYST_CALIB" start="0xE000E01C" access="ReadOnly" description="SysTick Calibration Value Register">
       <BitField name="NOREF" start="31" size="1" description="Indicates whether the device provides a reference clock to the processor" />
       <BitField name="SKEW" start="30" size="1" description="Indicates whether the TENMS value is exact" />
       <BitField name="TENMS" start="0" size="24" description="Reload value for 10ms (100Hz) timing, subject to system clock skew errors" />
     </Register>
   </RegisterGroup>
-  <RegisterGroup name="SCB" start="0xe000e000" description="System Control Block">
-    <Register name="ICTR" start="0xe000e004" description="Interrupt Controller Type Register">
+  <RegisterGroup name="SCB" start="0xE000E000" description="System Control Block">
+    <Register name="ICTR" start="0xE000E004" description="Interrupt Controller Type Register">
       <BitField name="INTLINESNUM" start="0" size="4" description="The total number of interrupt lines supported by an implementation, defined in groups of 32." />
     </Register>
-    <Register name="ACTLR" start="0xe000e008" description="Auxiliary Control Register">
+    <Register name="ACTLR" start="0xE000E008" description="Auxiliary Control Register">
       <BitField name="DISDYNADD" start="26" size="1" description="Disables dynamic allocation of ADD and SUB instructions" />
       <BitField name="DISISSCH1" start="21" size="5" description="Indicates instruction type might not be issued in channel 1" />
       <BitField name="DISDI" start="16" size="5" description="Indicates nothing can be dual-issued when this instruction type is in channel 0" />
@@ -30905,13 +30905,13 @@
       <BitField name="FPEXCODIS" start="10" size="1" description="Disables FPU exception outputs" />
       <BitField name="DISFOLD" start="2" size="1" description="Disables dual-issue functionality" />
     </Register>
-    <Register name="CPUID" start="0xe000ed00" access="ReadOnly" description="CPUID Register">
+    <Register name="CPUID" start="0xE000ED00" access="ReadOnly" description="CPUID Register">
       <BitField name="IMPLEMENTER" start="24" size="8" description="Implementer Code" />
       <BitField name="VARIANT" start="20" size="4" description="Variant Number" />
       <BitField name="PARTNO" start="4" size="12" description="Part Number" />
       <BitField name="REVISION" start="0" size="4" description="Revision Number" />
     </Register>
-    <Register name="ICSR" start="0xe000ed04" description="Interrupt Control and State Register">
+    <Register name="ICSR" start="0xE000ED04" description="Interrupt Control and State Register">
       <BitField name="NMIPENDSET" start="31" size="1" description="NMI set-pending bit" />
       <BitField name="PENDSVSET" start="28" size="1" description="PendSV set-pending bit" />
       <BitField name="PENDSVCLR" start="27" size="1" description="PendSV clear-pending bit" />
@@ -30923,10 +30923,10 @@
       <BitField name="RETTOBASE" start="11" size="1" description="Indicates whether there are preempted active exceptions" />
       <BitField name="VECTACTIVE" start="0" size="9" description="Contains the active exception number" />
     </Register>
-    <Register name="VTOR" start="0xe000ed08" description="Vector Table Offset Register">
+    <Register name="VTOR" start="0xE000ED08" description="Vector Table Offset Register">
       <BitField name="TBLOFF" start="7" size="25" description="Vector table base offset field" />
     </Register>
-    <Register name="AIRCR" start="0xe000ed0c" description="Application Interrupt and Reset Control Register">
+    <Register name="AIRCR" start="0xE000ED0C" description="Application Interrupt and Reset Control Register">
       <BitField name="VECTKEY" start="16" size="16" description="Register key" />
       <BitField name="ENDIANESS" start="15" size="1" description="Data endianness bit" />
       <BitField name="PRIGROUP" start="8" size="3" description="Interrupt priority grouping field" />
@@ -30934,12 +30934,12 @@
       <BitField name="VECTCLRACTIVE" start="1" size="1" description="" />
       <BitField name="VECTRESET" start="0" size="1" description="" />
     </Register>
-    <Register name="SCR" start="0xe000ed10" description="System Control Register">
+    <Register name="SCR" start="0xE000ED10" description="System Control Register">
       <BitField name="SEVONPEND" start="4" size="1" description="Send event on pending bit" />
       <BitField name="SLEEPDEEP" start="2" size="1" description="Controls whether the processor uses sleep or deep sleep as its low power mode" />
       <BitField name="SLEEPONEXIT" start="1" size="1" description="Indicates sleep-on-exit when returning from Handler mode to Thread mode" />
     </Register>
-    <Register name="CCR" start="0xe000ed14" description="Configuration and Control Register">
+    <Register name="CCR" start="0xE000ED14" description="Configuration and Control Register">
       <BitField name="BP" start="18" size="1" description="Branch prediction enable bit" />
       <BitField name="IC" start="17" size="1" description="Instruction cache enable bit" />
       <BitField name="DC" start="16" size="1" description="Cache enable bit" />
@@ -30950,20 +30950,20 @@
       <BitField name="USERSETMPEND" start="1" size="1" description="Enables unprivileged software access to the STIR" />
       <BitField name="NONBASETHRDENA" start="0" size="1" description="Indicates how the processor enters Thread mode" />
     </Register>
-    <Register name="SHPR1" start="0xe000ed18" description="System Handler Priority Register 1">
+    <Register name="SHPR1" start="0xE000ED18" description="System Handler Priority Register 1">
       <BitField name="PRI_6(UsageFault)" start="20" size="4" description="Priority of system handler 6 (UsageFault)" />
       <BitField name="PRI_5(BusFault)" start="12" size="4" description="Priority of system handler 5 (BusFault)" />
       <BitField name="PRI_4(MemManage)" start="4" size="4" description="Priority of system handler 4 (MemManage)" />
     </Register>
-    <Register name="SHPR2" start="0xe000ed1c" description="System Handler Priority Register 2">
+    <Register name="SHPR2" start="0xE000ED1C" description="System Handler Priority Register 2">
       <BitField name="PRI_11(SVCall)" start="28" size="4" description="Priority of system handler 11 (SVCall)" />
     </Register>
-    <Register name="SHPR3" start="0xe000ed20" description="System Handler Priority Register 3">
+    <Register name="SHPR3" start="0xE000ED20" description="System Handler Priority Register 3">
       <BitField name="PRI_15(SysTick)" start="28" size="4" description="Priority of system handler 15 (SysTick)" />
       <BitField name="PRI_14(PendSV)" start="20" size="4" description="Priority of system handler 14 (PendSV)" />
       <BitField name="PRI_12(DebugMonitor)" start="4" size="4" description="Priority of system handler 12 (DebugMonitor)" />
     </Register>
-    <Register name="SHCSR" start="0xe000ed24" description="System Handler Control and State Register">
+    <Register name="SHCSR" start="0xE000ED24" description="System Handler Control and State Register">
       <BitField name="USGFAULTENA" start="18" size="1" description="UsageFault Enable Bit" />
       <BitField name="BUSFAULTENA" start="17" size="1" description="BusFault Enable Bit" />
       <BitField name="MEMFAULTENA" start="16" size="1" description="MemManage Enable Bit" />
@@ -30979,7 +30979,7 @@
       <BitField name="BUSFAULTACT" start="1" size="1" description="BusFault Exception Active Bit" />
       <BitField name="MEMFAULTACT" start="0" size="1" description="MemManage Exception Active Bit" />
     </Register>
-    <Register name="MMFSR" start="0xe000ed28" size="1" description="MemManage Fault Status Register">
+    <Register name="MMFSR" start="0xE000ED28" size="1" description="MemManage Fault Status Register">
       <BitField name="MMARVALID" start="7" size="1" description="MemManage Fault Address Register(MMFAR) valid flag" />
       <BitField name="MLSPERR" start="5" size="1" description="Indicates a MemManage fault occurred during floating-point lazy state preservation" />
       <BitField name="MSTKERR" start="4" size="1" description="MemManage fault on stacking for exception entry" />
@@ -30987,7 +30987,7 @@
       <BitField name="DACCVIOL" start="1" size="1" description="Data access violation flag" />
       <BitField name="IACCVIOL" start="0" size="1" description="Instruction access violation flag" />
     </Register>
-    <Register name="BFSR" start="0xe000ed29" size="1" description="BusFault Status Register">
+    <Register name="BFSR" start="0xE000ED29" size="1" description="BusFault Status Register">
       <BitField name="BFARVALID" start="7" size="1" description="BusFault Address Register(BFAR) valid flag" />
       <BitField name="LSPERR" start="5" size="1" description="Indicates a bus fault occurred during floating-point lazy state preservation" />
       <BitField name="STKERR" start="4" size="1" description="BusFault on stacking for exception entry" />
@@ -30996,7 +30996,7 @@
       <BitField name="PRECISERR" start="1" size="1" description="Precise data bus error" />
       <BitField name="IBUSERR" start="0" size="1" description="Instruction bus error" />
     </Register>
-    <Register name="UFSR" start="0xe000ed2a" size="2" description="UsageFault Status Register">
+    <Register name="UFSR" start="0xE000ED2A" size="2" description="UsageFault Status Register">
       <BitField name="DIVBYZERO" start="9" size="1" description="Divide by zero UsageFault" />
       <BitField name="UNALIGNED" start="8" size="1" description="Unaligned access UsageFault" />
       <BitField name="NOCP" start="3" size="1" description="No coprocessor UsageFault" />
@@ -31004,42 +31004,42 @@
       <BitField name="INVSTATE" start="1" size="1" description="Invalid state UsageFault" />
       <BitField name="UNDEFINSTR" start="0" size="1" description="Undefined instruction UsageFault" />
     </Register>
-    <Register name="HFSR" start="0xe000ed2c" description="HardFault Status Register">
+    <Register name="HFSR" start="0xE000ED2C" description="HardFault Status Register">
       <BitField name="DEBUGEVT" start="31" size="1" description="" />
       <BitField name="FORCED" start="30" size="1" description="Indicates a forced hard fault, generated by escalation of a fault with configurable priority that cannot be handled, either because of priority or because it is disabled" />
       <BitField name="VECTTBL" start="1" size="1" description="Indicates a BusFault on a vectortable read during exception processing" />
     </Register>
-    <Register name="DFSR" start="0xe000ed30" description="Debug Fault Status Register">
+    <Register name="DFSR" start="0xE000ED30" description="Debug Fault Status Register">
       <BitField name="EXTERNAL" start="4" size="1" description="" />
       <BitField name="VCATCH" start="3" size="1" description="" />
       <BitField name="DWTTRAP" start="2" size="1" description="" />
       <BitField name="BKPT" start="1" size="1" description="" />
       <BitField name="HALTED" start="0" size="1" description="" />
     </Register>
-    <Register name="MMFAR" start="0xe000ed34" description="MemManage Fault Address Register">
+    <Register name="MMFAR" start="0xE000ED34" description="MemManage Fault Address Register">
       <BitField name="ADDRESS" start="0" size="32" description="When the MMARVALID bit of the MMFSR is set to 1, this field holds the address of the location that generated the MemManage fault" />
     </Register>
-    <Register name="BFAR" start="0xe000ed38" description="BusFault Address Register">
+    <Register name="BFAR" start="0xE000ED38" description="BusFault Address Register">
       <BitField name="ADDRESS" start="0" size="32" description="When the BFARVALID bit of the BFSR is set to1, this field holds the address of the location that generated the BusFault" />
     </Register>
-    <Register name="AFSR" start="0xe000ed3c" description="Auxiliary Fault Status Register">
+    <Register name="AFSR" start="0xE000ED3C" description="Auxiliary Fault Status Register">
       <BitField name="IMPDEF" start="0" size="32" description="Implementation defined, the bits map to the AUXFAULT input signals" />
     </Register>
-    <Register name="ID_PFR0" start="0xe000ed40" access="ReadOnly" description="Processor Feature Register 0" />
-    <Register name="ID_PFR1" start="0xe000ed44" access="ReadOnly" description="Processor Feature Register 1" />
-    <Register name="ID_DFR0" start="0xe000ed48" access="ReadOnly" description="Debug Feature Register 0" />
-    <Register name="ID_AFR0" start="0xe000ed4c" access="ReadOnly" description="Auxilliary Feature Register 0" />
-    <Register name="ID_MMFR0" start="0xe000ed50" access="ReadOnly" description="Memory Model Feature Register 0" />
-    <Register name="ID_MMFR1" start="0xe000ed54" access="ReadOnly" description="Memory Model Feature Register 1" />
-    <Register name="ID_MMFR2" start="0xe000ed58" access="ReadOnly" description="Memory Model Feature Register 2" />
-    <Register name="ID_MMFR3" start="0xe000ed5c" access="ReadOnly" description="Memory Model Feature Register 3" />
-    <Register name="ID_ISAR0" start="0xe000ed60" access="ReadOnly" description="Instruction Set Attribute Register 0" />
-    <Register name="ID_ISAR1" start="0xe000ed64" access="ReadOnly" description="Instruction Set Attribute Register 1" />
-    <Register name="ID_ISAR2" start="0xe000ed68" access="ReadOnly" description="Instruction Set Attribute Register 2" />
-    <Register name="ID_ISAR3" start="0xe000ed6c" access="ReadOnly" description="Instruction Set Attribute Register 3" />
-    <Register name="ID_ISAR4" start="0xe000ed70" access="ReadOnly" description="Instruction Set Attribute Register 4" />
-    <Register name="ID_ISAR5" start="0xe000ed74" access="ReadOnly" description="Instruction Set Attribute Register 5" />
-    <Register name="CLIDR" start="0xe000ed78" access="ReadOnly" description="Cache Level ID Register">
+    <Register name="ID_PFR0" start="0xE000ED40" access="ReadOnly" description="Processor Feature Register 0" />
+    <Register name="ID_PFR1" start="0xE000ED44" access="ReadOnly" description="Processor Feature Register 1" />
+    <Register name="ID_DFR0" start="0xE000ED48" access="ReadOnly" description="Debug Feature Register 0" />
+    <Register name="ID_AFR0" start="0xE000ED4C" access="ReadOnly" description="Auxilliary Feature Register 0" />
+    <Register name="ID_MMFR0" start="0xE000ED50" access="ReadOnly" description="Memory Model Feature Register 0" />
+    <Register name="ID_MMFR1" start="0xE000ED54" access="ReadOnly" description="Memory Model Feature Register 1" />
+    <Register name="ID_MMFR2" start="0xE000ED58" access="ReadOnly" description="Memory Model Feature Register 2" />
+    <Register name="ID_MMFR3" start="0xE000ED5C" access="ReadOnly" description="Memory Model Feature Register 3" />
+    <Register name="ID_ISAR0" start="0xE000ED60" access="ReadOnly" description="Instruction Set Attribute Register 0" />
+    <Register name="ID_ISAR1" start="0xE000ED64" access="ReadOnly" description="Instruction Set Attribute Register 1" />
+    <Register name="ID_ISAR2" start="0xE000ED68" access="ReadOnly" description="Instruction Set Attribute Register 2" />
+    <Register name="ID_ISAR3" start="0xE000ED6C" access="ReadOnly" description="Instruction Set Attribute Register 3" />
+    <Register name="ID_ISAR4" start="0xE000ED70" access="ReadOnly" description="Instruction Set Attribute Register 4" />
+    <Register name="ID_ISAR5" start="0xE000ED74" access="ReadOnly" description="Instruction Set Attribute Register 5" />
+    <Register name="CLIDR" start="0xE000ED78" access="ReadOnly" description="Cache Level ID Register">
       <BitField name="Ctype1" start="0" size="3" description="Cache Type fields" />
       <BitField name="Ctype2" start="3" size="3" description="Cache Type fields" />
       <BitField name="Ctype3" start="6" size="3" description="Cache Type fields" />
@@ -31052,12 +31052,12 @@
       <BitField name="LoC" start="24" size="3" description="Level of Coherency for the cache hierarchy" />
       <BitField name="LoC" start="27" size="3" description="Level of Unification Uniprocessor for the cache hierarchy" />
     </Register>
-    <Register name="CTR" start="0xe000ed7c" access="ReadOnly" description="Cache Type Register">
+    <Register name="CTR" start="0xE000ED7C" access="ReadOnly" description="Cache Type Register">
       <BitField name="IminLine" start="0" size="4" description="Instruction cache minimum line length" />
       <BitField name="DminLine" start="16" size="4" description="Data cache minimum line length" />
       <BitField name="ERG" start="20" size="4" description="Exclusives Reservation Granule" />
     </Register>
-    <Register name="CCSIDR" start="0xe000ed80" access="ReadOnly" description="Current Cache Size ID Register">
+    <Register name="CCSIDR" start="0xE000ED80" access="ReadOnly" description="Current Cache Size ID Register">
       <BitField name="LineSize" start="0" size="3" description="Log2 Number of words in cache line - 2" />
       <BitField name="Associativity" start="3" size="10" description="Associativity of cache - 1" />
       <BitField name="NumSets" start="13" size="15" description="Number of sets in cache - 1" />
@@ -31066,11 +31066,11 @@
       <BitField name="WB" start="30" size="1" description="Write-Back" />
       <BitField name="WT" start="31" size="1" description="Write-Through" />
     </Register>
-    <Register name="CSSLER" start="0xe000ed84" description="Current Cache Selection Register">
+    <Register name="CSSLER" start="0xE000ED84" description="Current Cache Selection Register">
       <BitField name="InD" start="0" size="1" description="Selects either instruction or data cache" />
       <BitField name="Level" start="1" size="3" description="Identifies which cache level to select" />
     </Register>
-    <Register name="CPACR" start="0xe000ed88" description="Coprocessor Access Control Register">
+    <Register name="CPACR" start="0xE000ED88" description="Coprocessor Access Control Register">
       <BitField name="CP11" start="22" size="2" description="Access privileges for coprocessor 11" />
       <BitField name="CP10" start="20" size="2" description="Access privileges for coprocessor 10" />
       <BitField name="CP7" start="14" size="2" description="Access privileges for coprocessor 7" />
@@ -31152,8 +31152,8 @@
       <BitField name="Valid" start="0" size="1" description="Valid" />
     </Register>
   </RegisterGroup>
-  <RegisterGroup name="FPU" start="0xe000ef34" description="Floating Point Unit">
-    <Register name="FPCCR" start="0xe000ef34" description="Floating-point Context Control Register">
+  <RegisterGroup name="FPU" start="0xE000EF34" description="Floating Point Unit">
+    <Register name="FPCCR" start="0xE000EF34" description="Floating-point Context Control Register">
       <BitField name="ASPEN" start="31" size="1" description="Automatic state preservation enable" />
       <BitField name="LSPEN" start="30" size="1" description="Lazy state preservation enable" />
       <BitField name="MONRDY" start="8" size="1" description="DebugMonitor ready" />
@@ -31164,36 +31164,36 @@
       <BitField name="USER" start="1" size="1" description="User privilege" />
       <BitField name="LSPACT" start="0" size="1" description="Lazy state preservation active" />
     </Register>
-    <Register name="FPCAR" start="0xe000ef38" description="Floating-point Context Address Register">
+    <Register name="FPCAR" start="0xE000EF38" description="Floating-point Context Address Register">
       <BitField name="ADDRESSS" start="3" size="29" description="The location of the unpopulated floating-point register space allocated on an exception stack frame" />
     </Register>
-    <Register name="FPDSCR" start="0xe000ef3c" description="Floating-point Default Status Control Register">
+    <Register name="FPDSCR" start="0xE000EF3C" description="Floating-point Default Status Control Register">
       <BitField name="AHP" start="26" size="1" description="Alternative half-precision control bit" />
       <BitField name="DN" start="25" size="1" description="Default NaN mode control bit" />
       <BitField name="FZ" start="24" size="1" description="Flush-to-zero mode control bit" />
       <BitField name="RMode" start="22" size="2" description="Rounding Mode control field" />
     </Register>
   </RegisterGroup>
-  <RegisterGroup name="MPU" start="0xe000ed90" description="Memory Protection Unit">
-    <Register name="MPU_TYPE" start="0xe000ed90" access="ReadOnly" description="MPU Type Register">
+  <RegisterGroup name="MPU" start="0xE000ED90" description="Memory Protection Unit">
+    <Register name="MPU_TYPE" start="0xE000ED90" access="ReadOnly" description="MPU Type Register">
       <BitField name="IREGION" start="16" size="8" description="Number of supported MPU instruction regions" />
       <BitField name="DREGION" start="8" size="8" description="Number of supported MPU data regions" />
       <BitField name="SEPARATE" start="0" size="1" description="Support for unified or separate instruction and date memory maps" />
     </Register>
-    <Register name="MPU_CTRL" start="0xe000ed94" description="MPU Control Register">
+    <Register name="MPU_CTRL" start="0xE000ED94" description="MPU Control Register">
       <BitField name="PRIVDEFENA" start="2" size="1" description="Enables privileged software access to the default memory map" />
       <BitField name="HFNMIENA" start="1" size="1" description="Enable the operation of MPU during hard fault, NMI, and FAULTMASK handlers" />
       <BitField name="ENABLE" start="0" size="1" description="Enable MPU" />
     </Register>
-    <Register name="MPU_RNR" start="0xe000ed98" description="MPU Region Number Register">
+    <Register name="MPU_RNR" start="0xE000ED98" description="MPU Region Number Register">
       <BitField name="REGION" start="0" size="8" description="Indicates the MPU region referenced by the MPU_RBAR and MPU_RASR registers" />
     </Register>
-    <Register name="MPU_RBAR" start="0xe000ed9c" description="MPU Region Base Address Register">
+    <Register name="MPU_RBAR" start="0xE000ED9C" description="MPU Region Base Address Register">
       <BitField name="ADDR" start="5" size="27" description="Region base address field" />
       <BitField name="VALID" start="4" size="1" description="MPU Region Number valid bit" />
       <BitField name="REGION" start="0" size="4" description="MPU region field" />
     </Register>
-    <Register name="MPU_RASR" start="0xe000eda0" description="MPU Region Attribute and Size Register">
+    <Register name="MPU_RASR" start="0xE000EDA0" description="MPU Region Attribute and Size Register">
       <BitField name="XN" start="28" size="1" description="Instruction access disable bit" />
       <BitField name="AP" start="24" size="3" description="Access permission field" />
       <BitField name="TEX" start="19" size="3" description="Memory access attribute" />

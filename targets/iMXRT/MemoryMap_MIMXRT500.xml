@@ -1,11 +1,11 @@
 <!DOCTYPE Board_Memory_Definition_File>
 <Root name="iMXRT" >
-	<MemorySegment name="FlexSPI0"      start="$(FlexSPI0START:0x08000000)"    size="$(FlexSPI0SIZE:0x08000000)"    access="ReadOnly"/>
-	<MemorySegment name="FlexSPI0_sec"  start="$(FlexSPI0SECSTART:0x18000000)" size="$(FlexSPI0SECSIZE:0x08000000)" access="ReadOnly"/>
-	<MemorySegment name="FlexSPI1"      start="$(FlexSP1ISTART:0x28000000)"    size="$(FlexSPI1SIZE:0x08000000)"    access="ReadOnly"/>
-	<MemorySegment name="FlexSPI1_sec"  start="$(FlexSP1ISTART:0x38000000)"    size="$(FlexSPI1SIZE:0x08000000)"    access="ReadOnly"/>
-	<MemorySegment name="SRAM_code"     start="$(SRAMCODESTART:0x00000000)"    size="$(SRAMCODESIZE:0x00500000)"    access="Read/Write"/>
-	<MemorySegment name="SRAM_code_sec" start="$(SRAMCODESECSTART:0x10000000)" size="$(SRAMCODESECSIZE:0x00500000)" access="Read/Write"/>
-	<MemorySegment name="SRAM_data"     start="$(SRAMDATASTART:0x20000000)"    size="$(SRAMDATASIZE:0x00500000)"    access="Read/Write"/>
-	<MemorySegment name="SRAM_data_sec" start="$(SRAMDATASECSTART:0x30000000)" size="$(SRAMDATASECSIZE:0x00500000)" access="Read/Write"/>
+	<MemorySegment name="FlexSPI0_NS"   start="$(FlexSPI0START:0x08000000)"    size="$(FlexSPI0SIZE:0x08000000)"    access="ReadOnly"/>
+	<MemorySegment name="FlexSPI0"      start="$(FlexSPI0SECSTART:0x18000000)" size="$(FlexSPI0SECSIZE:0x08000000)" access="ReadOnly"/>
+	<MemorySegment name="FlexSPI1_NS"   start="$(FlexSP1ISTART:0x28000000)"    size="$(FlexSPI1SIZE:0x08000000)"    access="ReadOnly"/>
+	<MemorySegment name="FlexSPI1"      start="$(FlexSP1ISTART:0x38000000)"    size="$(FlexSPI1SIZE:0x08000000)"    access="ReadOnly"/>
+	<MemorySegment name="SRAM_code_NS"  start="$(SRAMCODESTART:0x00000000)"    size="$(SRAMCODESIZE:0x00500000)"    access="Read/Write"/>
+	<MemorySegment name="SRAM_code"     start="$(SRAMCODESECSTART:0x10000000)" size="$(SRAMCODESECSIZE:0x00500000)" access="Read/Write"/>
+	<MemorySegment name="SRAM_data_NS"  start="$(SRAMDATASTART:0x20000000)"    size="$(SRAMDATASIZE:0x00500000)"    access="Read/Write"/>
+	<MemorySegment name="SRAM_data"     start="$(SRAMDATASECSTART:0x30000000)" size="$(SRAMDATASECSIZE:0x00500000)" access="Read/Write"/>
 </Root>

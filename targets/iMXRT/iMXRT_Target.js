@@ -811,8 +811,6 @@ function FlexRAM_Restore ()
 	}
 
 	TargetInterface.message ("## FlexRAM_Restore - done");
-
-	TargetInterface.message ("## FlexRAM_Restore - done");
 }
 
 function ClockGate_EnableAll_10xx ()
@@ -1525,7 +1523,8 @@ function AlterRegister (Addr, Clear, Set)
 	TargetInterface.pokeUint32 (Addr, temp);
 }
 
-function FLEXSPI_Init (FlexSPI)
+// Index of the FlexSPI. Depending on the device, can be one or two.
+function FlexSPI_GetBaseAddress (FlexSPI)
 {
 	var FlexSPI1 = 0x402A8000;
 	var FlexSPI2 = 0x402A4000;
@@ -1554,8 +1553,17 @@ function FLEXSPI_Init (FlexSPI)
 			FlexSPI1 = 0x400CC000;
 			FlexSPI2 = 0x400D0000;
 			break;
+		case "MIMXRT1181":
+		case "MIMXRT1182":
+		case "MIMXRT1187_cm33":
+		case "MIMXRT1189_cm33":
+		case "MIMXRT1187_cm7":
+		case "MIMXRT1189_cm7":
+			FlexSPI1 = 0x525E0000; // Non Secure: 0x425E0000
+			FlexSPI2 = 0x545E0000; // Non Secure: 0x445E0000
+			break;
 		default:
-			TargetInterface.message ("FLEXSPI_Init - unknown Device: " + DeviceName);
+			TargetInterface.message ("FlexSPI_GetBaseAddress - unknown Device: " + DeviceName);
 			return;
 	}
 
@@ -1563,15 +1571,53 @@ function FLEXSPI_Init (FlexSPI)
 	switch (FlexSPI)
 	{
 		case 1:
-			base = FlexSPI1;
-			break;
+			return FlexSPI1;
 		case 2:
-			base = FlexSPI2;
+			return FlexSPI2;
 			break;
 		default:
-			TargetInterface.message ("FLEXSPI_Init - Invalid Interface");
+			TargetInterface.message ("FlexSPI_GetBaseAddress - Invalid Interface");
 	}
 
+	return 0;
+}
+
+function FlexSPI_ModuleReset (FlexSPI)
+{
+	TargetInterface.message ("## FlexSPI_ModuleReset ");
+	var base = FlexSPI_GetBaseAddress (FlexSPI);
+	var mcr0 = TargetInterface.peekUint32 (base);
+	if ((mcr0 & 0x02) == 0)  // Module enabled
+	{
+		TargetInterface.message ("## FlexSPI_ModuleReset - Module is enabled");
+		TargetInterface.pokeUint32 (base, mcr0 | 0x1);
+		do
+		{
+			mcr0 = TargetInterface.peekUint32 (base);
+		}
+		while ((mcr0 & 0x1) != 0);
+	}
+	TargetInterface.message ("## FlexSPI_ModuleReset - done");
+}
+
+function FlexSPI_WaitBusIdle (base)
+{
+	TargetInterface.message ("## FlexSPI_WaitBusIdle ");
+	var mcr0 = TargetInterface.peekUint32 (base);
+	if ((mcr0 & 0x02) == 0)  // Module enabled
+	{
+		TargetInterface.message ("## FlexSPI_WaitBusIdle - Module is enabled");
+		do
+		{
+			mcr0 = TargetInterface.peekUint32 (base);
+		}
+		while ((mcr0 & 0x3) != 0x3);
+	}
+	TargetInterface.message ("## FlexSPI_WaitBusIdle - done");
+}
+
+function FlexSPI_Init (FlexSPI)
+{
 	var CCM = 0x400FC000;
 	var CCM_CBCMR  = CCM + 0x18;
 	var CCM_CSCMR1 = CCM + 0x1C;
@@ -1579,6 +1625,8 @@ function FLEXSPI_Init (FlexSPI)
 
 	var CCM_ANALOG = 0x400D8000;
 	var CCM_ANALOG_PFD480 = CCM_ANALOG + 0xF0;
+
+	var base = FlexSPI_GetBaseAddress (FlexSPI);
 
 	// Set flexSPI root clock to 166MHZ.
 	AlterRegister (CCM_ANALOG_PFD480, 0xBF, 0x80);	// Disable the clock output first.
@@ -1612,8 +1660,9 @@ function FLEXSPI_Init (FlexSPI)
 
 function Reset_Loader ()
 {
-	Reset ();
 	TargetInterface.message ("## Reset_Loader");
+	Reset ();
 	TargetInterface.setRegister ("r0", 1);
 	TargetInterface.setRegister ("r1", 1);
+	TargetInterface.message ("## Reset_Loader - done");
 }
