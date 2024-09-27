@@ -1,18 +1,25 @@
 <!DOCTYPE CrossStudio_Project_File>
 <solution Name="Loader2" target="8" version="2">
+  <configuration Name="MIMXRT1166DVM6A_M4" />
+  <configuration Name="MIMXRT1166DVM6A_M7" />
+  <configuration Name="MIMXRT1176DVMAA_M4" />
+  <configuration Name="MIMXRT1176DVMAA_M7" />
+  <configuration Name="MIMXRT1042XJM5B" /> 
+  <configuration Name="MIMXRT1062DVL6B" />
+  <configuration Name="MIMXRT1064DVL6A" />
   <project Name="FlexSPI_NOR_Loader">
     <configuration
       CMSIS_CORE="Yes"
       Name="Common"
       Placement="TCM"
       arm_architecture="v7EM"
-      arm_linker_heap_size="1024"
-      arm_linker_stack_size="1024"
+      arm_linker_heap_size="0"
+      arm_linker_stack_size="4096"
       arm_target_interface_type="SWD"
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
-      batch_build_configurations="MIMXRT1166DVM6A_M7;MIMXRT1166DVM6A_M4;MIMXRT1176DVMAA_M7;MIMXRT1176DVMAA_M4"
-      c_user_include_directories="$(TargetsDir)/iMXRT/devices/$(DeviceFamily)"
+      batch_build_configurations="MIMXRT1166DVM6A_M7;MIMXRT1166DVM6A_M4;MIMXRT1176DVMAA_M7;MIMXRT1176DVMAA_M4;MIMXRT1042XJM5B;MIMXRT1062DVL6B;MIMXRT1064DVL6A"
+      c_user_include_directories="$(TargetsDir)/iMXRT/drivers/common;$(TargetsDir)/iMXRT/devices/$(DeviceFamily);$(TargetsDir)/iMXRT/devices/$(DeviceFamily)/drivers"
       gcc_debugging_level="None"
       gcc_entry_point="Reset_Handler"
       gcc_optimization_level="Level 1"
@@ -25,45 +32,29 @@
       target_reset_script="Reset()"
       target_script_file="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
     <configuration
-      Name="MIMXRT1166DVM6A_M7"
-      Target="MIMXRT1166DVM6A_M7"
-      arm_core_type="Cortex-M7"
-      arm_fpu_type="FPv5-D16"
-      arm_target_device_name="MIMXRT1166xxxA_M7"
-      build_output_file_name="../Loader/MIMXRT116x_QuadSPI_4KB_SEC_Loader.elf"
-      c_preprocessor_definitions="FLASH_START=0x30000000"
-      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1166_cm7_registers.xml"
-      linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml"
-      linker_section_placement_macros="FILLSIZE=0x400"
-      macros="DeviceFamily=MIMXRT1166"
-      target_get_partname_script=""
-      target_reset_script="Reset()" />
-    <configuration
       Name="MIMXRT1166DVM6A_M4"
       Target="MIMXRT1166DVM6A_M4"
       arm_core_type="Cortex-M4"
       arm_fpu_type="FPv4-SP-D16"
       arm_target_device_name="MIMXRT1166xxxA_M4"
-      build_output_file_name="../Loader/MIMXRT116x_QuadSPI_4KB_SEC_Alias_Loader.elf"
-      c_preprocessor_definitions="FLASH_START=0x08000000"
-      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1166_cm4_registers.xml"
+      build_output_file_name="../Loader/MIMXRT116x_FlexSPI_NOR_API_M4_Loader.elf"
+      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x08000000"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_Registers.xml"
       linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml"
-      linker_section_placement_macros="FILLSIZE=0x400"
       macros="DeviceFamily=MIMXRT1166"
       target_get_partname_script="EnableCM4()"
       target_reset_script="ResetCM4()" />
     <configuration
-      Name="MIMXRT1176DVMAA_M7"
-      Target="MIMXRT1176DVMAA_M7"
+      Name="MIMXRT1166DVM6A_M7"
+      Target="MIMXRT1166DVM6A_M7"
       arm_core_type="Cortex-M7"
       arm_fpu_type="FPv5-D16"
-      arm_target_device_name="MIMXRT1176xxxA_M7"
-      build_output_file_name="../Loader/MIMXRT117x_QuadSPI_4KB_SEC_Loader.elf"
-      c_preprocessor_definitions="FLASH_START=0x30000000"
-      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1176_cm7_registers.xml"
+      arm_target_device_name="MIMXRT1166xxxA_M7"
+      build_output_file_name="../Loader/MIMXRT116x_FlexSPI_NOR_API_M7_Loader.elf"
+      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x30000000"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_Registers.xml"
       linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml"
-      linker_section_placement_macros="FILLSIZE=0x400"
-      macros="DeviceFamily=MIMXRT1176"
+      macros="DeviceFamily=MIMXRT1166"
       target_get_partname_script=""
       target_reset_script="Reset()" />
     <configuration
@@ -72,24 +63,102 @@
       arm_core_type="Cortex-M4"
       arm_fpu_type="FPv4-SP-D16"
       arm_target_device_name="MIMXRT1176xxxA_M4"
-      build_output_file_name="../Loader/MIMXRT117x_QuadSPI_4KB_SEC_Alias_Loader.elf"
-      c_preprocessor_definitions="FLASH_START=0x08000000"
-      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1176_cm4_registers.xml"
+      build_output_file_name="../Loader/MIMXRT117x_FlexSPI_NOR_API_M4_Loader.elf"
+      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x08000000;has_ROM_API_Init"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_Registers.xml"
       linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml"
-      linker_section_placement_macros="FILLSIZE=0x400"
       macros="DeviceFamily=MIMXRT1176"
       target_get_partname_script="EnableCM4()"
       target_reset_script="ResetCM4()" />
+    <configuration
+      Name="MIMXRT1176DVMAA_M7"
+      Target="MIMXRT1176DVMAA_M7"
+      arm_core_type="Cortex-M7"
+      arm_fpu_type="FPv5-D16"
+      arm_target_device_name="MIMXRT1176xxxA_M7"
+      build_output_file_name="../Loader/MIMXRT117x_FlexSPI_NOR_API_M7_Loader.elf"
+      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x30000000;has_ROM_API_Init"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_Registers.xml"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml"
+      linker_section_placement_macros="FILLSIZE=0x400"
+      macros="DeviceFamily=MIMXRT1176"
+      target_get_partname_script=""
+      target_reset_script="Reset()" />
+    <configuration
+      Name="MIMXRT1042XJM5B"
+      Target="MIMXRT1042XJM5B"
+      arm_core_type="Cortex-M7"
+      arm_fpu_type="FPv5-D16"
+      arm_target_device_name="MIMXRT1042XJM5B"
+      build_output_file_name="../Loader/MIMXRT104x_FlexSPI_NOR_API_Loader.elf"
+      c_preprocessor_definitions="FlexSpiInstance=0;FLASH_START=0x60000000"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1042_Registers.xml"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml"
+      macros="DeviceFamily=MIMXRT1042"
+      target_get_partname_script=""
+      target_reset_script="Reset()" />    
+    <configuration
+      Name="MIMXRT1062DVL6B"
+      Target="MIMXRT1062DVL6B"
+      arm_core_type="Cortex-M7"
+      arm_fpu_type="FPv5-D16"
+      arm_target_device_name="MIMXRT1062DVL6B"
+      build_output_file_name="../Loader/MIMXRT106x_FlexSPI_NOR_API_Loader.elf"
+      c_preprocessor_definitions="FlexSpiInstance=0;FLASH_START=0x60000000"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1062_Registers.xml"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml"
+      macros="DeviceFamily=MIMXRT1062"
+      target_get_partname_script=""
+      target_reset_script="Reset()" />
+    <configuration
+      Name="MIMXRT1064DVL6A"
+      Target="MIMXRT1064DVL6A"
+      arm_core_type="Cortex-M7"
+      arm_fpu_type="FPv5-D16"
+      arm_target_device_name="MIMXRT1064DVL6A"
+      build_output_file_name="../Loader/MIMXRT1064_FlexSPI_NOR_API_Loader.elf"
+      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x70000000"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1064_Registers.xml"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml"
+      macros="DeviceFamily=MIMXRT1064"
+      target_get_partname_script=""
+      target_reset_script="Reset()" />
     <folder Name="Source Files">
       <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc" />
-      <file file_name="fsl_romapi.c" />
-      <file file_name="fsl_romapi.h" />
       <file file_name="loader2.c" />
       <file file_name="../Loader/loader_startup.s" />
     </folder>
+    <folder Name="fsl_romapi_MIMXRT1042">
+      <configuration Name="Common" build_exclude_from_build="Yes"/>
+      <configuration Name="MIMXRT1042XJM5B" build_exclude_from_build="No"/>
+      <file file_name="../devices/MIMXRT1042/drivers/fsl_romapi.c" />
+      <file file_name="../devices/MIMXRT1042/drivers/fsl_romapi.h" />
+    </folder>   
+    <folder Name="fsl_romapi_MIMXRT1062">
+      <configuration Name="Common" build_exclude_from_build="Yes"/>
+      <configuration Name="MIMXRT1062DVL6B" build_exclude_from_build="No"/>
+      <file file_name="../devices/MIMXRT1062/drivers/fsl_romapi.c" />
+      <file file_name="../devices/MIMXRT1062/drivers/fsl_romapi.h" />
+    </folder>
+    <folder Name="fsl_romapi_MIMXRT1064">
+      <configuration Name="Common" build_exclude_from_build="Yes"/>
+      <configuration Name="MIMXRT1064DVL6A" build_exclude_from_build="No"/>
+      <file file_name="../devices/MIMXRT1064/drivers/fsl_romapi.c" />
+      <file file_name="../devices/MIMXRT1064/drivers/fsl_romapi.h" />
+    </folder>
+    <folder Name="fsl_romapi_MIMXRT1166">
+      <configuration Name="Common" build_exclude_from_build="Yes"/>
+      <configuration Name="MIMXRT1166DVM6A_M7" build_exclude_from_build="No"/>
+      <configuration Name="MIMXRT1166DVM6A_M4" build_exclude_from_build="No"/>
+      <file file_name="../devices/MIMXRT1166/drivers/fsl_romapi.c" />
+      <file file_name="../devices/MIMXRT1166/drivers/fsl_romapi.h" />
+    </folder>
+    <folder Name="fsl_romapi_MIMXRT1176">
+      <configuration Name="Common" build_exclude_from_build="Yes"/>
+      <configuration Name="MIMXRT1176DVMAA_M7" build_exclude_from_build="No"/>
+      <configuration Name="MIMXRT1176DVMAA_M4" build_exclude_from_build="No"/>
+      <file file_name="../devices/MIMXRT1176/drivers/fsl_romapi.c" />
+      <file file_name="../devices/MIMXRT1176/drivers/fsl_romapi.h" />
+    </folder>
   </project>
-  <configuration Name="MIMXRT1166DVM6A_M7" />
-  <configuration Name="MIMXRT1166DVM6A_M4" />
-  <configuration Name="MIMXRT1176DVMAA_M7" />
-  <configuration Name="MIMXRT1176DVMAA_M4" />
 </solution>

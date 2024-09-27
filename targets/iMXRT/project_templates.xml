@@ -5,12 +5,15 @@
     <property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
     <propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
     <propertygroup name="Placement" value="TCM" choose="Yes" />
-    <property name="arm_architecture" value="v7EM" />
     <property name="arm_fpu_abi" value="Hard" />
     <property name="arm_target_interface_type" value="SWD" />
     <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
+    <property name="target_get_partname_script" value="GetPartName()" />
+    <property name="target_match_partname_script" value="MatchPartName(&quot;$(Target)&quot;)" />
+    <property name="target_trace_initialize_script" value="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
     <property name="target_reset_script" value="Reset()" />
     <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
+    <property name="arm_link_debugio_type" value="Breakpoint" />
     <property name="arm_linker_stack_size" value="1024" />
     <property name="arm_linker_heap_size" value="1024" />
     <property name="linker_output_format" />
@@ -22,7 +25,7 @@
     <property name="linker_scanf_character_group_matching_enabled" />
     <property name="link_symbol_definitions" value="__NCACHE_REGION_START=__NCACHE_REGION_segment_start__;__NCACHE_REGION_SIZE=__NCACHE_REGION_segment_size__;__base_NCACHE_REGION=__NCACHE_REGION_segment_start__;__top_NCACHE_REGION=__NCACHE_REGION_segment_end__" />
     <propertygroup name="CMSIS_CORE" value="Yes" />
-    <property name="c_user_include_directories" value="$(TargetsDir)/iMXRT/devices/$(DeviceFamily)" />
+    <property name="c_user_include_directories" value="$(TargetsDir)/iMXRT/drivers/common;$(TargetsDir)/iMXRT/devices/$(DeviceFamily);$(TargetsDir)/iMXRT/devices/$(DeviceFamily)/drivers" />
     <folder name="Source Files" filter="c;cpp;cxx;cc;h;s;asm;inc">
       <file name="main.c" source="$(StudioDir)/samples/Shared/main.c" />
     </folder>
@@ -32,15 +35,56 @@
       <file name="$(DeviceSystemFile)" expand="no" />
     </folder>
   </project>
+  <project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT CTL Executable" description="A CrossWorks Tasking Library executable for NXP iMXRT processor." type="Executable" template_name="iMXRT_CTL_EXE">
+    <configuration name="THUMB Debug" />
+    <configuration name="THUMB Release" />
+    <property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
+    <propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
+    <propertygroup name="Placement" value="TCM" choose="Yes" />
+    <property name="arm_fpu_abi" value="Hard" />
+    <property name="arm_target_interface_type" value="SWD" />
+    <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
+    <property name="target_get_partname_script" value="GetPartName()" />
+    <property name="target_match_partname_script" value="MatchPartName(&quot;$(Target)&quot;)" />
+    <property name="target_trace_initialize_script" value="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
+    <property name="target_reset_script" value="Reset()" />
+    <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
+    <property name="arm_link_debugio_type" value="Breakpoint" />
+    <property name="arm_linker_stack_size" value="1024" />
+    <property name="arm_linker_process_stack_size" value="1024" />
+    <property name="arm_linker_heap_size" value="1024" />
+    <property name="linker_output_format" />
+    <property name="linker_printf_fmt_level" />
+    <property name="linker_printf_width_precision_supported" />
+    <property name="linker_printf_fp_enabled" />
+    <property name="linker_scanf_fmt_level" />
+    <property name="linker_scanf_fp_enabled" />
+    <property name="linker_scanf_character_group_matching_enabled" />
+    <property name="link_symbol_definitions" value="__NCACHE_REGION_START=__NCACHE_REGION_segment_start__;__NCACHE_REGION_SIZE=__NCACHE_REGION_segment_size__;__base_NCACHE_REGION=__NCACHE_REGION_segment_start__;__top_NCACHE_REGION=__NCACHE_REGION_segment_end__" />
+    <propertygroup name="CMSIS_CORE" value="Yes" />
+    <propertygroup name="libctl" value="Yes" />
+    <property name="c_user_include_directories" value="$(TargetsDir)/iMXRT/drivers/common;$(TargetsDir)/iMXRT/devices/$(DeviceFamily);$(TargetsDir)/iMXRT/devices/$(DeviceFamily)/drivers" />
+    <folder name="Source Files" filter="c;cpp;cxx;cc;h;s;asm;inc">
+      <file name="main_ctl.c" source="$(StudioDir)/ctl/source/main_ctl.c" />
+    </folder>
+    <folder name="System Files">
+      <file name="$(StudioDir)/source/thumb_crt0.s" expand="no" />
+      <file name="$(DeviceStartFile)" expand="no" />
+      <file name="$(DeviceSystemFile)" expand="no" />
+      <file name="$(TargetsDir)/iMXRT/iMXRT_ctl.c" expand="no" />
+    </folder>
+  </project>
   <project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT External GCC Built Executable" description="An external GCC built executable for NXP iMXRT processor." type="Executable" template_name="iMXRT_GCC_EXE">
     <configuration name="$(Configuration)" />
     <property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
     <propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
     <propertygroup name="Placement" value="TCM" choose="Yes" />
-    <property name="arm_architecture" value="v7EM" />
     <property name="arm_fpu_abi" value="Hard" />
     <property name="arm_target_interface_type" value="SWD" />
     <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
+    <property name="target_get_partname_script" value="GetPartName()" />
+    <property name="target_match_partname_script" value="MatchPartName(&quot;$(Target)&quot;)" />
+    <property name="target_trace_initialize_script" value="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
     <property name="target_reset_script" value="Reset()" />
     <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
     <property name="c_system_include_directories" value="$(ARMGCCDIR)/../arm-none-eabi/include;$(ARMGCCDIR)/../lib/gcc/arm-none-eabi/$(ARMGCCVERSION)/include;$(ARMGCCDIR)/../lib/gcc/arm-none-eabi/$(ARMGCCVERSION)/include-fixed;$(ARMGCCDIR)/../arm-none-eabi/include/c++/$(ARMGCCVERSION);$(ARMGCCDIR)/../arm-none-eabi/include/c++/$(ARMGCCVERSION)/bits" />
@@ -52,10 +96,12 @@
     <property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
     <propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
     <propertygroup name="Placement" value="TCM" choose="Yes" />
-    <property name="arm_architecture" value="v7EM" />
     <property name="arm_fpu_abi" value="Hard" />
     <property name="arm_target_interface_type" value="SWD" />
     <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
+    <property name="target_get_partname_script" value="GetPartName()" />
+    <property name="target_match_partname_script" value="MatchPartName(&quot;$(Target)&quot;)" />
+    <property name="target_trace_initialize_script" value="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
     <property name="target_reset_script" value="Reset()" />
     <property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
     <property name="external_build_file_name" />

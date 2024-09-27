@@ -72,9 +72,6 @@ uint32_t SystemCoreClock = DEFAULT_SYSTEM_CLOCK;
 void SystemInit (void) {
 #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
   SCB->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access in Secure mode */
-  #if defined (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U)
-  SCB_NS->CPACR |= ((3UL << 10*2) | (3UL << 11*2));    /* set CP10, CP11 Full Access in Non-secure mode */
-  #endif /* (__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE == 3U) */
 #endif /* ((__FPU_PRESENT == 1) && (__FPU_USED == 1)) */
 
 #if defined(__MCUXPRESSO)
@@ -96,7 +93,15 @@ void SystemInit (void) {
     /* Re-Configure FLEXSPI NOR via ROM API, for details please refer to the init function of ROM FLEXSPI NOR flash
        driver which is in fsl_romapi.h and fsl_romapi.c in the devices\${soc}\drivers directory of SDK package */
     uint8_t flexspi_nor_config[512];
-    memcpy((void *)flexspi_nor_config, (void *)FLASH_CONFIG_ADDRESS, sizeof(flexspi_nor_config));
+    uint8_t * srcAddr, * dstAddr;
+    dstAddr = flexspi_nor_config;
+    srcAddr = (uint8_t *)FLASH_CONFIG_ADDRESS;
+    uint16_t i= sizeof(flexspi_nor_config);
+    while (i--)
+    {
+      *dstAddr++ = *srcAddr++;
+    }
+    
     flexspi_nor_config[12] = 1U;  /* kFLEXSPIReadSampleClk_LoopbackFromDqsPad */
     flexspi_nor_config[70] = 7U;  /* kFLEXSPISerialClk_133MHz */
 

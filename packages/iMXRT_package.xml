@@ -1,5 +1,5 @@
 <!DOCTYPE CrossStudio_Package_Description_File>
-<package crossstudio_versions="8:4.8-" version="4.5" dependencies="CMSIS" cpu_family="iMXRT" author="Rowley Associates Ltd" name="iMXRT" cpu_manufacturer="NXP" build_version="2022082500.13398;crossworks_v4;crossworks_v4" date="2022-08-25T13:48:15">
+<package crossstudio_versions="8:4.10-" version="4.6" dependencies="CMSIS" cpu_family="iMXRT" author="Rowley Associates Ltd" name="iMXRT" cpu_manufacturer="NXP" build_version="2024092601.13718;crossworks_v4;crossworks_v4" date="2024-09-26T16:19:30">
  <group title="System Solutions">
   <file title="iMXRT Loader Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader.hzp"/>
   <file title="iMXRT Loader2 Solution" file_name="$(TargetsDir)/iMXRT/Loader/Loader2.hzp"/>
@@ -11,13 +11,19 @@
   </category>
   <category name="iMXRT1015">
    <cpu name="MIMXRT1015CAF4A"/>
+   <cpu name="MIMXRT1015CAF4B"/>
    <cpu name="MIMXRT1015DAF5A"/>
+   <cpu name="MIMXRT1015DAF5B"/>
   </category>
   <category name="iMXRT1020">
-   <cpu name="MIMXRT1021CAG4A"/>
    <cpu name="MIMXRT1021CAF4A"/>
-   <cpu name="MIMXRT1021DAG5A"/>
+   <cpu name="MIMXRT1021CAF4B"/>
+   <cpu name="MIMXRT1021CAG4A"/>
+   <cpu name="MIMXRT1021CAG4B"/>
    <cpu name="MIMXRT1021DAF5A"/>
+   <cpu name="MIMXRT1021DAF5B"/>
+   <cpu name="MIMXRT1021DAG5A"/>
+   <cpu name="MIMXRT1021DAG5B"/>
   </category>
   <category name="iMXRT1024">
    <cpu name="MIMXRT1024CAG4A"/>
@@ -25,37 +31,62 @@
    <cpu name="MIMXRT1024DAG5A"/>
    <cpu name="MIMXRT1024DAG5B"/>
   </category>
-  <category name="iMXRT1050">
-   <cpu name="MIMXRT1051CVL5A"/>
-   <cpu name="MIMXRT1051CVL5B"/>
-   <cpu name="MIMXRT1051CVJ5B"/>
-   <cpu name="MIMXRT1051DVL6A"/>
-   <cpu name="MIMXRT1051DVL6B"/>
-   <cpu name="MIMXRT1052CVL5A"/>
-   <cpu name="MIMXRT1052CVL5B"/>
-   <cpu name="MIMXRT1052CVJ5B"/>
-   <cpu name="MIMXRT1052DVL6A"/>
-   <cpu name="MIMXRT1052DVL6B"/>
-   <cpu name="MIMXRT1052DVJ6B"/>
+  <category name="iMXRT1041">
+   <cpu name="MIMXRT1041DFP6B"/>
+   <cpu name="MIMXRT1041DJM6B"/>
+   <cpu name="MIMXRT1041XFP5B"/>
+   <cpu name="MIMXRT1041XJM5B"/>
   </category>
-  <category name="iMXRT1060">
+  <category name="iMXRT1042">
+   <cpu name="MIMXRT1042DFP6B"/>
+   <cpu name="MIMXRT1042DJM6B"/>
+   <cpu name="MIMXRT1042XFP5B"/>
+   <cpu name="MIMXRT1042XJM5B"/>
+  </category>
+  <category name="iMXRT1051">
+   <cpu name="MIMXRT1051CVJ5B"/>
+   <cpu name="MIMXRT1051CVL5B"/>
+   <cpu name="MIMXRT1051DVJ6B"/>
+   <cpu name="MIMXRT1051DVL6B"/>
+  </category>
+  <category name="iMXRT1052">
+   <cpu name="MIMXRT1052CVJ5B"/>
+   <cpu name="MIMXRT1052CVL5B"/>
+   <cpu name="MIMXRT1052DVJ6B"/>
+   <cpu name="MIMXRT1052DVL6B"/>
+  </category>
+  <category name="iMXRT1061">
    <cpu name="MIMXRT1061CVJ5A"/>
+   <cpu name="MIMXRT1061CVJ5B"/>
    <cpu name="MIMXRT1061CVL5A"/>
-   <cpu name="MIMXRT1061DVL6A"/>
+   <cpu name="MIMXRT1061CVL5B"/>
    <cpu name="MIMXRT1061DVJ6A"/>
+   <cpu name="MIMXRT1061DVJ6B"/>
+   <cpu name="MIMXRT1061DVL6A"/>
+   <cpu name="MIMXRT1061DVL6B"/>
    <cpu name="MIMXRT1061XVN5B"/>
+  </category>
+  <category name="iMXRT1062">
    <cpu name="MIMXRT1062CVJ5A"/>
+   <cpu name="MIMXRT1062CVJ5B"/>
    <cpu name="MIMXRT1062CVL5A"/>
+   <cpu name="MIMXRT1062CVL5B"/>
    <cpu name="MIMXRT1062DVJ6A"/>
+   <cpu name="MIMXRT1062DVJ6B"/>
    <cpu name="MIMXRT1062DVL6A"/>
+   <cpu name="MIMXRT1062DVL6B"/>
    <cpu name="MIMXRT1062DVN6B"/>
    <cpu name="MIMXRT1062XVN5B"/>
   </category>
   <category name="iMXRT1064">
-   <cpu name="MIMXRT1064CVL5A"/>
-   <cpu name="MIMXRT1064DVL6A"/>
    <cpu name="MIMXRT1064CVJ5A"/>
-   <cpu name="MIMXRT1064CVJ6A"/>
+   <cpu name="MIMXRT1064CVJ5B"/>
+   <cpu name="MIMXRT1064CVL5A"/>
+   <cpu name="MIMXRT1064CVL5B"/>
+   <cpu name="MIMXRT1064DVJ6A"/>
+   <cpu name="MIMXRT1064DVJ6B"/>
+   <cpu name="MIMXRT1064DVL6A"/>
+   <cpu name="MIMXRT1064DVL6B"/>
   </category>
   <category name="iMXRT1160">
    <cpu name="MIMXRT1165CVM5A"/>
@@ -184,13 +215,21 @@
   </section>
  </documentation>
  <history>
+  <version name="4.6">
+   <description>Add latest CMSIS header files and device specific driver files.</description>
+   <description>Add Loader2 (implemented using fsl_romapi) builds for iMXRT1042/iMXRT1062/iMXRT1064 QSPI.</description>
+   <description>Add support for latest devices.</description>
+   <description>Improve attach and reset of iMXRT11xx devices.</description>
+   <description>Added missing ResetCM4() script.</description>
+   <description>Add CTL project templates.</description>
+  </version>
   <version name="4.5">
    <description>Fixed FPUType for iMXRT1011 devices.</description>
    <description>Add latest CMSIS header files.</description>
    <description>Add support for iMXRT1160 devices.</description>
    <description>Moved FILL section into iMXRT1011/iMXRT11xx startup code.</description>
    <description>STARTUP_FROM_RESET now implemented in iMXRT11xx startup code.</description>
-   <description>Add Loader2 implemented using fsl_romapi with builds for iMXRT117x/iMXRT116x QSPI.</description>
+   <description>Add Loader2 (implemented using fsl_romapi) with builds for iMXRT117x/iMXRT116x QSPI.</description>
    <description>Modified the Reset() script for iMXRT11xx devices to use the NSRST pin.</description>
   </version>
   <version name="4.4">

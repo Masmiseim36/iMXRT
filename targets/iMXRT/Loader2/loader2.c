@@ -15,7 +15,9 @@
 #include <libmem.h>
 #include "fsl_romapi.h"
 
+#ifndef FlexSpiInstance
 #define FlexSpiInstance           1U
+#endif
 static serial_nor_config_option_t option = {
     .option0.U = 0xc0000007U,
     .option1.U = 0U,
@@ -98,19 +100,21 @@ unsigned char mem2[64];
 
 int
 main(uint32_t flags, uint32_t param)
-{
-  int res;
-  uint32_t fosc = flags & LIBMEM_RPC_LOADER_FLAG_PARAM ? param : 0;
+{ 
   const char *error_string = 0;
   libmem_driver_handle_t flash1_handle;
   
+#ifdef has_ROM_API_Init
   ROM_API_Init();
+#endif
+  if ((flags & LIBMEM_RPC_LOADER_FLAG_PARAM) && param != 24000000)
+    option.option0.U = param;
   status_t status = ROM_FLEXSPI_NorFlash_GetConfig(FlexSpiInstance, &norConfig, &option);
   if (status != kStatus_Success)
     return LIBMEM_STATUS_ERROR;
   status = ROM_FLEXSPI_NorFlash_Init(FlexSpiInstance, &norConfig);
   if (status != kStatus_Success)
-    libmem_rpc_loader_exit(res, error_string);
+    libmem_rpc_loader_exit(status, error_string);
   //ROM_FLEXSPI_NorFlash_ClearCache(FlexSpiInstance);
   //if (status != kStatus_Success)
   //  return LIBMEM_STATUS_ERROR;
@@ -127,7 +131,7 @@ main(uint32_t flags, uint32_t param)
   res = libmem_flush(); 
 #endif
 
-  res = libmem_rpc_loader_start(&__DTCM_segment_used_end__, &__DTCM_segment_end__ - 1);
+  int res = libmem_rpc_loader_start(&__DTCM_segment_used_end__, &__DTCM_segment_end__ - 1);
 
   /* Terminate loader */
   libmem_rpc_loader_exit(res, error_string);
