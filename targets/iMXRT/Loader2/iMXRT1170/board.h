@@ -99,9 +99,6 @@
 #define BOARD_USER_BUTTON_IRQ_HANDLER GPIO13_Combined_0_31_IRQHandler
 #define BOARD_USER_BUTTON_NAME        "SW7"
 
-/*! @brief The board flash size */
-#define BOARD_FLASH_SIZE (0x1000000U)
-
 /* SKIP_SEMC_INIT can also be defined independently */
 #ifdef USE_SDRAM
 #define SKIP_SEMC_INIT

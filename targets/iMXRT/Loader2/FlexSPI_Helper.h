@@ -2,7 +2,6 @@
 #define FLEX_SPI_HELPER_H_
 
 #include "fsl_device_registers.h"
-#include "fsl_flexspi.h"
 #include "pin_mux.h"
 
 /*! \brief perform a JEDEC reset on the given interface 

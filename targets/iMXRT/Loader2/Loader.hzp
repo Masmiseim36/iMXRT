@@ -10,7 +10,7 @@
     c_additional_options="-fno-signed-char;-Wno-narrowing;-Wall;-Wextra;-Wmisleading-indentation;-Wshadow;-Wdouble-promotion;-Wformat=2"
     c_preprocessor_definitions="__THUMB;STARTUP_FROM_RESET=1;DISABLE_WDOG=1"
     c_preprocessor_undefinitions="__STDCPP_THREADS__"
-    clang_tidy_checks_cpp="*;-llvm*;-fuchsia*;-altera*;-modernize-use-trailing-return-type;-*braces-around-statements;-*magic-numbers;-cppcoreguidelines-pro-bounds-constant-array-index;-google-readability-namespace-comments"
+    clang_tidy_checks_cpp="*;-llvm*;-fuchsia*;-altera*;-modernize-use-trailing-return-type;-*braces-around-statements;-*magic-numbers;-cppcoreguidelines-pro-bounds-constant-array-index;-google-readability-namespace-comments;-readability-identifier-length"
     cpp_only_additional_options="-Woverloaded-virtual;-Wnon-virtual-dtor"
     linker_treat_libraries_as_object_files="No" />
   <configuration
@@ -716,8 +716,6 @@
     <folder Name="Source">
       <file file_name="loader.cpp" />
       <file file_name="board.cpp" />
-      <file file_name="libmem_driver_Hyperflash.h" />
-      <file file_name="libmem_driver_Hyperflash.cpp" />
       <file file_name="libmem_Tools.h" />
       <file file_name="libmem_Tools.cpp" />
       <file file_name="libmem_driver_xSPI.h" />
@@ -734,6 +732,7 @@
       <file file_name="FlexSPI_ISSI.cpp" />
       <file file_name="FlexSPI_Macronix.h" />
       <file file_name="FlexSPI_Macronix.cpp" />
+      <file file_name="FlexSPI_Spansion.h" />
       <file file_name="FlexSPI_Winbond.h" />
       <file file_name="FlexSPI_Winbond.cpp" />
     </folder>

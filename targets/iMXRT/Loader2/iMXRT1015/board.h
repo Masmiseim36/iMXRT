@@ -76,9 +76,6 @@
 #define BOARD_USER_BUTTON_IRQ_HANDLER GPIO2_Combined_0_15_IRQHandler
 #define BOARD_USER_BUTTON_NAME        "SW4"
 
-/*! @brief The flash size */
-#define BOARD_FLASH_SIZE (0x1000000U)
-
 /* USB PHY condfiguration */
 #define BOARD_USB_PHY_D_CAL     (0x0CU)
 #define BOARD_USB_PHY_TXCAL45DP (0x06U)

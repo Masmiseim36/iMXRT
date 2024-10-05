@@ -30,7 +30,6 @@ extern "C"
 #include "fsl_common.h"
 #include "fsl_clock.h"
 #include "libmem_Tools.h"
-#include "libmem_driver_Hyperflash.h"
 #include "libmem_driver_xSPI.h"
 #include "pin_mux.h"
 #include "DebugPrint.h"
@@ -97,19 +96,12 @@ void InitializeAndTest (FlexSPI_Helper *base, MemoryType type)
 	PerformJEDECReset (base);
 	InitializeSpiPins (base, type);
 
-	LibmemStatus_t res {LibmemStaus_Success};
-	if (type == MemType_Hyperflash)
-		res = Libmem_InitializeDriver_Hyperflash (base);
-	else
-		res = Libmem_InitializeDriver_xSPI (base, type);
+	LibmemStatus_t res= Libmem_InitializeDriver_xSPI (base, type);
 	if (res != LibmemStaus_Success)
 	{
 		PerformJEDECReset (base);
 		InitializeSpiPins (base, type);
-		if (type == MemType_Hyperflash)
-			res = Libmem_InitializeDriver_Hyperflash (base);
-		else
-			res = Libmem_InitializeDriver_xSPI (base, type);
+		res = Libmem_InitializeDriver_xSPI (base, type);
 	}
 	if (res == LibmemStaus_Success)
 	{
@@ -239,26 +231,12 @@ enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
 	switch (memoryType)
 	{
 		case MemType_Hyperflash:
-			do
-			{
-				// Init for Hyperflash
-				DebugPrint ("Init Loader for Hyperflash\r\n");
-				InitOctaSPIPins (base);
-				status = Libmem_InitializeDriver_Hyperflash (base);
-				if (status != LibmemStaus_Success)
-				{
-					Trials ++;
-					PerformJEDECReset (base);
-				}
-			}
-			while (status != LibmemStaus_Success && Trials < 3);
-			break;
 		case MemType_OctaSPI_DDR:
 		case MemType_OctaSPI:
 			do
 			{
 				// Init for Octal-SPI with DDR
-				DebugPrint ("Init Loader for Octal-SPI (DDR)\r\n");
+				DebugPrint ("Init Loader for Octal-SPI (DDR) or Hyperflash\r\n");
 				// A small delay is need here
 				for (int i=0; i<1000000; i++)
 					__asm__ volatile("nop");
@@ -274,26 +252,11 @@ enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
 			while (status != LibmemStaus_Success && Trials < 3);
 			break;
 		case MemType_QuadSPI_DDR:
-//		case MemType_QuadSPI:
-			do
-			{
-				// Init for Octal-SPI with DDR
-				DebugPrint ("Init Loader for Quad-SPI-DDR\r\n");
-				InitQuadSPIPins (base);
-				status =  Libmem_InitializeDriver_xSPI (base, memoryType);
-				if (status != LibmemStaus_Success)
-				{
-					Trials ++;
-					PerformJEDECReset (base);
-				}
-			}
-			while (status != LibmemStaus_Success && Trials < 3);
-			break;
 		case MemType_QuadSPI:
 			do
 			{
-				// Init for Quad-SPI
-				DebugPrint ("Init Loader for Quad-SPI\r\n");
+				// Init for Octal-SPI with DDR
+				DebugPrint ("Init Loader for Quad-SPI (DDR)\r\n");
 				InitQuadSPIPins (base);
 				status =  Libmem_InitializeDriver_xSPI (base, memoryType);
 				if (status != LibmemStaus_Success)

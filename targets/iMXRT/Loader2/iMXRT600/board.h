@@ -228,7 +228,6 @@
 #define BOARD_USB_PHY_TXCAL45DP (0x06U)
 #define BOARD_USB_PHY_TXCAL45DM (0x06U)
 
-#define BOARD_FLASH_SIZE (0x4000000U)
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */

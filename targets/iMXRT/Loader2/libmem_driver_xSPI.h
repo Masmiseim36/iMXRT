@@ -111,7 +111,7 @@ public:
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
 	}
 
-	status_t ReadRegister (uint32_t Address, uint32_t &value, LUT_CommandOffsets cmd)
+	status_t ReadRegister (uint32_t Address, uint32_t &value, LUT_CommandOffsets cmd, size_t size  = 1)
 	{
 		flexspi_transfer_t flashXfer
 		{
@@ -121,7 +121,7 @@ public:
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
 			&value,						// data				- Data buffer.
-			1							// dataSize			- Data size in bytes.
+			size						// dataSize			- Data size in bytes.
 		};
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
 	}
@@ -141,7 +141,7 @@ public:
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
 	}
 
-	status_t SendCommand (uint32_t Address, LUT_CommandOffsets cmd)
+	status_t SendCommand (uint32_t Address, LUT_CommandOffsets cmd, uint8_t sequenceSize = 1)
 	{
 		flexspi_transfer_t flashXfer
 		{
@@ -149,7 +149,7 @@ public:
 			port,						// port				- Operation port
 			kFLEXSPI_Command,			// cmdType			- Execution command type.
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
-			1,							// SeqNumber		- Sequence number for command.
+			sequenceSize,				// SeqNumber		- Sequence number for command.
 			nullptr,					// data				- Data buffer.
 			0							// dataSize			- Data size in bytes.
 		};
