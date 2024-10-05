@@ -176,34 +176,7 @@ inline int GetPageSize (MemoryType memType)
 \return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
 LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType memType)
 {
-	#if (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES))
-		// Clock Source
-		// 0 --> Main Clock.
-		// 1 --> Main PLL Clock (main_pll_clk).
-		// 2 --> AUX0 PLL clock (aux0_pll_clk).
-		// 3 --> FFRO Clock.
-		// 4 --> AUX1 PLL clock (aux1_pll_clk).
-		constexpr uint32_t src = 1;	// Use AUX0_PLL as clock source for the FlexSPI
-		uint32_t ClockDiv = 9;		// with a divider of four
-		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (ClockDiv - 1))
-		{
-			#if !defined(FSL_SDK_DRIVER_QUICK_ACCESS_ENABLE)
-				POWER_DisablePD(kPDRUNCFG_APD_FLEXSPI_SRAM);
-				POWER_DisablePD(kPDRUNCFG_PPD_FLEXSPI_SRAM);
-				POWER_ApplyPD();
-			#endif
-
-//			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
-			CLKCTL0->FLEXSPIFCLKSEL  = CLKCTL0_FLEXSPIFCLKSEL_SEL(src);			// Update flexspi clock.
-			CLKCTL0->FLEXSPIFCLKDIV |= CLKCTL0_FLEXSPIFCLKDIV_RESET_MASK;		// Reset the divider counter
-			CLKCTL0->FLEXSPIFCLKDIV  = CLKCTL0_FLEXSPIFCLKDIV_DIV(ClockDiv - 1);
-			while ((CLKCTL0->FLEXSPIFCLKDIV) & CLKCTL0_FLEXSPIFCLKDIV_REQFLAG_MASK)
-				;
-//			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
-		}
-		uint32_t ClockHz = CLOCK_GetFlexspiClkFreq ();
-		//uint32_t sourceClock_Hz = ClockHz * ClockDiv;
-	#elif (defined(MIMXRT533S_SERIES)  || defined(MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES))
+	#if (defined(MIMXRT533S_SERIES)  || defined(MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES))
 		constexpr uint32_t src {2};	// Use AUX0_PLL as clock source for the FlexSPI
 		uint32_t ClockDiv {4};		// with a divider of four
 		uint32_t ClockHz  {};
@@ -243,6 +216,33 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 //			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
 			ClockHz = CLOCK_GetFlexspiClkFreq (1);
 		}
+	#elif (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES))
+		// Clock Source
+		// 0 --> Main Clock.
+		// 1 --> Main PLL Clock (main_pll_clk).
+		// 2 --> AUX0 PLL clock (aux0_pll_clk).
+		// 3 --> FFRO Clock.
+		// 4 --> AUX1 PLL clock (aux1_pll_clk).
+		constexpr uint32_t src = 1;	// Use AUX0_PLL as clock source for the FlexSPI
+		uint32_t ClockDiv = 9;		// with a divider of four
+		if (CLKCTL0->FLEXSPIFCLKSEL != CLKCTL0_FLEXSPIFCLKSEL_SEL(src) || (CLKCTL0->FLEXSPIFCLKDIV & CLKCTL0_FLEXSPIFCLKDIV_DIV_MASK) != (ClockDiv - 1))
+		{
+			#if !defined(FSL_SDK_DRIVER_QUICK_ACCESS_ENABLE)
+				POWER_DisablePD(kPDRUNCFG_APD_FLEXSPI_SRAM);
+				POWER_DisablePD(kPDRUNCFG_PPD_FLEXSPI_SRAM);
+				POWER_ApplyPD();
+			#endif
+
+//			CLKCTL0->PSCCTL0_CLR = CLKCTL0_PSCCTL0_CLR_FLEXSPI_OTFAD_CLK_MASK;	// Disable clock before changing clock source
+			CLKCTL0->FLEXSPIFCLKSEL  = CLKCTL0_FLEXSPIFCLKSEL_SEL(src);			// Update flexspi clock.
+			CLKCTL0->FLEXSPIFCLKDIV |= CLKCTL0_FLEXSPIFCLKDIV_RESET_MASK;		// Reset the divider counter
+			CLKCTL0->FLEXSPIFCLKDIV  = CLKCTL0_FLEXSPIFCLKDIV_DIV(ClockDiv - 1);
+			while ((CLKCTL0->FLEXSPIFCLKDIV) & CLKCTL0_FLEXSPIFCLKDIV_REQFLAG_MASK)
+				;
+//			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
+		}
+		uint32_t ClockHz = CLOCK_GetFlexspiClkFreq ();
+		//uint32_t sourceClock_Hz = ClockHz * ClockDiv;
 	#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
 		   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
 		   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))

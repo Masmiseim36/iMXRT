@@ -33,12 +33,6 @@
 	#include "MIMXRT595S_cm33.h"
 	/* CPU specific feature definitions */
 	#include "MIMXRT595S_cm33_features.h"
-#elif (defined(CPU_MIMXRT595SFAWC_dsp) || defined(CPU_MIMXRT595SFFOC_dsp))
-	#define MIMXRT595S_dsp_SERIES
-	/* CMSIS-style register definitions */
-	#include "MIMXRT595S_dsp.h"
-	/* CPU specific feature definitions */
-	#include "MIMXRT595S_dsp_features.h"
 
 #elif (defined(CPU_MIMXRT633SFAWBR) || defined(CPU_MIMXRT633SFFOB) || defined(CPU_MIMXRT633SFVKB))
 	#define MIMXRT633S_SERIES
@@ -78,7 +72,7 @@
 	#include "MIMXRT1021_features.h"
 
 #elif (defined(CPU_MIMXRT1024CAG4A) || defined(CPU_MIMXRT1024CAG4B) || defined(CPU_MIMXRT1024DAG5A) || \
-	defined(CPU_MIMXRT1024DAG5B))
+	   defined(CPU_MIMXRT1024DAG5B))
 	#define MIMXRT1024_SERIES
 	/* CMSIS-style register definitions */
 	#include "MIMXRT1024.h"
@@ -108,7 +102,7 @@
 	#include "MIMXRT1051_features.h"
 
 #elif (defined(CPU_MIMXRT1052CVJ5B) || defined(CPU_MIMXRT1052CVL5B) || defined(CPU_MIMXRT1052DVJ6B) || \
-	defined(CPU_MIMXRT1052DVL6B) || defined(CPU_MIMXRT1052DVL6A) || defined(CPU_MIMXRT1052CVL5A))
+	   defined(CPU_MIMXRT1052DVL6B) || defined(CPU_MIMXRT1052DVL6A) || defined(CPU_MIMXRT1052CVL5A))
 	#define MIMXRT1052_SERIES
 	/* CMSIS-style register definitions */
 	#include "MIMXRT1052.h"
