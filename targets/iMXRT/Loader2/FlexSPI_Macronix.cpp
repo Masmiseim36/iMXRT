@@ -70,45 +70,48 @@ namespace Macronix
 	status_t TryDetect (FlexSPI_Helper &flexSPI, DeviceInfo &info)
 	{
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
-
-		uint8_t Identification[16] {0U};
-
-		flexspi_transfer_t flashXfer;
-		flashXfer.deviceAddress = 0;
-		flashXfer.port          = FlexSPI_Helper::port;
-		flashXfer.cmdType       = kFLEXSPI_Read;
-		flashXfer.SeqNumber     = 1;
-		flashXfer.seqIndex      = LUT_ReadJEDEC_ID;
-		flashXfer.data          = (uint32_t *)Identification;
-		flashXfer.dataSize      = sizeof(Identification);
-
-		status_t status = FLEXSPI_TransferBlocking (&flexSPI, &flashXfer);
-		if (status != kStatus_Success)
-			return status;
-
-		// Sanity check of the data, first byte must not be zero or 0xFF
-		if (Identification[0] == 0 || Identification[0] == 0xFF)
-			return kStatus_Fail;	// got no ID-Code: No Flash available
-
-		int i=0;
-		for (; i<8; i++)
+/*		if (kStatus_Success == flexSPI.ReadJEDEC (&info))
 		{
-			if (Identification[i] != ManufactureID_NEXT_MARKER)
-				break;
+			// We were able to read the JEDEC ID via OctaSpi-DDR, so we are in tis mode
+			tryDetectMemoryType = MemType_OctaSPI_DDR;
+//			info.Capacity = static_cast<Capacity>(info.Capacity & 0x1F);
+			flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, Generic::LUT_SPI, 4);
+			return kStatus_Success;
+		}*/
+
+		// SDR Mode for data-transfer only in DDR Mode seems not to work, therefore we need to do it this way:
+		uint8_t identification[16] {0U};
+		if (kStatus_Success == flexSPI.Read (0, reinterpret_cast<uint32_t *>(identification), sizeof(identification), LUT_ReadJEDEC_ID))
+		{
+			if (identification[0] != 0 && identification[0] != 0xFF) // Sanity check of the data, first byte must not be zero or 0xFF
+			{
+				// We were able to read the JEDEC ID via OctaSpi-DDR, so we are in this mode
+				tryDetectMemoryType = MemType_OctaSPI_DDR;
+				int i=0;
+				for (; i<8; i++)
+				{
+					if (identification[i] != ManufactureID_NEXT_MARKER)
+						break;
+				}
+				info.ManufactureID = (SerialFlash_ManufactureID)(((i+1)<<8) | identification[i]);
+				info.Type          = identification[i+1];
+				info.Capacity      = (Capacity)(identification[i+3] & 0x1F);
+				return kStatus_Success; 
+			}
 		}
 
-		info.ManufactureID = (SerialFlash_ManufactureID)(((i+1)<<8) | Identification[i]);
-		info.Type          = Identification[i+1];
-//		info.Capacity      = (Capacity)Identification[i+3];
-		info.Capacity      = (Capacity)(Identification[i+3] & 0x1F);
+		// DDR mode didn't work, try SDR mode
+		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI, 4);
+		if (kStatus_Success == flexSPI.ReadJEDEC (&info))
+		{
+			// We were able to read the JEDEC ID via OctaSpi (none DDR), so we are in tis mode
+			tryDetectMemoryType = MemType_OctaSPI;
+//			info.Capacity = static_cast<Capacity>(info.Capacity & 0x1F);
+			flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, Generic::LUT_SPI, 4); 
+			return kStatus_Success;
+		}
 
-
-		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, Generic::LUT_SPI, 4);
-
-		// We were able to read the JEDEC ID via octaspi-DDR, so we are in tis mode
-		tryDetectMemoryType = MemType_OctaSPI_DDR;
-
-		return status;
+		return kStatus_Fail;
 	}
 
 	// Some Debug Code
@@ -118,9 +121,9 @@ namespace Macronix
 		flexspi_transfer_t flashXfer
 		{
 			0,							// deviceAddress	- Operation device address.
-			kFLEXSPI_PortB1,			// port				- Operation port
+			FlexSPI_Helper::port,		// port				- Operation port
 			kFLEXSPI_Read,				// cmdType			- Execution command type.
-			static_cast<uint8_t>(7),	// seqIndex			- Sequence ID for command.
+			static_cast<uint8_t>(10),	// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
 			value,						// data				- Data buffer.
 			sizeof(value)				// dataSize			- Data size in bytes.
@@ -218,10 +221,17 @@ namespace Macronix
 					return LibmemStaus_Error;
 			}
 
-			if (tryDetectMemoryType == MemType_OctaSPI_DDR)
-				flexSPI.UpdateLUT (0, LUT_OctaSPI_DDR); // Load the Octa-SPI LUT if we are already in this mode
-			else
-				flexSPI.UpdateLUT (LUT_SPI);
+			switch (tryDetectMemoryType)
+			{
+				case MemType_OctaSPI_DDR:
+					flexSPI.UpdateLUT (0, LUT_OctaSPI_DDR); // Load the Octa-SPI-DDR LUT if we are already in this mode
+					break;
+				case MemType_OctaSPI:
+					flexSPI.UpdateLUT (0, LUT_OctaSPI);     // Load the Octa-SPI LUT if we are already in this mode
+					break;
+				default:
+					flexSPI.UpdateLUT (LUT_SPI);
+			}
 
 			// Switch to OSPI-Mode
 			// Write to status/control register 2 to set dummy cycles

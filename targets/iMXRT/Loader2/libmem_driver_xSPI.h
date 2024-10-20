@@ -76,6 +76,9 @@ public:
 			if (this->GetBaseAddr () == FLEXSPI1_BASE)
 				return reinterpret_cast<uint8_t *>(FlexSPI1_ALIAS_BASE);
 		#endif
+		#if defined FlexSPI_AMBA_BASE_NS
+			return reinterpret_cast<uint8_t *>(FlexSPI_AMBA_BASE_NS);
+		#endif
 		#if defined FlexSPI1_AMBA_BASE_NS
 			if (this->GetBaseAddr () == FLEXSPI1_BASE)
 				return reinterpret_cast<uint8_t *>(FlexSPI1_AMBA_BASE_NS);
@@ -111,7 +114,22 @@ public:
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
 	}
 
-	status_t ReadRegister (uint32_t Address, uint32_t &value, LUT_CommandOffsets cmd, size_t size  = 1)
+	status_t Write (uint32_t Address, uint32_t *value, size_t size, LUT_CommandOffsets cmd)
+	{
+		flexspi_transfer_t flashXfer
+		{
+			Address,					// deviceAddress	- Operation device address.
+			port,						// port				- Operation port
+			kFLEXSPI_Write,				// cmdType			- Execution command type.
+			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
+			1,							// SeqNumber		- Sequence number for command.
+			value,						// data				- Data buffer.
+			size						// dataSize			- Data size in bytes.
+		};
+		return FLEXSPI_TransferBlocking (this, &flashXfer);
+	}
+
+	status_t ReadRegister (uint32_t Address, uint32_t &value, LUT_CommandOffsets cmd)
 	{
 		flexspi_transfer_t flashXfer
 		{
@@ -121,6 +139,21 @@ public:
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
 			&value,						// data				- Data buffer.
+			1							// dataSize			- Data size in bytes.
+		};
+		return FLEXSPI_TransferBlocking (this, &flashXfer);
+	}
+
+	status_t Read (uint32_t Address, uint32_t *value, size_t size, LUT_CommandOffsets cmd)
+	{
+		flexspi_transfer_t flashXfer
+		{
+			Address,					// deviceAddress	- Operation device address.
+			port,						// port				- Operation port
+			kFLEXSPI_Read,				// cmdType			- Execution command type.
+			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
+			1,							// SeqNumber		- Sequence number for command.
+			value,						// data				- Data buffer.
 			size						// dataSize			- Data size in bytes.
 		};
 		return FLEXSPI_TransferBlocking (this, &flashXfer);
@@ -163,30 +196,18 @@ public:
 	\return status_t Status of the Operation - kStatus_Success when successfully */
 	status_t ReadJEDEC (DeviceInfo *info)
 	{
-		uint8_t Identification[16] {0U};
-
-		flexspi_transfer_t flashXfer
-		{
-			0,
-			FlexSPI_Helper::port,
-			kFLEXSPI_Read,
-			LUT_ReadJEDEC_ID,
-			1,
-			(uint32_t *)Identification,
-			sizeof(Identification),
-		};
-
-		status_t status = FLEXSPI_TransferBlocking (this, &flashXfer);
+		uint8_t identification[16] {0U};
+		status_t status = this->Read (0, reinterpret_cast<uint32_t *>(identification), sizeof(identification), LUT_ReadJEDEC_ID);
 		if (status != kStatus_Success)
 			return status;
 
 		// Sanity check of the data, first byte must not be zero or 0xFF
-		if (Identification[0] == 0 || Identification[0] == 0xFF)
+		if (identification[0] == 0 || identification[0] == 0xFF)
 			return kStatus_Fail;	// got no ID-Code: No Flash available
 	
 		// Check if all data are identical
-		size_t Index = sizeof(Identification)/sizeof(Identification[0]);
-		while (--Index>0 && Identification[0]==Identification[Index])
+		size_t Index = sizeof(identification)/sizeof(identification[0]);
+		while (--Index>0 && identification[0]==identification[Index])
 			;
 		if (Index == 0)
 			return kStatus_Fail;	// Data is all identical. Got some transfer error
@@ -195,13 +216,13 @@ public:
 		int i=0;
 		for (; i<8; i++)
 		{
-			if (Identification[i] != ManufactureID_NEXT_MARKER)
+			if (identification[i] != ManufactureID_NEXT_MARKER)
 				break;
 		}
 
-		info->ManufactureID = static_cast<SerialFlash_ManufactureID>(((i+1)<<8U) | Identification[i]);
-		info->Type          = Identification[i+1];
-		info->Capacity      = static_cast<Capacity>(Identification[i+2]);
+		info->ManufactureID = static_cast<SerialFlash_ManufactureID>(((i+1)<<8U) | identification[i]);
+		info->Type          = identification[i+1];
+		info->Capacity      = static_cast<Capacity>(identification[i+2]);
 
 		return status;
 	}
@@ -240,10 +261,10 @@ public:
 	}
 };
 
-LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryType MemType);
-inline LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType MemType)
+LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryType memType);
+inline LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType memType)
 {
-	return Libmem_InitializeDriver_xSPI (static_cast<FlexSPI_Helper *>(base), MemType);
+	return Libmem_InitializeDriver_xSPI (static_cast<FlexSPI_Helper *>(base), memType);
 }
 
 #endif	// _LIBMEM_DRIVER_QCTA_SPI_H_

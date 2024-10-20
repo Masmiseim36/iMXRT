@@ -26,12 +26,8 @@ extern "C"
 }
 #include <cstdio>
 
-#include "board.h"
-#include "fsl_common.h"
-#include "fsl_clock.h"
 #include "libmem_Tools.h"
 #include "libmem_driver_xSPI.h"
-#include "pin_mux.h"
 #include "DebugPrint.h"
 #include "FlexSPI_Helper.h"
 
@@ -224,7 +220,7 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
 {
 	enum LibmemStatus status;
-	uint32_t Trials = 0;
+	uint32_t trials = 0;
 
 	PerformJEDECReset (base);
 
@@ -245,11 +241,11 @@ enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
 				status =  Libmem_InitializeDriver_xSPI (base, memoryType);
 				if (status != LibmemStaus_Success)
 				{
-					Trials ++;
+					trials ++;
 					PerformJEDECReset (base);
 				}
 			}
-			while (status != LibmemStaus_Success && Trials < 3);
+			while (status != LibmemStaus_Success && trials < 3);
 			break;
 		case MemType_QuadSPI_DDR:
 		case MemType_QuadSPI:
@@ -261,14 +257,22 @@ enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
 				status =  Libmem_InitializeDriver_xSPI (base, memoryType);
 				if (status != LibmemStaus_Success)
 				{
-					Trials ++;
+					trials ++;
 					PerformJEDECReset (base);
 				}
 			}
-			while (status != LibmemStaus_Success && Trials < 3);
+			while (status != LibmemStaus_Success && trials < 3);
 			break;
 		default:
 			return LibmemStatus_InvalidMemoryType;
 	}
 	return status;
 }
+
+
+#if defined MIMXRT685S_cm33_SERIES
+	void SystemInitHook (void)
+	{
+		CACHE64->CCR &= ~CACHE64_CTRL_CCR_ENCACHE_MASK; // disable the cache
+	}
+#endif

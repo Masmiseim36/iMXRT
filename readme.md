@@ -14,12 +14,13 @@ This package enhances the original package by
 - Using the latest CMSIS-Files and register-descriptions provided by NXP
 - Enabling debugging in the external-SDRAM-memory
 - Added a loader (in Source code) which supports different Flash memory targets
-- Adding support for iMXRT1040
+- Adding support for iMXRT600 / iMXRT1180 (with restrictions)
 
-Sample code for booting from external Flash can be found in this repositorry: https://github.com/Masmiseim36/Coremark_iMXRT
+Sample code for booting from external Flash can be found in this repository: https://github.com/Masmiseim36/Coremark_iMXRT
 
 The following Controllers are supported:
 
+- [iMXRT600](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt600-crossover-mcu-with-arm-cortex-m33-and-dsp-cores:i.MX-RT600)
 - [iMXRT1010](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1010-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1010)
 - [iMXRT1015](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1015-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1015)
 - [iMXRT1020](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1020-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1020)
@@ -34,6 +35,7 @@ The following Controllers are supported:
   Limited functionality:
   - Native dual-core debugging is not yet possible
   - the controller must be reset manually after each debugging process
+  - Only the internal RAM memory is supported
 
 ## Build and Install
 
@@ -67,6 +69,8 @@ enum MemoryType
 The lowest Nibble of the parameter is used to configure the first FlexSPI-Interface, the next nibble for the second interface if available on the target device.
 
 ### Supported Flashes
+
+The following flash memories were tested, and derivatives of these memories will presumably also work. Other memories can be supported by extending the loader.
 
 - Adesto
   - AT25SF128A-SHB-T

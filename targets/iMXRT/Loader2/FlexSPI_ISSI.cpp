@@ -31,13 +31,13 @@ namespace ISSI
 		uint32_t value[32]{};
 		flexspi_transfer_t flashXfer
 		{
-			0,					// deviceAddress	- Operation device address.
-			kFLEXSPI_PortA1,						// port				- Operation port
-			kFLEXSPI_Read,				// cmdType			- Execution command type.
+			0,						// deviceAddress	- Operation device address.
+			FlexSPI_Helper::port,	// port				- Operation port
+			kFLEXSPI_Read,			// cmdType			- Execution command type.
 			static_cast<uint8_t>(Command::ReadConfigNonVolatile),	// seqIndex			- Sequence ID for command.
-			1,							// SeqNumber		- Sequence number for command.
-			value,						// data				- Data buffer.
-			sizeof(value)							// dataSize			- Data size in bytes.
+			1,						// SeqNumber		- Sequence number for command.
+			value,					// data				- Data buffer.
+			sizeof(value)			// dataSize			- Data size in bytes.
 		};
 		[[maybe_unused]]status_t stat = FLEXSPI_TransferBlocking (&flexSPI, &flashXfer);
 
@@ -64,7 +64,7 @@ namespace ISSI
 
 		if (status != kStatus_Success)
 		{
-			// We were able to read the JEDEC ID via octaspi-DDR, so we are in tis mode
+			// We were able to read the JEDEC ID via octaspi-DDR, so we are in this mode
 			tryDetectMemoryType = MemType_OctaSPI_DDR;
 		}
 		return status;
