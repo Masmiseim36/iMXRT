@@ -78,6 +78,18 @@
     macros="DeviceName=MIMXRT685S_cm33;Family=iMXRT600"
     property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml" />
   <configuration
+    Name="700"
+    Placement="SRAM"
+    Target="MIMXRT798SGAWBR_cm33_core0"
+    c_preprocessor_definitions="CPU_MIMXRT798SGAWBR_cm33_core0"
+    c_user_include_directories=".;./drivers/iMXRT700/.;./drivers/cache/xcache"
+    hidden="Yes"
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT700.xml"
+    linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
+    linker_section_placement_macros="RAM_NAME=SRAM_data"
+    macros="DeviceName=MIMXRT798S_cm33_core0;Family=iMXRT700"
+    property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml" />
+  <configuration
     Name="1011"
     Target="MIMXRT1011xxx5A"
     arm_fpu_type="FPv5-SP-D16"
@@ -221,6 +233,14 @@
     build_output_file_name="Loader_iMXRT600_M33.elf"
     inherited_configurations="CM33;600;Release" />
   <configuration
+    Name="MIMXRT700_Debug"
+    build_output_file_name="Loader_iMXRT700_M33_Debug.elf"
+    inherited_configurations="CM33;700;Debug" />
+  <configuration
+    Name="MIMXRT700_Release"
+    build_output_file_name="Loader_iMXRT700_M33.elf"
+    inherited_configurations="CM33;700;Release" />
+  <configuration
     Name="MIMXRT1011_Debug"
     build_output_file_name="Loader_iMXRT1010_CM7_Debug.elf"
     inherited_configurations="CM7;1011;Debug" />
@@ -343,7 +363,7 @@
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
       arm_target_loader_reset_after_download="No"
-      batch_build_configurations="MIMXRT500_Release;MIMXRT600_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1040_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release;MIMXRT1180_CM7_Release;MIMXRT1180_CM33_Release"
+      batch_build_configurations="MIMXRT500_Release;MIMXRT600_Release;MIMXRT700_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1040_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release;MIMXRT1180_CM7_Release;MIMXRT1180_CM33_Release"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(ProjectDir)/../devices/$(Family);$(PackagesDir)/libraries/libmem_drivers"
       c_user_include_directories=".;./.."
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
@@ -385,13 +405,6 @@
         gcc_c_language_standard="gnu11" />
     </folder>
     <folder Name="drivers">
-      <file file_name="drivers/fsl_common.c" />
-      <file file_name="drivers/fsl_common.h" />
-      <file file_name="drivers/fsl_common_arm.c" />
-      <file file_name="drivers/fsl_common_arm.h" />
-      <file file_name="drivers/fsl_flexspi.c" />
-      <file file_name="drivers/fsl_flexspi.h" />
-      <file file_name="drivers/pin_mux.h" />
       <folder Name="iMXRT500">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="500" build_exclude_from_build="No" />
@@ -445,6 +458,20 @@
         <file file_name="drivers/iMXRT600/placement.xml">
           <configuration Name="Common" file_type="Section Placement" />
         </file>
+      </folder>
+      <folder Name="iMXRT700">
+        <file file_name="drivers/iMXRT700/fsl_clock.c" />
+        <file file_name="drivers/iMXRT700/fsl_clock.h" />
+        <file file_name="drivers/iMXRT700/fsl_power.c" />
+        <file file_name="drivers/iMXRT700/fsl_power.h" />
+        <file file_name="drivers/iMXRT700/clock_config.c" />
+        <file file_name="drivers/iMXRT700/clock_config.h" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="700" build_exclude_from_build="No" />
+        <file file_name="drivers/iMXRT700/board.h" />
+        <file file_name="drivers/iMXRT700/pin_mux.cpp" />
+        <file file_name="drivers/iMXRT700/fsl_reset.c" />
+        <file file_name="drivers/iMXRT700/fsl_reset.h" />
       </folder>
       <folder Name="iMXRT1011">
         <configuration Name="Common" build_exclude_from_build="Yes" />
@@ -721,8 +748,6 @@
         <file file_name="drivers/iMXRT1180/clock_config.c" />
         <file file_name="drivers/iMXRT1180/clock_config.h" />
         <file file_name="drivers/iMXRT1180/pin_mux.c" />
-        <file file_name="drivers/iMXRT1180/fsl_rgpio.c" />
-        <file file_name="drivers/iMXRT1180/fsl_rgpio.h" />
         <file file_name="drivers/iMXRT1180/fsl_misc.h" />
         <file file_name="drivers/fsl_lpuart.c" />
         <file file_name="drivers/fsl_lpuart.h" />
@@ -737,31 +762,78 @@
           <configuration Name="CM33" build_exclude_from_build="Yes" />
         </folder>
       </folder>
+      <file file_name="drivers/fsl_common.c" />
+      <file file_name="drivers/fsl_common.h" />
+      <file file_name="drivers/fsl_common_arm.c" />
+      <file file_name="drivers/fsl_common_arm.h" />
+      <file file_name="drivers/fsl_flexspi.c">
+        <configuration Name="700" build_exclude_from_build="Yes" />
+      </file>
+      <file file_name="drivers/fsl_flexspi.h">
+        <configuration Name="700" build_exclude_from_build="Yes" />
+      </file>
+      <file file_name="pin_mux.h" />
+      <file file_name="drivers/fsl_xspi.c">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="700" build_exclude_from_build="No" />
+      </file>
+      <file file_name="drivers/fsl_xspi.h">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="700" build_exclude_from_build="No" />
+      </file>
+      <file file_name="drivers/fsl_rgpio.h">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1180_CM33" build_exclude_from_build="No" />
+        <configuration Name="1180_CM7" build_exclude_from_build="No" />
+      </file>
+      <file file_name="drivers/fsl_rgpio.c">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="1180_CM7" build_exclude_from_build="No" />
+        <configuration Name="1180_CM33" build_exclude_from_build="No" />
+      </file>
+      <file file_name="drivers/fsl_gpio.c">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="700" build_exclude_from_build="No" />
+      </file>
+      <file file_name="drivers/fsl_gpio.h">
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="700" build_exclude_from_build="No" />
+      </file>
     </folder>
     <folder Name="Source">
       <file file_name="loader.cpp" />
       <file file_name="board.cpp" />
       <file file_name="libmem_Tools.h" />
       <file file_name="libmem_Tools.cpp" />
-      <file file_name="libmem_driver_FlexSPI.h" />
-      <file file_name="libmem_driver_FlexSPI.cpp" />
       <file file_name="DebugPrint.h" />
       <file file_name="DebugPrint_LPUART.cpp" />
       <file file_name="DebugPrint_USART.cpp" />
       <file file_name="board_generic.h" />
-      <file file_name="FlexSPI_Adesto.h" />
-      <file file_name="FlexSPI_Adesto.cpp" />
-      <file file_name="FlexSPI_Generic.h" />
-      <file file_name="FlexSPI_Helper.h" />
-      <file file_name="FlexSPI_ISSI.h" />
-      <file file_name="FlexSPI_ISSI.cpp" />
-      <file file_name="FlexSPI_Macronix.h" />
-      <file file_name="FlexSPI_Macronix.cpp" />
-      <file file_name="FlexSPI_Spansion.h" />
-      <file file_name="FlexSPI_Winbond.h" />
-      <file file_name="FlexSPI_Winbond.cpp" />
-      <file file_name="FlexSPI_Micron.cpp" />
-      <file file_name="FlexSPI_Micron.h" />
+      <folder Name="FlexSPI">
+        <file file_name="FlexSPI_Adesto.cpp" />
+        <file file_name="FlexSPI_Adesto.h" />
+        <file file_name="FlexSPI_Macronix.cpp" />
+        <file file_name="FlexSPI_Macronix.h" />
+        <file file_name="FlexSPI_ISSI.cpp" />
+        <file file_name="FlexSPI_ISSI.h" />
+        <file file_name="FlexSPI_Helper.h" />
+        <file file_name="FlexSPI_Generic.h" />
+        <file file_name="FlexSPI_Winbond.cpp" />
+        <file file_name="FlexSPI_Winbond.h" />
+        <file file_name="FlexSPI_Spansion.h" />
+        <file file_name="libmem_driver_FlexSPI.cpp" />
+        <file file_name="libmem_driver_FlexSPI.h" />
+        <configuration Name="700" build_exclude_from_build="Yes" />
+        <file file_name="FlexSPI_Micron.cpp" />
+        <file file_name="FlexSPI_Micron.h" />
+      </folder>
+      <folder Name="xSPI">
+        <file file_name="xSPI_Helper.h" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <configuration Name="700" build_exclude_from_build="No" />
+        <file file_name="libmem_driver_xSPI.h" />
+        <file file_name="libmem_driver_xSPI.cpp" />
+      </folder>
     </folder>
     <folder Name="libmem">
       <file file_name="$(StudioDir)/include/libmem.h" />

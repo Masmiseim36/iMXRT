@@ -26,6 +26,7 @@ OF SUCH DAMAGE. */
 #include <cstdint>
 #include <array>
 #include "fsl_device_registers.h"
+#if defined FLEXSPI || defined FLEXSPI0 || defined FLEXSPI1
 #include "fsl_flexspi.h"
 #include "pin_mux.h"
 #include "DebugPrint.h"
@@ -463,6 +464,10 @@ inline int GetPortWidth ([[maybe_unused]]const FLEXSPI_Type *base)
 		   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
 		   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
 		return 4;
+	#elif (defined(MIMXRT735S_cm33_core0_SERIES) || defined(MIMXRT735S_cm33_core1_SERIES) || \
+		   defined(MIMXRT758S_cm33_core0_SERIES) || defined(MIMXRT758S_cm33_core1_SERIES) || \
+		   defined(MIMXRT798S_cm33_core0_SERIES) || defined(MIMXRT798S_cm33_core1_SERIES))
+		   return 8; // ToDo: Check if this is correct
 	#elif (defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
 		   defined(MIMXRT1171_SERIES)     || defined(MIMXRT1172_SERIES)     || defined(MIMXRT1173_cm7_SERIES) || defined(MIMXRT1173_cm4_SERIES) || \
 		   defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1175_cm4_SERIES) || defined(MIMXRT1176_cm7_SERIES) || defined(MIMXRT1176_cm4_SERIES))
@@ -492,4 +497,6 @@ inline void PrintMemTypeInfor (MemoryType memoryType)
 {
 	DebugPrintf ("Init Loader for %s\r\n", MemoryTypeName[memoryType]);
 }
+
+#endif // defined FLEXSPI || defined FLEXSPI0 || defined FLEXSPI1
 #endif // FLEX_SPI_HELPER_H_
