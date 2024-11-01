@@ -1,0 +1,10 @@
+<!DOCTYPE Board_Memory_Definition_File>
+<Root name="iMXRT" >
+<!-- This is not final - the information for this is not publicly available yet -->
+	<MemorySegment name="FlexSPI_NS"   start="$(FlexSPISTART_NS:0x08000000)"  size="$(FlexSPISIZE_NS:0x08000000)"  access="ReadOnly"/>
+	<MemorySegment name="FlexSPI"      start="$(FlexSPISTART:0x18000000)"     size="$(FlexSPISIZE:0x08000000)"     access="ReadOnly"/>
+	<MemorySegment name="SRAM_code_NS" start="$(SRAMCODESTART_NS:0x00000000)" size="$(SRAMCODESIZE_NS:0x00480000)" access="Read/Write"/>
+	<MemorySegment name="SRAM_code"    start="$(SRAMCODESTART:0x10000000)"    size="$(SRAMCODESIZE:0x00480000)"    access="Read/Write"/>
+	<MemorySegment name="SRAM_data_NS" start="$(SRAMDATASTART_NS:0x20000000)" size="$(SRAMDATASIZE_NS:0x00480000)" access="Read/Write"/>
+	<MemorySegment name="SRAM_data"    start="$(SRAMDATASTART:0x30000000)"    size="$(SRAMDATASIZE:0x00480000)"    access="Read/Write"/>
+</Root>

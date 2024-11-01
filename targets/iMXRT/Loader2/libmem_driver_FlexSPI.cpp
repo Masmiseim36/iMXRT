@@ -21,6 +21,7 @@ OF SUCH DAMAGE. */
 
 
 #include "libmem_driver_FlexSPI.h"
+#if defined FLEXSPI || defined FLEXSPI0 || defined FLEXSPI1
 #include "libmem_Tools.h"
 #include "fsl_device_registers.h"
 #include "fsl_flexspi.h"
@@ -985,3 +986,5 @@ namespace Hyperflash
 		return crc;
 	}
 }
+
+#endif	// defined FLEXSPI || defined FLEXSPI0 || defined FLEXSPI1

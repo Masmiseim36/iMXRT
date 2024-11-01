@@ -19,16 +19,16 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
 IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE. */
 
-#ifndef _LIBMEM_DRIVER_XSPI_H_
-#define _LIBMEM_DRIVER_XSPI_H_
+#ifndef _LIBMEM_DRIVER_FLEXSPI_H_
+#define _LIBMEM_DRIVER_FLEXSPI_H_
+
+#include "fsl_device_registers.h"
+#if defined FLEXSPI || defined FLEXSPI0 || defined FLEXSPI1
 
 #include "libmem_Tools.h"
 #include "FlexSPI_Helper.h"
 
 LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryType memType);
-inline LibmemStatus_t Libmem_InitializeDriver_xSPI (FLEXSPI_Type *base, enum MemoryType memType)
-{
-	return Libmem_InitializeDriver_xSPI (static_cast<FlexSPI_Helper *>(base), memType);
-}
 
-#endif	// _LIBMEM_DRIVER_QCTA_SPI_H_
+#endif  // defined FLEXSPI || defined FLEXSPI0 || defined FLEXSPI1
+#endif	// _LIBMEM_DRIVER_FLEXSPI_H_

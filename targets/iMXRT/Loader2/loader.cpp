@@ -28,8 +28,10 @@ extern "C"
 
 #include "libmem_Tools.h"
 #include "libmem_driver_FlexSPI.h"
-#include "DebugPrint.h"
+#include "libmem_driver_xSPI.h"
 #include "FlexSPI_Helper.h"
+#include "xSPI_Helper.h"
+#include "DebugPrint.h"
 
 
 enum LibmemStatus Init_Libmem (FlexSPI_Helper *base, MemoryType memoryType);
@@ -119,6 +121,15 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 		#endif
 		#ifdef FLEXSPI2
 			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI2), MemType_QuadSPI);
+		#endif
+		#if defined XSPI0
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(XSPI0), MemType_QuadSPI); // MemType_Hyperflash - MemType_OctaSPI_DDR - MemType_QuadSPI
+		#endif
+		#if defined XSPI1
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(XSPI1), MemType_QuadSPI); // MemType_Hyperflash - MemType_OctaSPI_DDR - MemType_QuadSPI
+		#endif
+		#if defined XSPI2
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(XSPI2), MemType_QuadSPI); // MemType_Hyperflash - MemType_OctaSPI_DDR - MemType_QuadSPI
 		#endif
 	#else
 		if (param != 0)
@@ -214,7 +225,7 @@ enum LibmemStatus Init_Libmem (FlexSPI_Helper *base, MemoryType memoryType)
 	if (memoryType == MemType_Invalid)
 		return status;
 
-	PrintMemTypeInfor (memoryType);
+//	PrintMemTypeInfor (memoryType);
 	base->PerformJEDECReset ();
 
 	do
