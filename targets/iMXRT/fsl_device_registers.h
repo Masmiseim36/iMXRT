@@ -48,6 +48,45 @@
 	/* CPU specific feature definitions */
 	#include "MIMXRT685S_cm33_features.h"
 
+#elif (defined(CPU_MIMXRT735SGAWAR_cm33_core0) || defined(CPU_MIMXRT735SGFOA_cm33_core0))
+	#define MIMXRT735S_cm33_core0_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT735S_cm33_core0.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT735S_cm33_core0_features.h"
+#elif (defined(CPU_MIMXRT735SGAWAR_cm33_core1) || defined(CPU_MIMXRT735SGFOA_cm33_core1))
+	#define MIMXRT735S_cm33_core1_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT735S_cm33_core1.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT735S_cm33_core1_features.h"
+
+#elif (defined(CPU_MIMXRT758SGAWAR_cm33_core0) || defined(CPU_MIMXRT758SGFOA_cm33_core0))
+	#define MIMXRT758S_cm33_core0_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT758S_cm33_core0.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT758S_cm33_core0_features.h"
+#elif (defined(CPU_MIMXRT758SGAWAR_cm33_core1) || defined(CPU_MIMXRT758SGFOA_cm33_core1))
+	#define MIMXRT758S_cm33_core1_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT758S_cm33_core1.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT758S_cm33_core1_features.h"
+
+#elif (defined(CPU_MIMXRT798SGAWAR_cm33_core0) || defined(CPU_MIMXRT798SGFOA_cm33_core0))
+	#define MIMXRT798S_cm33_core0_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT798S_cm33_core0.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT798S_cm33_core0_features.h"
+#elif (defined(CPU_MIMXRT798SGAWAR_cm33_core1) || defined(CPU_MIMXRT798SGFOA_cm33_core1))
+	#define MIMXRT798S_cm33_core1_SERIES
+	/* CMSIS-style register definitions */
+	#include "MIMXRT798S_cm33_core1.h"
+	/* CPU specific feature definitions */
+	#include "MIMXRT798S_cm33_core1_features.h"
+
 #elif (defined(CPU_MIMXRT1011CAE4A) || defined(CPU_MIMXRT1011DAE5A))
 	#define MIMXRT1011_SERIES
 	/* CMSIS-style register definitions */

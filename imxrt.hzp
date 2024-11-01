@@ -267,6 +267,44 @@
           <file file_name="targets/iMXRT/system_MIMXRT685S_cm33.c" />
           <file file_name="targets/iMXRT/system_MIMXRT685S_cm33.h" />
         </folder>
+        <folder Name="7xx">
+          <file file_name="targets/iMXRT/MIMXRT735S_cm33_core0.h" />
+          <file file_name="targets/iMXRT/MIMXRT735S_cm33_core0_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT735S_cm33_core1.h" />
+          <file file_name="targets/iMXRT/MIMXRT735S_cm33_core1_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT758S_cm33_core0.h" />
+          <file file_name="targets/iMXRT/MIMXRT758S_cm33_core0_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT758S_cm33_core1.h" />
+          <file file_name="targets/iMXRT/MIMXRT758S_cm33_core1_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT798S_cm33_core0.h" />
+          <file file_name="targets/iMXRT/MIMXRT798S_cm33_core0_features.h" />
+          <file file_name="targets/iMXRT/MIMXRT798S_cm33_core1.h" />
+          <file file_name="targets/iMXRT/MIMXRT798S_cm33_core1_features.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT735S_cm33_core0.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT735S_cm33_core0.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT735S_cm33_core1.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT735S_cm33_core1.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT758S_cm33_core0.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT758S_cm33_core0.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT758S_cm33_core1.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT758S_cm33_core1.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT798S_cm33_core0.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT798S_cm33_core0.h" />
+          <file file_name="targets/iMXRT/system_MIMXRT798S_cm33_core1.c" />
+          <file file_name="targets/iMXRT/system_MIMXRT798S_cm33_core1.h" />
+          <file file_name="targets/iMXRT/startup_MIMXRT735S_cm33_core0.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT735S_cm33_core1.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT758S_cm33_core0.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT758S_cm33_core1.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT798S_cm33_core0.s" />
+          <file file_name="targets/iMXRT/startup_MIMXRT798S_cm33_core1.s" />
+          <file file_name="targets/iMXRT/XML/MIMXRT735S_cm33_core0_Registers.xml" />
+          <file file_name="targets/iMXRT/XML/MIMXRT735S_cm33_core1_Registers.xml" />
+          <file file_name="targets/iMXRT/XML/MIMXRT758S_cm33_core0_Registers.xml" />
+          <file file_name="targets/iMXRT/XML/MIMXRT758S_cm33_core1_Registers.xml" />
+          <file file_name="targets/iMXRT/XML/MIMXRT798S_cm33_core0_Registers.xml" />
+          <file file_name="targets/iMXRT/XML/MIMXRT798S_cm33_core1_Registers.xml" />
+        </folder>
       </folder>
       <folder Name="Loader">
         <folder Name="FLM">
