@@ -152,6 +152,18 @@
     macros="DeviceName=MIMXRT685S_cm33;Family=iMXRT600"
     property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml" />
   <configuration
+    Name="700"
+    Placement="SRAM"
+    Target="MIMXRT798SGAWBR_cm33_core0"
+    c_preprocessor_definitions="CPU_MIMXRT798SGAWBR_cm33_core0"
+    c_user_include_directories=".;./drivers/iMXRT700/.;./drivers/cache/xcache"
+    hidden="Yes"
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT700.xml"
+    linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
+    linker_section_placement_macros="RAM_NAME=SRAM"
+    macros="DeviceName=MIMXRT798S_cm33_core0;Family=iMXRT700"
+    property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml" />
+  <configuration
     Name="CM33"
     arm_architecture="v8M_Mainline"
     arm_core_type="Cortex-M33"
@@ -214,11 +226,11 @@
     inherited_configurations="CM7;1015;Release" />
   <configuration
     Name="MIMXRT1021_Debug"
-    build_output_file_name="Loader_iMXRT1021_CM7_Debug.elf"
+    build_output_file_name="Loader_iMXRT1020_CM7_Debug.elf"
     inherited_configurations="CM7;1021;Debug" />
   <configuration
     Name="MIMXRT1021_Release"
-    build_output_file_name="Loader_iMXRT1021_CM7.elf"
+    build_output_file_name="Loader_iMXRT1020_CM7.elf"
     inherited_configurations="CM7;1021;Release" />
   <configuration
     Name="MIMXRT1024_Debug"
@@ -310,20 +322,28 @@
     inherited_configurations="CM7;1180_CM7;Release" />
   <configuration
     Name="MIMXRT500_Debug"
-    build_output_file_name="Loader_iMXRT500_M33_Debug.elf"
+    build_output_file_name="Loader_iMXRT500_CM33_Debug.elf"
     inherited_configurations="CM33;500;Debug" />
   <configuration
     Name="MIMXRT500_Release"
-    build_output_file_name="Loader_iMXRT500_M33.elf"
+    build_output_file_name="Loader_iMXRT500_CM33.elf"
     inherited_configurations="CM33;500;Release" />
   <configuration
     Name="MIMXRT600_Debug"
-    build_output_file_name="Loader_iMXRT600_M33_Debug.elf"
+    build_output_file_name="Loader_iMXRT600_CM33_Debug.elf"
     inherited_configurations="CM33;600;Debug" />
   <configuration
     Name="MIMXRT600_Release"
-    build_output_file_name="Loader_iMXRT600_M33.elf"
+    build_output_file_name="Loader_iMXRT600_CM33.elf"
     inherited_configurations="CM33;600;Release" />
+  <configuration
+    Name="MIMXRT700_Debug"
+    build_output_file_name="Loader_iMXRT700_CM33_Debug.elf"
+    inherited_configurations="CM33;700;Debug" />
+  <configuration
+    Name="MIMXRT700_Release"
+    build_output_file_name="Loader_iMXRT700_CM33.elf"
+    inherited_configurations="CM33;700;Release" />
   <configuration
     Name="Release"
     c_preprocessor_definitions="NDEBUG=1"
@@ -343,7 +363,7 @@
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
       arm_target_loader_reset_after_download="No"
-      batch_build_configurations="MIMXRT500_Release;MIMXRT600_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1040_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release;MIMXRT1180_CM7_Release;MIMXRT1180_CM33_Release"
+      batch_build_configurations="MIMXRT500_Release;MIMXRT600_Release;MIMXRT700_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1040_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release;MIMXRT1180_CM7_Release;MIMXRT1180_CM33_Release"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(ProjectDir)/../devices/$(Family);$(PackagesDir)/libraries/libmem_drivers"
       c_user_include_directories=".;./.."
       debug_register_definition_file="../devices/$(Family)/$(DeviceName)_registers.xml"
@@ -649,8 +669,8 @@
         <file file_name="drivers/iMXRT1180/fsl_misc.h" />
         <file file_name="drivers/iMXRT1180/fsl_pmu.c" />
         <file file_name="drivers/iMXRT1180/fsl_pmu.h" />
-        <file file_name="drivers/iMXRT1180/fsl_rgpio.c" />
-        <file file_name="drivers/iMXRT1180/fsl_rgpio.h" />
+        <file file_name="drivers/fsl_rgpio.c" />
+        <file file_name="drivers/fsl_rgpio.h" />
         <file file_name="drivers/iMXRT1180/pin_mux.cpp" />
       </folder>
       <folder Name="iMXRT500">
@@ -703,17 +723,45 @@
         <file file_name="drivers/fsl_usart.c" />
         <file file_name="drivers/fsl_usart.h" />
         <file file_name="drivers/iMXRT600/pin_mux.cpp" />
-        <file file_name="drivers/iMXRT600/placement.xml">
-          <configuration Name="Common" file_type="Section Placement" />
-        </file>
+      </folder>
+      <folder Name="iMXRT700">
+        <configuration Name="700" build_exclude_from_build="No" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <file file_name="drivers/iMXRT700/board.h" />
+        <file file_name="drivers/iMXRT700/clock_config.c" />
+        <file file_name="drivers/iMXRT700/clock_config.h" />
+        <file file_name="drivers/iMXRT700/fsl_clock.c" />
+        <file file_name="drivers/iMXRT700/fsl_clock.h" />
+        <file file_name="drivers/fsl_gpio.c" />
+        <file file_name="drivers/fsl_gpio.h" />
+        <file file_name="drivers/iMXRT700/fsl_iopctl.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
+        <file file_name="drivers/iMXRT700/fsl_power.c" />
+        <file file_name="drivers/iMXRT700/fsl_power.h" />
+        <file file_name="drivers/iMXRT700/fsl_reset.c" />
+        <file file_name="drivers/iMXRT700/fsl_reset.h" />
+        <file file_name="drivers/iMXRT700/pin_mux.cpp" />S
       </folder>
       <file file_name="drivers/fsl_common.c" />
       <file file_name="drivers/fsl_common.h" />
       <file file_name="drivers/fsl_common_arm.c" />
       <file file_name="drivers/fsl_common_arm.h" />
-      <file file_name="drivers/fsl_flexspi.c" />
-      <file file_name="drivers/fsl_flexspi.h" />
-      <file file_name="drivers/pin_mux.h" />
+      <file file_name="drivers/fsl_flexspi.c">
+        <configuration Name="700" build_exclude_from_build="Yes" />
+      </file>
+      <file file_name="drivers/fsl_flexspi.h">
+        <configuration Name="700" build_exclude_from_build="Yes" />
+      </file>
+      <file file_name="drivers/fsl_xspi.c">
+        <configuration Name="700" build_exclude_from_build="No" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+      </file>
+      <file file_name="drivers/fsl_xspi.h">
+        <configuration Name="700" build_exclude_from_build="No" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+      </file>
+      <file file_name="pin_mux.h" />
     </folder>
     <folder Name="libmem">
       <file file_name="$(StudioDir)/include/libmem.h" />
@@ -738,11 +786,16 @@
       <file file_name="FlexSPI_Spansion.h" />
       <file file_name="FlexSPI_Winbond.cpp" />
       <file file_name="FlexSPI_Winbond.h" />
+      <file file_name="libmem_callbacks.cpp" />
+      <file file_name="libmem_callbacks.h" />
       <file file_name="libmem_driver_FlexSPI.cpp" />
       <file file_name="libmem_driver_FlexSPI.h" />
+      <file file_name="libmem_driver_xSPI.cpp" />
+      <file file_name="libmem_driver_xSPI.h" />
       <file file_name="libmem_Tools.cpp" />
       <file file_name="libmem_Tools.h" />
       <file file_name="loader.cpp" />
+      <file file_name="LutTranslator.h" />
     </folder>
     <folder Name="System Files">
       <configuration

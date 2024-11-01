@@ -31,7 +31,7 @@ LibmemDriver LibmemDriver::Drivers[4];
 \param base the FlexSPI-Interface which is be used
 \param Addr The Address to be converted
 \return uint32_t */
-uint32_t libmem_CalculateOffset (libmem_driver_handle_t *handle, uint8_t *Addr)
+uint32_t libmem_CalculateOffset (libmem_driver_handle_t *handle, const uint8_t *Addr)
 {
 	return Addr - handle->start;
 }

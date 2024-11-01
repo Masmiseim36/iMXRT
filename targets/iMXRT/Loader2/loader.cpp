@@ -28,8 +28,9 @@ extern "C"
 
 #include "libmem_Tools.h"
 #include "libmem_driver_FlexSPI.h"
-#include "DebugPrint.h"
+#include "libmem_driver_xSPI.h"
 #include "FlexSPI_Helper.h"
+#include "DebugPrint.h"
 
 
 enum LibmemStatus Init_Libmem (FlexSPI_Helper *base, MemoryType memoryType);
@@ -59,10 +60,11 @@ uint32_t Compare (const uint32_t *memPointer, const uint32_t *pComp, size_t size
 void ExecuteTest (uint32_t *memPointer)
 {
 	static std::array<uint32_t, 4096> buffer;
+	const size_t testSize = buffer.size () * sizeof(uint32_t);
 
 	uint8_t *erase_start = nullptr;
-	size_t erase_size = 0;
-	LibmemStatus_t res = static_cast<LibmemStatus_t>(libmem_erase (reinterpret_cast<uint8_t *>(memPointer), buffer.size() * sizeof(uint32_t), &erase_start, &erase_size));
+	size_t erase_size    = 0;
+	LibmemStatus_t res   = static_cast<LibmemStatus_t>(libmem_erase (reinterpret_cast<uint8_t *>(memPointer), testSize, &erase_start, &erase_size));
 	if (res != LIBMEM_STATUS_SUCCESS)
 	{
 		DebugPrintf ("Error '%s' occurred\r\n", Libmem_GetErrorString (res));
@@ -71,7 +73,7 @@ void ExecuteTest (uint32_t *memPointer)
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
 	// Check if everything is erased
-	libmem_read (reinterpret_cast<uint8_t *>(buffer.data()), reinterpret_cast<const uint8_t *>(memPointer), buffer.size() * sizeof(uint32_t));
+	libmem_read (reinterpret_cast<uint8_t *>(buffer.data()), reinterpret_cast<const uint8_t *>(memPointer), testSize);
 	uint32_t errorCounter = Compare (memPointer, 0xFFFFFFFF, erase_size);
 	if (errorCounter > 0)
 	{
@@ -82,14 +84,24 @@ void ExecuteTest (uint32_t *memPointer)
 	// Initialize the array with test data
 	for (size_t i=0; i<sizeof(buffer)/sizeof(buffer[0]); i++)
 		buffer[i] = reinterpret_cast<uint32_t>((buffer.data ()) + i);
-	res = static_cast<LibmemStatus_t>(libmem_write (reinterpret_cast<uint8_t *>(memPointer), (uint8_t *)buffer.data (), buffer.size() * sizeof(uint32_t)));
+	res = static_cast<LibmemStatus_t>(libmem_write (reinterpret_cast<uint8_t *>(memPointer), (uint8_t *)buffer.data (), testSize));
+	if (res != LIBMEM_STATUS_SUCCESS)
+	{
+		DebugPrintf ("Write error '%s'\r\n", Libmem_GetErrorString (res));
+		__BKPT(3);
+	}
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
+	if (res != LIBMEM_STATUS_SUCCESS)
+	{
+		DebugPrintf ("Flush error '%s'\r\n", Libmem_GetErrorString (res));
+		__BKPT(4);
+	}
 
 	errorCounter = Compare (memPointer, &buffer[0], sizeof (buffer));
 	if (errorCounter > 0)
 	{
 		DebugPrintf ("Invalid memory-chunks on write %d\r\n", errorCounter);
-		__BKPT(3);
+		__BKPT(5);
 	}
 }
 
@@ -128,6 +140,15 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 		#endif
 		#ifdef FLEXSPI2
 			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI2), MemoryType::QuadSPI);
+		#endif
+		#ifdef XSPI0
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(XSPI0),MemoryType::OctaSPI_DDR); // MemType_Hyperflash - MemType_OctaSPI_DDR - MemType_QuadSPI
+		#endif
+		#ifdef XSPI1
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(XSPI1), MemoryType::QuadSPI); // MemType_Hyperflash - MemType_OctaSPI_DDR - MemType_QuadSPI
+		#endif
+		#ifdef XSPI2
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(XSPI2), MemoryType::QuadSPI); // MemType_Hyperflash - MemType_OctaSPI_DDR - MemType_QuadSPI
 		#endif
 	#else
 		if (param != 0)
@@ -188,9 +209,16 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 		extern uint8_t __DTCM_segment_end__[];
 		res = static_cast<LibmemStatus>(libmem_rpc_loader_start (__DTCM_segment_used_end__, __DTCM_segment_end__ - 1));
 	#else
-		extern uint8_t __SRAM_data_segment_used_end__[];
-		extern uint8_t __SRAM_data_segment_end__[];
-		res = static_cast<LibmemStatus>(libmem_rpc_loader_start (__SRAM_data_segment_used_end__, __SRAM_data_segment_end__ - 1));
+		#if (defined(MIMXRT533S_SERIES) || defined(MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES)) || \
+			(defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES))
+			extern uint8_t __SRAM_data_segment_used_end__[];
+			extern uint8_t __SRAM_data_segment_end__[];
+			res = static_cast<LibmemStatus>(libmem_rpc_loader_start (__SRAM_data_segment_used_end__, __SRAM_data_segment_end__ - 1));
+		#else
+			extern uint8_t __SRAM_segment_used_end__[];
+			extern uint8_t __SRAM_segment_end__[];
+			res = static_cast<LibmemStatus>(libmem_rpc_loader_start (__SRAM_segment_used_end__, __SRAM_segment_end__ - 1));
+		#endif
 	#endif
 	#pragma GCC diagnostic pop
 
@@ -223,7 +251,7 @@ enum LibmemStatus Init_Libmem (FlexSPI_Helper *base, MemoryType memoryType)
 	if (memoryType == MemoryType::Invalid)
 		return status;
 
-	PrintMemTypeInfor (memoryType);
+//	PrintMemTypeInfor (memoryType);
 	base->PerformJEDECReset ();
 
 	do
@@ -251,3 +279,8 @@ enum LibmemStatus Init_Libmem (FlexSPI_Helper *base, MemoryType memoryType)
 		CACHE64->CCR &= ~CACHE64_CTRL_CCR_ENCACHE_MASK; // disable the cache
 	}
 #endif
+
+
+extern "C" void SysTick_Handler (void)
+{
+}

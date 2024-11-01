@@ -69,50 +69,60 @@ namespace Macronix
 	static MemoryType tryDetectMemoryType = MemoryType::Invalid;
 	status_t TryDetect (FlexSPI_Helper &flexSPI, DeviceInfo &info)
 	{
-		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
-/*		if (kStatus_Success == flexSPI.ReadJEDEC (&info))
-		{
-			// We were able to read the JEDEC ID via OctaSpi-DDR, so we are in tis mode
-			tryDetectMemoryType = MemoryType::OctaSPI_DDR;
-//			info.Capacity = static_cast<Capacity>(info.Capacity & 0x1F);
-			flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, Generic::LUT_SPI, 4);
-			return kStatus_Success;
-		}*/
-
-		// SDR Mode for data-transfer only in DDR Mode seems not to work, therefore we need to do it this way:
-		uint8_t identification[16] {0U};
-		if (kStatus_Success == flexSPI.Read (0, reinterpret_cast<uint32_t *>(identification), sizeof(identification), LUT_ReadJEDEC_ID))
-		{
-			if (identification[0] != 0 && identification[0] != 0xFF) // Sanity check of the data, first byte must not be zero or 0xFF
+		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID * Lut::BlockSize, LUT_OctaSPI_DDR, Lut::BlockSize);
+		#if defined XSPI0 || defined XSPI1 || defined XSPI2
+			if (kStatus_Success == flexSPI.ReadJEDEC (&info))
 			{
-				// We were able to read the JEDEC ID via OctaSpi-DDR, so we are in this mode
+				// We were able to read the JEDEC ID via OctaSpi-DDR, so we are in tis mode
 				tryDetectMemoryType = MemoryType::OctaSPI_DDR;
-				int i=0;
-				for (; i<8; i++)
+				info.Capacity = static_cast<Capacity>(info.Capacity & 0x1F);
+				flexSPI.UpdateLUT (LUT_ReadJEDEC_ID * Lut::BlockSize, Generic::LUT_SPI, Lut::BlockSize);
+				return kStatus_Success;
+			}
+		#else
+			// SDR Mode for data-transfer only in DDR Mode seems not to work, therefore we need to do it this way:
+			uint8_t identification[32] {0U};
+			if (kStatus_Success == flexSPI.Read (0, reinterpret_cast<uint32_t *>(identification), sizeof(identification), LUT_ReadJEDEC_ID))
+			{
+				size_t i {0};
+				for (; i<std::size (identification); i++)
 				{
-					if (identification[i] != ManufactureID_NEXT_MARKER)
+					// Ignore all leading bytes with zero or 0xFF
+					if (identification[i] != 0 && identification[i] != 0xFF)
 						break;
 				}
-				info.ManufactureID = (SerialFlash_ManufactureID)(((i+1)<<8) | identification[i]);
-				info.Type          = identification[i+1];
-				info.Capacity      = (Capacity)(identification[i+3] & 0x1F);
-				if (info.ManufactureID == ManufactureID_Macronix)
-					return kStatus_Success; 
-				else
-					return kStatus_Fail;
-			}
-		}
+					
+				if (i < std::size (identification) -6)
+				{
+					// We were able to read the JEDEC ID via OctaSpi-DDR, so we are in this mode
+					tryDetectMemoryType = MemoryType::OctaSPI_DDR;
 
-		// DDR mode didn't work, try SDR mode
-		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI, 4);
-		if (kStatus_Success == flexSPI.ReadJEDEC (&info))
-		{
-			// We were able to read the JEDEC ID via OctaSpi (none DDR), so we are in tis mode
-			tryDetectMemoryType = MemoryType::OctaSPI;
-//			info.Capacity = static_cast<Capacity>(info.Capacity & 0x1F);
-			flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, Generic::LUT_SPI, 4); 
-			return kStatus_Success;
-		}
+					for (; i<8; i++)
+					{
+						if (identification[i] != ManufactureID_NEXT_MARKER)
+							break;
+					}
+					info.ManufactureID = (SerialFlash_ManufactureID)(((i+1)<<8) | identification[i]);
+					info.Type          = identification[i+2];
+					info.Capacity      = (Capacity)(identification[i+4] & 0x1F);
+					if (info.ManufactureID == ManufactureID_Macronix)
+						return kStatus_Success; 
+					else
+						return kStatus_Fail;
+				}
+			}
+
+			// DDR mode didn't work, try SDR mode
+			flexSPI.UpdateLUT (LUT_ReadJEDEC_ID * Lut::BlockSize, LUT_OctaSPI, Lut::BlockSize);
+			if (kStatus_Success == flexSPI.ReadJEDEC (&info))
+			{
+				// We were able to read the JEDEC ID via OctaSpi (none DDR), so we are in tis mode
+				tryDetectMemoryType = MemoryType::OctaSPI;
+//				info.Capacity = static_cast<Capacity>(info.Capacity & 0x1F);
+				flexSPI.UpdateLUT (LUT_ReadJEDEC_ID * Lut::BlockSize, Generic::LUT_SPI, Lut::BlockSize); 
+				return kStatus_Success;
+			}
+		#endif
 
 		return kStatus_Fail;
 	}
@@ -120,18 +130,17 @@ namespace Macronix
 	// Some Debug Code
 	uint32_t CheckRegisters (FlexSPI_Helper &flexSPI)
 	{
-		uint32_t value[32];
-		flexspi_transfer_t flashXfer
+		uint32_t value[32] {};
+		Transfer flashXfer
 		{
 			0,							// deviceAddress	- Operation device address.
-			FlexSPI_Helper::port,		// port				- Operation port
-			kFLEXSPI_Read,				// cmdType			- Execution command type.
+			CommandType::Read,			// cmdType			- Execution command type.
 			static_cast<uint8_t>(10),	// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
 			value,						// data				- Data buffer.
 			sizeof(value)				// dataSize			- Data size in bytes.
 		};
-		FLEXSPI_TransferBlocking (&flexSPI, &flashXfer);
+		TransferBlocking (&flexSPI, &flashXfer);
 
 		flexSPI.ReadRegister (0x000, value[0], (LUT_CommandOffsets)10);
 		flexSPI.ReadRegister (0x200, value[1], (LUT_CommandOffsets)10);
@@ -147,7 +156,7 @@ namespace Macronix
 		return value[0];
 	}
 
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, DeviceInfo &info, [[maybe_unused]] flexspi_config_t &config,  [[maybe_unused]]flexspi_device_config_t &deviceConfig)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, DeviceInfo &info)
 	{
 		if (memType == MemoryType::Invalid || memType == MemoryType::Hyperflash)
 			return LibmemStaus_Error;
@@ -193,7 +202,7 @@ namespace Macronix
 			}
 
 			// Check the addressing mode
-			const FlexSPI_LUT *lut = &LUT_QuadSPI;
+			const Lut::Table *lut = &LUT_QuadSPI;
 			if (info.Capacity > Capacity_128MBit)	// We can not address this with 24-Bit
 			{
 				status = flexSPI.SendCommand (0, static_cast<LUT_CommandOffsets>(Command::EnterFourByteMode));
@@ -208,7 +217,7 @@ namespace Macronix
 		else /* Octa SPI */
 		{
 			uint8_t stateReg = 0;
-			const FlexSPI_LUT *lut = nullptr;
+			const Lut::Table *lut = nullptr;
 			switch (memType)
 			{
 				case MemoryType::OctaSPI_DDR:
@@ -257,7 +266,6 @@ namespace Macronix
 			flexSPI.UpdateLUT (*lut);
 
 //			config.ahbConfig.enableReadAddressOpt = false;
-			config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;// To achieve high speeds - always use DQS
 		}
 
 		return LibmemStaus_Success;

@@ -48,11 +48,11 @@ void BOARD_InitQuadSPIPins (void)
 	IOMUXC_SetPinConfig (IOMUXC_GPIO_SD_B1_05_FLEXSPI_A_DQS, BOARD_FlexSPIPinConfig);
 
 	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_00_FLEXSPI_A_DATA3, 1U);
-	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_01_FLEXSPI_A_SCLK,   1U);
+	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_01_FLEXSPI_A_SCLK,  1U);
 	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_02_FLEXSPI_A_DATA0, 1U);
 	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_03_FLEXSPI_A_DATA2, 1U);
 	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_04_FLEXSPI_A_DATA1, 1U);
-	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_05_FLEXSPI_A_SS0_B,  1U);
+	IOMUXC_SetPinMux (IOMUXC_GPIO_AD_B1_05_FLEXSPI_A_SS0_B, 1U);
 }
 
 
@@ -85,7 +85,7 @@ void BOARD_PerformJEDECReset_FlexSPI (void)
 	// Perform a reset sequence:
 	// CS goes low 4 times with alternating values of SOUT
 	// SCK is drive low or high and must stay in one state
-	GPIO_WritePinOutput(GPIO1, 17, 0); // set SCK low
+	GPIO_WritePinOutput (GPIO1, 17, 0); // set SCK low
 	for (uint32_t i = 0; i < 4; i++)
 	{
 		// drive CS low

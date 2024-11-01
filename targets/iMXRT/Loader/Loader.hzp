@@ -132,10 +132,6 @@
       macros="DeviceName=MIMXRT1021;Family=iMXRT1020;DeviceLoaderFile=../FLM/MIMXRT1021_QuadSPI_4KB_SEC.FLM" />
     <configuration
       Name="MIMXRT1024_QuadSPI_4KB_SEC"
-      arm_architecture="v7EM"
-      arm_core_type="Cortex-M7"
-      arm_linker_heap_size="0"
-      arm_linker_stack_size="1024"
       build_output_file_name="MIMXRT1024_QuadSPI_4KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1024CAG4A;FLM_ALGORITHM_MIMXRT1024_QuadSPI_4KB_SEC"
       debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1024_Registers.xml"

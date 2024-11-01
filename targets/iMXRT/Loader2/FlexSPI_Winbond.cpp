@@ -116,7 +116,7 @@ namespace Winbond
 	// W25Q512NW-IQ/IN		- 0x60'20
 	// W25Q512NW-IM			- 0x80'20
 	
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, DeviceInfo &info, [[maybe_unused]] flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &deviceConfig)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, DeviceInfo &info)
 	{
 		if (memType != MemoryType::QuadSPI && memType != MemoryType::SPI)
 			return LibmemStaus_Error;

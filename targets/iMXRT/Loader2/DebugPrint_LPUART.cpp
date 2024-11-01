@@ -42,9 +42,17 @@ OF SUCH DAMAGE. */
 	{
 		BOARD_InitUARTPins ();
 
-		#if (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
-			 defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
-			 defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
+		#if (defined(MIMXRT735S_cm33_core0_SERIES) || defined(MIMXRT735S_cm33_core1_SERIES) || \
+			 defined(MIMXRT758S_cm33_core0_SERIES) || defined(MIMXRT758S_cm33_core1_SERIES) || \
+			 defined(MIMXRT798S_cm33_core0_SERIES) || defined(MIMXRT798S_cm33_core1_SERIES))
+			CLOCK_AttachClk (kOSC_CLK_to_FCCLK0);
+			CLOCK_SetClkDiv (kCLOCK_DivFcclk0Clk, 1U);
+			CLOCK_AttachClk (kFCCLK0_to_FLEXCOMM0);	// attach FC0 clock to LP_FLEXCOMM (debug console)
+
+			const uint32_t ClockFrequency = CLOCK_GetLPFlexCommClkFreq (0U);
+		#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
+			   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
+			   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
 			uint32_t ClockFrequency = 0;
 			if (CLOCK_GetMux (kCLOCK_UartMux) == 0) // --> PLL3 div6 80M
 				ClockFrequency = (CLOCK_GetPllFreq (kCLOCK_PllUsb1) / 6U) / (CLOCK_GetDiv(kCLOCK_UartDiv) + 1U);
@@ -64,9 +72,9 @@ OF SUCH DAMAGE. */
 			CLOCK_SetRootClock (RootClocks[BOARD_DEBUG_UART_INSTANCE], &rootCfg);
 			CLOCK_ControlGate  (clocks[BOARD_DEBUG_UART_INSTANCE], kCLOCK_On);
 
-			uint32_t ClockFrequency = CLOCK_GetRootClockFreq (RootClocks[BOARD_DEBUG_UART_INSTANCE]);
+			const uint32_t ClockFrequency = CLOCK_GetRootClockFreq (RootClocks[BOARD_DEBUG_UART_INSTANCE]);
 		#elif (defined(MIMXRT1181_SERIES)     || defined(MIMXRT1182_SERIES)     || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1187_cm33_SERIES) ||\
-				 defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
+			   defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
 			// Configure Lpuartx using SysPll2
 			static const clock_root_t RootClocks [] 
 			{
@@ -82,7 +90,7 @@ OF SUCH DAMAGE. */
 			CLOCK_SetRootClock (RootClocks[BOARD_DEBUG_UART_INSTANCE], &rootCfg);
 			CLOCK_ControlGate  (clocks[BOARD_DEBUG_UART_INSTANCE], kCLOCK_On);
 
-			uint32_t ClockFrequency = CLOCK_GetRootClockFreq (RootClocks[BOARD_DEBUG_UART_INSTANCE]);
+			const uint32_t ClockFrequency = CLOCK_GetRootClockFreq (RootClocks[BOARD_DEBUG_UART_INSTANCE]);
 		#else
 			#error "unknon controller family"
 		#endif

@@ -21,7 +21,8 @@ OF SUCH DAMAGE. */
 
 #include "FlexSPI_ISSI.h"
 #include "DebugPrint.h"
-#include "FlexSPI_Generic.h"
+//#include "FlexSPI_Generic.h"
+#include "FlexSPI_Helper.h"
 
 namespace ISSI
 {
@@ -29,17 +30,16 @@ namespace ISSI
 	uint32_t CheckRegisters (FlexSPI_Helper &flexSPI)
 	{
 		uint32_t value[32]{};
-		flexspi_transfer_t flashXfer
+		Transfer flashXfer
 		{
 			0,						// deviceAddress	- Operation device address.
-			FlexSPI_Helper::port,	// port				- Operation port
-			kFLEXSPI_Read,			// cmdType			- Execution command type.
+			CommandType::Read,		// cmdType			- Execution command type.
 			static_cast<uint8_t>(Command::ReadConfigNonVolatile),	// seqIndex			- Sequence ID for command.
 			1,						// SeqNumber		- Sequence number for command.
 			value,					// data				- Data buffer.
 			sizeof(value)			// dataSize			- Data size in bytes.
 		};
-		[[maybe_unused]]status_t stat = FLEXSPI_TransferBlocking (&flexSPI, &flashXfer);
+		[[maybe_unused]]status_t stat = TransferBlocking (&flexSPI, &flashXfer);
 
 		stat = flexSPI.ReadRegister (0x0, value[0], (LUT_CommandOffsets)Command::ReadConfigVolatile);
 		stat = flexSPI.ReadRegister (0x1, value[1], (LUT_CommandOffsets)Command::ReadConfigVolatile);
@@ -59,7 +59,7 @@ namespace ISSI
 	static MemoryType tryDetectMemoryType = ::MemoryType::Invalid;
 	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &info)
 	{
-		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
+		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID * Lut::BlockSize, LUT_OctaSPI_DDR, Lut::BlockSize);
 		const status_t status = flexSPI.ReadJEDEC (&info);
 
 		if (status != kStatus_Success)
@@ -83,7 +83,7 @@ namespace ISSI
 		OctalSPI     = 0xC7		// without DQS
 	};
 
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, [[maybe_unused]] MemoryType memType, DeviceInfo &info, flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &deviceConfig)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, [[maybe_unused]] MemoryType memType, DeviceInfo &info)
 	{
 		DebugPrint ("Found ISSI (Lucent) Flash\r\n");
 
@@ -139,8 +139,6 @@ namespace ISSI
 			const status_t stat = flexSPI.SendCommand (0, static_cast<LUT_CommandOffsets>(Command::EnterQpiMode)); // Enter QuadSPI mode
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
-
-			config.rxSampleClock = kFLEXSPI_ReadSampleClkLoopbackFromDqsPad;
 		}
 		else if (info.Type == 0x5A || info.Type == 0x5B)
 		{
@@ -169,7 +167,6 @@ namespace ISSI
 
 			// Octa SPI
 			flexSPI.UpdateLUT (ISSI::LUT_OctaSPI_DDR);
-			config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;// To achieve high speeds - always use DQS
 
 //			CheckRegisters (flexSPI);
 		}

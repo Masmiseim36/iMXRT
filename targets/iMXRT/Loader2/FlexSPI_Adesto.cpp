@@ -63,7 +63,7 @@ namespace Adesto
 		0x00,	// SPI
 	};
 
-	static constexpr std::array <const FlexSPI_LUT *, 7> LUT
+	static constexpr std::array <const Lut::Table *, 7> LUT
 	{
 		nullptr,				// unused
 		nullptr,				// unused
@@ -74,7 +74,7 @@ namespace Adesto
 		&Generic::LUT_SPI,		// SPI
 	};
 
-	LibmemStatus_t InitializeOcta (FlexSPI_Helper &flexSPI, const MemoryType memType, DeviceInfo &info, flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &deviceConfig)
+	LibmemStatus_t InitializeOcta (FlexSPI_Helper &flexSPI, const MemoryType memType, DeviceInfo &info)
 	{
 		(void)info;
 		if (memType == MemoryType::Invalid || memType == MemoryType::Hyperflash)
@@ -97,8 +97,6 @@ namespace Adesto
 
 		flexSPI.UpdateLUT (*LUT[static_cast<int>(memType)]);
 
-		config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;// To achieve high speeds - always use DQS
-
 /*		deviceConfig.CSInterval    = 5;
 		deviceConfig.CSHoldTime    = 2;
 		deviceConfig.CSSetupTime   = 4;
@@ -107,7 +105,7 @@ namespace Adesto
 		return LibmemStaus_Success;
 	}
 
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, const MemoryType memType, DeviceInfo &info, flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &deviceConfig)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, const MemoryType memType, DeviceInfo &info)
 	{
 		DebugPrint ("Found Atmel/Adesto/Renesas Flash\r\n");
 		if (info.Type == 0xA8 || info.ManufactureID == ManufactureID_AdestoTechnologies)
@@ -128,7 +126,7 @@ namespace Adesto
 					info.Capacity = Capacity_128MBit;
 					break;
 			}
-			return InitializeOcta (flexSPI, memType, info, config, deviceConfig);
+			return InitializeOcta (flexSPI, memType, info);
 		}
 		else
 		{

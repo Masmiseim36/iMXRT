@@ -26,10 +26,16 @@ OF SUCH DAMAGE. */
 #include <cstdint>
 #include <array>
 #include "fsl_device_registers.h"
-#include "fsl_flexspi.h"
+#if defined FLEXSPI || defined FLEXSPI0 || defined FLEXSPI1
+	#include "fsl_flexspi.h"
+#endif
+#if defined XSPI0 || defined XSPI1 || defined XSPI2
+	#include "fsl_xspi.h"
+#endif
 #include "pin_mux.h"
 #include "DebugPrint.h"
 #include "libmem_Tools.h"
+#include "LutTranslator.h"
 
 /*! MemoryType:
 \brief Supported Memory/Interface types */
@@ -74,31 +80,96 @@ enum LUT_CommandOffsets
 };
 
 
-/*! FlexSPI_LUT:
-\brief Type for the LUT information used for different Flash types */
-using FlexSPI_LUT = std::array <uint32_t, sizeof(FLEXSPI_Type::LUT)/sizeof(FLEXSPI_Type::LUT[0])>;
+#if defined FLEXSPI || defined FLEXSPI0 || defined FLEXSPI1
+	using TrasferConfig         = _flexspi_transfer;
+	using NativeCommandType     = flexspi_command_type_t;
+	using NativeSpiType         = FLEXSPI_Type;
+	const auto UpdateLUT        = FLEXSPI_UpdateLUT;
+	const auto SoftwareReset    = FLEXSPI_SoftwareReset;
+	const auto TransferBlocking = FLEXSPI_TransferBlocking;
+	enum class CommandType
+	{
+		Command = kFLEXSPI_Command,
+		Config  = kFLEXSPI_Config,
+		Read    = kFLEXSPI_Read,
+		Write   = kFLEXSPI_Write
+	};
+#endif
+#if defined XSPI0 || defined XSPI1 || defined XSPI2
+	using TrasferConfig         = _xspi_transfer;
+	using NativeCommandType     = xspi_command_type_t;
+	using NativeSpiType         = XSPI_Type;
+	const auto UpdateLUT        = XSPI_UpdateLUT;
+	const auto SoftwareReset    = XSPI_SoftwareReset;
+	const auto TransferBlocking = XSPI_TransferBlocking;
+	enum class CommandType
+	{
+		Command = kXSPI_Command,
+		Config  = kXSPI_Config,
+		Read    = kXSPI_Read,
+		Write   = kXSPI_Write
+	};
+#endif
 
 
-class FlexSPI_Helper: public FLEXSPI_Type
+
+class Transfer : public TrasferConfig
 {
 public:
-	void UpdateLUT (const FlexSPI_LUT &lut)
+	Transfer (uint32_t address, CommandType command, uint8_t seqIdx, [[maybe_unused]]uint8_t seqNum, const uint32_t *dat, size_t dataSz)
 	{
-		::FLEXSPI_UpdateLUT (this, 0, &lut.front(), lut.size());
-	}
-	void UpdateLUT (uint32_t index, const FlexSPI_LUT &lut)
-	{
-		::FLEXSPI_UpdateLUT (this, index, &lut.front()+index, lut.size()-index);
+		this-> deviceAddress = address;
+		#if defined FLEXSPI || defined FLEXSPI0 || defined FLEXSPI1
+			this->port      = Transfer::Port ();
+			this->SeqNumber = seqNum;
+		#endif
+		#if defined XSPI0 || defined XSPI1 || defined XSPI2
+			// Not quite sure on how to use it. Check later
+			this->targetGroup     = kXSPI_TargetGroup0;
+			this->lockArbitration = false;
+		#endif
+		this->cmdType  = static_cast<NativeCommandType>(command);
+		this->seqIndex = seqIdx;
+		this->data     = const_cast<uint32_t *>(dat);
+		this->dataSize = dataSz;
 	}
 
-	void UpdateLUT (uint32_t index, const FlexSPI_LUT &lut, size_t size)
+	#if defined FLEXSPI || defined FLEXSPI0 || defined FLEXSPI1
+	static constexpr flexspi_port_t Port (void)
 	{
-		::FLEXSPI_UpdateLUT (this, index, &lut.front()+index, size);
+		return 
+			// This is a quite dirty hack, as we do not have the possibility to configure the port to use. At least up to now.
+			#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || \
+				 defined(MIMXRT533S_SERIES) || defined (MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES)
+				kFLEXSPI_PortB1;
+			#else
+				kFLEXSPI_PortA1;
+			#endif
+	}
+	#endif
+};
+
+
+class FlexSPI_Helper: public NativeSpiType
+{
+public:
+	void UpdateLUT (const Lut::Table &lut)
+	{
+		::UpdateLUT (this, 0, &lut.front(), lut.size());
+	}
+	void UpdateLUT (uint32_t index, const Lut::Table &lut)
+	{
+		::UpdateLUT (this, index, &lut.front()+index, lut.size()-index);
+	}
+
+	void UpdateLUT (uint32_t index, const Lut::Table &lut, size_t size)
+	{
+		::UpdateLUT (this, index, &lut.front()+index, size);
 	}
 
 	void SoftwareReset (void)
 	{
-		::FLEXSPI_SoftwareReset (this);
+		::SoftwareReset (this);
 	}
 
 	uint32_t GetBaseAddr (void) const
@@ -106,7 +177,7 @@ public:
 		return reinterpret_cast<uint32_t>(this);
 	}
 
-	uint8_t *GetAmbaAddress (void)
+	uint8_t *GetAmbaAddress (void) const
 	{
 		switch (this->GetBaseAddr ())
 		{
@@ -116,138 +187,176 @@ public:
 			#endif
 			#ifdef FLEXSPI0
 			case FLEXSPI0_BASE:
+//			case FLEXSPI0_BASE_NS:
 				return reinterpret_cast<uint8_t *>(FlexSPI0_AMBA_BASE);
 			#endif
 			#ifdef FLEXSPI1
 			case FLEXSPI1_BASE:
+//			case FLEXSPI1_BASE_NS:
 				return reinterpret_cast<uint8_t *>(FlexSPI1_AMBA_BASE);
 			#endif
 			#ifdef FLEXSPI2
 			case FLEXSPI2_BASE:
+//			case FLEXSPI2_BASE_NS:
 				return reinterpret_cast<uint8_t *>(FlexSPI2_AMBA_BASE);
+			#endif
+
+			#ifdef XSPI0
+			case XSPI0_BASE:
+			case XSPI0_BASE_NS:
+				return reinterpret_cast<uint8_t *>(XSPI0_AMBA_BASE);
+			#endif
+			#ifdef XSPI1
+			case XSPI1_BASE:
+			case XSPI1_BASE_NS:
+				return reinterpret_cast<uint8_t *>(XSPI1_AMBA_BASE);
+			#endif
+			#ifdef XSPI2
+			case XSPI2_BASE:
+			case XSPI2_BASE_NS:
+				return reinterpret_cast<uint8_t *>(XSPI2_AMBA_BASE);
 			#endif
 			default:
 				return nullptr;
 		}
 	}
 	
-	inline uint8_t *GetAliasBaseAddress ()
+	inline uint8_t *GetAmbaAliasAddress (void) const
 	{
-		#if defined FlexSPI1_ALIAS_BASE && __CORTEX_M == 4
-			if (this->GetBaseAddr () == FLEXSPI1_BASE)
+		switch (this->GetBaseAddr ())
+		{
+			#if defined FlexSPI1_ALIAS_BASE && __CORTEX_M == 4
+			case FLEXSPI1_BASE:
 				return reinterpret_cast<uint8_t *>(FlexSPI1_ALIAS_BASE);
-		#endif
-		#if defined FlexSPI_AMBA_BASE_NS
-			return reinterpret_cast<uint8_t *>(FlexSPI_AMBA_BASE_NS);
-		#endif
-		#if defined FlexSPI1_AMBA_BASE_NS
-			if (this->GetBaseAddr () == FLEXSPI1_BASE)
+			#endif
+			#if defined FlexSPI_AMBA_BASE_NS
+			case FLEXSPI_BASE:
+			case FLEXSPI_BASE_NS:
+				return reinterpret_cast<uint8_t *>(FlexSPI_AMBA_BASE_NS);
+			#endif
+			#if defined FlexSPI1_AMBA_BASE_NS	
+			case FLEXSPI1_BASE:
+			case FLEXSPI1_BASE_NS:
 				return reinterpret_cast<uint8_t *>(FlexSPI1_AMBA_BASE_NS);
-		#endif
-		#if defined FlexSPI2_AMBA_BASE_NS
-			if (this->GetBaseAddr () == FLEXSPI2_BASE)
+			#endif
+			#if defined FlexSPI2_AMBA_BASE_NS
+			case FLEXSPI2_BASE:
+			case FLEXSPI2_BASE_NS:
 				return reinterpret_cast<uint8_t *>(FlexSPI2_AMBA_BASE_NS);
-		#endif
+			#endif
 
-		return nullptr;
+			#if defined XSPI0_BASE_NS
+			case XSPI0_BASE:
+			case XSPI0_BASE_NS:
+				return reinterpret_cast<uint8_t *>(XSPI0_AMBA_BASE_NS);
+			#endif
+			#if defined XSPI1_BASE_NS
+			case XSPI1_BASE:
+			case XSPI1_BASE_NS:
+				return reinterpret_cast<uint8_t *>(XSPI1_AMBA_BASE_NS);
+			#endif
+			#if defined XSPI2_BASE_NS
+			case XSPI2_BASE:
+			case XSPI2_BASE_NS:
+				return reinterpret_cast<uint8_t *>(XSPI2_AMBA_BASE_NS);
+			#endif
+			default:
+				return nullptr;
+		}
 	}
 
-	static constexpr flexspi_port_t port =
-	#if (defined MIMXRT633S_SERIES) || defined (MIMXRT685S_cm33_SERIES) || \
-		 defined(MIMXRT533S_SERIES) || defined (MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES)
-		kFLEXSPI_PortB1;
-	#else
-		kFLEXSPI_PortA1;
-	#endif
+	status_t TransferBlocking (Transfer *flashXfer)
+	{
+		#if defined XSPI0 || defined XSPI1 || defined XSPI2
+			// XSPI uses the AMBA Base address, while FlexSPI uses just the offset
+			flashXfer-> deviceAddress += reinterpret_cast<uintptr_t>(this->GetAmbaAddress ());
+		#endif
+		return ::TransferBlocking (this, flashXfer);
+	}
+
 
 	status_t WriteRegister (uint32_t Address, uint32_t value, LUT_CommandOffsets cmd, size_t size  = 1)
 	{
-		flexspi_transfer_t flashXfer
+		Transfer flashXfer
 		{
 			Address,					// deviceAddress	- Operation device address.
-			port,						// port				- Operation port
-			kFLEXSPI_Write,				// cmdType			- Execution command type.
+			CommandType::Write,			// cmdType			- Execution command type.
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
 			&value,						// data				- Data buffer.
 			size						// dataSize			- Data size in bytes.
 		};
-		return FLEXSPI_TransferBlocking (this, &flashXfer);
+		return this->TransferBlocking (&flashXfer);
 	}
 
 	status_t Write (uint32_t Address, uint32_t *value, size_t size, LUT_CommandOffsets cmd)
 	{
-		flexspi_transfer_t flashXfer
+		Transfer flashXfer
 		{
 			Address,					// deviceAddress	- Operation device address.
-			port,						// port				- Operation port
-			kFLEXSPI_Write,				// cmdType			- Execution command type.
+			CommandType::Write,			// cmdType			- Execution command type.
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
 			value,						// data				- Data buffer.
 			size						// dataSize			- Data size in bytes.
 		};
-		return FLEXSPI_TransferBlocking (this, &flashXfer);
+		return this->TransferBlocking (&flashXfer);
 	}
 
 	status_t ReadRegister (uint32_t Address, uint32_t &value, LUT_CommandOffsets cmd)
 	{
-		flexspi_transfer_t flashXfer
+		Transfer flashXfer
 		{
 			Address,					// deviceAddress	- Operation device address.
-			port,						// port				- Operation port
-			kFLEXSPI_Read,				// cmdType			- Execution command type.
+			CommandType::Read,			// cmdType			- Execution command type.
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
 			&value,						// data				- Data buffer.
-			1							// dataSize			- Data size in bytes.
+			4							// dataSize			- Data size in bytes.
 		};
-		return FLEXSPI_TransferBlocking (this, &flashXfer);
+		return this->TransferBlocking (&flashXfer);
 	}
 
 	status_t Read (uint32_t Address, uint32_t *value, size_t size, LUT_CommandOffsets cmd)
 	{
-		flexspi_transfer_t flashXfer
+		Transfer flashXfer
 		{
 			Address,					// deviceAddress	- Operation device address.
-			port,						// port				- Operation port
-			kFLEXSPI_Read,				// cmdType			- Execution command type.
+			CommandType::Read,			// cmdType			- Execution command type.
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
 			value,						// data				- Data buffer.
 			size						// dataSize			- Data size in bytes.
 		};
-		return FLEXSPI_TransferBlocking (this, &flashXfer);
+		return this->TransferBlocking (&flashXfer);
 	}
 
 	status_t ReadStatusRegister (uint32_t Address, uint32_t &value)
 	{
-		flexspi_transfer_t flashXfer
+		Transfer flashXfer
 		{
 			Address,					// deviceAddress	- Operation device address.
-			port,						// port				- Operation port
-			kFLEXSPI_Read,				// cmdType			- Execution command type.
+			CommandType::Read,			// cmdType			- Execution command type.
 			LUT_ReadStatus,				// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
 			&value,						// data				- Data buffer.
 			1							// dataSize			- Data size in bytes.
 		};
-		return FLEXSPI_TransferBlocking (this, &flashXfer);
+		return this->TransferBlocking (&flashXfer);
 	}
 
 	status_t SendCommand (uint32_t Address, LUT_CommandOffsets cmd, uint8_t sequenceSize = 1)
 	{
-		flexspi_transfer_t flashXfer
+		Transfer flashXfer
 		{
 			Address,					// deviceAddress	- Operation device address.
-			port,						// port				- Operation port
-			kFLEXSPI_Command,			// cmdType			- Execution command type.
+			CommandType::Command,		// cmdType			- Execution command type.
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
 			sequenceSize,				// SeqNumber		- Sequence number for command.
 			nullptr,					// data				- Data buffer.
 			0							// dataSize			- Data size in bytes.
 		};
-		return FLEXSPI_TransferBlocking (this, &flashXfer);
+		return this->TransferBlocking (&flashXfer);
 	}
 
 	/*! ReadJEDEC
@@ -267,10 +376,10 @@ public:
 			return kStatus_Fail;	// got no ID-Code: No Flash available
 	
 		// Check if all data are identical
-		size_t Index = sizeof(identification)/sizeof(identification[0]);
-		while (--Index>0 && identification[0]==identification[Index])
+		size_t index = sizeof(identification)/sizeof(identification[0]);
+		while (--index>0 && identification[0]==identification[index])
 			;
-		if (Index == 0)
+		if (index == 0)
 			return kStatus_Fail;	// Data is all identical. Got some transfer error
 
 
@@ -304,7 +413,7 @@ public:
 	status_t WaitBusBusy (void)
 	{
 		// Wait status ready.
-		bool isBusy{false};
+		bool isBusy {false};
 		uint32_t readValue{};
 		status_t status{};
 
@@ -329,22 +438,40 @@ public:
 		{
 			#ifdef FLEXSPI
 			case FLEXSPI_BASE:
-				BOARD_PerformJEDECReset_FlexSPI();
+				BOARD_PerformJEDECReset_FlexSPI ();
 				break;
 			#endif
 			#ifdef FLEXSPI0
 			case FLEXSPI0_BASE:
-				BOARD_PerformJEDECReset_FlexSPI0();
+				BOARD_PerformJEDECReset_FlexSPI0 ();
 				break;
 			#endif
 			#ifdef FLEXSPI1
 			case FLEXSPI1_BASE:
-				BOARD_PerformJEDECReset_FlexSPI1();
+				BOARD_PerformJEDECReset_FlexSPI1 ();
 				break;
 			#endif
 			#ifdef FLEXSPI2
 			case FLEXSPI2_BASE:
-				BOARD_PerformJEDECReset_FlexSPI2();
+				BOARD_PerformJEDECReset_FlexSPI2 ();
+				break;
+			#endif
+			#ifdef XSPI0
+			case XSPI0_BASE:
+			case XSPI0_BASE_NS:
+				BOARD_PerformJEDECReset_xSPI0 ();
+				break;
+			#endif
+			#ifdef XSPI1
+			case XSPI1_BASE:
+			case XSPI1_BASE_NS:
+				BOARD_PerformJEDECReset_xSPI1 ();
+				break;
+			#endif
+			#ifdef XSPI2
+			case XSPI2_BASE:
+			case XSPI2_BASE_NS:
+				BOARD_PerformJEDECReset_xSPI2 ();
 				break;
 			#endif
 			default:
@@ -359,7 +486,7 @@ public:
 	{
 		switch (this->GetBaseAddr ())
 		{
-			#if defined FLEXSPI
+			#ifdef FLEXSPI
 			case FLEXSPI_BASE:
 				BOARD_InitOctaSPIPins ();
 				break;
@@ -379,6 +506,25 @@ public:
 				BOARD_InitOctaSPI2Pins ();
 				break;
 			#endif
+
+			#ifdef XSPI0
+			case XSPI0_BASE:
+			case XSPI0_BASE_NS:
+				BOARD_InitOctaSPI0Pins ();
+				break;
+			#endif
+			#ifdef XSPI1
+			case XSPI1_BASE:
+			case XSPI1_BASE_NS:
+				BOARD_InitOctaSPI1Pins ();
+				break;
+			#endif
+			#ifdef XSPI2
+			case XSPI2_BASE:
+			case XSPI2_BASE_NS:
+				BOARD_InitOctaSPI2Pins ();
+				break;
+			#endif
 			default:
 				return;
 		}
@@ -390,7 +536,7 @@ public:
 	{
 		switch (this->GetBaseAddr ())
 		{
-			#if defined FLEXSPI
+			#ifdef FLEXSPI
 			case FLEXSPI_BASE:
 				BOARD_InitQuadSPIPins ();
 				break;
@@ -407,6 +553,25 @@ public:
 			#endif
 			#ifdef FLEXSPI2
 			case FLEXSPI2_BASE:
+				BOARD_InitQuadSPI2Pins ();
+				break;
+			#endif
+
+			#ifdef XSPI0
+			case XSPI0_BASE:
+			case XSPI0_BASE_NS:
+				BOARD_InitQuadSPI0Pins ();
+				break;
+			#endif
+			#ifdef XSPI1
+			case XSPI1_BASE:
+			case XSPI1_BASE_NS:
+				BOARD_InitQuadSPI1Pins ();
+				break;
+			#endif
+			#ifdef XSPI2
+			case XSPI2_BASE:
+			case XSPI2_BASE_NS:
 				BOARD_InitQuadSPI2Pins ();
 				break;
 			#endif
@@ -439,25 +604,12 @@ public:
 	}
 };
 
-inline uint8_t *GetAliasBaseAddress ([[maybe_unused]]const FLEXSPI_Type *base)
+inline uint8_t *GetAmbaAliasAddress ([[maybe_unused]]const NativeSpiType *base)
 {
-	#if defined FlexSPI1_ALIAS_BASE && __CORTEX_M == 4
-		if (reinterpret_cast<uint32_t>(base) == FLEXSPI1_BASE)  // ToDo: switch (base->GetBaseAddr ())
-			return reinterpret_cast<uint8_t *>(FlexSPI1_ALIAS_BASE);
-	#endif
-	#if defined FlexSPI1_AMBA_BASE_NS
-		if (reinterpret_cast<uint32_t>(base) == FLEXSPI1_BASE)  // ToDo: switch (base->GetBaseAddr ())
-			return reinterpret_cast<uint8_t *>(FlexSPI1_AMBA_BASE_NS);
-	#endif
-	#if defined FlexSPI2_AMBA_BASE_NS
-		if (reinterpret_cast<uint32_t>(base) == FLEXSPI2_BASE)  // ToDo: switch (base->GetBaseAddr ())
-			return reinterpret_cast<uint8_t *>(FlexSPI2_AMBA_BASE_NS);
-	#endif
-
-	return nullptr;
+	return static_cast<const FlexSPI_Helper *>(base)->GetAmbaAliasAddress ();
 }
 
-inline int GetPortWidth ([[maybe_unused]]const FLEXSPI_Type *base)
+inline int GetPortWidth ([[maybe_unused]]const NativeSpiType *base)
 {
 	#if (defined(MIMXRT533S_SERIES)  || defined(MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES))
 		return 8;
@@ -467,25 +619,29 @@ inline int GetPortWidth ([[maybe_unused]]const FLEXSPI_Type *base)
 		   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
 		   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
 		return 4;
+	#elif (defined(MIMXRT735S_cm33_core0_SERIES) || defined(MIMXRT735S_cm33_core1_SERIES) || \
+		   defined(MIMXRT758S_cm33_core0_SERIES) || defined(MIMXRT758S_cm33_core1_SERIES) || \
+		   defined(MIMXRT798S_cm33_core0_SERIES) || defined(MIMXRT798S_cm33_core1_SERIES))
+		return 8; // ToDo: Check if this is correct
 	#elif (defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
 		   defined(MIMXRT1171_SERIES)     || defined(MIMXRT1172_SERIES)     || defined(MIMXRT1173_cm7_SERIES) || defined(MIMXRT1173_cm4_SERIES) || \
 		   defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1175_cm4_SERIES) || defined(MIMXRT1176_cm7_SERIES) || defined(MIMXRT1176_cm4_SERIES))
-			switch (reinterpret_cast<uint32_t>(base))
-			{
-				case FLEXSPI1_BASE:
-					return 4;
-				case FLEXSPI2_BASE:
-					return 8;
-			}
+		switch (reinterpret_cast<uint32_t>(base))
+		{
+			case FLEXSPI1_BASE:
+				return 4;
+			case FLEXSPI2_BASE:
+				return 8;
+		}
 	#elif (defined(MIMXRT1181_SERIES)     || defined(MIMXRT1182_SERIES)     || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1187_cm33_SERIES) ||\
 		   defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
-			switch (reinterpret_cast<uint32_t>(base))
-			{
-				case FLEXSPI1_BASE:
-					return 8;
-				case FLEXSPI2_BASE:
-					return 4;
-			}
+		switch (reinterpret_cast<uint32_t>(base))
+		{
+			case FLEXSPI1_BASE:
+				return 8;
+			case FLEXSPI2_BASE:
+				return 4;
+		}
 	#else
 		#error "unknon controller family"
 	#endif
@@ -496,4 +652,5 @@ inline void PrintMemTypeInfor (MemoryType memoryType)
 {
 	DebugPrintf ("Init Loader for %s\r\n", MemoryTypeName[static_cast<int>(memoryType)]);
 }
+
 #endif // FLEX_SPI_HELPER_H_

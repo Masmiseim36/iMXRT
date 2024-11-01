@@ -22,7 +22,6 @@ OF SUCH DAMAGE. */
 #ifndef _LIBMEM_TOOLS_H_
 #define _LIBMEM_TOOLS_H_
 
-#include "fsl_device_registers.h"
 #include "libmem.h"
 
 #ifdef __cplusplus
@@ -51,7 +50,7 @@ extern "C"
 		Capacity_1024MBit = 0x1B,
 	};
 
-	uint32_t libmem_CalculateOffset         (libmem_driver_handle_t *handle, uint8_t *Addr);
+	uint32_t libmem_CalculateOffset         (libmem_driver_handle_t *handle, const uint8_t *Addr);
 	const char * Libmem_GetErrorString      (int Error);
 	uint_least32_t CalculateCapacity_KBytes (enum Capacity c);
 

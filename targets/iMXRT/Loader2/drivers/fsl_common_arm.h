@@ -445,22 +445,23 @@ _Pragma("diag_suppress=Pm120")
  * @{
  */
 #if (defined(__ICCARM__))
-#define AT_QUICKACCESS_SECTION_CODE(func) func @"CodeQuickAccess"
-#define AT_QUICKACCESS_SECTION_DATA(var)  var @"DataQuickAccess"
-#define AT_QUICKACCESS_SECTION_DATA_ALIGN(var, alignbytes) \
-    SDK_PRAGMA(data_alignment = alignbytes) var @"DataQuickAccess"
+	#define AT_QUICKACCESS_SECTION_CODE(func) func @"CodeQuickAccess"
+	#define AT_QUICKACCESS_SECTION_DATA(var)  var @"DataQuickAccess"
+	#define AT_QUICKACCESS_SECTION_DATA_ALIGN(var, alignbytes) SDK_PRAGMA(data_alignment = alignbytes) var @"DataQuickAccess"
 #elif (defined(__CC_ARM) || defined(__ARMCC_VERSION))
-#define AT_QUICKACCESS_SECTION_CODE(func) __attribute__((section("CodeQuickAccess"), __noinline__)) func
-#define AT_QUICKACCESS_SECTION_DATA(var)  __attribute__((section("DataQuickAccess"))) var
-#define AT_QUICKACCESS_SECTION_DATA_ALIGN(var, alignbytes) \
-    __attribute__((section("DataQuickAccess"))) __attribute__((aligned(alignbytes))) var
+	#define AT_QUICKACCESS_SECTION_CODE(func) __attribute__((section("CodeQuickAccess"), __noinline__)) func
+	#define AT_QUICKACCESS_SECTION_DATA(var)  __attribute__((section("DataQuickAccess"))) var
+	#define AT_QUICKACCESS_SECTION_DATA_ALIGN(var, alignbytes) __attribute__((section("DataQuickAccess"))) __attribute__((aligned(alignbytes))) var
+#elif defined __CROSSWORKS_ARM
+	#define AT_QUICKACCESS_SECTION_CODE(func) __attribute__((section(".text"), __noinline__)) func
+	#define AT_QUICKACCESS_SECTION_DATA(var)  __attribute__((section(".data"))) var
+	#define AT_QUICKACCESS_SECTION_DATA_ALIGN(var, alignbytes) __attribute__((section(".data"))) var __attribute__((aligned(alignbytes)))
 #elif (defined(__GNUC__))
-#define AT_QUICKACCESS_SECTION_CODE(func) __attribute__((section("CodeQuickAccess"), __noinline__)) func
-#define AT_QUICKACCESS_SECTION_DATA(var)  __attribute__((section("DataQuickAccess"))) var
-#define AT_QUICKACCESS_SECTION_DATA_ALIGN(var, alignbytes) \
-    __attribute__((section("DataQuickAccess"))) var __attribute__((aligned(alignbytes)))
+	#define AT_QUICKACCESS_SECTION_CODE(func) __attribute__((section("CodeQuickAccess"), __noinline__)) func
+	#define AT_QUICKACCESS_SECTION_DATA(var)  __attribute__((section("DataQuickAccess"))) var
+	#define AT_QUICKACCESS_SECTION_DATA_ALIGN(var, alignbytes) __attribute__((section("DataQuickAccess"))) var __attribute__((aligned(alignbytes)))
 #else
-#error Toolchain not supported.
+	#error Toolchain not supported.
 #endif /* defined(__ICCARM__) */
 
 /*! @name Ram Function */

@@ -24,312 +24,250 @@ OF SUCH DAMAGE. */
 
 #include "libmem_driver_FlexSPI.h"
 #include "FlexSPI_Helper.h"
+#include "LutTranslator.h"
+#include "libmem_Tools.h"
 #include <array>
 
 namespace Adesto
 {
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info, flexspi_config_t &config, flexspi_device_config_t &DeviceConfig);
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType MemType, DeviceInfo &Info);
 
 	namespace ATXP
 	{
 		constexpr uint32_t DummyCycles   = 18;	// Number of dummy cycles after Read Command
 	
-		constexpr FlexSPI_LUT LUT_OctaSPI
-		{
-			// (0) Read Array --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,          kFLEXSPI_8PAD, 0x0B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_8PAD, 32),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR,    kFLEXSPI_8PAD, DummyCycles, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_8PAD, 128),
-		//	[2]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_JUMP_ON_CS,   kFLEXSPI_8PAD, 0,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+		inline constexpr Lut::Table LUT_OctaSPI = Lut::Make
+		(
+			{
+				// (0) Read Array --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x0B,        Lut::Command::RowAddress_Sdr, Lut::Pad::Count8, 32),
+				Lut::Sequence (Lut::Command::Dummy_Sdr, Lut::Pad::Count8, DummyCycles, Lut::Command::Read_Sdr,  Lut::Pad::Count8, 128),
+				// Lut::Sequence (kFLEXSPI_Command_JUMP_ON_CS,   Lut::Pad::Count8, 0,    Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (1) Read Status (byte 1) --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,          kFLEXSPI_8PAD, 0x05, kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_8PAD, 4),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_SDR,     kFLEXSPI_8PAD, 1,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (1) Read Status (byte 1) --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x05, Lut::Command::Dummy_Sdr, Lut::Pad::Count8, 4),
+				Lut::Sequence (Lut::Command::Read_Sdr,  Lut::Pad::Count8, 1,    Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (2) free
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{ 0U }, // (2) free
 
-			// (3) Write Enable --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x06,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (3) Write Enable --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x06,  Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (4) Page Program --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x02,  kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_8PAD, 32),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_8PAD, 128,   kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (4) Page Program --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x02,  Lut::Command::RowAddress_Sdr, Lut::Pad::Count8, 32),
+				Lut::Sequence (Lut::Command::Write_Sdr, Lut::Pad::Count8, 128,   Lut::Command::Stop,           Lut::Pad::Count1, 0),
+			},
 
-			// (5) Block Erase 4K --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x20,  kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_8PAD, 32),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (5) Block Erase 4K --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x20,  Lut::Command::RowAddress_Sdr, Lut::Pad::Count8, 32),
+			},
 
-			// (6) Chip Erase --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x60,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (6) Chip Erase --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x60,  Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (7) Return to Standard SPI Mode --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xFF,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (7) Return to Standard SPI Mode --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0xFF,  Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (8) Write Status/Control Registers --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x71,  kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_8PAD, 8),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_8PAD, 1,     kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (8) Write Status/Control Registers --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x71,  Lut::Command::RowAddress_Sdr, Lut::Pad::Count8, 8),
+				Lut::Sequence (Lut::Command::Write_Sdr, Lut::Pad::Count8, 1,     Lut::Command::Stop,           Lut::Pad::Count1, 0),
+			},
 
-			// (9) Block Erase 32K --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x52,  kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_8PAD, 32),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (9) Block Erase 32K --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x52,  Lut::Command::RowAddress_Sdr, Lut::Pad::Count8, 32),
+			},
 
-			// (10) Block Erase 64K --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xD8,  kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_8PAD, 32),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (10) Block Erase 64K --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0xD8,  Lut::Command::RowAddress_Sdr, Lut::Pad::Count8, 32),
+			}
+		);
 
-			// (12) free
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+		inline constexpr Lut::Table LUT_QuadSPI_DDR = Lut::Make
+		(
+			{
+				// (0) Read Array --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0x0B,            Lut::Command::RowAddress_Ddr, Lut::Pad::Count4, 32),
+				Lut::Sequence (Lut::Command::Dummy_Ddr, Lut::Pad::Count4, DummyCycles*2+1, Lut::Command::Read_Ddr,       Lut::Pad::Count4, 128),
+				//	Lut::Sequence (kFLEXSPI_Command_JUMP_ON_CS,  Lut::Pad::Count4, 0,     Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (13) free
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (1) Read Status (byte 1) --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0x05,  Lut::Command::Dummy_Ddr, Lut::Pad::Count4, 9),
+				Lut::Sequence (Lut::Command::Read_Ddr,  Lut::Pad::Count4, 1,     Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (14) free
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{ 0U }, // (2) free
 
-			// (15) free
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-		};
+			{
+				// (3) Write Enable --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0x06,  Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-		constexpr FlexSPI_LUT LUT_QuadSPI_DDR
-		{
-			// (0) Read Array --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x0B,  kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_4PAD, 32),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_4PAD, DummyCycles*2+1, kFLEXSPI_Command_READ_DDR,  kFLEXSPI_4PAD, 128),
-		//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_JUMP_ON_CS,  kFLEXSPI_4PAD, 0,     kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (4) Page Program --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0x02,  Lut::Command::RowAddress_Ddr, Lut::Pad::Count4, 32),
+				Lut::Sequence (Lut::Command::Write_Ddr, Lut::Pad::Count4, 128,   Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (1) Read Status (byte 1) --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x05,  kFLEXSPI_Command_DUMMY_DDR, kFLEXSPI_4PAD, 9),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,    kFLEXSPI_4PAD, 1,     kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (5) Block Erase 4K --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0x20,  Lut::Command::RowAddress_Ddr, Lut::Pad::Count4, 32),
+			},
 
-			// (2) free
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (6) Chip Erase --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0x60,  Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (3) Write Enable --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x06,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (7) Return to Standard SPI Mode --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0xFF,  Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (4) Page Program --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x02,  kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_4PAD, 32),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_4PAD, 128,   kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (8) Write Status/Control Registers --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0x71,  Lut::Command::RowAddress_Ddr, Lut::Pad::Count4, 8),
+				Lut::Sequence (Lut::Command::Write_Ddr, Lut::Pad::Count4, 1,     Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (5) Block Erase 4K --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x20,  kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_4PAD, 32),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (9) Block Erase 32K --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0x52,  Lut::Command::RowAddress_Ddr, Lut::Pad::Count4, 32),
+			},
 
-			// (6) Chip Erase --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x60,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-
-			// (7) Return to Standard SPI Mode --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0xFF,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-
-			// (8) Write Status/Control Registers --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x71,  kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_4PAD, 8),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_4PAD, 1,     kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-
-			// (9) Block Erase 32K --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x52,  kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_4PAD, 32),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-
-			// (10) Block Erase 64K --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0xD8,  kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_4PAD, 32),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-		};
+			{
+				// (10) Block Erase 64K --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0xD8,  Lut::Command::RowAddress_Ddr, Lut::Pad::Count4, 32),
+			}
+		);
 
 
-		constexpr FlexSPI_LUT LUT_OctaSPI_DDR
-		{
-			// (0) Read Array --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x0B, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 32),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_DDR,   kFLEXSPI_8PAD, (DummyCycles*2+1), kFLEXSPI_Command_READ_DDR,  kFLEXSPI_8PAD, 128),
-		//	[2]  = FLEXSPI_LUT_SEQ (kFLEXSPI_Command_JUMP_ON_CS,  kFLEXSPI_8PAD, 0,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+		inline constexpr Lut::Table LUT_OctaSPI_DDR = Lut::Make
+		(
+			{
+				// (0) Read Array --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x0B, Lut::Command::RowAddress_Ddr, Lut::Pad::Count8, 32),
+				Lut::Sequence (Lut::Command::Dummy_Ddr, Lut::Pad::Count8, (DummyCycles*2+1), Lut::Command::Read_Ddr,  Lut::Pad::Count8, 128),
+				//	Lut::Sequence (kFLEXSPI_Command_JUMP_ON_CS,  Lut::Pad::Count8, 0,    Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (1) Read Status (byte 1) --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x05, kFLEXSPI_Command_DUMMY_DDR, kFLEXSPI_8PAD, 8),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 1,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (1) Read Status (byte 1) --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x05, Lut::Command::Dummy_Ddr, Lut::Pad::Count8, 8),
+				Lut::Sequence (Lut::Command::Read_Ddr,  Lut::Pad::Count8, 1,    Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (2) free
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{ 0U }, // (2) free
 
-			// (3) Write Enable --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x06, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (3) Write Enable --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x06, Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (4) Page Program --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x02, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 32),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_8PAD, 128,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (4) Page Program --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x02, Lut::Command::RowAddress_Ddr, Lut::Pad::Count8, 32),
+				Lut::Sequence (Lut::Command::Write_Ddr, Lut::Pad::Count8, 128,  Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (5) Block Erase 4K --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x20, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 32),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (5) Block Erase 4K --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x20, Lut::Command::RowAddress_Ddr, Lut::Pad::Count8, 32),
+			},
 
-			// (6) Chip Erase --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x60, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (6) Chip Erase --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x60, Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (7) Return to Standard SPI Mode --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xFF, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (7) Return to Standard SPI Mode --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0xFF, Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (8) Write Status/Control Registers --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x71, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 8),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_8PAD, 1,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (8) Write Status/Control Registers --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count8, 0x71, Lut::Command::RowAddress_Ddr, Lut::Pad::Count8, 8),
+				Lut::Sequence (Lut::Command::Write_Ddr, Lut::Pad::Count8, 1,    Lut::Command::Stop,      Lut::Pad::Count1, 0),
+				//	Lut::Sequence (Lut::Command::Cmd_Sdr, Lut::Pad::Count8, 0x71, Lut::Command::Write_Ddr, Lut::Pad::Count8, 4),
+			},
 
-			// (5) Write Status/Control Registers
-		//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x71, kFLEXSPI_Command_WRITE_DDR, kFLEXSPI_8PAD, 4),
+			{
+				// (9) Block Erase 32K --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,    Lut::Pad::Count8, 0x52, Lut::Command::RowAddress_Ddr, Lut::Pad::Count8, 32),
+			},
 
-			// (9) Block Erase 32K --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0x52, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 32),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-
-			// (10) Block Erase 64K --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_8PAD, 0xD8, kFLEXSPI_Command_RADDR_DDR, kFLEXSPI_8PAD, 32),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-		};
+			{
+				// (10) Block Erase 64K --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,    Lut::Pad::Count8, 0xD8, Lut::Command::RowAddress_Ddr, Lut::Pad::Count8, 32),
+			}
+		);
 	
-		constexpr FlexSPI_LUT LUT_QuadSPI
-		{
-			// (0) Read Array --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x0B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 32),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR,   kFLEXSPI_4PAD, DummyCycles, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 128),
-		//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_JUMP_ON_CS,  kFLEXSPI_4PAD, 0,
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+		inline constexpr Lut::Table LUT_QuadSPI = Lut::Make
+		(
+			{
+				// (0) Read Array --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0x0B, Lut::Command::RowAddress_Sdr, Lut::Pad::Count4, 32),
+				Lut::Sequence (Lut::Command::Dummy_Sdr, Lut::Pad::Count4, DummyCycles, Lut::Command::Read_Sdr,  Lut::Pad::Count4, 128),
+				//	Lut::Sequence (kFLEXSPI_Command_JUMP_ON_CS,  Lut::Pad::Count4, 0,
+			},
 
-			// (1) Read Status (byte 1) --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x05, kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD, 4),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_SDR,    kFLEXSPI_4PAD, 0x01, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-		//	FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_1PAD, 0x05, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_1PAD, 4),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (1) Read Status (byte 1) --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0x05, Lut::Command::Dummy_Sdr, Lut::Pad::Count4, 4),
+				Lut::Sequence (Lut::Command::Read_Sdr,  Lut::Pad::Count4, 0x01, Lut::Command::Stop,      Lut::Pad::Count1, 0),
+				//	Lut::Sequence (Lut::Command::Cmd_Sdr, Lut::Pad::Count1, 0x05, Lut::Command::Read_Sdr,  Lut::Pad::Count1, 4),
+			},
 
-			// (2) free
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{ 0U }, // (2) free
 
-			// (3) Write Enable --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x06, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (3) Write Enable --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,    Lut::Pad::Count4, 0x06, Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (4) Page Program --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x02, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 32),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_4PAD, 128,  kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (4) Page Program --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,    Lut::Pad::Count4, 0x02, Lut::Command::RowAddress_Sdr, Lut::Pad::Count4, 32),
+				Lut::Sequence (Lut::Command::Write_Sdr,  Lut::Pad::Count4, 128,  Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (5) Block Erase 4K --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x20, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 32),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (5) Block Erase 4K --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,    Lut::Pad::Count4, 0x20, Lut::Command::RowAddress_Sdr, Lut::Pad::Count4, 32),
+			},
 
-			// (6) Chip Erase --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x60, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (6) Chip Erase --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,    Lut::Pad::Count4, 0x60, Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (7) Return to Standard SPI Mode --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0xFF, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (7) Return to Standard SPI Mode --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,    Lut::Pad::Count4, 0xFF, Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (8) Write Status/Control Registers --> compare @LUT_CommandOffsets
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,         kFLEXSPI_4PAD, 0x71, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 8),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR,   kFLEXSPI_4PAD, 1,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-		};
+			{
+				// (8) Write Status/Control Registers --> compare @LUT_CommandOffsets
+				Lut::Sequence (Lut::Command::Cmd_Sdr,    Lut::Pad::Count4, 0x71, Lut::Command::RowAddress_Sdr, Lut::Pad::Count4, 8),
+				Lut::Sequence (Lut::Command::Write_Sdr,  Lut::Pad::Count4, 1,    Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			}
+		);
 	}
 
 
@@ -350,68 +288,61 @@ namespace Adesto
 			EnterQpiMode    =  9,
 		};
 
-		constexpr FlexSPI_LUT LUT_QuadSPI
-		{
-			// (0) Read Array --> compare @AT25::Command
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xEB, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_4PAD, 0x18),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_4PAD, 0x06, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_4PAD, 0x04),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-	
-			// (1) Read Status --> compare @AT25::Command
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x05, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_1PAD, 0x04),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+		inline constexpr Lut::Table LUT_QuadSPI = Lut::Make
+		(
+			{
+				// (0) Read Array --> compare @AT25::Command
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count1, 0xEB, Lut::Command::RowAddress_Sdr, Lut::Pad::Count4, 0x18),
+				Lut::Sequence (Lut::Command::Dummy_Sdr, Lut::Pad::Count4, 0x06, Lut::Command::Read_Sdr,  Lut::Pad::Count4, 0x04),
+			},
 
-			// (2) Read JEDEC-ID --> compare @AT25::Command
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x9F, kFLEXSPI_Command_READ_SDR,  kFLEXSPI_1PAD, 24),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0,    kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (1) Read Status --> compare @AT25::Command
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count1, 0x05, Lut::Command::Read_Sdr,  Lut::Pad::Count1, 0x04),
+			},
 
-			// (3) Write Enable --> compare @AT25::Command
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x06, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (2) Read JEDEC-ID --> compare @AT25::Command
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count1, 0x9F, Lut::Command::Read_Sdr,  Lut::Pad::Count1, 24),
+				Lut::Sequence (Lut::Command::Stop,      Lut::Pad::Count1, 0,    Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (4) Page Program --> compare @AT25::Command
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x32, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 0x18),
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_SDR, kFLEXSPI_4PAD, 0x04, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (3) Write Enable --> compare @AT25::Command
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count1, 0x06, Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (5) Sector Erase 4K --> compare @AT25::Command
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x20, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 0x18),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (4) Page Program --> compare @AT25::Command
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count1, 0x32, Lut::Command::RowAddress_Sdr, Lut::Pad::Count1, 0x18),
+				Lut::Sequence (Lut::Command::Write_Sdr, Lut::Pad::Count4, 0x04, Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (6) Chip Erase --> compare @AT25::Command
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0xC7, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),	
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (5) Sector Erase 4K --> compare @AT25::Command
+				Lut::Sequence (Lut::Command::Cmd_Sdr,  Lut::Pad::Count1, 0x20, Lut::Command::RowAddress_Sdr, Lut::Pad::Count1, 0x18),
+			},
 
-			// (7) Return to Standard SPI Mode --> compare @AT25::Command
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_4PAD, 0xF5, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (6) Chip Erase --> compare @AT25::Command
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count1, 0xC7, Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (8) Write Status/Control Registers --> compare @AT25::Command
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,       kFLEXSPI_1PAD, 0x01, kFLEXSPI_Command_WRITE_SDR, kFLEXSPI_1PAD, 0x04),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
+			{
+				// (7) Return to Standard SPI Mode --> compare @AT25::Command
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count4, 0xF5, Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			},
 
-			// (9) Enter QPI mode --> compare @AT25::Command
-			FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,      kFLEXSPI_1PAD, 0x31, kFLEXSPI_Command_STOP,      kFLEXSPI_1PAD, 0),
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-			0,	// Dummy to fill a block of four
-		};
+			{
+				// (8) Write Status/Control Registers --> compare @AT25::Command
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count1, 0x01, Lut::Command::Write_Sdr, Lut::Pad::Count1, 0x04),
+			},
+
+			{
+				// (9) Enter QPI mode --> compare @AT25::Command
+				Lut::Sequence (Lut::Command::Cmd_Sdr,   Lut::Pad::Count1, 0x31, Lut::Command::Stop,      Lut::Pad::Count1, 0),
+			}
+		);
 	}
 }
 

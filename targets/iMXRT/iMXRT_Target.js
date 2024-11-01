@@ -211,7 +211,7 @@ function Connect ()
 		case "MIMXRT1186_cm33":
 		case "MIMXRT1187_cm33":
 		case "MIMXRT1189_cm33":
-//			TargetInterface.setDeviceTypeProperty ("MIMXRT1189xxxx_M33");
+			TargetInterface.setDebugInterfaceProperty ("max_ap_num", 5); // MIMXRT118 doesn't like attempt to access AP5
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // LPC Solution
 			break;
 		case "MIMXRT118C_cm7":
@@ -219,7 +219,7 @@ function Connect ()
 		case "MIMXRT1186_cm7":
 		case "MIMXRT1187_cm7":
 		case "MIMXRT1189_cm7":
-//			TargetInterface.setDeviceTypeProperty ("MCIMXRT1180_M7");
+			TargetInterface.setDebugInterfaceProperty ("max_ap_num", 5); // MIMXRT118 doesn't like attempt to access AP5
 			if (TargetInterface.implementation() == "j-link")
 				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2);
 			else
@@ -551,6 +551,8 @@ function Reset ()
 		case "MIMXRT1024":
 		case "MIMXRT1041":
 		case "MIMXRT1042":
+		case "MIMXRT1043":
+		case "MIMXRT1046":
 		case "MIMXRT1051":
 		case "MIMXRT1052":
 		case "MIMXRT1061":
@@ -820,6 +822,12 @@ function GetProjectPartName ()
 			break;
 		case "cm33":
 			TargetShort += '_cm33';
+			break;
+		case "ore0":
+			TargetShort += '_core0';
+			break;
+		case "ore1":
+			TargetShort += '_core1';
 			break;
 		default:
 			// Do nothing

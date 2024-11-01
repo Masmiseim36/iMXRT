@@ -13,5 +13,5 @@
 	<MemorySegment name="DTCM"          start="$(DTCMSTART:0x20000000)"      size="$(DTCMSIZE:0x00020000)"/>
 	<MemorySegment name="DTCM_backdoor" start="$(DTCMBACKDORSTART:0x20220000)" size="$(DTCMBACKDORSIZE:0x00020000)"/> <!-- DTCM alias - is accessible by DMA -->
 	<MemorySegment name="ITCM"          start="$(ITCMSTART:0x1FFE0000)"      size="$(ITCMSIZE:0x00020000)"/>
-	<MemorySegment name="SDRAM"         start="$(SDRAMSTART:0x80000000)"      size="$(SDRAMSIZE:0x02000000)"/>
+	<MemorySegment name="SDRAM"         start="$(SDRAMSTART:0x80000000)"     size="$(SDRAMSIZE:0x02000000)"/>
 </Root>

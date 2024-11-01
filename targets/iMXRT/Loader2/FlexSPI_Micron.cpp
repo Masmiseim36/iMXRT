@@ -28,10 +28,10 @@ namespace Micron
 	static MemoryType tryDetectMemoryType = MemoryType::Invalid;
 	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &info)
 	{
-		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
+		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID * Lut::BlockSize, LUT_OctaSPI_DDR, Lut::BlockSize);
 		status_t status = flexSPI.ReadJEDEC (&info);
 
-		if (status != kStatus_Success)
+		if (status == kStatus_Success)
 		{
 			// We were able to read the JEDEC ID via octaspi-DDR, so we are in this mode
 			tryDetectMemoryType = MemoryType::OctaSPI_DDR;
@@ -52,13 +52,12 @@ namespace Micron
 		OctalSPI     = 0xC7		// without DQS
 	};
 
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, [[maybe_unused]] MemoryType memType, [[maybe_unused]] DeviceInfo &info, flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &deviceConfig)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, [[maybe_unused]] MemoryType memType, [[maybe_unused]] DeviceInfo &info)
 	{
 		DebugPrint ("Found Micron Flash\r\n");
 
 		// Octa SPI
 		flexSPI.UpdateLUT (LUT_OctaSPI_DDR);
-		config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;// To achieve high speeds - always use DQS
 		return LibmemStaus_Success;
 	}
 }

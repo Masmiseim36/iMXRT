@@ -1,9 +1,11 @@
 <!DOCTYPE CrossStudio_Project_File>
 <solution Name="iMXRT" target="8" version="2">
+  <import file_name="targets/iMXRT/Loader2/Loader.hzp" />
+  <import file_name="targets/iMXRT/Loader/Loader.hzp" />
   <project Name="iMXRT">
     <configuration
       Name="Common"
-      combine_command="$(StudioDir)/bin/mkpkg -exclude ./git -exclude ./.vscode -exclude ./___ -exclude ./doc -exclude ./targets/iMXRT/Loader2/out -exclude ./targets/iMXRT/Loader2/bin -exclude ./.editorconfig -exclude ./.gitignore -exclude ./_clean.bat -exclude ./Convert.sh -exclude ./Extract.sh  -exclude ./FlashInfo.txt -exclude ./iMXRT.hzp -exclude ./iMXRT.hzq -exclude ./iMXRT.hzs -exclude ./iMXRText.hzp -exclude ./iMXRText.hzq -exclude ./iMXRText.hzs -exclude ./readme.md -c &quot;$(CombiningOutputFilePath)&quot; ."
+      combine_command="$(StudioDir)/bin/mkpkg -exclude ./git -exclude ./.vscode -exclude ./___ -exclude ./doc -exclude ./targets/iMXRT/Loader2/out -exclude ./targets/iMXRT/Loader2/bin -exclude ./.editorconfig -exclude ./.gitignore -exclude ./_clean.bat -exclude ./Convert.sh -exclude ./Extract.sh  -exclude ./FlashInfo.txt -exclude ./iMXRT.hzp -exclude ./iMXRT.hzq -exclude ./iMXRT.hzs -exclude ./iMXRText.hzq -exclude ./readme.md -c &quot;$(CombiningOutputFilePath)&quot; ."
       combine_output_filepath="$(ProjectDir)/iMXRT.hzq"
       project_directory=""
       project_type="Combining" />
@@ -370,6 +372,10 @@
           <file file_name="targets/iMXRT/devices/iMXRT1180/system_MIMXRT1189_cm33.h" />
           <file file_name="targets/iMXRT/devices/iMXRT1180/system_MIMXRT1189_cm7.c" />
           <file file_name="targets/iMXRT/devices/iMXRT1180/system_MIMXRT1189_cm7.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT1180/system_MIMXRT118C_cm33.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT1180/system_MIMXRT118C_cm33.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT1180/system_MIMXRT118C_cm7.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT1180/system_MIMXRT118C_cm7.h" />
         </folder>
         <folder Name="5xx">
           <folder Name="periph">
@@ -477,6 +483,64 @@
           <file file_name="targets/iMXRT/devices/iMXRT600/system_MIMXRT685S_cm33.c" />
           <file file_name="targets/iMXRT/devices/iMXRT600/system_MIMXRT685S_cm33.h" />
         </folder>
+        <folder Name="7xx">
+          <folder
+            Name="periph"
+            exclude=""
+            filter=""
+            path="targets/iMXRT/devices/iMXRT700/periph"
+            recurse="No" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/fsl_device_registers.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MemoryMap_MIMXRT700.xml" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT735S_cm33_core0.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT735S_cm33_core0_COMMON.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT735S_cm33_core0_features.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT735S_cm33_core1.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT735S_cm33_core1_COMMON.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT735S_cm33_core1_features.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT758S_cm33_core0.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT758S_cm33_core0_COMMON.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT758S_cm33_core0_features.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT758S_cm33_core1.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT758S_cm33_core1_COMMON.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT758S_cm33_core1_features.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT798S_cm33_core0.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT798S_cm33_core0_COMMON.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT798S_cm33_core0_features.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT798S_cm33_core1.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT798S_cm33_core1_COMMON.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/MIMXRT798S_cm33_core1_features.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT735S_cm33_core0.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT735S_cm33_core0.cpp" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT735S_cm33_core0.s" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT735S_cm33_core1.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT735S_cm33_core1.cpp" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT735S_cm33_core1.s" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT758S_cm33_core0.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT758S_cm33_core0.cpp" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT758S_cm33_core0.s" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT758S_cm33_core1.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT758S_cm33_core1.cpp" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT758S_cm33_core1.s" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT798S_cm33_core0.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT798S_cm33_core0.cpp" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT798S_cm33_core0.s" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT798S_cm33_core1.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT798S_cm33_core1.cpp" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/startup_MIMXRT798S_cm33_core1.s" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/system_MIMXRT735S_cm33_core0.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/system_MIMXRT735S_cm33_core0.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/system_MIMXRT735S_cm33_core1.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/system_MIMXRT735S_cm33_core1.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/system_MIMXRT758S_cm33_core0.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/system_MIMXRT758S_cm33_core0.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/system_MIMXRT758S_cm33_core1.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/system_MIMXRT758S_cm33_core1.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/system_MIMXRT798S_cm33_core0.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/system_MIMXRT798S_cm33_core0.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/system_MIMXRT798S_cm33_core1.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT700/system_MIMXRT798S_cm33_core1.h" />
+        </folder>
       </folder>
       <folder Name="Loader">
         <folder Name="FLM">
@@ -531,6 +595,4 @@
       <file file_name="targets/iMXRT/propertyGroups.xml" />
     </folder>
   </project>
-  <import file_name="targets/iMXRT/Loader2/Loader.hzp" />
-  <import file_name="targets/iMXRT/Loader/Loader.hzp" />
 </solution>
