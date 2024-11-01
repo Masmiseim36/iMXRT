@@ -803,6 +803,12 @@ function GetProjectPartName ()
 		case "cm33":
 			TargetShort += '_cm33';
 			break;
+		case "ore0"
+			TargetShort += '_core0';
+			break;
+		case "ore1"
+			TargetShort += '_core1';
+			break;
 		default:
 			// Do nothing
 	}

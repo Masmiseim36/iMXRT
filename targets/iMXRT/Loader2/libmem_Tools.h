@@ -22,7 +22,6 @@ OF SUCH DAMAGE. */
 #ifndef _LIBMEM_TOOLS_H_
 #define _LIBMEM_TOOLS_H_
 
-#include "fsl_device_registers.h"
 #include "libmem.h"
 
 #ifdef __cplusplus

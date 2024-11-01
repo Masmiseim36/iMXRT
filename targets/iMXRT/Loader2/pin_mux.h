@@ -53,20 +53,23 @@ extern "C" {
 		void BOARD_InitOctaSPIPins (void);
 		void BOARD_PerformJEDECReset_FlexSPI (void);
 	#endif
-	#if defined FLEXSPI0
+	#if defined FLEXSPI0 || defined XSPI0
 		void BOARD_InitQuadSPI0Pins (void);
 		void BOARD_InitOctaSPI0Pins (void);
 		void BOARD_PerformJEDECReset_FlexSPI0 (void);
+		void BOARD_PerformJEDECReset_xSPI0 (void);
 	#endif
-	#if defined FLEXSPI1
+	#if defined FLEXSPI1 || defined XSPI1
 		void BOARD_InitQuadSPI1Pins (void);
 		void BOARD_InitOctaSPI1Pins (void);
 		void BOARD_PerformJEDECReset_FlexSPI1 (void);
+		void BOARD_PerformJEDECReset_xSPI1 (void);
 	#endif
-	#if defined FLEXSPI2
+	#if defined FLEXSPI2 || defined XSPI2
 		void BOARD_InitQuadSPI2Pins (void);
 		void BOARD_InitOctaSPI2Pins (void);
 		void BOARD_PerformJEDECReset_FlexSPI2 (void);
+		void BOARD_PerformJEDECReset_xSPI2 (void);
 	#endif
 
 #if defined(__cplusplus)
