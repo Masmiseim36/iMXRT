@@ -19,6 +19,11 @@
 	<MemorySegment name="ITCM_NS"           start="$(ITCMSTART_NS:0x0FFE0000)"          size="$(ITCMSIZE_NS:0x00020000)"/>   <!-- Not Secure -->
 	<MemorySegment name="ITCM"              start="$(ITCMSTART:0x1FFE0000)"             size="$(ITCMSIZE:0x00020000)"/>      <!-- Secure -->
 
+	<MemorySegment name="DTCM_M7_NS"        start="$(DTCMSTART_NS:0x20400000)"          size="$(DTCMSIZE_NSA:0x00020000)"/>  <!-- Not Secure -->
+	<MemorySegment name="DTCM_M7"           start="$(DTCMSTART:0x30400000)"             size="$(DTCMSIZE:0x00020000)"/>      <!-- Secure -->
+	<MemorySegment name="ITCM_M7_NS"        start="$(ITCMSTART_NS:0x203C0000)"          size="$(ITCMSIZE_NS:0x00020000)"/>   <!-- Not Secure -->
+	<MemorySegment name="ITCM_M7"           start="$(ITCMSTART:0x303C0000)"             size="$(ITCMSIZE:0x00020000)"/>      <!-- Secure -->
+
 	<MemorySegment name="SDRAM_NS"          start="$(SDRAMSTART_NS:0x80000000)"         size="$(SDRAMSIZE:0x02000000)"/>     <!-- Not Secure -->
 	<MemorySegment name="SDRAM"             start="$(SDRAMSTART:0x90000000)"            size="$(SDRAMSIZE:0x02000000)"/>     <!-- Secure -->
 	<MemorySegment name="SDRAMAlias_NS"     start="$(SDRAMAliasSTART_NS:0x0C000000)"    size="$(SDRAMSIZE:0x02000000)"/>     <!-- Not Secure -->

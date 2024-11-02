@@ -322,6 +322,7 @@
       <file file_name="targets/iMXRText/project_templates.xml" />
       <file file_name="targets/iMXRText/propertyGroups.xml" />
     </folder>
+    <file file_name="readme.md" />
   </project>
   <import file_name="targets/iMXRText/Loader2/Loader.hzp" />
   <import file_name="targets/iMXRText/Loader/Loader.hzp" />

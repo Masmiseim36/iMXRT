@@ -208,12 +208,13 @@ function Connect ()
 		case "MIMXRT1182":
 		case "MIMXRT1187_cm33":
 		case "MIMXRT1189_cm33":
-//			TargetInterface.setDeviceTypeProperty ("MIMXRT1189xxxx_M33");
-			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // LPC Solution
+			if (TargetInterface.implementation() == "j-link")
+				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3);
+			else
+				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // LPC Solution
 			break;
 		case "MIMXRT1187_cm7":
 		case "MIMXRT1189_cm7":
-//			TargetInterface.setDeviceTypeProperty ("MCIMXRT1180_M7");
 			if (TargetInterface.implementation() == "j-link")
 				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2);
 			else
@@ -260,17 +261,31 @@ function GetPartName ()
 			case "MIMXRT1182":
 			case "MIMXRT1187_cm33":
 			case "MIMXRT1189_cm33":
-				// Invalidate and disable XCACHEs
-//				TargetInterface.pokeUint32 (0x44400000, 0x85000000);
-//				TargetInterface.pokeUint32 (0x44400800, 0x85000000);
-
 				TargetInterface.resetDebugInterface ();
+				AlterRegister (0x54460018, 0x100, 0); // SRC->SRMASK
+				TargetInterface.pokeUint32 (0xE000EDF0, 0xA05F0001);   // DHCSR, Enable CM33 debug control
+				TargetInterface.pokeUint32 (0xE000EDF0, 0xA05F0003);   // DHCSR, Halt CM33
+//				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // LPC Solution
+				// Invalidate and disable XCACHEs
+				TargetInterface.pokeUint32 (0x54400000, 0x85000000); // XCACHE_PC->CCR
+				TargetInterface.pokeUint32 (0x54400800, 0x85000000); // XCACHE_PS->CCR
+
+/*				var i = TargetInterface.getDebugRegister (0x030000FC);
+				if (i != 0x002A0000)
+					TargetInterface.error ("DM ID invalid: " + i.toString(16) + "\n");
+				TargetInterface.setDebugRegister (0x02000000, 0x21); // DM_RESYNC_REQ+CHIP_RESET_REQ
+				for (i=0;i<1000;i++)
+					if (TargetInterface.getDebugRegister (0x02000000) == 0)
+						break;
+				if (i==1000)
+					TargetInterface.message ("RESYNC_REQUEST+CHIP_RESET_REQ: timeout\n");
+				TargetInterface.setDebugRegister (0x02000004, 0x07); // START_DEBUG */
 				break;
 			case "MIMXRT1187_cm7":
 			case "MIMXRT1189_cm7":
 				TargetInterface.resetDebugInterface ();
 				Release_118x_M7 (); // Enable M7 core
-				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2);
+				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2, 0x40000000, 0x00000000);
 			break;
 		}
 	}
