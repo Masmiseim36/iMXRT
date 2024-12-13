@@ -36573,7 +36573,7 @@
       <BitField name="TENMS" start="0" size="24" description="Reload value for 10ms (100Hz) timing, subject to system clock skew errors" />
     </Register>
   </RegisterGroup>
-  <RegisterGroup name="SCB" start="0xE000E000" description="System Control Block">
+  <RegisterGroup name="ICB" start="0xE000E000" description="Implementation Control Block">
     <Register name="ICTR" start="0xE000E004" description="Interrupt Controller Type Register">
       <BitField name="INTLINESNUM" start="0" size="4" description="The total number of interrupt lines supported by an implementation, defined in groups of 32." />
     </Register>
@@ -36589,6 +36589,8 @@
       <BitField name="FPEXCODIS" start="10" size="1" description="Disables FPU exception outputs" />
       <BitField name="DISFOLD" start="2" size="1" description="Disables dual-issue functionality" />
     </Register>
+  </RegisterGroup>
+  <RegisterGroup name="SCB" start="0xE000ED00" description="System Control Block">
     <Register name="CPUID" start="0xE000ED00" access="ReadOnly" description="CPUID Register">
       <BitField name="IMPLEMENTER" start="24" size="8" description="Implementer Code" />
       <BitField name="VARIANT" start="20" size="4" description="Variant Number" />
@@ -36662,6 +36664,11 @@
       <BitField name="USGFAULTACT" start="3" size="1" description="UsageFault Exception Active Bit" />
       <BitField name="BUSFAULTACT" start="1" size="1" description="BusFault Exception Active Bit" />
       <BitField name="MEMFAULTACT" start="0" size="1" description="MemManage Exception Active Bit" />
+    </Register>
+    <Register name="CFSR" start="0xE000ED28" description="Configurable Fault Status Register">
+      <BitField name="UFSR" start="16" size="16" description="UsageFault Status Register" />
+      <BitField name="BFSR" start="8" size="8" description="BusFault Status Register" />
+      <BitField name="MMFSR" start="0" size="8" description="MemManage Fault Status Register" />
     </Register>
     <Register name="MMFSR" start="0xE000ED28" size="1" description="MemManage Fault Status Register">
       <BitField name="MMARVALID" start="7" size="1" description="MemManage Fault Address Register(MMFAR) valid flag" />
@@ -36856,6 +36863,25 @@
       <BitField name="DN" start="25" size="1" description="Default NaN mode control bit" />
       <BitField name="FZ" start="24" size="1" description="Flush-to-zero mode control bit" />
       <BitField name="RMode" start="22" size="2" description="Rounding Mode control field" />
+    </Register>
+    <Register name="MVFR0" start="0xE000EF40" description="Media and VFP Feature Register 0">
+      <BitField name="FPRound" start="28" size="4" description="Floating-point rounding modes" />
+      <BitField name="FPSqrt" start="20" size="4" description="Floating-point square root" />
+      <BitField name="FPDivide" start="16" size="4" description="Floating-point divide" />
+      <BitField name="FPDP" start="8" size="4" description="Floating-point double-precision" />
+      <BitField name="FPSP" start="4" size="4" description="Floating-point single-precision" />
+      <BitField name="SIMDReg" start="0" size="4" description="SIMD registers" />
+    </Register>
+    <Register name="MVFR1" start="0xE000EF44" description="Media and VFP Feature Register 1">
+      <BitField name="FMAC" start="28" size="4" description="Fused multiply accumulate" />
+      <BitField name="FPHP" start="24" size="4" description="Floating-point half-precision conversion" />
+      <BitField name="FP16" start="20" size="4" description="Floating-point half-precision data processing" />
+      <BitField name="MVE" start="8" size="4" description="M-profile vector extension" />
+      <BitField name="FPDNaN" start="4" size="4" description="Floating-point default NaN" />
+      <BitField name="FPFtZ" start="0" size="4" description="Floating-point flush-to-zero" />
+    </Register>
+    <Register name="MVFR2" start="0xE000EF48" description="Media and VFP Feature Register 2">
+      <BitField name="FPMisc" start="4" size="4" description="Floating-point miscellaneous" />
     </Register>
   </RegisterGroup>
   <RegisterGroup name="MPU" start="0xE000ED90" description="Memory Protection Unit">
