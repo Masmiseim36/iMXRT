@@ -4,7 +4,7 @@
 		<ProgramSection                    load="Yes" name=".boot_offset"        keep="Yes" address_symbol="__FLASH_BASE" />
 		<ProgramSection alignment="4"      load="Yes" name=".boot_hdr.conf"      keep="Yes" address_symbol="__HDR_BASE" />
 		<ProgramSection alignment="0x1000" load="Yes" name=".boot_hdr.ivt"       keep="Yes" /> <!-- not for iMXRT1180 -->
-		<ProgramSection alignment="0x1000" load="Yes" name=".boot_hdr.container" keep="Yes" /> <!-- only iMXRT1180 -->
+		<ProgramSection                    load="Yes" name=".boot_hdr.container" keep="Yes" /> <!-- only iMXRT1180 -->
 		<ProgramSection                    load="Yes" name=".boot_hdr.boot_data" keep="Yes" />
 		<ProgramSection                    load="Yes" name=".boot_hdr.dcd_data"  keep="Yes" />
 		<ProgramSection alignment="0x1000" load="Yes" name=".vectors" address_symbol="__VECTOR_TABLE" start="__FLASH_BASE + $(VECTOR_OFFSET:0x2000)" />

@@ -10,6 +10,7 @@
     c_additional_options="-fno-signed-char;-Wno-narrowing;-Wall;-Wextra;-Wmisleading-indentation;-Wshadow;-Wdouble-promotion;-Wformat=2"
     c_preprocessor_definitions="__THUMB;STARTUP_FROM_RESET=1;DISABLE_WDOG=1"
     c_preprocessor_undefinitions="__STDCPP_THREADS__"
+    c_user_include_directories=".;./drivers"
     clang_tidy_checks_cpp="*;-llvm*;-fuchsia*;-altera*;-modernize-use-trailing-return-type;-*braces-around-statements;-*magic-numbers;-cppcoreguidelines-pro-bounds-constant-array-index;-google-readability-namespace-comments;-readability-identifier-length"
     cpp_only_additional_options="-Woverloaded-virtual;-Wnon-virtual-dtor"
     linker_treat_libraries_as_object_files="No" />
@@ -34,6 +35,7 @@
     arm_architecture="v7EM"
     arm_core_type="Cortex-M7"
     hidden="Yes"
+    c_user_include_directories=".;./drivers/cache/armv7-m7"
     linker_section_placement_file="../placement_tcm.xml" />
   <configuration
     Name="CM4"
@@ -41,6 +43,7 @@
     arm_architecture="v7EM"
     arm_core_type="Cortex-M4"
     hidden="Yes"
+    c_user_include_directories=".;./drivers/cache/lmem"
     linker_section_placement_file="../placement_tcm.xml" />
   <configuration
     Name="CM33"
@@ -55,7 +58,7 @@
     Placement="SRAM"
     Target="MIMXRT595SFAWC_cm33"
     c_preprocessor_definitions="CPU_MIMXRT595SFAWC_cm33"
-    c_user_include_directories=".;./iMXRT500/."
+    c_user_include_directories=".;./drivers/iMXRT500/.;./drivers/cache/cache64"
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT500.xml"
     linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
@@ -67,7 +70,7 @@
     Placement="SRAM"
     Target="MIMXRT685SFVKB_cm33"
     c_preprocessor_definitions="CPU_MIMXRT685SFVKB_cm33"
-    c_user_include_directories=".;./iMXRT600/."
+    c_user_include_directories=".;./drivers/iMXRT600/.;./drivers/cache/cache64"
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT600.xml"
     linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
@@ -79,7 +82,7 @@
     Target="MIMXRT1011xxx5A"
     arm_fpu_type="FPv5-SP-D16"
     c_preprocessor_definitions="CPU_MIMXRT1011DAE5A"
-    c_user_include_directories=".;./iMXRT1011/."
+    c_user_include_directories=".;./drivers/iMXRT1011/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT1015.xml"
     macros="DeviceName=MIMXRT1011" />
@@ -88,7 +91,7 @@
     Target="MIMXRT1015CAF4A"
     arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1015CAF4A"
-    c_user_include_directories=".;./iMXRT1015/."
+    c_user_include_directories=".;./drivers/iMXRT1015/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT1015.xml"
     macros="DeviceName=MIMXRT1015" />
@@ -97,7 +100,7 @@
     Target="MIMXRT1021DAF5A"
     arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1021DAF5A"
-    c_user_include_directories=".;./iMXRT1021/."
+    c_user_include_directories=".;./drivers/iMXRT1021/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
     macros="DeviceName=MIMXRT1021" />
@@ -106,7 +109,7 @@
     Target="MIMXRT1024DAG5A"
     arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1024DAG5A"
-    c_user_include_directories=".;./iMXRT1024/."
+    c_user_include_directories=".;./drivers/iMXRT1024/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
     macros="DeviceName=MIMXRT1024" />
@@ -115,7 +118,7 @@
     Target="MIMXRT1042DFP6B"
     arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1042DFP6B"
-    c_user_include_directories=".;./iMXRT1040/."
+    c_user_include_directories=".;./drivers/iMXRT1040/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT104x.xml"
     macros="DeviceName=MIMXRT1042" />
@@ -124,7 +127,7 @@
     Target="MIMXRT1052DVJ6B"
     arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1052DVJ6B"
-    c_user_include_directories=".;./iMXRT1050/."
+    c_user_include_directories=".;./drivers/iMXRT1050/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT105x.xml"
     macros="DeviceName=MIMXRT1052" />
@@ -133,7 +136,7 @@
     Target="MIMXRT1062DVJ6A"
     arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1062DVJ6A"
-    c_user_include_directories=".;./iMXRT1060/."
+    c_user_include_directories=".;./drivers/iMXRT1060/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
     macros="DeviceName=MIMXRT1062" />
@@ -142,7 +145,7 @@
     Target="MIMXRT1064DVL6A"
     arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1064DVL6A"
-    c_user_include_directories=".;./iMXRT1064/."
+    c_user_include_directories=".;./drivers/iMXRT1064/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
     macros="DeviceName=MIMXRT1064" />
@@ -151,7 +154,7 @@
     Target="MIMXRT1166DVM6A_cm7"
     arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1166DVM6A_cm7"
-    c_user_include_directories=".;./iMXRT1160/."
+    c_user_include_directories=".;./drivers/iMXRT1160/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT116x_cm7.xml"
     macros="DeviceName=MIMXRT1166_cm7;Family=iMXRT1160" />
@@ -160,7 +163,7 @@
     Target="MIMXRT1166DVM6A_cm4"
     arm_fpu_type="FPv4-SP-D16"
     c_preprocessor_definitions="CPU_MIMXRT1166DVM6A_cm4"
-    c_user_include_directories=".;./iMXRT1160/."
+    c_user_include_directories=".;./drivers/iMXRT1160/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT116x_cm4.xml"
     macros="DeviceName=MIMXRT1166_cm4;Family=iMXRT1160" />
@@ -169,7 +172,7 @@
     Target="MIMXRT1176DVMAA_cm7"
     arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1176DVMAA_cm7"
-    c_user_include_directories=".;./iMXRT1170/."
+    c_user_include_directories=".;./drivers/iMXRT1170/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT117x_cm7.xml"
     macros="DeviceName=MIMXRT1176_cm7;Family=iMXRT1170;Core=CM7" />
@@ -178,7 +181,7 @@
     Target="MIMXRT1176DVMAA_cm4"
     arm_fpu_type="FPv4-SP-D16"
     c_preprocessor_definitions="CPU_MIMXRT1176DVMAA_cm4"
-    c_user_include_directories=".;./iMXRT1170/."
+    c_user_include_directories=".;./drivers/iMXRT1170/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT117x_cm4.xml"
     macros="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170;Core=CM4" />
@@ -187,7 +190,7 @@
     Target="MIMXRT1189CVM8B_cm7"
     arm_fpu_type="FPv5-D16"
     c_preprocessor_definitions="CPU_MIMXRT1189CVM8B_cm7"
-    c_user_include_directories=".;./iMXRT1180/.;./iMXRT1180/cm7/."
+    c_user_include_directories=".;./drivers/iMXRT1180/."
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT118x_cm7.xml"
     macros="DeviceName=MIMXRT1189_cm7;Family=iMXRT1180;Core=CM7" />
@@ -196,7 +199,7 @@
     Placement="TCM"
     Target="MIMXRT1189CVM8B_cm33"
     c_preprocessor_definitions="CPU_MIMXRT1189CVM8B_cm33"
-    c_user_include_directories=".;./iMXRT1180/.;./iMXRT1180_cm33/."
+    c_user_include_directories=".;./drivers/iMXRT1180/.;./drivers/cache/xcache"
     hidden="Yes"
     linker_memory_map_file="../MemoryMap_MIMXRT118x_cm33.xml"
     linker_section_placement_file="../placement_tcm.xml"
@@ -376,103 +379,111 @@
         default_const_section=".rodata_init" />
     </folder>
     <folder Name="drivers">
-      <file file_name="fsl_common.c" />
-      <file file_name="fsl_common.h" />
-      <file file_name="fsl_common_arm.c" />
-      <file file_name="fsl_common_arm.h" />
-      <file file_name="fsl_flexspi.c" />
-      <file file_name="fsl_flexspi.h" />
-      <file file_name="pin_mux.h" />
+      <file file_name="drivers/fsl_common.c" />
+      <file file_name="drivers/fsl_common.h" />
+      <file file_name="drivers/fsl_common_arm.c" />
+      <file file_name="drivers/fsl_common_arm.h" />
+      <file file_name="drivers/fsl_flexspi.c" />
+      <file file_name="drivers/fsl_flexspi.h" />
+      <file file_name="drivers/pin_mux.h" />
       <folder Name="iMXRT500">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="500" build_exclude_from_build="No" />
-        <file file_name="iMXRT500/board.h" />
-        <file file_name="iMXRT500/clock_config.c" />
-        <file file_name="iMXRT500/clock_config.h" />
-        <file file_name="iMXRT500/fsl_clock.c" />
-        <file file_name="iMXRT500/fsl_clock.h" />
-        <file file_name="iMXRT500/fsl_dma.c" />
-        <file file_name="iMXRT500/fsl_dma.h" />
-        <file file_name="iMXRT500/fsl_gpio.c" />
-        <file file_name="iMXRT500/fsl_gpio.h" />
-        <file file_name="iMXRT500/fsl_iopctl.h" />
-        <file file_name="iMXRT500/fsl_power.c" />
-        <file file_name="iMXRT500/fsl_power.h" />
-        <file file_name="iMXRT500/fsl_reset.c" />
-        <file file_name="iMXRT500/fsl_reset.h" />
-        <file file_name="fsl_usart.c" />
-        <file file_name="fsl_usart.h" />
-        <file file_name="fsl_flexcomm.c" />
-        <file file_name="fsl_flexcomm.h" />
-        <file file_name="iMXRT500/pin_mux.cpp" />
-        <file file_name="iMXRT500/placement.xml" />
+        <file file_name="drivers/iMXRT500/board.h" />
+        <file file_name="drivers/iMXRT500/clock_config.c" />
+        <file file_name="drivers/iMXRT500/clock_config.h" />
+        <file file_name="drivers/iMXRT500/fsl_clock.c" />
+        <file file_name="drivers/iMXRT500/fsl_clock.h" />
+        <file file_name="drivers/iMXRT500/fsl_dma.c" />
+        <file file_name="drivers/iMXRT500/fsl_dma.h" />
+        <file file_name="drivers/iMXRT500/fsl_gpio.c" />
+        <file file_name="drivers/iMXRT500/fsl_gpio.h" />
+        <file file_name="drivers/iMXRT500/fsl_iopctl.h" />
+        <file file_name="drivers/iMXRT500/fsl_power.c" />
+        <file file_name="drivers/iMXRT500/fsl_power.h" />
+        <file file_name="drivers/iMXRT500/fsl_reset.c" />
+        <file file_name="drivers/iMXRT500/fsl_reset.h" />
+        <file file_name="drivers/fsl_usart.c" />
+        <file file_name="drivers/fsl_usart.h" />
+        <file file_name="drivers/fsl_flexcomm.c" />
+        <file file_name="drivers/fsl_flexcomm.h" />
+        <file file_name="drivers/iMXRT500/pin_mux.cpp" />
+        <file file_name="drivers/iMXRT500/placement.xml" />
+        <file file_name="drivers/cache/cache64/fsl_cache.c" />
+        <file file_name="drivers/cache/cache64/fsl_cache.h" />
       </folder>
       <folder Name="iMXRT600">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="600" build_exclude_from_build="No" />
-        <file file_name="iMXRT600/board.h" />
-        <file file_name="iMXRT600/clock_config.c" />
-        <file file_name="iMXRT600/clock_config.h" />
-        <file file_name="iMXRT600/fsl_clock.c" />
-        <file file_name="iMXRT600/fsl_clock.h" />
-        <file file_name="iMXRT600/fsl_dma.c" />
-        <file file_name="iMXRT600/fsl_dma.h" />
-        <file file_name="iMXRT600/fsl_gpio.c" />
-        <file file_name="iMXRT600/fsl_gpio.h" />
-        <file file_name="iMXRT600/fsl_reset.c" />
-        <file file_name="iMXRT600/fsl_reset.h" />
-        <file file_name="iMXRT600/pin_mux.cpp" />
-        <file file_name="iMXRT600/fsl_iopctl.h" />
-        <file file_name="iMXRT600/fsl_power.c" />
-        <file file_name="iMXRT600/fsl_power.h" />
-        <file file_name="fsl_usart.c" />
-        <file file_name="fsl_usart.h" />
-        <file file_name="fsl_flexcomm.c" />
-        <file file_name="fsl_flexcomm.h" />
-        <file file_name="iMXRT600/placement.xml">
+        <file file_name="drivers/iMXRT600/board.h" />
+        <file file_name="drivers/iMXRT600/clock_config.c" />
+        <file file_name="drivers/iMXRT600/clock_config.h" />
+        <file file_name="drivers/iMXRT600/fsl_clock.c" />
+        <file file_name="drivers/iMXRT600/fsl_clock.h" />
+        <file file_name="drivers/iMXRT600/fsl_dma.c" />
+        <file file_name="drivers/iMXRT600/fsl_dma.h" />
+        <file file_name="drivers/iMXRT600/fsl_gpio.c" />
+        <file file_name="drivers/iMXRT600/fsl_gpio.h" />
+        <file file_name="drivers/iMXRT600/fsl_reset.c" />
+        <file file_name="drivers/iMXRT600/fsl_reset.h" />
+        <file file_name="drivers/iMXRT600/pin_mux.cpp" />
+        <file file_name="drivers/iMXRT600/fsl_iopctl.h" />
+        <file file_name="drivers/iMXRT600/fsl_power.c" />
+        <file file_name="drivers/iMXRT600/fsl_power.h" />
+        <file file_name="drivers/fsl_usart.c" />
+        <file file_name="drivers/fsl_usart.h" />
+        <file file_name="drivers/fsl_flexcomm.c" />
+        <file file_name="drivers/fsl_flexcomm.h" />
+        <file file_name="drivers/cache/cache64/fsl_cache.c" />
+        <file file_name="drivers/cache/cache64/fsl_cache.h" />
+        <file file_name="drivers/iMXRT600/placement.xml">
           <configuration Name="Common" file_type="Section Placement" />
         </file>
       </folder>
       <folder Name="iMXRT1011">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="1011" build_exclude_from_build="No" />
-        <file file_name="iMXRT1011/pin_mux.c" />
-        <file file_name="iMXRT1011/board.h" />
-        <file file_name="iMXRT1011/clock_config.c" />
-        <file file_name="iMXRT1011/clock_config.h" />
-        <file file_name="iMXRT1011/fsl_iomuxc.h" />
-        <file file_name="iMXRT1011/fsl_clock.c" />
-        <file file_name="iMXRT1011/fsl_clock.h" />
-        <file file_name="iMXRT1011/fsl_gpio.c" />
-        <file file_name="iMXRT1011/fsl_gpio.h" />
-        <file file_name="fsl_cache.c" />
-        <file file_name="fsl_cache.h" />
-        <file file_name="fsl_dmamux.c" />
-        <file file_name="fsl_dmamux.h" />
-        <file file_name="fsl_lpuart.c" />
-        <file file_name="fsl_lpuart.h" />
+        <folder Name="CM7">
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.c" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.h" />
+        </folder>
+        <file file_name="drivers/iMXRT1011/pin_mux.c" />
+        <file file_name="drivers/iMXRT1011/board.h" />
+        <file file_name="drivers/iMXRT1011/clock_config.c" />
+        <file file_name="drivers/iMXRT1011/clock_config.h" />
+        <file file_name="drivers/iMXRT1011/fsl_iomuxc.h" />
+        <file file_name="drivers/iMXRT1011/fsl_clock.c" />
+        <file file_name="drivers/iMXRT1011/fsl_clock.h" />
+        <file file_name="drivers/iMXRT1011/fsl_gpio.c" />
+        <file file_name="drivers/iMXRT1011/fsl_gpio.h" />
+        <file file_name="drivers/fsl_dmamux.c" />
+        <file file_name="drivers/fsl_dmamux.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
         <file file_name="../MemoryMap_MIMXRT1011.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
       </folder>
       <folder Name="iMXRT1015">
-        <file file_name="iMXRT1015/fsl_clock.c" />
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="1015" build_exclude_from_build="No" />
-        <file file_name="iMXRT1015/clock_config.c" />
-        <file file_name="iMXRT1015/clock_config.h" />
-        <file file_name="iMXRT1015/fsl_iomuxc.h" />
-        <file file_name="iMXRT1015/fsl_clock.h" />
-        <file file_name="iMXRT1015/pin_mux.c" />
-        <file file_name="iMXRT1015/board.h" />
-        <file file_name="iMXRT1015/fsl_gpio.c" />
-        <file file_name="iMXRT1015/fsl_gpio.h" />
-        <file file_name="fsl_cache.c" />
-        <file file_name="fsl_cache.h" />
-        <file file_name="fsl_dmamux.c" />
-        <file file_name="fsl_dmamux.h" />
-        <file file_name="fsl_lpuart.c" />
-        <file file_name="fsl_lpuart.h" />
+        <folder Name="CM7">
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.c" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.h" />
+        </folder>
+        <file file_name="drivers/iMXRT1015/fsl_clock.c" />
+        <file file_name="drivers/iMXRT1015/fsl_clock.h" />
+        <file file_name="drivers/iMXRT1015/clock_config.c" />
+        <file file_name="drivers/iMXRT1015/clock_config.h" />
+        <file file_name="drivers/iMXRT1015/fsl_iomuxc.h" />
+        <file file_name="drivers/iMXRT1015/pin_mux.c" />
+        <file file_name="drivers/iMXRT1015/board.h" />
+        <file file_name="drivers/iMXRT1015/fsl_gpio.c" />
+        <file file_name="drivers/iMXRT1015/fsl_gpio.h" />
+        <file file_name="drivers/fsl_dmamux.c" />
+        <file file_name="drivers/fsl_dmamux.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
         <file file_name="../MemoryMap_MIMXRT1015.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
@@ -480,21 +491,23 @@
       <folder Name="iMXRT1021">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="1021" build_exclude_from_build="No" />
-        <file file_name="iMXRT1021/fsl_clock.h" />
-        <file file_name="iMXRT1021/fsl_iomuxc.h" />
-        <file file_name="iMXRT1021/fsl_clock.c" />
-        <file file_name="iMXRT1021/clock_config.c" />
-        <file file_name="iMXRT1021/clock_config.h" />
-        <file file_name="iMXRT1021/pin_mux.c" />
-        <file file_name="iMXRT1021/board.h" />
-        <file file_name="iMXRT1021/fsl_gpio.c" />
-        <file file_name="iMXRT1021/fsl_gpio.h" />
-        <file file_name="fsl_cache.c" />
-        <file file_name="fsl_cache.h" />
-        <file file_name="fsl_dmamux.c" />
-        <file file_name="fsl_dmamux.h" />
-        <file file_name="fsl_lpuart.c" />
-        <file file_name="fsl_lpuart.h" />
+        <folder Name="CM7">
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.c" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.h" />
+        </folder>
+        <file file_name="drivers/iMXRT1021/fsl_clock.c" />
+        <file file_name="drivers/iMXRT1021/fsl_clock.h" />
+        <file file_name="drivers/iMXRT1021/fsl_iomuxc.h" />
+        <file file_name="drivers/iMXRT1021/clock_config.c" />
+        <file file_name="drivers/iMXRT1021/clock_config.h" />
+        <file file_name="drivers/iMXRT1021/pin_mux.c" />
+        <file file_name="drivers/iMXRT1021/board.h" />
+        <file file_name="drivers/iMXRT1021/fsl_gpio.c" />
+        <file file_name="drivers/iMXRT1021/fsl_gpio.h" />
+        <file file_name="drivers/fsl_dmamux.c" />
+        <file file_name="drivers/fsl_dmamux.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
         <file file_name="../MemoryMap_MIMXRT102x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
@@ -502,21 +515,23 @@
       <folder Name="iMXRT1024">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="1024" build_exclude_from_build="No" />
-        <file file_name="iMXRT1024/fsl_clock.h" />
-        <file file_name="iMXRT1024/fsl_iomuxc.h" />
-        <file file_name="iMXRT1024/fsl_clock.c" />
-        <file file_name="iMXRT1024/clock_config.c" />
-        <file file_name="iMXRT1024/clock_config.h" />
-        <file file_name="iMXRT1024/pin_mux.c" />
-        <file file_name="iMXRT1024/board.h" />
-        <file file_name="iMXRT1024/fsl_gpio.c" />
-        <file file_name="iMXRT1024/fsl_gpio.h" />
-        <file file_name="fsl_cache.c" />
-        <file file_name="fsl_cache.h" />
-        <file file_name="fsl_dmamux.c" />
-        <file file_name="fsl_dmamux.h" />
-        <file file_name="fsl_lpuart.c" />
-        <file file_name="fsl_lpuart.h" />
+        <folder Name="CM7">
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.c" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.h" />
+        </folder>
+        <file file_name="drivers/iMXRT1024/fsl_clock.h" />
+        <file file_name="drivers/iMXRT1024/fsl_iomuxc.h" />
+        <file file_name="drivers/iMXRT1024/fsl_clock.c" />
+        <file file_name="drivers/iMXRT1024/clock_config.c" />
+        <file file_name="drivers/iMXRT1024/clock_config.h" />
+        <file file_name="drivers/iMXRT1024/pin_mux.c" />
+        <file file_name="drivers/iMXRT1024/board.h" />
+        <file file_name="drivers/iMXRT1024/fsl_gpio.c" />
+        <file file_name="drivers/iMXRT1024/fsl_gpio.h" />
+        <file file_name="drivers/fsl_dmamux.c" />
+        <file file_name="drivers/fsl_dmamux.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
         <file file_name="../MemoryMap_MIMXRT102x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
@@ -524,21 +539,23 @@
       <folder Name="iMXRT1040">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="1040" build_exclude_from_build="No" />
-        <file file_name="iMXRT1040/fsl_clock.h" />
-        <file file_name="iMXRT1040/fsl_iomuxc.h" />
-        <file file_name="iMXRT1040/fsl_clock.c" />
-        <file file_name="iMXRT1040/clock_config.c" />
-        <file file_name="iMXRT1040/clock_config.h" />
-        <file file_name="iMXRT1040/pin_mux.c" />
-        <file file_name="iMXRT1040/board.h" />
-        <file file_name="iMXRT1040/fsl_gpio.c" />
-        <file file_name="iMXRT1040/fsl_gpio.h" />
-        <file file_name="fsl_cache.c" />
-        <file file_name="fsl_cache.h" />
-        <file file_name="fsl_dmamux.c" />
-        <file file_name="fsl_dmamux.h" />
-        <file file_name="fsl_lpuart.c" />
-        <file file_name="fsl_lpuart.h" />
+        <folder Name="CM7">
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.c" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.h" />
+        </folder>
+        <file file_name="drivers/iMXRT1040/fsl_clock.h" />
+        <file file_name="drivers/iMXRT1040/fsl_iomuxc.h" />
+        <file file_name="drivers/iMXRT1040/fsl_clock.c" />
+        <file file_name="drivers/iMXRT1040/clock_config.c" />
+        <file file_name="drivers/iMXRT1040/clock_config.h" />
+        <file file_name="drivers/iMXRT1040/pin_mux.c" />
+        <file file_name="drivers/iMXRT1040/board.h" />
+        <file file_name="drivers/iMXRT1040/fsl_gpio.c" />
+        <file file_name="drivers/iMXRT1040/fsl_gpio.h" />
+        <file file_name="drivers/fsl_dmamux.c" />
+        <file file_name="drivers/fsl_dmamux.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
         <file file_name="../MemoryMap_MIMXRT104x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
@@ -546,21 +563,23 @@
       <folder Name="iMXRT1050">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="1050" build_exclude_from_build="No" />
-        <file file_name="iMXRT1050/fsl_clock.h" />
-        <file file_name="iMXRT1050/fsl_iomuxc.h" />
-        <file file_name="iMXRT1050/fsl_clock.c" />
-        <file file_name="iMXRT1050/clock_config.c" />
-        <file file_name="iMXRT1050/clock_config.h" />
-        <file file_name="iMXRT1050/pin_mux.c" />
-        <file file_name="iMXRT1050/board.h" />
-        <file file_name="iMXRT1050/fsl_gpio.c" />
-        <file file_name="iMXRT1050/fsl_gpio.h" />
-        <file file_name="fsl_cache.c" />
-        <file file_name="fsl_cache.h" />
-        <file file_name="fsl_dmamux.c" />
-        <file file_name="fsl_dmamux.h" />
-        <file file_name="fsl_lpuart.c" />
-        <file file_name="fsl_lpuart.h" />
+        <folder Name="CM7">
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.c" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.h" />
+        </folder>
+        <file file_name="drivers/iMXRT1050/fsl_clock.h" />
+        <file file_name="drivers/iMXRT1050/fsl_iomuxc.h" />
+        <file file_name="drivers/iMXRT1050/fsl_clock.c" />
+        <file file_name="drivers/iMXRT1050/clock_config.c" />
+        <file file_name="drivers/iMXRT1050/clock_config.h" />
+        <file file_name="drivers/iMXRT1050/pin_mux.c" />
+        <file file_name="drivers/iMXRT1050/board.h" />
+        <file file_name="drivers/iMXRT1050/fsl_gpio.c" />
+        <file file_name="drivers/iMXRT1050/fsl_gpio.h" />
+        <file file_name="drivers/fsl_dmamux.c" />
+        <file file_name="drivers/fsl_dmamux.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
         <file file_name="../MemoryMap_MIMXRT105x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
@@ -568,21 +587,23 @@
       <folder Name="iMXRT1060">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="1060" build_exclude_from_build="No" />
-        <file file_name="iMXRT1060/fsl_clock.h" />
-        <file file_name="iMXRT1060/fsl_iomuxc.h" />
-        <file file_name="iMXRT1060/fsl_clock.c" />
-        <file file_name="iMXRT1060/clock_config.c" />
-        <file file_name="iMXRT1060/clock_config.h" />
-        <file file_name="iMXRT1060/pin_mux.c" />
-        <file file_name="iMXRT1060/board.h" />
-        <file file_name="iMXRT1060/fsl_gpio.c" />
-        <file file_name="iMXRT1060/fsl_gpio.h" />
-        <file file_name="fsl_cache.c" />
-        <file file_name="fsl_cache.h" />
-        <file file_name="fsl_dmamux.c" />
-        <file file_name="fsl_dmamux.h" />
-        <file file_name="fsl_lpuart.c" />
-        <file file_name="fsl_lpuart.h" />
+        <folder Name="CM7">
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.c" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.h" />
+        </folder>
+        <file file_name="drivers/iMXRT1060/fsl_clock.h" />
+        <file file_name="drivers/iMXRT1060/fsl_iomuxc.h" />
+        <file file_name="drivers/iMXRT1060/fsl_clock.c" />
+        <file file_name="drivers/iMXRT1060/clock_config.c" />
+        <file file_name="drivers/iMXRT1060/clock_config.h" />
+        <file file_name="drivers/iMXRT1060/pin_mux.c" />
+        <file file_name="drivers/iMXRT1060/board.h" />
+        <file file_name="drivers/iMXRT1060/fsl_gpio.c" />
+        <file file_name="drivers/iMXRT1060/fsl_gpio.h" />
+        <file file_name="drivers/fsl_dmamux.c" />
+        <file file_name="drivers/fsl_dmamux.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
         <file file_name="../MemoryMap_MIMXRT106x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
@@ -590,21 +611,23 @@
       <folder Name="iMXRT1064">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="1064" build_exclude_from_build="No" />
-        <file file_name="iMXRT1064/fsl_clock.h" />
-        <file file_name="iMXRT1064/fsl_iomuxc.h" />
-        <file file_name="iMXRT1064/fsl_clock.c" />
-        <file file_name="iMXRT1064/clock_config.c" />
-        <file file_name="iMXRT1064/clock_config.h" />
-        <file file_name="iMXRT1064/pin_mux.c" />
-        <file file_name="iMXRT1064/board.h" />
-        <file file_name="iMXRT1064/fsl_gpio.c" />
-        <file file_name="iMXRT1064/fsl_gpio.h" />
-        <file file_name="fsl_cache.c" />
-        <file file_name="fsl_cache.h" />
-        <file file_name="fsl_dmamux.c" />
-        <file file_name="fsl_dmamux.h" />
-        <file file_name="fsl_lpuart.c" />
-        <file file_name="fsl_lpuart.h" />
+        <folder Name="CM7">
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.c" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.h" />
+        </folder>
+        <file file_name="drivers/iMXRT1064/fsl_clock.h" />
+        <file file_name="drivers/iMXRT1064/fsl_iomuxc.h" />
+        <file file_name="drivers/iMXRT1064/fsl_clock.c" />
+        <file file_name="drivers/iMXRT1064/clock_config.c" />
+        <file file_name="drivers/iMXRT1064/clock_config.h" />
+        <file file_name="drivers/iMXRT1064/pin_mux.c" />
+        <file file_name="drivers/iMXRT1064/board.h" />
+        <file file_name="drivers/iMXRT1064/fsl_gpio.c" />
+        <file file_name="drivers/iMXRT1064/fsl_gpio.h" />
+        <file file_name="drivers/fsl_dmamux.c" />
+        <file file_name="drivers/fsl_dmamux.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
         <file file_name="../MemoryMap_MIMXRT106x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
@@ -613,104 +636,100 @@
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="1160_CM4" build_exclude_from_build="No" />
         <configuration Name="1160_CM7" build_exclude_from_build="No" />
-        <file file_name="iMXRT1160/board.h" />
-        <file file_name="iMXRT1160/clock_config.c" />
-        <file file_name="iMXRT1160/clock_config.h" />
-        <file file_name="iMXRT1160/fsl_anatop_ai.c" />
-        <file file_name="iMXRT1160/fsl_anatop_ai.h" />
-        <file file_name="iMXRT1160/fsl_clock.c" />
-        <file file_name="iMXRT1160/fsl_clock.h" />
-        <file file_name="iMXRT1160/fsl_dcdc.c" />
-        <file file_name="iMXRT1160/fsl_dcdc.h" />
-        <file file_name="iMXRT1160/fsl_gpio.c" />
-        <file file_name="iMXRT1160/fsl_gpio.h" />
-        <file file_name="iMXRT1160/fsl_iomuxc.h" />
-        <file file_name="iMXRT1160/fsl_pmu.c" />
-        <file file_name="iMXRT1160/fsl_pmu.h" />
-        <file file_name="iMXRT1160/pin_mux.c" />
-        <file file_name="fsl_cache.c">
+        <folder Name="CM4">
+          <configuration Name="CM7" build_exclude_from_build="Yes" />
+          <file file_name="drivers/cache/lmem/fsl_cache.c" />
+          <file file_name="drivers/cache/lmem/fsl_cache.h" />
+        </folder>
+        <folder Name="CM7">
           <configuration Name="CM4" build_exclude_from_build="Yes" />
-        </file>
-        <file file_name="fsl_cache.h" />
-        <file file_name="fsl_dmamux.c" />
-        <file file_name="fsl_dmamux.h" />
-        <file file_name="fsl_lpuart.c" />
-        <file file_name="fsl_lpuart.h" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.c" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.h" />
+        </folder>
+        <file file_name="drivers/iMXRT1160/board.h" />
+        <file file_name="drivers/iMXRT1160/clock_config.c" />
+        <file file_name="drivers/iMXRT1160/clock_config.h" />
+        <file file_name="drivers/iMXRT1160/fsl_anatop_ai.c" />
+        <file file_name="drivers/iMXRT1160/fsl_anatop_ai.h" />
+        <file file_name="drivers/iMXRT1160/fsl_clock.c" />
+        <file file_name="drivers/iMXRT1160/fsl_clock.h" />
+        <file file_name="drivers/iMXRT1160/fsl_dcdc.c" />
+        <file file_name="drivers/iMXRT1160/fsl_dcdc.h" />
+        <file file_name="drivers/iMXRT1160/fsl_gpio.c" />
+        <file file_name="drivers/iMXRT1160/fsl_gpio.h" />
+        <file file_name="drivers/iMXRT1160/fsl_iomuxc.h" />
+        <file file_name="drivers/iMXRT1160/fsl_pmu.c" />
+        <file file_name="drivers/iMXRT1160/fsl_pmu.h" />
+        <file file_name="drivers/iMXRT1160/pin_mux.c" />
+        <file file_name="drivers/fsl_dmamux.c" />
+        <file file_name="drivers/fsl_dmamux.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
       </folder>
       <folder Name="iMXRT1170">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="1170_CM7" build_exclude_from_build="No" />
         <configuration Name="1170_CM4" build_exclude_from_build="No" />
-        <file file_name="iMXRT1170/fsl_clock.c" />
-        <file file_name="iMXRT1170/fsl_clock.h" />
-        <file file_name="iMXRT1170/fsl_dcdc.c" />
-        <file file_name="iMXRT1170/fsl_dcdc.h" />
-        <file file_name="iMXRT1170/fsl_iomuxc.h" />
-        <file file_name="iMXRT1170/clock_config.h" />
-        <file file_name="iMXRT1170/clock_config.c" />
-        <file file_name="iMXRT1170/fsl_anatop_ai.h" />
-        <file file_name="iMXRT1170/fsl_anatop_ai.c" />
-        <file file_name="iMXRT1170/pin_mux.c" />
-        <file file_name="iMXRT1170/board.h" />
-        <file file_name="iMXRT1170/fsl_gpio.c" />
-        <file file_name="iMXRT1170/fsl_gpio.h" />
-        <file file_name="iMXRT1170/fsl_pmu.c" />
-        <file file_name="iMXRT1170/fsl_pmu.h" />
-        <file file_name="fsl_cache.c">
+        <folder Name="CM4">
+          <configuration Name="CM7" build_exclude_from_build="Yes" />
+          <file file_name="drivers/cache/lmem/fsl_cache.c" />
+          <file file_name="drivers/cache/lmem/fsl_cache.h" />
+        </folder>
+        <folder Name="CM7">
           <configuration Name="CM4" build_exclude_from_build="Yes" />
-        </file>
-        <file file_name="fsl_cache.h" />
-        <file file_name="fsl_dmamux.c" />
-        <file file_name="fsl_dmamux.h" />
-        <file file_name="fsl_lpuart.c" />
-        <file file_name="fsl_lpuart.h" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.c" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.h" />
+        </folder>
+        <file file_name="drivers/iMXRT1170/fsl_clock.c" />
+        <file file_name="drivers/iMXRT1170/fsl_clock.h" />
+        <file file_name="drivers/iMXRT1170/fsl_dcdc.c" />
+        <file file_name="drivers/iMXRT1170/fsl_dcdc.h" />
+        <file file_name="drivers/iMXRT1170/fsl_iomuxc.h" />
+        <file file_name="drivers/iMXRT1170/clock_config.h" />
+        <file file_name="drivers/iMXRT1170/clock_config.c" />
+        <file file_name="drivers/iMXRT1170/fsl_anatop_ai.h" />
+        <file file_name="drivers/iMXRT1170/fsl_anatop_ai.c" />
+        <file file_name="drivers/iMXRT1170/pin_mux.c" />
+        <file file_name="drivers/iMXRT1170/board.h" />
+        <file file_name="drivers/iMXRT1170/fsl_gpio.c" />
+        <file file_name="drivers/iMXRT1170/fsl_gpio.h" />
+        <file file_name="drivers/iMXRT1170/fsl_pmu.c" />
+        <file file_name="drivers/iMXRT1170/fsl_pmu.h" />
+        <file file_name="drivers/fsl_dmamux.c" />
+        <file file_name="drivers/fsl_dmamux.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
       </folder>
       <folder Name="iMXRT1180">
         <configuration Name="Common" build_exclude_from_build="Yes" />
         <configuration Name="1180_CM7" build_exclude_from_build="No" />
         <configuration Name="1180_CM33" build_exclude_from_build="No" />
-        <file file_name="iMXRT1180/fsl_clock.c" />
-        <file file_name="iMXRT1180/fsl_clock.h" />
-        <file file_name="iMXRT1180/fsl_dcdc.c" />
-        <file file_name="iMXRT1180/fsl_dcdc.h" />
-        <file file_name="iMXRT1180/fsl_iomuxc.h" />
-        <file file_name="iMXRT1180/fsl_pmu.c" />
-        <file file_name="iMXRT1180/fsl_pmu.h" />
-        <file file_name="iMXRT1180/board.h" />
-        <file file_name="iMXRT1180/clock_config.c" />
-        <file file_name="iMXRT1180/clock_config.h" />
-        <file file_name="iMXRT1180/pin_mux.c" />
-        <file file_name="iMXRT1180/fsl_rgpio.c" />
-        <file file_name="iMXRT1180/fsl_rgpio.h" />
-        <file file_name="iMXRT1180/fsl_misc.h" />
-        <file file_name="fsl_lpuart.c" />
-        <file file_name="fsl_lpuart.h" />
+        <file file_name="drivers/iMXRT1180/fsl_clock.c" />
+        <file file_name="drivers/iMXRT1180/fsl_clock.h" />
+        <file file_name="drivers/iMXRT1180/fsl_dcdc.c" />
+        <file file_name="drivers/iMXRT1180/fsl_dcdc.h" />
+        <file file_name="drivers/iMXRT1180/fsl_iomuxc.h" />
+        <file file_name="drivers/iMXRT1180/fsl_pmu.c" />
+        <file file_name="drivers/iMXRT1180/fsl_pmu.h" />
+        <file file_name="drivers/iMXRT1180/board.h" />
+        <file file_name="drivers/iMXRT1180/clock_config.c" />
+        <file file_name="drivers/iMXRT1180/clock_config.h" />
+        <file file_name="drivers/iMXRT1180/pin_mux.c" />
+        <file file_name="drivers/iMXRT1180/fsl_rgpio.c" />
+        <file file_name="drivers/iMXRT1180/fsl_rgpio.h" />
+        <file file_name="drivers/iMXRT1180/fsl_misc.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
         <folder Name="cm33">
-          <file file_name="iMXRT1180/cm33/fsl_cache.c" />
-          <file file_name="iMXRT1180/cm33/fsl_cache.h" />
-          <configuration
-            Name="MIMXRT1180_CM7_Debug"
-            build_exclude_from_build="Yes" />
-          <configuration
-            Name="MIMXRT1180_CM7_Release"
-            build_exclude_from_build="Yes" />
+          <file file_name="drivers/cache/xcache/fsl_cache.c" />
+          <file file_name="drivers/cache/xcache/fsl_cache.h" />
+          <configuration Name="CM7" build_exclude_from_build="Yes" />
         </folder>
         <folder Name="cm7">
-          <file file_name="iMXRT1180/cm7/fsl_cache.c" />
-          <file file_name="iMXRT1180/cm7/fsl_cache.h" />
-          <configuration
-            Name="MIMXRT1180_CM33_Debug"
-            build_exclude_from_build="Yes" />
-          <configuration
-            Name="MIMXRT1180_CM33_Release"
-            build_exclude_from_build="Yes" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.c" />
+          <file file_name="drivers/cache/armv7-m7/fsl_cache.h" />
+          <configuration Name="CM33" build_exclude_from_build="Yes" />
         </folder>
-      </folder>
-      <folder Name="CM4">
-        <file file_name="iMXRT1170/cm4/fsl_cache.c" />
-        <file file_name="iMXRT1170/cm4/fsl_cache.h" />
-        <configuration Name="Common" build_exclude_from_build="Yes" />
-        <configuration Name="CM4" build_exclude_from_build="No" />
       </folder>
     </folder>
     <folder Name="Source">
@@ -718,8 +737,8 @@
       <file file_name="board.cpp" />
       <file file_name="libmem_Tools.h" />
       <file file_name="libmem_Tools.cpp" />
-      <file file_name="libmem_driver_xSPI.h" />
-      <file file_name="libmem_driver_xSPI.cpp" />
+      <file file_name="libmem_driver_FlexSPI.h" />
+      <file file_name="libmem_driver_FlexSPI.cpp" />
       <file file_name="DebugPrint.h" />
       <file file_name="DebugPrint_LPUART.cpp" />
       <file file_name="DebugPrint_USART.cpp" />

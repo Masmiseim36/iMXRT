@@ -68,10 +68,6 @@ extern "C"
 		return true;
 	}
 
-	/*! FlexSPI_LUT:
-	\brief Type for the LUT information used for different Flash types */
-	using FlexSPI_LUT = std::array <uint32_t, sizeof(FLEXSPI_Type::LUT)/sizeof(FLEXSPI_Type::LUT[0])>;
-
 	/*! LibmemDriver:
 	\brief Factory for libmem drivers */
 	class LibmemDriver: public libmem_driver_handle_t
@@ -98,19 +94,6 @@ extern "C"
 		{
 			return Addr - this->start;
 		}
-	};
-
-	/*! MemoryType:
-	\brief Supported Memory/Interface types */
-	enum MemoryType
-	{
-		MemType_Invalid     = 0,
-		MemType_Hyperflash  = 1,
-		MemType_OctaSPI_DDR = 2,
-		MemType_OctaSPI     = 3,
-		MemType_QuadSPI_DDR = 4,
-		MemType_QuadSPI     = 5,
-		MemType_SPI         = 6,
 	};
 
 	/*! LibmemStatus:

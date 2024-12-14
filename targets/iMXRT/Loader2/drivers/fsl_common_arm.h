@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_COMMON_ARM_H_
-#define _FSL_COMMON_ARM_H_
+#ifndef FSL_COMMON_ARM_H_
+#define FSL_COMMON_ARM_H_
 
 /*
  * For CMSIS pack RTE.
@@ -261,7 +261,7 @@ static inline void _SDK_AtomicLocalClearAndSet4Byte(volatile uint32_t *addr, uin
         s_atomicOldInt = DisableGlobalIRQ(); \
         *(addr) += (val);                    \
         EnableGlobalIRQ(s_atomicOldInt);     \
-    } while (0)
+    } while (false)
 
 #define SDK_ATOMIC_LOCAL_SUB(addr, val)      \
     do                                       \
@@ -270,7 +270,7 @@ static inline void _SDK_AtomicLocalClearAndSet4Byte(volatile uint32_t *addr, uin
         s_atomicOldInt = DisableGlobalIRQ(); \
         *(addr) -= (val);                    \
         EnableGlobalIRQ(s_atomicOldInt);     \
-    } while (0)
+    } while (false)
 
 #define SDK_ATOMIC_LOCAL_SET(addr, bits)     \
     do                                       \
@@ -279,7 +279,7 @@ static inline void _SDK_AtomicLocalClearAndSet4Byte(volatile uint32_t *addr, uin
         s_atomicOldInt = DisableGlobalIRQ(); \
         *(addr) |= (bits);                   \
         EnableGlobalIRQ(s_atomicOldInt);     \
-    } while (0)
+    } while (false)
 
 #define SDK_ATOMIC_LOCAL_CLEAR(addr, bits)   \
     do                                       \
@@ -288,7 +288,7 @@ static inline void _SDK_AtomicLocalClearAndSet4Byte(volatile uint32_t *addr, uin
         s_atomicOldInt = DisableGlobalIRQ(); \
         *(addr) &= ~(bits);                  \
         EnableGlobalIRQ(s_atomicOldInt);     \
-    } while (0)
+    } while (false)
 
 #define SDK_ATOMIC_LOCAL_TOGGLE(addr, bits)  \
     do                                       \
@@ -297,7 +297,7 @@ static inline void _SDK_AtomicLocalClearAndSet4Byte(volatile uint32_t *addr, uin
         s_atomicOldInt = DisableGlobalIRQ(); \
         *(addr) ^= (bits);                   \
         EnableGlobalIRQ(s_atomicOldInt);     \
-    } while (0)
+    } while (false)
 
 #define SDK_ATOMIC_LOCAL_CLEAR_AND_SET(addr, clearBits, setBits) \
     do                                                           \
@@ -306,7 +306,7 @@ static inline void _SDK_AtomicLocalClearAndSet4Byte(volatile uint32_t *addr, uin
         s_atomicOldInt = DisableGlobalIRQ();                     \
         *(addr)        = (*(addr) & ~(clearBits)) | (setBits);   \
         EnableGlobalIRQ(s_atomicOldInt);                         \
-    } while (0)
+    } while (false)
 
 #endif
 /* @} */
@@ -410,15 +410,21 @@ _Pragma("diag_suppress=Pm120")
 #endif
 
 #elif (defined(__GNUC__))
+#if defined(__ARM_ARCH_8A__) /* This macro is ARMv8-A specific */
+#define __CS "//"
+#else
+#define __CS "@"
+#endif
+
 /* For GCC, when the non-cacheable section is required, please define "__STARTUP_INITIALIZE_NONCACHEDATA"
  * in your projects to make sure the non-cacheable section variables will be initialized in system startup.
  */
 #define AT_NONCACHEABLE_SECTION_INIT(var) __attribute__((section("NonCacheable.init"))) var
 #define AT_NONCACHEABLE_SECTION_ALIGN_INIT(var, alignbytes) \
     __attribute__((section("NonCacheable.init"))) var __attribute__((aligned(alignbytes)))
-#define AT_NONCACHEABLE_SECTION(var) __attribute__((section("NonCacheable,\"aw\",%nobits @"))) var
+#define AT_NONCACHEABLE_SECTION(var) __attribute__((section("NonCacheable,\"aw\",%nobits " __CS))) var
 #define AT_NONCACHEABLE_SECTION_ALIGN(var, alignbytes) \
-    __attribute__((section("NonCacheable,\"aw\",%nobits @"))) var __attribute__((aligned(alignbytes)))
+    __attribute__((section("NonCacheable,\"aw\",%nobits " __CS))) var __attribute__((aligned(alignbytes)))
 #else
 #error Toolchain not supported.
 #endif
@@ -469,6 +475,38 @@ _Pragma("diag_suppress=Pm120")
 #endif /* defined(__ICCARM__) */
 /* @} */
 
+/*!
+ * @def MSDK_REG_SECURE_ADDR(x)
+ * Convert the register address to the one used in secure mode.
+ *
+ * @def MSDK_REG_NONSECURE_ADDR(x)
+ * Convert the register address to the one used in non-secure mode.
+ */
+
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+#define MSDK_REG_SECURE_ADDR(x) ((uintptr_t)(x) | (0x1UL << 28))
+#define MSDK_REG_NONSECURE_ADDR(x) ((uintptr_t)(x) & ~(0x1UL << 28))
+#else
+#define MSDK_REG_SECURE_ADDR(x) (x)
+#define MSDK_REG_NONSECURE_ADDR(x) (x)
+#endif
+
+/*!
+ * @def MSDK_REG_SECURE_ADDR(x)
+ * Convert the register address to the one used in secure mode.
+ *
+ * @def MSDK_REG_NONSECURE_ADDR(x)
+ * Convert the register address to the one used in non-secure mode.
+ */
+
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+#define MSDK_REG_SECURE_ADDR(x) ((uintptr_t)(x) | (0x1UL << 28))
+#define MSDK_REG_NONSECURE_ADDR(x) ((uintptr_t)(x) & ~(0x1UL << 28))
+#else
+#define MSDK_REG_SECURE_ADDR(x) (x)
+#define MSDK_REG_NONSECURE_ADDR(x) (x)
+#endif
+
 #if defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
         void DefaultISR(void);
 #endif
@@ -485,6 +523,11 @@ _Pragma("diag_suppress=Pm120")
 #if ((defined(FSL_FEATURE_SOC_SYSCON_COUNT) && (FSL_FEATURE_SOC_SYSCON_COUNT > 0)) || \
      (defined(FSL_FEATURE_SOC_ASYNC_SYSCON_COUNT) && (FSL_FEATURE_SOC_ASYNC_SYSCON_COUNT > 0)))
 #include "fsl_reset.h"
+#endif
+
+#if defined(FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM) && (FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM > 0) && defined(FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) && (FSL_FEATURE_IRQSTEER_IRQ_START_INDEX > 0)
+void IRQSTEER_EnableInterrupt(int32_t instIdx, IRQn_Type irq);
+void IRQSTEER_DisableInterrupt(int32_t instIdx, IRQn_Type irq);
 #endif
 
 /*******************************************************************************
@@ -523,7 +566,13 @@ static inline status_t EnableIRQ(IRQn_Type interrupt)
 #if defined(FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS) && (FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS > 0)
     else if ((int32_t)interrupt >= (int32_t)FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS)
     {
+#if defined(FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM) && (FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM > 0) && defined(FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) && (FSL_FEATURE_IRQSTEER_IRQ_START_INDEX > 0)
+        int32_t irqsteerInstIdx = (int32_t)((interrupt + 1 - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) / FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM);
+
+        IRQSTEER_EnableInterrupt(irqsteerInstIdx, interrupt);
+#else
         status = kStatus_Fail;
+#endif
     }
 #endif
 
@@ -567,7 +616,13 @@ static inline status_t DisableIRQ(IRQn_Type interrupt)
 #if defined(FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS) && (FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS > 0)
     else if ((int32_t)interrupt >= (int32_t)FSL_FEATURE_NUMBER_OF_LEVEL1_INT_VECTORS)
     {
+#if defined(FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM) && (FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM > 0) && defined(FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) && (FSL_FEATURE_IRQSTEER_IRQ_START_INDEX > 0)
+        int32_t irqsteerInstIdx = (int32_t)((interrupt - FSL_FEATURE_IRQSTEER_IRQ_START_INDEX) / FSL_FEATURE_IRQSTEER_EXT_INT_MAX_NUM);
+
+        IRQSTEER_DisableInterrupt(irqsteerInstIdx, interrupt);
+#else
         status = kStatus_Fail;
+#endif
     }
 #endif
 
@@ -582,6 +637,10 @@ static inline status_t DisableIRQ(IRQn_Type interrupt)
 
     return status;
 }
+
+#if defined(__GIC_PRIO_BITS)
+#define NVIC_SetPriority(irq, prio) do {} while(0)
+#endif
 
 /*!
  * @brief Enable the IRQ, and also set the interrupt priority.
@@ -839,4 +898,4 @@ uint32_t MSDK_GetCpuCycleCount(void);
 
 /*! @} */
 
-#endif /* _FSL_COMMON_ARM_H_ */
+#endif /* FSL_COMMON_ARM_H_ */

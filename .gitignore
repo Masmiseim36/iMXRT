@@ -7,3 +7,4 @@
 *.ld
 *Debug.elf
 *_PP.s
+*_lto.txt

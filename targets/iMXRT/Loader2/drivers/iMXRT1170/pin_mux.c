@@ -25,7 +25,7 @@ OF SUCH DAMAGE. */
 #include "pin_mux.h"
 #include "board.h"
 
-/** BOARD_InitUARTPins
+/*! BOARD_InitUARTPins
 Set pin muxing and configure electrical properties for the UART */
 void BOARD_InitUARTPins (void)
 {

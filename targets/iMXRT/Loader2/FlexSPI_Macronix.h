@@ -22,7 +22,7 @@ OF SUCH DAMAGE. */
 #ifndef FLEXSPI_MACRONIX_H_
 #define FLEXSPI_MACRONIX_H_
 
-#include "libmem_driver_xSPI.h"
+#include "libmem_driver_FlexSPI.h"
 #include "FlexSPI_Helper.h"
 #include <array>
 

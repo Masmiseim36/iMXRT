@@ -22,7 +22,7 @@ OF SUCH DAMAGE. */
 #ifndef FLKEXSPI_ADESTO_H_
 #define FLKEXSPI_ADESTO_H_
 
-#include "libmem_driver_xSPI.h"
+#include "libmem_driver_FlexSPI.h"
 #include "FlexSPI_Helper.h"
 #include <array>
 

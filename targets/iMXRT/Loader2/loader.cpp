@@ -27,12 +27,12 @@ extern "C"
 #include <cstdio>
 
 #include "libmem_Tools.h"
-#include "libmem_driver_xSPI.h"
+#include "libmem_driver_FlexSPI.h"
 #include "DebugPrint.h"
 #include "FlexSPI_Helper.h"
 
 
-enum LibmemStatus Init_Libmem (enum MemoryType memoryType, FlexSPI_Helper *base);
+enum LibmemStatus Init_Libmem (FlexSPI_Helper *base, MemoryType memoryType);
 
 uint32_t Compare (const uint32_t *memPointer, uint32_t Comp, size_t size)
 {
@@ -87,22 +87,11 @@ void ExecuteTest (uint32_t *memPointer)
 //static constexpr uint32_t FourMegabyteOffset = 4 * 1024 * 1024;
 static constexpr uint32_t TwoMegabyteOffset = 2 * 1024 * 1024;
 
-void InitializeAndTest (FlexSPI_Helper *base, MemoryType type)
+void InitializeAndTest (FlexSPI_Helper *base, MemoryType memoryType)
 {
-	PerformJEDECReset (base);
-	InitializeSpiPins (base, type);
-
-	LibmemStatus_t res= Libmem_InitializeDriver_xSPI (base, type);
-	if (res != LibmemStaus_Success)
-	{
-		PerformJEDECReset (base);
-		InitializeSpiPins (base, type);
-		res = Libmem_InitializeDriver_xSPI (base, type);
-	}
+	LibmemStatus res = Init_Libmem (base, memoryType);
 	if (res == LibmemStaus_Success)
-	{
-		ExecuteTest ((uint32_t *)(GetBaseAddress (base) + TwoMegabyteOffset));
-	}
+		ExecuteTest ((uint32_t *)(base->GetAmbaAddress () + TwoMegabyteOffset));
 }
 
 #pragma GCC diagnostic push
@@ -138,9 +127,9 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 			// Register iMX-RT internal FLASH driver
 			#if defined FLEXSPI
 				// devices with a single FlexSPI interface or two interfaces (imxRT106x)
-				res = Init_Libmem ((MemoryType)(param & 0x0F), static_cast<FlexSPI_Helper *>(FLEXSPI));
+				res = Init_Libmem (static_cast<FlexSPI_Helper *>(FLEXSPI), static_cast<MemoryType>(param & 0x0F));
 				#if defined FLEXSPI2
-					LibmemStatus res2 = Init_Libmem ((MemoryType)((param & 0xF0) >> 4), static_cast<FlexSPI_Helper *>(FLEXSPI2));
+					LibmemStatus res2 = Init_Libmem (static_cast<FlexSPI_Helper *>(FLEXSPI2), static_cast<MemoryType>((param & 0xF0) >> 4));
 				#endif
 				if (res == LibmemStatus_InvalidMemoryType
 				#if defined FLEXSPI2
@@ -149,9 +138,9 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 				)
 			#elif defined FLEXSPI0
 				// devices with one or two FlexSPI Interfaces counting from zero
-				LibmemStatus res0 = Init_Libmem ((MemoryType)(param & 0x0F), static_cast<FlexSPI_Helper *>(FLEXSPI0));
+				LibmemStatus res0 = Init_Libmem (static_cast<FlexSPI_Helper *>(FLEXSPI0), static_cast<MemoryType>(param & 0x0F));
 				#if defined FLEXSPI1
-					LibmemStatus_t res1 = Init_Libmem ((MemoryType)((param & 0xF0) >> 4), static_cast<FlexSPI_Helper *>(FLEXSPI1));
+					LibmemStatus_t res1 = Init_Libmem (static_cast<FlexSPI_Helper *>(FLEXSPI1), static_cast<MemoryType>((param & 0xF0) >> 4));
 				#endif
 				if (res0 == LibmemStatus_InvalidMemoryType 
 				#if defined FLEXSPI1
@@ -160,8 +149,8 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 				)
 			#elif defined FLEXSPI1
 				// devices with two FlexSPI Interfaces counting from one
-				LibmemStatus res1 = Init_Libmem ((MemoryType)(param & 0x0F), static_cast<FlexSPI_Helper *>(FLEXSPI1));
-				LibmemStatus res2 = Init_Libmem ((MemoryType)((param & 0xF0) >> 4), static_cast<FlexSPI_Helper *>(FLEXSPI2));
+				LibmemStatus res1 = Init_Libmem (static_cast<FlexSPI_Helper *>(FLEXSPI1), static_cast<MemoryType>(param & 0x0F));
+				LibmemStatus res2 = Init_Libmem (static_cast<FlexSPI_Helper *>(FLEXSPI2), static_cast<MemoryType>((param & 0xF0) >> 4));
 				if (res1 == LibmemStatus_InvalidMemoryType && res2 == LibmemStatus_InvalidMemoryType)
 			#endif
 			{
@@ -217,55 +206,32 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 
 
 
-enum LibmemStatus Init_Libmem (MemoryType memoryType, FlexSPI_Helper *base)
+enum LibmemStatus Init_Libmem (FlexSPI_Helper *base, MemoryType memoryType)
 {
-	enum LibmemStatus status;
+	enum LibmemStatus status {LibmemStaus_Success};
 	uint32_t trials = 0;
 
-	PerformJEDECReset (base);
+	if (memoryType == MemType_Invalid)
+		return status;
 
-	switch (memoryType)
+	PrintMemTypeInfor (memoryType);
+	base->PerformJEDECReset ();
+
+	do
 	{
-		case MemType_Hyperflash:
-		case MemType_OctaSPI_DDR:
-		case MemType_OctaSPI:
-			do
-			{
-				// Init for Octal-SPI with DDR
-				DebugPrint ("Init Loader for Octal-SPI (DDR) or Hyperflash\r\n");
-				// A small delay is need here
-				for (int i=0; i<1000000; i++)
-					__asm__ volatile("nop");
+		// A small delay is need here
+		for (int i=0; i<1000000; i++)
+			__asm__ volatile("nop");
 
-				InitOctaSPIPins (base);
-				status =  Libmem_InitializeDriver_xSPI (base, memoryType);
-				if (status != LibmemStaus_Success)
-				{
-					trials ++;
-					PerformJEDECReset (base);
-				}
-			}
-			while (status != LibmemStaus_Success && trials < 3);
-			break;
-		case MemType_QuadSPI_DDR:
-		case MemType_QuadSPI:
-			do
-			{
-				// Init for Octal-SPI with DDR
-				DebugPrint ("Init Loader for Quad-SPI (DDR)\r\n");
-				InitQuadSPIPins (base);
-				status =  Libmem_InitializeDriver_xSPI (base, memoryType);
-				if (status != LibmemStaus_Success)
-				{
-					trials ++;
-					PerformJEDECReset (base);
-				}
-			}
-			while (status != LibmemStaus_Success && trials < 3);
-			break;
-		default:
-			return LibmemStatus_InvalidMemoryType;
+		base->InitializeSpiPins (memoryType);
+		status =  Libmem_InitializeDriver_xSPI (base, memoryType);
+		if (status != LibmemStaus_Success)
+		{
+			trials ++;
+			base->PerformJEDECReset ();
+		}
 	}
+	while (status != LibmemStaus_Success && trials < 3);
 	return status;
 }
 

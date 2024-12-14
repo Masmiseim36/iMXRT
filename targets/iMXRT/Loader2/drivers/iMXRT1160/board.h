@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 NXP
+ * Copyright 2021 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -18,9 +18,9 @@
  * Definitions
  ******************************************************************************/
 /*! @brief The board name */
-#define BOARD_NAME "MIMXRT1170-EVK"
+#define BOARD_NAME "MIMXRT1160-EVK"
 #ifndef DEBUG_CONSOLE_UART_INDEX
-	#define DEBUG_CONSOLE_UART_INDEX 1	/* iMXRT1170-EVK */
+	#define DEBUG_CONSOLE_UART_INDEX 1
 #endif
 
 /* The UART to use for debug messages. */
@@ -90,10 +90,10 @@
 
 /*! @brief Define the port interrupt number for the board switches */
 #ifndef BOARD_USER_BUTTON_GPIO
-#define BOARD_USER_BUTTON_GPIO GPIO13
+	#define BOARD_USER_BUTTON_GPIO GPIO13
 #endif
 #ifndef BOARD_USER_BUTTON_GPIO_PIN
-#define BOARD_USER_BUTTON_GPIO_PIN (0U)
+	#define BOARD_USER_BUTTON_GPIO_PIN (0U)
 #endif
 #define BOARD_USER_BUTTON_IRQ         GPIO13_Combined_0_31_IRQn
 #define BOARD_USER_BUTTON_IRQ_HANDLER GPIO13_Combined_0_31_IRQHandler
@@ -101,20 +101,23 @@
 
 /* SKIP_SEMC_INIT can also be defined independently */
 #ifdef USE_SDRAM
-#define SKIP_SEMC_INIT
+	#define SKIP_SEMC_INIT
 #endif
 
-/*! @brief The ENET PHY address. */
+/*! @brief The ENET0 PHY address. */
 #define BOARD_ENET0_PHY_ADDRESS (0x02U) /* Phy address of enet port 0. */
 
-/* @brief The EMVSIM SMARTCARD PHY configuration. */
+/*! @brief The ENET1 PHY address. */
+#define BOARD_ENET1_PHY_ADDRESS (0x01U) /* Phy address of enet port 1. */
+
+/*! @brief The EMVSIM SMARTCARD PHY configuration. */
 #define BOARD_SMARTCARD_MODULE                (EMVSIM1)      /*!< SMARTCARD communicational module instance */
 #define BOARD_SMARTCARD_MODULE_IRQ            (EMVSIM1_IRQn) /*!< SMARTCARD communicational module IRQ handler */
 #define BOARD_SMARTCARD_CLOCK_MODULE_CLK_FREQ (CLOCK_GetRootClockFreq(kCLOCK_Root_Emv1))
 #define BOARD_SMARTCARD_CLOCK_VALUE           (4000000U) /*!< SMARTCARD clock frequency */
 
 /* USB PHY condfiguration */
-#define BOARD_USB_PHY_D_CAL     (0x0CU)
+#define BOARD_USB_PHY_D_CAL     (0x07U)
 #define BOARD_USB_PHY_TXCAL45DP (0x06U)
 #define BOARD_USB_PHY_TXCAL45DM (0x06U)
 

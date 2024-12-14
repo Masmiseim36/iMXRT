@@ -20,7 +20,7 @@ IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE. */
 
 
-#include "libmem_driver_xSPI.h"
+#include "libmem_driver_FlexSPI.h"
 #include "libmem_Tools.h"
 #include "fsl_device_registers.h"
 #include "fsl_flexspi.h"
@@ -525,7 +525,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 	static uint8_t writeBuffer[HYPERFLASH_PAGE_SIZE];
 	LibmemDriver *FlashHandle = LibmemDriver::GetDriver ();
 //	libmem_register_driver (FlashHandle, GetBaseAddress(base), FlashSize, geometry, nullptr, &DriverFunctions, &DriverFunctions_Extended);
-	libmem_register_driver (FlashHandle, GetBaseAddress(base), FlashSize, geometry, nullptr, pDriverFunctions, nullptr);
+	libmem_register_driver (FlashHandle, base->GetAmbaAddress (), FlashSize, geometry, nullptr, pDriverFunctions, nullptr);
 	int err = libmem_driver_paged_write_init (&FlashHandle->PageWriteControlBlock, writeBuffer, GetPageSize (memType), ProgramPage, 4, 0);
 	FlashHandle->user_data = (uint32_t)base;
 

@@ -22,7 +22,7 @@ OF SUCH DAMAGE. */
 #ifndef FLEXSPI_SPANSION_H_
 #define FLEXSPI_SPANSION_H_
 
-#include "libmem_driver_xSPI.h"
+#include "libmem_driver_FlexSPI.h"
 #include "FlexSPI_Helper.h"
 #include <array>
 

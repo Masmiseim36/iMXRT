@@ -89,7 +89,7 @@
 
 #if defined ARM_MPU_ARMV7_H
 	#if defined LMEM
-		#include "cm4/fsl_cache.h"
+		#include "fsl_cache.h"
 		// The M4 core has a NXP properity cache
 		void BOARD_ConfigMPU (void)
 		{
@@ -243,7 +243,7 @@
 	#endif
 #else
 	#warning " MPU for ARMv8 Architecture not supported"
-	#include "cm33/fsl_cache.h"
+	#include "fsl_cache.h"
 	void BOARD_ConfigMPU (void)
 	{
 		#if defined XCACHE_PC
