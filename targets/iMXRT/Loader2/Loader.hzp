@@ -27,23 +27,23 @@
     gcc_debugging_level="None"
     gcc_omit_frame_pointer="Yes"
     gcc_optimization_level="Optimize For Size"
-    link_time_optimization="Yes"
-    hidden="Yes" />
+    hidden="Yes"
+    link_time_optimization="Yes" />
   <configuration
     Name="CM7"
     Placement="TCM"
     arm_architecture="v7EM"
     arm_core_type="Cortex-M7"
-    hidden="Yes"
     c_user_include_directories=".;./drivers/cache/armv7-m7"
+    hidden="Yes"
     linker_section_placement_file="../placement_tcm.xml" />
   <configuration
     Name="CM4"
     Placement="TCM"
     arm_architecture="v7EM"
     arm_core_type="Cortex-M4"
-    hidden="Yes"
     c_user_include_directories=".;./drivers/cache/lmem"
+    hidden="Yes"
     linker_section_placement_file="../placement_tcm.xml" />
   <configuration
     Name="CM33"
@@ -60,7 +60,7 @@
     c_preprocessor_definitions="CPU_MIMXRT595SFAWC_cm33"
     c_user_include_directories=".;./drivers/iMXRT500/.;./drivers/cache/cache64"
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT500.xml"
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT500.xml"
     linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
     linker_section_placement_macros="RAM_NAME=SRAM_data"
     macros="DeviceName=MIMXRT595S_cm33;Family=iMXRT500"
@@ -72,7 +72,7 @@
     c_preprocessor_definitions="CPU_MIMXRT685SFVKB_cm33"
     c_user_include_directories=".;./drivers/iMXRT600/.;./drivers/cache/cache64"
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT600.xml"
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT600.xml"
     linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
     linker_section_placement_macros="RAM_NAME=SRAM_data"
     macros="DeviceName=MIMXRT685S_cm33;Family=iMXRT600"
@@ -84,8 +84,8 @@
     c_preprocessor_definitions="CPU_MIMXRT1011DAE5A"
     c_user_include_directories=".;./drivers/iMXRT1011/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT1015.xml"
-    macros="DeviceName=MIMXRT1011" />
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT1011.xml"
+    macros="DeviceName=MIMXRT1011;Family=iMXRT1010" />
   <configuration
     Name="1015"
     Target="MIMXRT1015CAF4A"
@@ -93,8 +93,8 @@
     c_preprocessor_definitions="CPU_MIMXRT1015CAF4A"
     c_user_include_directories=".;./drivers/iMXRT1015/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT1015.xml"
-    macros="DeviceName=MIMXRT1015" />
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT1015.xml"
+    macros="DeviceName=MIMXRT1015;Family=iMXRT1015" />
   <configuration
     Name="1021"
     Target="MIMXRT1021DAF5A"
@@ -102,8 +102,8 @@
     c_preprocessor_definitions="CPU_MIMXRT1021DAF5A"
     c_user_include_directories=".;./drivers/iMXRT1021/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
-    macros="DeviceName=MIMXRT1021" />
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT102x.xml"
+    macros="DeviceName=MIMXRT1021;Family=iMXRT1020" />
   <configuration
     Name="1024"
     Target="MIMXRT1024DAG5A"
@@ -111,8 +111,8 @@
     c_preprocessor_definitions="CPU_MIMXRT1024DAG5A"
     c_user_include_directories=".;./drivers/iMXRT1024/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
-    macros="DeviceName=MIMXRT1024" />
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT102x.xml"
+    macros="DeviceName=MIMXRT1024;Family=iMXRT1020" />
   <configuration
     Name="1040"
     Target="MIMXRT1042DFP6B"
@@ -120,8 +120,8 @@
     c_preprocessor_definitions="CPU_MIMXRT1042DFP6B"
     c_user_include_directories=".;./drivers/iMXRT1040/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT104x.xml"
-    macros="DeviceName=MIMXRT1042" />
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT104x.xml"
+    macros="DeviceName=MIMXRT1042;Family=iMXRT1040" />
   <configuration
     Name="1050"
     Target="MIMXRT1052DVJ6B"
@@ -129,8 +129,8 @@
     c_preprocessor_definitions="CPU_MIMXRT1052DVJ6B"
     c_user_include_directories=".;./drivers/iMXRT1050/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT105x.xml"
-    macros="DeviceName=MIMXRT1052" />
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT105x.xml"
+    macros="DeviceName=MIMXRT1052;Family=iMXRT1050" />
   <configuration
     Name="1060"
     Target="MIMXRT1062DVJ6A"
@@ -138,8 +138,8 @@
     c_preprocessor_definitions="CPU_MIMXRT1062DVJ6A"
     c_user_include_directories=".;./drivers/iMXRT1060/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
-    macros="DeviceName=MIMXRT1062" />
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT106x.xml"
+    macros="DeviceName=MIMXRT1062;Family=iMXRT1060" />
   <configuration
     Name="1064"
     Target="MIMXRT1064DVL6A"
@@ -147,8 +147,8 @@
     c_preprocessor_definitions="CPU_MIMXRT1064DVL6A"
     c_user_include_directories=".;./drivers/iMXRT1064/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
-    macros="DeviceName=MIMXRT1064" />
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT1064.xml"
+    macros="DeviceName=MIMXRT1064;Family=iMXRT1064" />
   <configuration
     Name="1160_CM7"
     Target="MIMXRT1166DVM6A_cm7"
@@ -156,7 +156,7 @@
     c_preprocessor_definitions="CPU_MIMXRT1166DVM6A_cm7"
     c_user_include_directories=".;./drivers/iMXRT1160/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT116x_cm7.xml"
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT116x_cm7.xml"
     macros="DeviceName=MIMXRT1166_cm7;Family=iMXRT1160" />
   <configuration
     Name="1160_CM4"
@@ -165,7 +165,7 @@
     c_preprocessor_definitions="CPU_MIMXRT1166DVM6A_cm4"
     c_user_include_directories=".;./drivers/iMXRT1160/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT116x_cm4.xml"
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT116x_cm4.xml"
     macros="DeviceName=MIMXRT1166_cm4;Family=iMXRT1160" />
   <configuration
     Name="1170_CM7"
@@ -174,7 +174,7 @@
     c_preprocessor_definitions="CPU_MIMXRT1176DVMAA_cm7"
     c_user_include_directories=".;./drivers/iMXRT1170/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT117x_cm7.xml"
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT117x_cm7.xml"
     macros="DeviceName=MIMXRT1176_cm7;Family=iMXRT1170;Core=CM7" />
   <configuration
     Name="1170_CM4"
@@ -183,7 +183,7 @@
     c_preprocessor_definitions="CPU_MIMXRT1176DVMAA_cm4"
     c_user_include_directories=".;./drivers/iMXRT1170/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT117x_cm4.xml"
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT117x_cm4.xml"
     macros="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170;Core=CM4" />
   <configuration
     Name="1180_CM7"
@@ -192,7 +192,7 @@
     c_preprocessor_definitions="CPU_MIMXRT1189CVM8B_cm7"
     c_user_include_directories=".;./drivers/iMXRT1180/."
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT118x_cm7.xml"
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT118x_cm7.xml"
     macros="DeviceName=MIMXRT1189_cm7;Family=iMXRT1180;Core=CM7" />
   <configuration
     Name="1180_CM33"
@@ -201,7 +201,7 @@
     c_preprocessor_definitions="CPU_MIMXRT1189CVM8B_cm33"
     c_user_include_directories=".;./drivers/iMXRT1180/.;./drivers/cache/xcache"
     hidden="Yes"
-    linker_memory_map_file="../MemoryMap_MIMXRT118x_cm33.xml"
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT118x_cm33.xml"
     linker_section_placement_file="../placement_tcm.xml"
     macros="DeviceName=MIMXRT1189_cm33;Family=iMXRT1180;Core=CM33" />
   <configuration
@@ -222,11 +222,11 @@
     inherited_configurations="CM33;600;Release" />
   <configuration
     Name="MIMXRT1011_Debug"
-    build_output_file_name="Loader_iMXRT1011_CM7_Debug.elf"
+    build_output_file_name="Loader_iMXRT1010_CM7_Debug.elf"
     inherited_configurations="CM7;1011;Debug" />
   <configuration
     Name="MIMXRT1011_Release"
-    build_output_file_name="Loader_iMXRT1011_CM7.elf"
+    build_output_file_name="Loader_iMXRT1010_CM7.elf"
     inherited_configurations="CM7;1011;Release" />
   <configuration
     Name="MIMXRT1015_Debug"
@@ -344,7 +344,7 @@
       arm_target_loader_default_loader=""
       arm_target_loader_reset_after_download="No"
       batch_build_configurations="MIMXRT500_Release;MIMXRT600_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1040_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release;MIMXRT1180_CM7_Release;MIMXRT1180_CM33_Release"
-      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT;$(PackagesDir)/libraries/libmem_drivers"
+      c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(ProjectDir)/../devices/$(Family);$(PackagesDir)/libraries/libmem_drivers"
       c_user_include_directories=".;./.."
       debug_register_definition_file="../XML/$(DeviceName)_registers.xml"
       debug_startup_completion_point="main"
@@ -362,21 +362,27 @@
       target_reset_script="Reset_Loader()"
       target_script_file="$(ProjectDir)/../iMXRT_Target.js" />
     <folder Name="System Files">
+      <folder
+        Name="periph"
+        exclude=""
+        filter="*.*"
+        path="../devices/$(Family)/periph"
+        recurse="No" />
       <file file_name="thumb_crt0.s" />
-      <file file_name="../system_$(DeviceName).h" />
-      <file file_name="../system_$(DeviceName).c" />
-      <file file_name="../$(DeviceName).h" />
-      <file file_name="../$(DeviceName)_features.h" />
-      <file file_name="../fsl_device_registers.h" />
+      <file file_name="../devices/$(Family)/system_$(DeviceName).h" />
+      <file file_name="../devices/$(Family)/system_$(DeviceName).c" />
+      <file file_name="../devices/$(Family)/$(DeviceName).h" />
+      <file file_name="../devices/$(Family)/$(DeviceName)_features.h" />
+      <file file_name="../devices/$(Family)/fsl_device_registers.h" />
       <file file_name="startup.s" />
       <file file_name="$(ProjectDir)/../iMXRT_Target.js">
         <configuration Name="Common" file_type="Target Script" />
       </file>
       <configuration
         Name="Common"
-        gcc_c_language_standard="gnu11"
         default_code_section=".init"
-        default_const_section=".rodata_init" />
+        default_const_section=".rodata_init"
+        gcc_c_language_standard="gnu11" />
     </folder>
     <folder Name="drivers">
       <file file_name="drivers/fsl_common.c" />
@@ -460,7 +466,7 @@
         <file file_name="drivers/fsl_dmamux.h" />
         <file file_name="drivers/fsl_lpuart.c" />
         <file file_name="drivers/fsl_lpuart.h" />
-        <file file_name="../MemoryMap_MIMXRT1011.xml">
+        <file file_name="../devices/$(Family)/MemoryMap_MIMXRT1011.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
       </folder>
@@ -484,7 +490,7 @@
         <file file_name="drivers/fsl_dmamux.h" />
         <file file_name="drivers/fsl_lpuart.c" />
         <file file_name="drivers/fsl_lpuart.h" />
-        <file file_name="../MemoryMap_MIMXRT1015.xml">
+        <file file_name="../devices/$(Family)/MemoryMap_MIMXRT1015.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
       </folder>
@@ -508,7 +514,7 @@
         <file file_name="drivers/fsl_dmamux.h" />
         <file file_name="drivers/fsl_lpuart.c" />
         <file file_name="drivers/fsl_lpuart.h" />
-        <file file_name="../MemoryMap_MIMXRT102x.xml">
+        <file file_name="../devices/$(Family)/MemoryMap_MIMXRT102x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
       </folder>
@@ -532,7 +538,7 @@
         <file file_name="drivers/fsl_dmamux.h" />
         <file file_name="drivers/fsl_lpuart.c" />
         <file file_name="drivers/fsl_lpuart.h" />
-        <file file_name="../MemoryMap_MIMXRT102x.xml">
+        <file file_name="../devices/$(Family)/MemoryMap_MIMXRT102x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
       </folder>
@@ -556,7 +562,7 @@
         <file file_name="drivers/fsl_dmamux.h" />
         <file file_name="drivers/fsl_lpuart.c" />
         <file file_name="drivers/fsl_lpuart.h" />
-        <file file_name="../MemoryMap_MIMXRT104x.xml">
+        <file file_name="../devices/$(Family)/MemoryMap_MIMXRT104x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
       </folder>
@@ -580,7 +586,7 @@
         <file file_name="drivers/fsl_dmamux.h" />
         <file file_name="drivers/fsl_lpuart.c" />
         <file file_name="drivers/fsl_lpuart.h" />
-        <file file_name="../MemoryMap_MIMXRT105x.xml">
+        <file file_name="../devices/$(Family)/MemoryMap_MIMXRT105x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
       </folder>
@@ -604,7 +610,7 @@
         <file file_name="drivers/fsl_dmamux.h" />
         <file file_name="drivers/fsl_lpuart.c" />
         <file file_name="drivers/fsl_lpuart.h" />
-        <file file_name="../MemoryMap_MIMXRT106x.xml">
+        <file file_name="../devices/$(Family)/MemoryMap_MIMXRT106x.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
       </folder>
@@ -628,7 +634,7 @@
         <file file_name="drivers/fsl_dmamux.h" />
         <file file_name="drivers/fsl_lpuart.c" />
         <file file_name="drivers/fsl_lpuart.h" />
-        <file file_name="../MemoryMap_MIMXRT106x.xml">
+        <file file_name="../devices/$(Family)/MemoryMap_MIMXRT1064.xml">
           <configuration Name="Common" file_type="Memory Map" />
         </file>
       </folder>

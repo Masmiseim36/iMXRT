@@ -26,23 +26,29 @@
 		<property name="linker_scanf_fmt_level" />
 		<property name="linker_scanf_fp_enabled" />
 		<property name="linker_scanf_character_group_matching_enabled" />
-		<property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/XML/$(DeviceName)_Registers.xml"/>
+		<property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/$(DeviceName)_Registers.xml"/>
 		<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family)_$(Core).elf" configuration="Flash" />
 		<propertygroup name="CMSIS_CORE" value="Yes" />
-		<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT" />
+		<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT/devices/$(Family)" />
 		<folder name="Source Files" filter="c;cpp;cxx;cc;h;s;asm;inc">
 			<file name="main.c" source="$(StudioDir)/samples/Shared/main.c" />
 		</folder>
 		<folder name="System Files">
 			<property name="default_code_section" value=".init" />
 			<property name="default_const_section" value=".init_rodata" />
+			<folder name="periph">
+				<property name="exclude" value="" />
+				<property name="filter" value="*.*" />
+				<property name="path" value="$(TargetsDir)/iMXRT/devices/$(Family)/periph" />
+				<property name="recurse" value="no" />
+			</folder>
 			<file name="$(StudioDir)/source/thumb_crt0.s" expand="no" />
-			<file name="$(TargetsDir)/iMXRT/startup_$(DeviceName).s" expand="no" />
-			<file name="$(TargetsDir)/iMXRT/system_$(DeviceName).h" expand="no" />
-			<file name="$(TargetsDir)/iMXRT/system_$(DeviceName).c" expand="no" />
-			<file name="$(TargetsDir)/iMXRT/$(DeviceName).h" expand="no" />
-			<file name="$(TargetsDir)/iMXRT/$(DeviceName)_features.h" expand="no" />
-			<file name="$(TargetsDir)/iMXRT/fsl_device_registers.h" expand="no" />
+			<file name="$(TargetsDir)/iMXRT/devices/$(Family)/startup_$(DeviceName).s" expand="no" />
+			<file name="$(TargetsDir)/iMXRT/devices/$(Family)/system_$(DeviceName).h" expand="no" />
+			<file name="$(TargetsDir)/iMXRT/devices/$(Family)/system_$(DeviceName).c" expand="no" />
+			<file name="$(TargetsDir)/iMXRT/devices/$(Family)/$(DeviceName).h" expand="no" />
+			<file name="$(TargetsDir)/iMXRT/devices/$(Family)/$(DeviceName)_features.h" expand="no" />
+			<file name="$(TargetsDir)/iMXRT/devices/$(Family)/fsl_device_registers.h" expand="no" />
 		</folder>
 	</project>
 
