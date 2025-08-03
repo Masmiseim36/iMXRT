@@ -1917,7 +1917,7 @@ static inline void IOMUXC_SetPinConfig(uint32_t muxRegister,
                                        uint32_t configRegister,
                                        uint32_t configValue)
 {
-	(void)muxRegister;
+    (void)muxRegister;
     (void)muxMode;
     (void)inputRegister;
     (void)inputDaisy;
