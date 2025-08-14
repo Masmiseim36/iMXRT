@@ -1,0 +1,286 @@
+<!DOCTYPE CrossStudio_Package_Description_File>
+<package crossstudio_versions="8:4.10-" version="1.0" dependencies="CMSIS" cpu_family="iMXRText" author="Rowley Associates Ltd" name="iMXRText" cpu_manufacturer="NXP" build_version="crossworks_v4" date="2025-08-13T21:20:37">
+	<group title="System Solutions">
+		<file title="iMXRT Loader Solution" file_name="$(TargetsDir)/iMXRText/Loader/Loader.hzp"/>
+		<file title="iMXRT Loader2 Solution" file_name="$(TargetsDir)/iMXRText/Loader2/Loader.hzp"/>
+	</group>
+	<targets>
+		<category name="iMXRT600">
+			<cpu name="MIMXRT633SFAWBR"/>
+			<cpu name="MIMXRT633SFFOB"/>
+			<cpu name="MIMXRT633SFVKB"/>
+			<cpu name="MIMXRT685SFAWBR"/>
+			<cpu name="MIMXRT685SFFOB"/>
+			<cpu name="MIMXRT685SFVKB"/>
+		</category>
+		<category name="iMXRT700">
+			<cpu name="MIMXRT735SGAWBR"/>
+			<cpu name="MIMXRT758SGAWBR"/>
+			<cpu name="MIMXRT798SGAWBR"/>
+		</category>
+		<category name="iMXRT1011">
+			<cpu name="MIMXRT1011CAE4A"/>
+			<cpu name="MIMXRT1011DAE5A"/>
+		</category>
+		<category name="iMXRT1015">
+			<cpu name="MIMXRT1015CAF4A"/>
+			<cpu name="MIMXRT1015CAF4B"/>
+			<cpu name="MIMXRT1015DAF5A"/>
+			<cpu name="MIMXRT1015DAF5B"/>
+		</category>
+		<category name="iMXRT1020">
+			<cpu name="MIMXRT1021CAF4A"/>
+			<cpu name="MIMXRT1021CAF4B"/>
+			<cpu name="MIMXRT1021CAG4A"/>
+			<cpu name="MIMXRT1021CAG4B"/>
+			<cpu name="MIMXRT1021DAF5A"/>
+			<cpu name="MIMXRT1021DAF5B"/>
+			<cpu name="MIMXRT1021DAG5A"/>
+			<cpu name="MIMXRT1021DAG5B"/>
+		</category>
+		<category name="iMXRT1024">
+			<cpu name="MIMXRT1024CAG4A"/>
+			<cpu name="MIMXRT1024CAG4B"/>
+			<cpu name="MIMXRT1024DAG5A"/>
+			<cpu name="MIMXRT1024DAG5B"/>
+		</category>
+		<category name="iMXRT1040">
+			<cpu name="MIMXRT1041DFP6B"/>
+			<cpu name="MIMXRT1041DJM6B"/>
+			<cpu name="MIMXRT1041XFP5B"/>
+			<cpu name="MIMXRT1041XJM5B"/>
+			<cpu name="MIMXRT1042DFP6B"/>
+			<cpu name="MIMXRT1042DJM6B"/>
+			<cpu name="MIMXRT1042XFP5B"/>
+			<cpu name="MIMXRT1042XJM5B"/>
+			<cpu name="MIMXRT1043DFP6B"/>
+			<cpu name="MIMXRT1043XFP5B"/>
+			<cpu name="MIMXRT1046DFQ6B"/>
+			<cpu name="MIMXRT1046XFQ5B"/>
+		</category>
+		<category name="iMXRT1050">
+			<cpu name="MIMXRT1051CVJ5B"/>
+			<cpu name="MIMXRT1051CVL5A"/>
+			<cpu name="MIMXRT1051CVL5B"/>
+			<cpu name="MIMXRT1051DVJ6B"/>
+			<cpu name="MIMXRT1051DVL6A"/>
+			<cpu name="MIMXRT1051DVL6B"/>
+			<cpu name="MIMXRT1052CVL5A"/>
+			<cpu name="MIMXRT1052CVL5B"/>
+			<cpu name="MIMXRT1052CVJ5B"/>
+			<cpu name="MIMXRT1052DVL6A"/>
+			<cpu name="MIMXRT1052DVL6B"/>
+			<cpu name="MIMXRT1052DVJ6B"/>
+		</category>
+		<category name="iMXRT1060">
+			<cpu name="MIMXRT1061CVL5A"/>
+			<cpu name="MIMXRT1061CVJ5A"/>
+			<cpu name="MIMXRT1061DVL6A"/>
+			<cpu name="MIMXRT1061DVJ6A"/>
+			<cpu name="MIMXRT1061CVL5B"/>
+			<cpu name="MIMXRT1061CVJ5B"/>
+			<cpu name="MIMXRT1061DVL6B"/>
+			<cpu name="MIMXRT1061DVJ6B"/>
+			<cpu name="MIMXRT1061XVN5B"/>
+			<cpu name="MIMXRT1062CVL5A"/>
+			<cpu name="MIMXRT1062CVJ5A"/>
+			<cpu name="MIMXRT1062DVL6A"/>
+			<cpu name="MIMXRT1062DVJ6A"/>
+			<cpu name="MIMXRT1062CVL5B"/>
+			<cpu name="MIMXRT1062CVJ5B"/>
+			<cpu name="MIMXRT1062DVL6B"/>
+			<cpu name="MIMXRT1062DVJ6B"/>
+			<cpu name="MIMXRT1062DVN6B"/>
+			<cpu name="MIMXRT1062XVN5B"/>
+		</category>
+		<category name="iMXRT1064">
+			<cpu name="MIMXRT1064CVJ5A"/>
+			<cpu name="MIMXRT1064CVJ5B"/>
+			<cpu name="MIMXRT1064CVL5A"/>
+			<cpu name="MIMXRT1064CVL5B"/>
+			<cpu name="MIMXRT1064DVJ6A"/>
+			<cpu name="MIMXRT1064DVJ6B"/>
+			<cpu name="MIMXRT1064DVL6A"/>
+			<cpu name="MIMXRT1064DVL6B"/>
+		</category>
+		<category name="iMXRT1150">
+			<cpu name="MIMXRT1151DHM8B"/>
+			<cpu name="MIMXRT1152AHM6B"/>
+		</category>
+		<category name="iMXRT1160">
+			<cpu name="MIMXRT1165CVM5A"/>
+			<cpu name="MIMXRT1165DVM6A"/>
+			<cpu name="MIMXRT1165XVM5A"/>
+			<cpu name="MIMXRT1166CVM5A"/>
+			<cpu name="MIMXRT1166DVM6A"/>
+			<cpu name="MIMXRT1166XVM5A"/>
+		</category>
+		<category name="iMXRT1170">
+			<cpu name="MIMXRT1171AVM8A"/>
+			<cpu name="MIMXRT1171AVM8B"/>
+			<cpu name="MIMXRT1171CVM8A"/>
+			<cpu name="MIMXRT1171CVM8B"/>
+			<cpu name="MIMXRT1171DVMAA"/>
+			<cpu name="MIMXRT1171DVMAB"/>
+			<cpu name="MIMXRT1172AVM8A"/>
+			<cpu name="MIMXRT1172AVM8B"/>
+			<cpu name="MIMXRT1172CVM8A"/>
+			<cpu name="MIMXRT1172CVM8B"/>
+			<cpu name="MIMXRT1172DVMAA"/>
+			<cpu name="MIMXRT1172DVMAB"/>
+			<cpu name="MIMXRT1173CVM8A"/>
+			<cpu name="MIMXRT1173CVM8B"/>
+			<cpu name="MIMXRT1175AVM8A"/>
+			<cpu name="MIMXRT1175AVM8B"/>
+			<cpu name="MIMXRT1175CVM8A"/>
+			<cpu name="MIMXRT1175CVM8B"/>
+			<cpu name="MIMXRT1175DVMAA"/>
+			<cpu name="MIMXRT1175DVMAB"/>
+			<cpu name="MIMXRT1176AVM8A"/>
+			<cpu name="MIMXRT1176AVM8B"/>
+			<cpu name="MIMXRT1176CVM8A"/>
+			<cpu name="MIMXRT1176CVM8B"/>
+			<cpu name="MIMXRT1176DVMAA"/>
+			<cpu name="MIMXRT1176DVMAB"/>
+		</category>
+		<category name="iMXRT1180">
+			<cpu name="MIMXRT1181CVM8B"/>
+			<cpu name="MIMXRT1182CVM8B"/>
+			<cpu name="MIMXRT118CXVJ8C"/>
+			<cpu name="MIMXRT1185XVJ8C"/>
+			<cpu name="MIMXRT1186XVJ8C"/>
+			<cpu name="MIMXRT1187CVM8B"/>
+			<cpu name="MIMXRT1189CVM8B"/>
+		</category>
+	</targets>
+  <documentation>
+    <section name="Creating i.MX RT Projects">
+      <h5>To create a new iMXRT project</h5>
+      <ul>
+        <li>Select the <b>File > New > New Project</b> menu item.</li>
+        <li>Select the appropriate <b>Generic iMXRT</b> from the <b>Categories</b> list.</li>
+        <li>Select the required project template type from the <b>Templates</b> list.</li>
+        <li>Set the required project name and location directory.</li>
+        <li>Click <b>OK</b>.</li>
+      </ul>
+      <h5>To import IAR project files supplied with the NXP iMXRT SDK</h5>
+      <ul>
+        <li>Select <b>File &gt; Import Project... &gt; IAR Ewarm Project</b> menu item.</li>
+        <li>Navigate to the directory containing the project e.g. E:/NXP/EVKB-IMXRT1050/boards/evkbimxrt1050/driver_examples/gpio/led_output/iar.</li>
+        <li>Select the workspace e.g. igpio_led_output.ewd.</li>
+      </ul>
+      <h5>To build and debug an application the runs in Flash memory</h5>
+      <ul>
+        <li>Select the project to work on by using the <b>Project > Set Active Project</b> menu option.</li>
+        <li>Select the configuration you require by using the <b>Build > Set Active Build Configuration</b> menu option.</li>
+        <li>Right click on the project node in the project explorer and select the <b>FlexSPI (HYPER|QuadSPI)</b> placement property.</li>
+        <li>Build the project by using the <b>Build > Build Project</b> menu option.</li>
+        <li>Connect to the appropriate target in the target window.</li>
+        <li>Download and start debugging the current project by using <b>Debug > Start Debugging</b>.</li>
+      </ul>
+      <h5>To make the application startup from reset</h5>
+      <ul>
+        <li>Right click on the project node in the project explorer and select <b>Properties...</b></li>
+        <li>In the properties window scroll down to the <b>Preprocessor Options</b> section.</li>
+        <li>Type <b>STARTUP_FROM_RESET</b> into the <b>Preprocessor Definitions</b> property editor.</li>
+      </ul>
+    </section>
+
+    <section name="iMXRT Project Specifics">
+      <h5>Target Processor</h5>
+      <p>Once a project has been created you can select different target processors by right clicking on the project node in the project 
+      explorer and selecting the <b>Target Processor</b> entry.</p>
+      <p>Selecting the target processor will specify the memory map that is used for the build and debug. You can view the selected 
+      memory map by right clicking on the project node in the project explorer and selecting <b>Edit Memory Map</b>.</p>
+      <p>In addition, the corresponding system-specific Files are added to the Project (MIMXRT10xx_features.h,
+      system_MIMXRT10xx.h/.c, startup_MIMXRT10xx.s and MIMXRT10xx.h). Reload the project for updating project-tree.</p>
+
+      <h5>Section Placement</h5>
+      <p>CrossStudio for ARM supports iMXRT projects running applications in a number of different
+      memory configurations. You can select the memory configuration you require by setting the <b>Section Placement</b> property.</p>
+      <p>For iMXRT projects the set of placements are:</p>
+      <ul>
+        <li><b>TCM</b> application runs ITCM and DTCM memories.</li>
+        <li><b>SRAM</b> application runs in internal SRAM memory.</li>
+        <li><b>OCRAM</b> application runs in On-Chip RAM, ITCM and DTCM memories.</li>
+        <li><b>SDRAM</b> application runs in External SD-RAM memory.</li>
+        <li><b>FlexSPI (HYPER)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
+        <li><b>FlexSPI (OctaSPI)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
+        <li><b>FlexSPI (QuadSPI)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
+        <li><b>FlexSPI2 (HYPER)</b> application runs in FlexSPI2, ITCM, DTCM and OCRAM memories.</li>
+        <li><b>FlexSPI2 (OctaSPI)</b> application runs in FlexSPI2, ITCM, DTCM and OCRAM memories.</li>
+        <li><b>FlexSPI2 (QuadSPI)</b> application runs in FlexSPI2, ITCM, DTCM and OCRAM memories.</li>
+      </ul>
+      <p>The <b>FlexSPI</b> and <b>FlexSPI2</b> placements also select the flash loader and the memory type it should
+      configure. The memory type is passed to the loader through the <b>Loader Parameter</b> property: the lowest nibble
+      selects the memory attached to the first FlexSPI/xSPI interface, the next nibble the memory on the second interface
+      if the device has one.</p>
+
+      <h5>Configuration Data</h5>
+      <p>The <b>Configuration Data</b> property controls which boot configuration structures are emitted into the boot
+      header of an application that runs from external flash. The available options are:</p>
+      <ul>
+        <li><b>Disabled</b> no additional configuration data is generated.</li>
+        <li><b>DCD Enabled</b> generates Device Configuration Data.</li>
+        <li><b>XMCD Enabled</b> generates eXternal Memory Configuration Data.</li>
+        <li><b>DCD and XMCD Enabled</b> generates both.</li>
+      </ul>
+
+      <h5>Stack and Heap Sizes</h5>
+      <p>The default stack and heap sizes are set to be 1024 and 1024 bytes by default when a project is created.</p>
+
+      <h5>Target Startup Code</h5>
+      <p>The startup code is device specific and is selected with the <b>Target Processor</b> entry.
+      There are a set of preprocessor defines that configure the startup code and are documented in the startup file itself. 
+      The startup code calls out to a weak symbol <b>SystemInit</b> with the stack pointer set to the end of the <b>stack</b>
+      section. The <b>SystemInit</b> function can be used to set the CPU clock or configure any external memories prior to the C 
+      initialisation code as such it cannot access initialised static data.</p>
+
+      <p>The startup code declares symbolic names (and weak implementations) for each interrupt service routine,
+      for example the <b>RTC_SEC_IRQHandler</b> function will be called when the RTC second match interrupt occurs. 
+      The names of the interrupt service routines match those in the CMSIS header file. If you are porting code that
+      has application specific interrupt service routines then you can use preprocessor definitions
+      to rename the declared symbolic name for example <b>RTC_SEC_IRQHandler=RTC_SEC_DriverIRQHandler</b>.</p>
+
+      <h5>Target Reset Script</h5>
+      <p>The reset script <a href="file:$(TargetsDir)/iMXRText/iMXRT_Target.js">iMXRT_Target.js</a> is used by the
+      debugger to reset the target board.</p>
+      <p>This Files includes also the functionality to initialize the external Memory-Interface for SD-RAM. These functions must be called after the Reset Script (Debugger -> Target Script -> Reset Script) when using a Configuration which runs from the external memory-Interface.</p>
+    </section>
+  </documentation>
+  <history>
+    <version name="4.4.3">
+      <description>Added support for iMXRT700 and iMXRT1150</description>
+      <description>Added support for iMXRT1180, including the iMXRT118C, iMXRT1185 and iMXRT1186 devices</description>
+      <description>iMXRT600 is now officially supported</description>
+      <description>Added the iMXRT1043 and iMXRT1046 devices</description>
+      <description>New flash loader (Loader2), provided in source code, with drivers for Adesto, Cypress/Infineon, ISSI, Macronix, Micron and Winbond memories</description>
+      <description>The loader supports both the FlexSPI and the xSPI peripheral, and HyperFlash, OctaSPI (SDR/DDR), QuadSPI (SDR/DDR), SPI and HyperRAM memories</description>
+      <description>The memory interface used by the loader is selected with the Section Placement property and passed through the Loader Parameter property</description>
+      <description>Updated the CMSIS header files, startup files and register description files from the NXP SDK</description>
+      <description>Added a Configuration Data property to enable Device Configuration Data (DCD) and eXternal Memory Configuration Data (XMCD)</description>
+      <description>Added SRAM and OCRAM section placements</description>
+    </version>
+    <version name="4.4.2">
+      <description>Added Support for iMXRT117x</description>
+      <description>FlexSPI-Configurations are also using TCM- and OCRAM-memory now</description>
+      <description>Added SDRAM-Segment to Memory-Map</description>
+      <description>Added support for Adesto EcoXiP Flash</description>
+      <description>Added dedicated memory-map files per Controller</description>
+      <description>Added NonCacheable-Section in the SD-RAM as recommended by NXP</description>
+      <description>Added SDRAM Initialization to the Reset-Script</description>
+    </version>
+    <version name="4.3">
+      <description>Add support for iMXRT1015 devices.</description>
+    </version>
+    <version name="4.2">
+      <description>Add support for iMXRT1060 and iMXRT1064 devices.</description>
+    </version>
+    <version name="4.1">
+      <description>Now using LIBMEM RPC FLM loader.</description>
+    </version>
+    <version name="4.0">
+      <description>Initial Release.</description>
+    </version>
+  </history>
+</package>
