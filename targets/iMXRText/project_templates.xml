@@ -1,8 +1,8 @@
 <projects>
-	<project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT Executable" description="An executable for NXP iMXRT processor." type="Executable" template_name="iMXRT_EXE">
+	<project cpu_manufacturer="NXP" cpu_name="iMXRText" name="iMXRText Executable" description="An executable for NXP iMXRText processor." type="Executable" template_name="iMXRText_EXE">
 		<configuration name="THUMB Debug" />
 		<configuration name="THUMB Release" />
-		<property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
+		<property name="property_groups_file_path" value="$(TargetsDir)/iMXRText/propertyGroups.xml" />
 		<propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
 		<propertygroup name="Placement" value="TCM" choose="Yes" />
 		<propertygroup name="ConfigurationData" value="Disabled" choose="Yes" />
@@ -15,7 +15,7 @@
 		<property name="target_get_partname_script" value="GetPartName()" />
 		<property name="target_reset_script" value="Reset()" />
 		<property name="target_stop_script" value="OnTargetStop_11xx()" />
-		<property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
+		<property name="target_script_file" value="$(TargetsDir)/iMXRText/iMXRT_Target.js" />
 		<property name="target_trace_initialize_script" value="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
 		<property name="arm_linker_stack_size" value="1024" />
 		<property name="arm_linker_heap_size" value="1024" />
@@ -26,10 +26,10 @@
 		<property name="linker_scanf_fmt_level" />
 		<property name="linker_scanf_fp_enabled" />
 		<property name="linker_scanf_character_group_matching_enabled" />
-		<property name="debug_register_definition_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/$(DeviceName)_Registers.xml"/>
-		<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRT/Loader2/Loader_$(Family)_$(Core).elf" configuration="Flash" />
+		<property name="debug_register_definition_file" value="$(TargetsDir)/iMXRText/devices/$(Family)/$(DeviceName)_Registers.xml"/>
+		<property name="arm_target_flash_loader_file_path" value="$(TargetsDir)/iMXRText/Loader2/Loader_$(Family)_$(Core).elf" configuration="Flash" />
 		<propertygroup name="CMSIS_CORE" value="Yes" />
-		<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRT/devices/$(Family)" />
+		<property name="c_system_include_directories" value="$(StudioDir)/include;$(PackagesDir)/include;$(TargetsDir)/iMXRText/devices/$(Family)" />
 		<folder name="Source Files" filter="c;cpp;cxx;cc;h;s;asm;inc">
 			<file name="main.c" source="$(StudioDir)/samples/Shared/main.c" />
 		</folder>
@@ -39,21 +39,21 @@
 			<folder name="periph">
 				<property name="exclude" value="" />
 				<property name="filter" value="*.*" />
-				<property name="path" value="$(TargetsDir)/iMXRT/devices/$(Family)/periph" />
+				<property name="path" value="$(TargetsDir)/iMXRText/devices/$(Family)/periph" />
 				<property name="recurse" value="no" />
 			</folder>
 			<file name="$(StudioDir)/source/thumb_crt0.s" expand="no" />
-			<file name="$(TargetsDir)/iMXRT/devices/$(Family)/startup_$(DeviceName).s" expand="no" />
-			<file name="$(TargetsDir)/iMXRT/devices/$(Family)/system_$(DeviceName).h" expand="no" />
-			<file name="$(TargetsDir)/iMXRT/devices/$(Family)/system_$(DeviceName).c" expand="no" />
-			<file name="$(TargetsDir)/iMXRT/devices/$(Family)/$(DeviceName).h" expand="no" />
-			<file name="$(TargetsDir)/iMXRT/devices/$(Family)/$(DeviceName)_features.h" expand="no" />
-			<file name="$(TargetsDir)/iMXRT/devices/$(Family)/fsl_device_registers.h" expand="no" />
+			<file name="$(TargetsDir)/iMXRText/devices/$(Family)/startup_$(DeviceName).s" expand="no" />
+			<file name="$(TargetsDir)/iMXRText/devices/$(Family)/system_$(DeviceName).h" expand="no" />
+			<file name="$(TargetsDir)/iMXRText/devices/$(Family)/system_$(DeviceName).c" expand="no" />
+			<file name="$(TargetsDir)/iMXRText/devices/$(Family)/$(DeviceName).h" expand="no" />
+			<file name="$(TargetsDir)/iMXRText/devices/$(Family)/$(DeviceName)_features.h" expand="no" />
+			<file name="$(TargetsDir)/iMXRText/devices/$(Family)/fsl_device_registers.h" expand="no" />
 		</folder>
 	</project>
 
-	<project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT External GCC Built Executable" description="An external GCC built executable for NXP iMXRT processor." type="Executable" template_name="iMXRT_GCC_EXE">
-		<property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
+	<project cpu_manufacturer="NXP" cpu_name="iMXRText" name="iMXRText external GCC Built Executable" description="An external GCC built executable for NXP iMXRText processor." type="Executable" template_name="iMXRText_GCC_EXE">
+		<property name="property_groups_file_path" value="$(TargetsDir)/iMXRText/propertyGroups.xml" />
 		<propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
 		<propertygroup name="Placement" value="TCM" choose="Yes" />
 		<property name="arm_architecture" value="v7EM" />
@@ -64,7 +64,7 @@
 		<property name="target_get_partname_script" value="GetPartName()" />
 		<property name="target_reset_script" value="Reset()" />
 		<property name="target_stop_script" value="OnTargetStop_11xx()" />
-		<property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
+		<property name="target_script_file" value="$(TargetsDir)/iMXRText/iMXRT_Target.js" />
 		<property name="target_trace_initialize_script" value="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
 		<property name="external_build_file_name" />
 	</project>
