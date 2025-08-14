@@ -1,7 +1,7 @@
 del *.bak /S
-rmdir /s /q ".\targets\iMXRT\Loader2\out"
+rmdir /s /q ".\targets\iMXRText\Loader2\out"
 
-cd "./targets/iMXRT/Loader2/"
+cd "./targets/iMXRText/Loader2/"
 del /f /q *_Debug.elf
 del /f /q *.map
 cd ..
