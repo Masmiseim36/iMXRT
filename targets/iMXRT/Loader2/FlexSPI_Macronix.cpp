@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2024 Markus Klein
+Copyright (C) 2019-2025 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -96,7 +96,10 @@ namespace Macronix
 				info.ManufactureID = (SerialFlash_ManufactureID)(((i+1)<<8) | identification[i]);
 				info.Type          = identification[i+1];
 				info.Capacity      = (Capacity)(identification[i+3] & 0x1F);
-				return kStatus_Success; 
+				if (info.ManufactureID == ManufactureID_Macronix)
+					return kStatus_Success; 
+				else
+					return kStatus_Fail;
 			}
 		}
 

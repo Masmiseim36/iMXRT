@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2024 Markus Klein
+Copyright (C) 2019-2025 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -60,7 +60,7 @@ void ExecuteTest (uint32_t *memPointer)
 {
 	static std::array<uint32_t, 4096> buffer;
 
-	uint8_t *erase_start = 0;
+	uint8_t *erase_start = nullptr;
 	size_t erase_size = 0;
 	LibmemStatus_t res = static_cast<LibmemStatus_t>(libmem_erase (reinterpret_cast<uint8_t *>(memPointer), sizeof(buffer), &erase_start, &erase_size));
 	if (res != LIBMEM_STATUS_SUCCESS)
@@ -76,7 +76,7 @@ void ExecuteTest (uint32_t *memPointer)
 	// Initialize the array with test data
 	for (size_t i=0; i<sizeof(buffer)/sizeof(buffer[0]); i++)
 		buffer[i] = reinterpret_cast<uint32_t>((buffer.data ()) + i);
-	res = static_cast<LibmemStatus_t>(libmem_write ((uint8_t *)memPointer, (uint8_t *)&buffer[0], sizeof(buffer)));
+	res = static_cast<LibmemStatus_t>(libmem_write ((uint8_t *)memPointer, (uint8_t *)buffer.data (), buffer.size()));
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
 	errorCounter = Compare (memPointer, &buffer[0], sizeof (buffer));
@@ -89,7 +89,7 @@ static constexpr uint32_t TwoMegabyteOffset = 2 * 1024 * 1024;
 
 void InitializeAndTest (FlexSPI_Helper *base, MemoryType memoryType)
 {
-	LibmemStatus res = Init_Libmem (base, memoryType);
+	const LibmemStatus res = Init_Libmem (base, memoryType);
 	if (res == LibmemStaus_Success)
 		ExecuteTest ((uint32_t *)(base->GetAmbaAddress () + TwoMegabyteOffset));
 }
@@ -108,16 +108,16 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 	enum LibmemStatus res {LibmemStaus_Success};
 	#ifdef DEBUG
 		// some test code, because the loader can not be debugged while using it in real scenarios
-		#if defined FLEXSPI
+		#ifdef FLEXSPI
 			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI), MemType_QuadSPI); // MemType_Hyperflash - MemType_OctaSPI_DDR - MemType_QuadSPI
 		#endif
-		#if defined FLEXSPI0
+		#ifdef FLEXSPI0
 			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI0), MemType_OctaSPI_DDR);
 		#endif
-		#if defined FLEXSPI1
+		#ifdef FLEXSPI1
 			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI1), MemType_OctaSPI_DDR);
 		#endif
-		#if defined FLEXSPI2
+		#ifdef FLEXSPI2
 			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI2), MemType_QuadSPI);
 		#endif
 	#else
@@ -155,13 +155,13 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 			#endif
 			{
 				// No valid option for an Flash-memory-interface selected
-				char ErrorString[64];
-				sprintf (ErrorString, "No valid interface selected. Parameter: 0x%X\r\n", param);
-				DebugPrint (ErrorString);
-				libmem_rpc_loader_exit (LIBMEM_STATUS_NO_DRIVER, ErrorString);
+				char errorString[64];
+				sprintf (errorString, "No valid interface selected. Parameter: 0x%X\r\n", param);
+				DebugPrint (errorString);
+				libmem_rpc_loader_exit (LIBMEM_STATUS_NO_DRIVER, errorString);
 				return LIBMEM_STATUS_INVALID_DEVICE;
 			}
-		}
+		} 
 		else
 		{
 			DebugPrintf ("No or invalid libmem parameter: 0x%X\r\n", param);
@@ -173,7 +173,7 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 	DebugPrint ("Start RPC loader\r\n");
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Warray-bounds"
-	#if defined INITIALIZE_TCM_SECTIONS
+	#ifdef INITIALIZE_TCM_SECTIONS
 		//extern uint8_t __DTCM_segment_start__;
 		extern uint8_t __DTCM_segment_used_end__[];
 		extern uint8_t __DTCM_segment_end__[];
@@ -195,10 +195,10 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 	}
 	else
 	{
-		char ErrorString[64];
-		sprintf (ErrorString, "Error '%s' occurred\r\n", Libmem_GetErrorString (res));
-		DebugPrint (ErrorString);
-		libmem_rpc_loader_exit (res, ErrorString);
+		char errorString[64];
+		sprintf (&errorString[0], "Error '%s' occurred\r\n", Libmem_GetErrorString (res));
+		DebugPrint (&errorString[0]);
+		libmem_rpc_loader_exit (res, &errorString[0]);
 	}
 
 	return 0;
@@ -236,7 +236,7 @@ enum LibmemStatus Init_Libmem (FlexSPI_Helper *base, MemoryType memoryType)
 }
 
 
-#if defined MIMXRT685S_cm33_SERIES
+#ifdef MIMXRT685S_cm33_SERIES
 	void SystemInitHook (void)
 	{
 		CACHE64->CCR &= ~CACHE64_CTRL_CCR_ENCACHE_MASK; // disable the cache

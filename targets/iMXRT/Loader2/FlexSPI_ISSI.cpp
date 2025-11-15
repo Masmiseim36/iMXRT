@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2024 Markus Klein
+Copyright (C) 2019-2025 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -60,14 +60,17 @@ namespace ISSI
 	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &info)
 	{
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
-		status_t status = flexSPI.ReadJEDEC (&info);
+		const status_t status = flexSPI.ReadJEDEC (&info);
 
 		if (status != kStatus_Success)
 		{
 			// We were able to read the JEDEC ID via octaspi-DDR, so we are in this mode
 			tryDetectMemoryType = MemType_OctaSPI_DDR;
 		}
-		return status;
+		if (info.ManufactureID == ManufactureID_Lucent) // Lucent ==> Issi
+			return kStatus_Success; 
+		else
+			return kStatus_Fail;
 	}
 
 
@@ -133,7 +136,7 @@ namespace ISSI
 			else
 				flexSPI.UpdateLUT (ISSI::LUT_QuadSPI_32Bit); // 32 bit Addressing
 
-			status_t stat = flexSPI.SendCommand (0, static_cast<LUT_CommandOffsets>(Command::EnterQpiMode)); // Enter QuadSPI mode
+			const status_t stat = flexSPI.SendCommand (0, static_cast<LUT_CommandOffsets>(Command::EnterQpiMode)); // Enter QuadSPI mode
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
 

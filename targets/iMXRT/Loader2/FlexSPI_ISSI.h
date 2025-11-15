@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2024 Markus Klein
+Copyright (C) 2019-2025 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -25,6 +25,7 @@ OF SUCH DAMAGE. */
 #include "libmem_driver_FlexSPI.h"
 #include "FlexSPI_Helper.h"
 #include <array>
+#include <cstdint>
 
 
 namespace ISSI
@@ -32,7 +33,7 @@ namespace ISSI
 	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, DeviceInfo &info, flexspi_config_t &config, flexspi_device_config_t &deviceConfig);
 	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &Info);
 
-	enum class Command
+	enum class Command: uint8_t
 	{
 		ReadArray       =  0,
 		ReadStatus      =  1,
