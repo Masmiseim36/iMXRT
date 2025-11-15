@@ -11,7 +11,7 @@
     c_preprocessor_definitions="__THUMB;STARTUP_FROM_RESET=1;DISABLE_WDOG=1"
     c_preprocessor_undefinitions="__STDCPP_THREADS__"
     c_user_include_directories=".;./drivers"
-    clang_tidy_checks_cpp="*;-llvm*;-fuchsia*;-altera*;-modernize-use-trailing-return-type;-*braces-around-statements;-*magic-numbers;-cppcoreguidelines-pro-bounds-constant-array-index;-google-readability-namespace-comments;-readability-identifier-length"
+    clang_tidy_checks_cpp="*;-llvm*;-fuchsia*;-altera*;-modernize-use-trailing-return-type;-*braces-around-statements;-*magic-numbers;-cppcoreguidelines-pro-bounds-constant-array-index;-google-readability-namespace-comments;-readability-identifier-length;-misc-include-cleaner;-modernize-redundant-void-arg;-hicpp-no-assembler;-cppcoreguidelines-avoid-do-while"
     cpp_only_additional_options="-Woverloaded-virtual;-Wnon-virtual-dtor"
     linker_treat_libraries_as_object_files="No" />
   <configuration
@@ -760,6 +760,8 @@
       <file file_name="FlexSPI_Spansion.h" />
       <file file_name="FlexSPI_Winbond.h" />
       <file file_name="FlexSPI_Winbond.cpp" />
+      <file file_name="FlexSPI_Micron.cpp" />
+      <file file_name="FlexSPI_Micron.h" />
     </folder>
     <folder Name="libmem">
       <file file_name="$(StudioDir)/include/libmem.h" />
