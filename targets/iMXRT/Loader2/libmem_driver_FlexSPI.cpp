@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2024 Markus Klein
+Copyright (C) 2019-2025 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -37,6 +37,7 @@ OF SUCH DAMAGE. */
 #include "FlexSPI_Winbond.h"
 #include "FlexSPI_ISSI.h"
 #include "FlexSPI_Spansion.h"
+#include "FlexSPI_Micron.h"
 
 namespace Xspi
 {
@@ -393,11 +394,12 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 	else
 	{
 		// Get the JEDEC Informations
-		static const std::array<status_t (*) (FlexSPI_Helper &, DeviceInfo &), 3> JedecReader
+		static const std::array<status_t (*) (FlexSPI_Helper &, DeviceInfo &), 4> JedecReader
 		{
 			[](FlexSPI_Helper &b, DeviceInfo &i){return b.ReadJEDEC (&i);},
 			Macronix::TryDetect,
-			ISSI::TryDetect
+			ISSI::TryDetect,
+			Micron::TryDetect
 		};
 		for (auto reader : JedecReader)
 		{
@@ -429,6 +431,9 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 			break;
 		case ManufactureID_Lucent:		// ISSI
 			res = ISSI::Initialize (*base, memType, info, config, deviceconfig);
+			break;
+		case ManufactureID_MicronTechnology:
+			res = Micron::Initialize (*base, memType, info, config, deviceconfig);
 			break;
 		case ManufactureID_Spansion:
 			config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad; // To achieve high speeds - always use DQS
@@ -740,14 +745,14 @@ namespace Xspi
 
 		while (size >= BufferSize)
 		{
-			libmem_Read (h, page_buffer, (uint8_t*)start, BufferSize);
+			libmem_Read (h, page_buffer, const_cast<uint8_t *>(start), BufferSize);
 			crc = libmem_crc32_direct (page_buffer,  BufferSize, crc);
 			start += BufferSize;
 			size  -= BufferSize;
 		}
 		if (size)
 		{
-			libmem_Read (h, page_buffer, (uint8_t*)start, BufferSize);
+			libmem_Read (h, page_buffer, const_cast<uint8_t *>(start), BufferSize);
 			crc = libmem_crc32_direct (page_buffer, size, crc);
 		}
 		return crc;

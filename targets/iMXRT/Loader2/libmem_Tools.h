@@ -1,5 +1,5 @@
 /** Loader for iMXRT-Family
-Copyright (C) 2019-2024 Markus Klein
+Copyright (C) 2019-2025 Markus Klein
 https://github.com/Masmiseim36/iMXRT
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -24,7 +24,6 @@ OF SUCH DAMAGE. */
 
 #include "fsl_device_registers.h"
 #include "libmem.h"
-#include <array>
 
 #ifdef __cplusplus
 extern "C"
