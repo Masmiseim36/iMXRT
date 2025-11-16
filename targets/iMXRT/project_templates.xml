@@ -5,6 +5,7 @@
 		<property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
 		<propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
 		<propertygroup name="Placement" value="TCM" choose="Yes" />
+		<propertygroup name="ConfigurationData" value="Disabled" choose="Yes" />
 		<property name="arm_architecture" value="v7EM" />
 		<property name="arm_fpu_abi" value="Hard" />
 		<property name="arm_target_interface_type" value="SWD" />
