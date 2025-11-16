@@ -1103,7 +1103,6 @@
 			<property name="target_reset_script" value="Reset()" />
 			<cdefine name="XIP_EXTERNAL_FLASH" value="1" />
 			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
-			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
 			<cdefine name="XIP_BOOT_HYPERFLASH" value="1" />
 			<cdefine name="XIP_BOOT_FLEXSPI1" value="1" />
 			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
@@ -1117,7 +1116,6 @@
 			<property name="target_reset_script" value="Reset()" />
 			<cdefine name="XIP_EXTERNAL_FLASH" value="1" />
 			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
-			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
 			<cdefine name="XIP_BOOT_OCTASPI" value="1" />
 			<cdefine name="XIP_BOOT_FLEXSPI1" value="1" />
 			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
@@ -1131,7 +1129,6 @@
 			<property name="target_reset_script" value="Reset()" />
 			<cdefine name="XIP_EXTERNAL_FLASH" value="1" />
 			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
-			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
 			<cdefine name="XIP_BOOT_QSPI" value="1" />
 			<cdefine name="XIP_BOOT_FLEXSPI1" value="1" />
 			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
@@ -1146,7 +1143,6 @@
 			<property name="target_reset_script" value="Reset()" />
 			<cdefine name="XIP_EXTERNAL_FLASH" value="1" />
 			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
-			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
 			<cdefine name="XIP_BOOT_HYPERFLASH" value="1" />
 			<cdefine name="XIP_BOOT_FLEXSPI2" value="1" />
 			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
@@ -1160,7 +1156,6 @@
 			<property name="target_reset_script" value="Reset()" />
 			<cdefine name="XIP_EXTERNAL_FLASH" value="1" />
 			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
-			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
 			<cdefine name="XIP_BOOT_OCTASPI" value="1" />
 			<cdefine name="XIP_BOOT_FLEXSPI2" value="1" />
 			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
@@ -1174,10 +1169,24 @@
 			<property name="target_reset_script" value="Reset()" />
 			<cdefine name="XIP_EXTERNAL_FLASH" value="1" />
 			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
-			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
 			<cdefine name="XIP_BOOT_QSPI" value="1" />
 			<cdefine name="XIP_BOOT_FLEXSPI2" value="1" />
 			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
+		</groupEntry>
+	</group>
+
+	<group short="Configuration Data" group="Build Options" long="Set options based on configuration data." name="ConfigurationData" default="Disabled" >
+		<groupEntry name="Disabled">
+		</groupEntry>
+		<groupEntry name="DCD Enabled">
+			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
+		</groupEntry>
+		<groupEntry name="XMCD Enabled">
+			<cdefine name="XIP_BOOT_HEADER_XMCD_ENABLE" value="1" />
+		</groupEntry>
+		<groupEntry name="DCD and XMCD Enabled">
+			<cdefine name="XIP_BOOT_HEADER_DCD_ENABLE" value="1" />
+			<cdefine name="XIP_BOOT_HEADER_XMCD_ENABLE" value="1" />
 		</groupEntry>
 	</group>
 </propertyGroups>

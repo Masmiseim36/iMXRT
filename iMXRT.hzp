@@ -3,7 +3,7 @@
   <project Name="iMXRT">
     <configuration
       Name="Common"
-      combine_command="$(StudioDir)/bin/mkpkg -exclude ./git -exclude ./.vscode -exclude ./___ -exclude ./Convert.sh -exclude ./Extract.sh -exclude ./doc -exclude ./.editorconfig -exclude ./.gitignore -exclude ./.gitignore -exclude ./iMXRT.hzq -exclude ./imxrt.hzs -exclude ./targets/iMXRT/Loader2/out -exclude ./targets/iMXRT/Loader2/bin -exclude ./readme.md -exclude ./FlashInfo.txt -c -v &quot;$(CombiningOutputFilePath)&quot; ."
+      combine_command="$(StudioDir)/bin/mkpkg -exclude ./git -exclude ./.vscode -exclude ./___ -exclude ./doc -exclude ./targets/iMXRT/Loader2/out -exclude ./targets/iMXRT/Loader2/bin -exclude ./.editorconfig -exclude ./.gitignore -exclude ./_clean.bat -exclude ./Convert.sh -exclude ./Extract.sh  -exclude ./FlashInfo.txt -exclude ./iMXRT.hzp -exclude ./iMXRT.hzq -exclude ./iMXRT.hzs -exclude ./iMXRText.hzp -exclude ./iMXRText.hzq -exclude ./iMXRText.hzs -exclude ./readme.md -c &quot;$(CombiningOutputFilePath)&quot; ."
       combine_output_filepath="$(ProjectDir)/iMXRT.hzq"
       project_directory=""
       project_type="Combining" />

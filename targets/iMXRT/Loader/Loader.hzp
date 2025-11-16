@@ -114,22 +114,22 @@
       build_output_file_name="MIMXRT1011_QuadSPI_4KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1011DAF5A;FLM_ALGORITHM_MIMXRT1011_QuadSPI_4KB_SEC"
       debug_register_definition_file="../XML/MIMXRT1011_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT1011.xml"
-      macros="DeviceLoaderFile=../FLM/MIMXRT1011_QuadSPI_4KB_SEC.FLM" />
+      linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT1011.xml"
+      macros="DeviceName=MIMXRT1011;Family=iMXRT1010;DeviceLoaderFile=../FLM/MIMXRT1011_QuadSPI_4KB_SEC.FLM" />
     <configuration
       Name="MIMXRT1015_QuadSPI_4KB_SEC"
       build_output_file_name="MIMXRT1015_QuadSPI_4KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1015CAF4A;FLM_ALGORITHM_MIMXRT1015_QuadSPI_4KB_SEC"
       debug_register_definition_file="../XML/MIMXRT1015_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT1015.xml"
-      macros="DeviceLoaderFile=../FLM/MIMXRT1015_QuadSPI_4KB_SEC.FLM" />
+      linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT1015.xml"
+      macros="DeviceName=MIMXRT1015;Family=iMXRT1015;DeviceLoaderFile=../FLM/MIMXRT1015_QuadSPI_4KB_SEC.FLM" />
     <configuration
       Name="MIMXRT1021_QuadSPI_4KB_SEC"
       build_output_file_name="MIMXRT1021_QuadSPI_4KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1021CAG4A;FLM_ALGORITHM_MIMXRT1021_QuadSPI_4KB_SEC"
       debug_register_definition_file="../XML/MIMXRT1021_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT102x.xml"
-      macros="DeviceLoaderFile=../FLM/MIMXRT1021_QuadSPI_4KB_SEC.FLM" />
+      linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT102x.xml"
+      macros="DeviceName=MIMXRT1021;Family=iMXRT1020;DeviceLoaderFile=../FLM/MIMXRT1021_QuadSPI_4KB_SEC.FLM" />
     <configuration
       Name="MIMXRT1024_QuadSPI_4KB_SEC"
       arm_architecture="v7EM"
@@ -146,50 +146,50 @@
       build_output_file_name="MIMXRT105x_EcoXiP_4KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1051CVL5A;FLM_ALGORITHM_MIMXRT105x_EcoXiP_4KB_SEC"
       debug_register_definition_file="../XML/MIMXRT1051_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT105x.xml"
-      macros="DeviceLoaderFile=../FLM/MIMXRT105x_ECOXIP_4MB_SEC.FLM" />
+      linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT105x.xml"
+      macros="DeviceName=MIMXRT1052;Family=iMXRT1050;DeviceLoaderFile=../FLM/MIMXRT105x_ECOXIP_4MB_SEC.FLM" />
     <configuration
       Name="MIMXRT105x_HYPER_256KB_SEC"
       build_output_file_name="MIMXRT105x_HYPER_256KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1051CVL5A;FLM_ALGORITHM_MIMXRT105x_HYPER_256KB_SEC"
       debug_register_definition_file="../XML/MIMXRT1051_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT105x.xml"
-      macros="DeviceLoaderFile=../FLM/MIMXRT105x_HYPER_256KB_SEC.FLM" />
+      linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT105x.xml"
+      macros="DeviceName=MIMXRT1052;Family=iMXRT1050;DeviceLoaderFile=../FLM/MIMXRT105x_HYPER_256KB_SEC.FLM" />
     <configuration
       Name="MIMXRT105x_QuadSPI_4KB_SEC"
       build_output_file_name="MIMXRT105x_QuadSPI_4KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1051CVL5A;FLM_ALGORITHM_MIMXRT105x_QuadSPI_4KB_SEC"
       debug_register_definition_file="../XML/MIMXRT1051_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT105x.xml"
-      macros="DeviceLoaderFile=../FLM/MIMXRT105x_QuadSPI_4KB_SEC.FLM" />
+      linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT105x.xml"
+      macros="DeviceName=MIMXRT1052;Family=iMXRT1050;DeviceLoaderFile=../FLM/MIMXRT105x_QuadSPI_4KB_SEC.FLM" />
     <configuration
       Name="MIMXRT1064_QSPI_4KB_SEC"
       build_output_file_name="MIMXRT1064_QSPI_4KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1064DVJ6A;FLM_ALGORITHM_MIMXRT1064_QSPI_4KB_SEC"
       debug_register_definition_file="../XML/MIMXRT1064_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
-      macros="DeviceLoaderFile=../FLM/MIMXRT1064_QSPI_4KB_SEC.FLM" />
+      linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT106x.xml"
+      macros="DeviceName=MIMXRT1064;Family=iMXRT1064;DeviceLoaderFile=../FLM/MIMXRT1064_QSPI_4KB_SEC.FLM" />
     <configuration
       Name="MIMXRT106x_EcoXiP_4KB_SEC"
       build_output_file_name="MIMXRT106x_EcoXiP_4KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1062DVL6A;FLM_ALGORITHM_MIMXRT106x_EcoXiP_4KB_SEC"
       debug_register_definition_file="../XML/MIMXRT1062_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
-      macros="DeviceLoaderFile=../FLM/MIMXRT105x_ECOXIP_4MB_SEC.FLM" />
+      linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT106x.xml"
+      macros="DeviceName=MIMXRT1062;Family=iMXRT1060;DeviceLoaderFile=../FLM/MIMXRT105x_ECOXIP_4MB_SEC.FLM" />
     <configuration
       Name="MIMXRT106x_HYPER_256KB_SEC"
       build_output_file_name="MIMXRT106x_HYPER_256KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1062DVL6A;FLM_ALGORITHM_MIMXRT106x_HYPER_256KB_SEC"
       debug_register_definition_file="../XML/MIMXRT1062_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
-      macros="DeviceLoaderFile=../FLM/MIMXRT105x_HYPER_256KB_SEC.FLM" />
+      linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT106x.xml"
+      macros="DeviceName=MIMXRT1062;Family=iMXRT1060;DeviceLoaderFile=../FLM/MIMXRT105x_HYPER_256KB_SEC.FLM" />
     <configuration
       Name="MIMXRT106x_QSPI_4KB_SEC"
       build_output_file_name="MIMXRT106x_QSPI_4KB_SEC_Loader.elf"
       c_preprocessor_definitions="CPU_MIMXRT1062DVL6A;FLM_ALGORITHM_MIMXRT106x_QSPI_4KB_SEC"
       debug_register_definition_file="../XML/MIMXRT1062_registers.xml"
-      linker_memory_map_file="../MemoryMap_MIMXRT106x.xml"
-      macros="DeviceLoaderFile=../FLM/MIMXRT106x_QSPI_4KB_SEC.FLM" />
+      linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT106x.xml"
+      macros="DeviceName=MIMXRT1062;Family=iMXRT1060;DeviceLoaderFile=../FLM/MIMXRT106x_QSPI_4KB_SEC.FLM" />
     <configuration
       Name="MIMXRT117x_QuadSPI_4KB_SEC"
       arm_architecture="v7EM"
