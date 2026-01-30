@@ -13,7 +13,6 @@
 		<property name="debug_startup_completion_point" value="main" />
 		<property name="target_connect_script" value="Connect()" />
 		<property name="target_get_partname_script" value="GetPartName()" />
-		<property name="target_poke_instruction_script" value="PokeInstruction($(address), $(instruction), $(size))" />
 		<property name="target_reset_script" value="Reset()" />
 		<property name="target_stop_script" value="OnTargetStop_11xx()" />
 		<property name="target_script_file" value="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
