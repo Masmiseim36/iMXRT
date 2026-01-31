@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 - 2021 NXP
+ * Copyright 2018 - 2021, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -418,6 +418,9 @@ uint32_t CLOCK_GetFreq(clock_name_t name)
             freq = CLOCK_GetPllFreq(kCLOCK_PllEnet);
             break;
         case kCLOCK_EnetPll1Clk:
+            freq = CLOCK_GetPllFreq(kCLOCK_PllEnet2);
+            break;
+        case kCLOCK_EnetPll2Clk:
             freq = CLOCK_GetPllFreq(kCLOCK_PllEnet25M);
             break;
         case kCLOCK_AudioPllClk:
@@ -833,7 +836,8 @@ void CLOCK_DeinitVideoPll(void)
  */
 void CLOCK_InitEnetPll(const clock_enet_pll_config_t *config)
 {
-    uint32_t enet_pll = CCM_ANALOG_PLL_ENET_DIV_SELECT(config->loopDivider);
+    uint32_t enet_pll = CCM_ANALOG_PLL_ENET_DIV_SELECT(config->loopDivider) |
+                        CCM_ANALOG_PLL_ENET_ENET2_DIV_SELECT(config->loopDivider1);
 
     CCM_ANALOG->PLL_ENET = (CCM_ANALOG->PLL_ENET & (~CCM_ANALOG_PLL_ENET_BYPASS_CLK_SRC_MASK)) |
                            CCM_ANALOG_PLL_ENET_BYPASS_MASK | CCM_ANALOG_PLL_ENET_BYPASS_CLK_SRC(config->src);
@@ -843,12 +847,19 @@ void CLOCK_InitEnetPll(const clock_enet_pll_config_t *config)
         enet_pll |= CCM_ANALOG_PLL_ENET_ENABLE_MASK;
     }
 
+    if (config->enableClkOutput1)
+    {
+        enet_pll |= CCM_ANALOG_PLL_ENET_ENET2_REF_EN_MASK;
+    }
+
     if (config->enableClkOutput25M)
     {
         enet_pll |= CCM_ANALOG_PLL_ENET_ENET_25M_REF_EN_MASK;
     }
+
     CCM_ANALOG->PLL_ENET =
-        (CCM_ANALOG->PLL_ENET & (~(CCM_ANALOG_PLL_ENET_DIV_SELECT_MASK | CCM_ANALOG_PLL_ENET_POWERDOWN_MASK))) |
+        (CCM_ANALOG->PLL_ENET & (~(CCM_ANALOG_PLL_ENET_DIV_SELECT_MASK | CCM_ANALOG_PLL_ENET_ENET2_DIV_SELECT_MASK |
+                                   CCM_ANALOG_PLL_ENET_POWERDOWN_MASK))) |
         enet_pll;
 
     /* Wait for stable */
@@ -1071,6 +1082,12 @@ uint32_t CLOCK_GetPllFreq(clock_pll_t pll)
             freq = enetRefClkFreq[divSelect];
             break;
 
+        case kCLOCK_PllEnet2:
+            divSelect = (CCM_ANALOG->PLL_ENET & CCM_ANALOG_PLL_ENET_ENET2_DIV_SELECT_MASK) >>
+                        CCM_ANALOG_PLL_ENET_ENET2_DIV_SELECT_SHIFT;
+            freq = enetRefClkFreq[divSelect];
+            break;
+
         case kCLOCK_PllEnet25M:
             /* ref_enetpll1 if fixed at 25MHz. */
             freq = 25000000UL;
@@ -1197,30 +1214,30 @@ bool CLOCK_IsUsb1PfdEnabled(clock_pfd_t pfd)
 uint32_t CLOCK_GetSysPfdFreq(clock_pfd_t pfd)
 {
     uint32_t freq = CLOCK_GetPllFreq(kCLOCK_PllSys);
+    uint64_t tmp64 = (uint64_t)freq * 18UL;
 
     switch (pfd)
     {
         case kCLOCK_Pfd0:
-            freq /= ((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD0_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD0_FRAC_SHIFT);
+            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD0_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD0_FRAC_SHIFT));
             break;
 
         case kCLOCK_Pfd1:
-            freq /= ((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD1_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD1_FRAC_SHIFT);
+            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD1_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD1_FRAC_SHIFT));
             break;
 
         case kCLOCK_Pfd2:
-            freq /= ((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD2_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD2_FRAC_SHIFT);
+            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD2_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD2_FRAC_SHIFT));
             break;
 
         case kCLOCK_Pfd3:
-            freq /= ((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD3_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD3_FRAC_SHIFT);
+            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_528 & CCM_ANALOG_PFD_528_PFD3_FRAC_MASK) >> CCM_ANALOG_PFD_528_PFD3_FRAC_SHIFT));
             break;
 
         default:
             freq = 0U;
             break;
     }
-    freq *= 18U;
 
     return freq;
 }
@@ -1236,30 +1253,30 @@ uint32_t CLOCK_GetSysPfdFreq(clock_pfd_t pfd)
 uint32_t CLOCK_GetUsb1PfdFreq(clock_pfd_t pfd)
 {
     uint32_t freq = CLOCK_GetPllFreq(kCLOCK_PllUsb1);
+    uint64_t tmp64 = (uint64_t)freq * 18UL;
 
     switch (pfd)
     {
         case kCLOCK_Pfd0:
-            freq /= ((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD0_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD0_FRAC_SHIFT);
+            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD0_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD0_FRAC_SHIFT));
             break;
 
         case kCLOCK_Pfd1:
-            freq /= ((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD1_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD1_FRAC_SHIFT);
+            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD1_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD1_FRAC_SHIFT));
             break;
 
         case kCLOCK_Pfd2:
-            freq /= ((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD2_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD2_FRAC_SHIFT);
+            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD2_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD2_FRAC_SHIFT));
             break;
 
         case kCLOCK_Pfd3:
-            freq /= ((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD3_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD3_FRAC_SHIFT);
+            freq = (uint32_t)(tmp64 / (uint64_t)((CCM_ANALOG->PFD_480 & CCM_ANALOG_PFD_480_PFD3_FRAC_MASK) >> CCM_ANALOG_PFD_480_PFD3_FRAC_SHIFT));
             break;
 
         default:
             freq = 0U;
             break;
     }
-    freq *= 18U;
 
     return freq;
 }

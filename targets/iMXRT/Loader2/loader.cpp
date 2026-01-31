@@ -62,13 +62,13 @@ void ExecuteTest (uint32_t *memPointer)
 
 	uint8_t *erase_start = nullptr;
 	size_t erase_size = 0;
-	LibmemStatus_t res = static_cast<LibmemStatus_t>(libmem_erase (reinterpret_cast<uint8_t *>(memPointer), sizeof(buffer), &erase_start, &erase_size));
+	LibmemStatus_t res = static_cast<LibmemStatus_t>(libmem_erase (reinterpret_cast<uint8_t *>(memPointer), buffer.size() * sizeof(uint32_t), &erase_start, &erase_size));
 	if (res != LIBMEM_STATUS_SUCCESS)
 		DebugPrintf ("Error '%s' occurred\r\n", Libmem_GetErrorString (res));
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
 	// Check if everything is erased
-	libmem_read (reinterpret_cast<uint8_t *>(buffer.data()), reinterpret_cast<const uint8_t *>(memPointer), buffer.size());
+	libmem_read (reinterpret_cast<uint8_t *>(buffer.data()), reinterpret_cast<const uint8_t *>(memPointer), buffer.size() * sizeof(uint32_t));
 	uint32_t errorCounter = Compare (memPointer, 0xFFFFFFFF, erase_size);
 	if (errorCounter > 0)
 		DebugPrintf ("Invalid memory-chunks on erase: %d\r\n", errorCounter);
@@ -76,7 +76,7 @@ void ExecuteTest (uint32_t *memPointer)
 	// Initialize the array with test data
 	for (size_t i=0; i<sizeof(buffer)/sizeof(buffer[0]); i++)
 		buffer[i] = reinterpret_cast<uint32_t>((buffer.data ()) + i);
-	res = static_cast<LibmemStatus_t>(libmem_write ((uint8_t *)memPointer, (uint8_t *)buffer.data (), buffer.size()));
+	res = static_cast<LibmemStatus_t>(libmem_write (reinterpret_cast<uint8_t *>(memPointer), (uint8_t *)buffer.data (), buffer.size() * sizeof(uint32_t)));
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
 	errorCounter = Compare (memPointer, &buffer[0], sizeof (buffer));

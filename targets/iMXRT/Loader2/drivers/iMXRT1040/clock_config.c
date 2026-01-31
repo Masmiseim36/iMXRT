@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -26,7 +26,7 @@ product: Clocks v10.0
 processor: MIMXRT1042xxxxB
 package_id: MIMXRT1042XJM5B
 mcu_data: ksdk2_0
-processor_version: 0.12.11
+processor_version: 0.12.13
 board: MIMXRT1040-EVK
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
@@ -57,7 +57,7 @@ void BOARD_InitBootClocks(void)
 name: BOARD_BootClockRUN
 called_from_default_init: true
 outputs:
-- {id: AHB_CLK_ROOT.outFreq, value: 600 MHz}
+- {id: AHB_CLK_ROOT.outFreq, value: 600/528 MHz}
 - {id: CAN_CLK_ROOT.outFreq, value: 40 MHz}
 - {id: CKIL_SYNC_CLK_ROOT.outFreq, value: 32.768 kHz}
 - {id: CLK_1M.outFreq, value: 1 MHz}
@@ -68,15 +68,15 @@ outputs:
 - {id: FLEXIO2_CLK_ROOT.outFreq, value: 30 MHz}
 - {id: FLEXSPI2_CLK_ROOT.outFreq, value: 1440/11 MHz}
 - {id: FLEXSPI_CLK_ROOT.outFreq, value: 1440/11 MHz}
-- {id: GPT1_ipg_clk_highfreq.outFreq, value: 75 MHz}
-- {id: GPT2_ipg_clk_highfreq.outFreq, value: 75 MHz}
-- {id: IPG_CLK_ROOT.outFreq, value: 150 MHz}
+- {id: GPT1_ipg_clk_highfreq.outFreq, value: 75/66 MHz}
+- {id: GPT2_ipg_clk_highfreq.outFreq, value: 75/66 MHz}
+- {id: IPG_CLK_ROOT.outFreq, value: 150/132 MHz}
 - {id: LCDIF_CLK_ROOT.outFreq, value: 67.5 MHz}
 - {id: LPI2C_CLK_ROOT.outFreq, value: 60 MHz}
 - {id: LPSPI_CLK_ROOT.outFreq, value: 105.6 MHz}
 - {id: LVDS1_CLK.outFreq, value: 1.2 GHz}
 - {id: MQS_MCLK.outFreq, value: 1080/17 MHz}
-- {id: PERCLK_CLK_ROOT.outFreq, value: 75 MHz}
+- {id: PERCLK_CLK_ROOT.outFreq, value: 75/66 MHz}
 - {id: SAI1_CLK_ROOT.outFreq, value: 1080/17 MHz}
 - {id: SAI1_MCLK1.outFreq, value: 1080/17 MHz}
 - {id: SAI1_MCLK2.outFreq, value: 1080/17 MHz}
@@ -87,7 +87,7 @@ outputs:
 - {id: SAI3_CLK_ROOT.outFreq, value: 1080/17 MHz}
 - {id: SAI3_MCLK1.outFreq, value: 1080/17 MHz}
 - {id: SAI3_MCLK3.outFreq, value: 30 MHz}
-- {id: SEMC_CLK_ROOT.outFreq, value: 75 MHz}
+- {id: SEMC_CLK_ROOT.outFreq, value: 75/66 MHz}
 - {id: SPDIF0_CLK_ROOT.outFreq, value: 30 MHz}
 - {id: TRACE_CLK_ROOT.outFreq, value: 132 MHz}
 - {id: UART_CLK_ROOT.outFreq, value: 80 MHz}
@@ -102,6 +102,7 @@ settings:
 - {id: CCM.FLEXSPI_SEL.sel, value: CCM_ANALOG.PLL3_PFD0_CLK}
 - {id: CCM.LPSPI_PODF.scale, value: '5', locked: true}
 - {id: CCM.PERCLK_PODF.scale, value: '2', locked: true}
+- {id: CCM.PRE_PERIPH_CLK_SEL.sel, value: CCM_ANALOG.PLL2_MAIN_CLK}
 - {id: CCM.SEMC_PODF.scale, value: '8', locked: true}
 - {id: CCM.TRACE_CLK_SEL.sel, value: CCM_ANALOG.PLL2_MAIN_CLK}
 - {id: CCM.TRACE_PODF.scale, value: '4', locked: true}
@@ -141,30 +142,34 @@ sources:
  * Variables for BOARD_BootClockRUN configuration
  ******************************************************************************/
 const clock_arm_pll_config_t armPllConfig_BOARD_BootClockRUN =
-    {
-        .loopDivider = 100,                       /* PLL loop divider, Fout = Fin * 50 */
-        .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
-    };
+{
+	#if (defined(CPU_MIMXRT1041DFP6B) || defined(CPU_MIMXRT1042DFP6B))
+		.loopDivider = 100,                   /* PLL loop divider, Fout = Fin * 50 --> 600 MHz */
+	#elif (defined(CPU_MIMXRT1041XFP5B) || defined(CPU_MIMXRT1041XJM5B) || defined(CPU_MIMXRT1042XFP5B) || defined(CPU_MIMXRT1042XJM5B))
+		.loopDivider = 88,                    /* PLL loop divider, Fout = Fin * 44  --> 528 MHz */
+	#endif
+	.src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
+};
 const clock_sys_pll_config_t sysPllConfig_BOARD_BootClockRUN =
-    {
-        .loopDivider = 1,                         /* PLL loop divider, Fout = Fin * ( 20 + loopDivider*2 + numerator / denominator ) */
-        .numerator = 0,                           /* 30 bit numerator of fractional loop divider */
-        .denominator = 1,                         /* 30 bit denominator of fractional loop divider */
-        .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
-    };
+{
+	.loopDivider = 1,                         /* PLL loop divider, Fout = Fin * ( 20 + loopDivider*2 + numerator / denominator ) */
+	.numerator = 0,                           /* 30 bit numerator of fractional loop divider */
+	.denominator = 1,                         /* 30 bit denominator of fractional loop divider */
+	.src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
+};
 const clock_usb_pll_config_t usb1PllConfig_BOARD_BootClockRUN =
-    {
-        .loopDivider = 0,                         /* PLL loop divider, Fout = Fin * 20 */
-        .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
-    };
+{
+	.loopDivider = 0,                         /* PLL loop divider, Fout = Fin * 20 */
+	.src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
+};
 const clock_video_pll_config_t videoPllConfig_BOARD_BootClockRUN =
-    {
-        .loopDivider = 31,                        /* PLL loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
-        .postDivider = 8,                         /* Divider after PLL */
-        .numerator = 0,                           /* 30 bit numerator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
-        .denominator = 1,                         /* 30 bit denominator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
-        .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
-    };
+{
+	.loopDivider = 31,                        /* PLL loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
+	.postDivider = 8,                         /* Divider after PLL */
+	.numerator = 0,                           /* 30 bit numerator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
+	.denominator = 1,                         /* 30 bit denominator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
+	.src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
+};
 /*******************************************************************************
  * Code for BOARD_BootClockRUN configuration
  ******************************************************************************/
@@ -189,12 +194,14 @@ void BOARD_BootClockRUN(void)
     /* Setting PeriphClk2Mux and PeriphMux to provide stable clock before PLLs are initialed */
     CLOCK_SetMux(kCLOCK_PeriphClk2Mux, 1); /* Set PERIPH_CLK2 MUX to OSC */
     CLOCK_SetMux(kCLOCK_PeriphMux, 1);     /* Set PERIPH_CLK MUX to PERIPH_CLK2 */
-    /* Setting the VDD_SOC to 1.275V. It is necessary to config AHB to 600Mhz. */
-    DCDC->REG3 = (DCDC->REG3 & (~DCDC_REG3_TRG_MASK)) | DCDC_REG3_TRG(0x13);
-    /* Waiting for DCDC_STS_DC_OK bit is asserted */
-    while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & DCDC->REG0))
-    {
-    }
+    #if (defined(CPU_MIMXRT1041DFP6B) || defined(CPU_MIMXRT1042DFP6B))
+        /* Setting the VDD_SOC to 1.275V. It is necessary to config AHB to 600Mhz. */
+        DCDC->REG3 = (DCDC->REG3 & (~DCDC_REG3_TRG_MASK)) | DCDC_REG3_TRG(0x13);
+        /* Waiting for DCDC_STS_DC_OK bit is asserted */
+        while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & DCDC->REG0))
+        {
+        }
+    #endif
     /* Set AHB_PODF. */
     CLOCK_SetDiv(kCLOCK_AhbDiv, 0);
     /* Disable IPG clock gate. */
@@ -308,8 +315,10 @@ void BOARD_BootClockRUN(void)
     /* Disable CAN clock gate. */
     CLOCK_DisableClock(kCLOCK_Can1);
     CLOCK_DisableClock(kCLOCK_Can2);
+    CLOCK_DisableClock(kCLOCK_Can3);
     CLOCK_DisableClock(kCLOCK_Can1S);
     CLOCK_DisableClock(kCLOCK_Can2S);
+    CLOCK_DisableClock(kCLOCK_Can3S);
     /* Set CAN_CLK_PODF. */
     CLOCK_SetDiv(kCLOCK_CanDiv, 1);
     /* Set Can clock source. */

@@ -151,7 +151,7 @@ ISR_HANDLER2 LPSPI3                               // LPSPI3 single interrupt vec
 ISR_HANDLER2 CAN1                                 // CAN1 interrupt                                                   CAN1_IRQHandler
 ISR_HANDLER2 CAN2                                 // CAN2 interrupt                                                   CAN2_IRQHandler
 ISR_HANDLER2 FLEXRAM                              // FlexRAM address out of range Or access hit IRQ                   FLEXRAM_IRQHandler
-ISR_RESERVEDv                                     // Reserved interrupt                                               Reserved55_IRQHandler
+ISR_RESERVED                                      // Reserved interrupt                                               Reserved55_IRQHandler
 ISR_RESERVED                                      // Reserved interrupt                                               Reserved56_IRQHandler
 ISR_HANDLER2 GPR_IRQ                              // GPR interrupt                                                    GPR_IRQ_IRQHandler
 ISR_RESERVED                                      // Reserved interrupt                                               Reserved58_IRQHandler

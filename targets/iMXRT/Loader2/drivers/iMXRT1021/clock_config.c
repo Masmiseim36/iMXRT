@@ -1,9 +1,10 @@
 /*
- * Copyright 2018-2020,2021 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+
 /*
  * How to setup clock using clock driver functions:
  *
@@ -21,11 +22,11 @@
 
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v8.0
+product: Clocks v10.0
 processor: MIMXRT1021xxxxx
 package_id: MIMXRT1021DAG5A
 mcu_data: ksdk2_0
-processor_version: 10.0.0
+processor_version: 0.12.10
 board: MIMXRT1020-EVK
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
@@ -39,8 +40,6 @@ board: MIMXRT1020-EVK
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-/* System clock frequency. */
-extern uint32_t SystemCoreClock;
 
 /*******************************************************************************
  ************************ BOARD_InitBootClocks function ************************
@@ -156,6 +155,17 @@ const clock_enet_pll_config_t enetPllConfig_BOARD_BootClockRUN =
         .loopDivider = 1,                         /* Set frequency of ethernet reference clock to 50 MHz */
         .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
     };
+
+#if (defined(CPU_MIMXRT1021DAF5A) || defined(CPU_MIMXRT1021DAF5B) || defined(CPU_MIMXRT1021DAG5A) || defined(CPU_MIMXRT1021DAG5B))
+	static const uint8_t SysPfd3_Div  = 18; // PLL2Pfd3 ==> 528 MHz *18/18 ==> 528 MHz
+	static const uint8_t PrePeriphMux = 3;  // Derive clock from divided PLL6 ==> 500 MHz
+#elif (defined(CPU_MIMXRT1021CAF4A) || defined(CPU_MIMXRT1021CAF4B) || defined(CPU_MIMXRT1021CAG4A) || defined(CPU_MIMXRT1021CAG4B))
+	static const uint8_t SysPfd3_Div  = 24; // PLL2 ==> 528 MHz *18/24 ==> 396 MHz
+	static const uint8_t PrePeriphMux = 2;  // Derive clock from PLL2 PFD3 ==> 396 MHz
+#else
+	#error "No valid CPU defined!"
+#endif
+
 /*******************************************************************************
  * Code for BOARD_BootClockRUN configuration
  ******************************************************************************/
@@ -180,12 +190,14 @@ void BOARD_BootClockRUN(void)
     /* Setting PeriphClk2Mux and PeriphMux to provide stable clock before PLLs are initialed */
     CLOCK_SetMux(kCLOCK_PeriphClk2Mux, 1); /* Set PERIPH_CLK2 MUX to OSC */
     CLOCK_SetMux(kCLOCK_PeriphMux, 1);     /* Set PERIPH_CLK MUX to PERIPH_CLK2 */
-    /* Setting the VDD_SOC to 1.25V. It is necessary to config AHB to 500Mhz. */
-    DCDC->REG3 = (DCDC->REG3 & (~DCDC_REG3_TRG_MASK)) | DCDC_REG3_TRG(0x12);
-    /* Waiting for DCDC_STS_DC_OK bit is asserted */
-    while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & DCDC->REG0))
-    {
-    }
+	#if (defined(CPU_MIMXRT1024DAG5A) || defined(CPU_MIMXRT1024DAG5B))
+		/* Setting the VDD_SOC to 1.25V. It is necessary to config AHB to 500Mhz. */
+		DCDC->REG3 = (DCDC->REG3 & (~DCDC_REG3_TRG_MASK)) | DCDC_REG3_TRG(0x12);
+		/* Waiting for DCDC_STS_DC_OK bit is asserted */
+		while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & DCDC->REG0))
+		{
+		}
+	#endif
     /* Set AHB_PODF. */
     CLOCK_SetDiv(kCLOCK_AhbDiv, 0);
     /* Disable IPG clock gate. */
@@ -346,7 +358,7 @@ void BOARD_BootClockRUN(void)
     /* Init System pfd2. */
     CLOCK_InitSysPfd(kCLOCK_Pfd2, 18);
     /* Init System pfd3. */
-    CLOCK_InitSysPfd(kCLOCK_Pfd3, 18);
+    CLOCK_InitSysPfd(kCLOCK_Pfd3, SysPfd3_Div);
 #endif
     /* In SDK projects, external flash (configured by FLEXSPI) will be initialized by dcd.
      * With this macro XIP_EXTERNAL_FLASH, usb1 pll (selected to be FLEXSPI clock source in SDK projects) will be left unchanged.
@@ -377,7 +389,7 @@ void BOARD_BootClockRUN(void)
     /* Init Enet PLL. */
     CLOCK_InitEnetPll(&enetPllConfig_BOARD_BootClockRUN);
     /* Set preperiph clock source. */
-    CLOCK_SetMux(kCLOCK_PrePeriphMux, 3);
+    CLOCK_SetMux(kCLOCK_PrePeriphMux, PrePeriphMux);
     /* Set periph clock source. */
     CLOCK_SetMux(kCLOCK_PeriphMux, 0);
     /* Set periph clock2 clock source. */
@@ -426,3 +438,4 @@ void BOARD_BootClockRUN(void)
     /* Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKRUN_CORE_CLOCK;
 }
+

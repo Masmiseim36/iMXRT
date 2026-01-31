@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 ,2021 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,7 +40,13 @@ void BOARD_InitBootClocks(void);
 /*******************************************************************************
  * Definitions for BOARD_BootClockRUN configuration
  ******************************************************************************/
-#define BOARD_BOOTCLOCKRUN_CORE_CLOCK             500000000U  /*!< Core clock frequency: 500000000Hz */
+#if (defined(CPU_MIMXRT1011DAE5A))
+	#define BOARD_BOOTCLOCKRUN_CORE_CLOCK             500000000U  /*!< Core clock frequency: 500000000Hz */
+#elif (defined(CPU_MIMXRT1011CAE4A))
+	#define BOARD_BOOTCLOCKRUN_CORE_CLOCK             396000000U  /*!< Core clock frequency: 396000000Hz */
+#else
+	#error "No valid CPU defined!"
+#endif
 
 /* Clock outputs (values are in Hz): */
 #define BOARD_BOOTCLOCKRUN_ADC_ALT_CLK                40000000UL

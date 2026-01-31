@@ -278,16 +278,16 @@ function GetPartName ()
 	if (TargetInterface.getProjectProperty ("Target").indexOf ("MIMXRT11") != -1)
 	{
 		// Read the chip silicon version
-		var ANADIG_MISC_DIFPROG = 0x40C84000 + 0x800;
-		if (TargetInterface.getProjectProperty ("Target").indexOf ("MIMXRT118") != -1)
-		{
-			ANADIG_MISC_DIFPROG = 0x44480000 + 0x4800;
-			TargetInterface.message ("#### 1180 device???");
-		}
-		var ChipID = TargetInterface.peekUint32 (ANADIG_MISC_DIFPROG); // ANADIG_MISC-->MISC_DIFPROG (Chip Silicon Version Register)
-		ChipID &= 0x00FFFF00;
-		ChipID >>= 8;
-		TargetInterface.message ("#### Device detected: MIMXRT" + ChipID.toString(16));
+//		var ANADIG_MISC_DIFPROG = 0x40C84000 + 0x800;
+//		if (TargetInterface.getProjectProperty ("Target").indexOf ("MIMXRT118") != -1)
+//		{
+//			ANADIG_MISC_DIFPROG = 0x44480000 + 0x4800;
+//			TargetInterface.message ("#### 1180 device???");
+//		}
+//		var ChipID = TargetInterface.peekUint32 (ANADIG_MISC_DIFPROG); // ANADIG_MISC-->MISC_DIFPROG (Chip Silicon Version Register)
+//		ChipID &= 0x00FFFF00;
+//		ChipID >>= 8;
+//		TargetInterface.message ("#### Device detected: MIMXRT" + ChipID.toString(16));
 /*		PART = "MIMXRT" + ChipID.toString(16); */
 	}
 	// 1180 --> 0x44484800

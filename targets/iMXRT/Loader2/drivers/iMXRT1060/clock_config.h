@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,7 +40,17 @@ void BOARD_InitBootClocks(void);
 /*******************************************************************************
  * Definitions for BOARD_BootClockRUN configuration
  ******************************************************************************/
-#define BOARD_BOOTCLOCKRUN_CORE_CLOCK             600000000U  /*!< Core clock frequency: 600000000Hz */
+#if (defined(CPU_MIMXRT1061DVJ6A) || defined(CPU_MIMXRT1061DVL6A) || defined(CPU_MIMXRT1061DVJ6B) || defined(CPU_MIMXRT1061DVL6B) || \
+	 defined(CPU_MIMXRT1062DVJ6A) || defined(CPU_MIMXRT1062DVL6A) || defined(CPU_MIMXRT1062DVJ6B) || defined(CPU_MIMXRT1062DVL6B) || \
+	 defined(CPU_MIMXRT1062DVN6B))
+	#define BOARD_BOOTCLOCKRUN_CORE_CLOCK             600000000U  /*!< Core clock frequency: 600000000Hz */
+#elif (defined(CPU_MIMXRT1061CVJ5A) || defined(CPU_MIMXRT1061CVL5A) || defined(CPU_MIMXRT1061CVJ5B) || defined(CPU_MIMXRT1061CVL5B) || \
+	   defined(CPU_MIMXRT1061XVN5B) || defined(CPU_MIMXRT1062CVJ5A) || defined(CPU_MIMXRT1062CVL5A) || defined(CPU_MIMXRT1062CVJ5B) || \
+	   defined(CPU_MIMXRT1062CVL5B) || defined(CPU_MIMXRT1062XVN5B))
+	#define BOARD_BOOTCLOCKRUN_CORE_CLOCK             528000000U  /*!< Core clock frequency: 528000000Hz */
+#else
+	#error "Unknown iMXRT1060 device"
+#endif
 
 /* Clock outputs (values are in Hz): */
 #define BOARD_BOOTCLOCKRUN_AHB_CLK_ROOT               600000000UL
@@ -51,11 +61,13 @@ void BOARD_InitBootClocks(void);
 #define BOARD_BOOTCLOCKRUN_CLK_1M                     1000000UL
 #define BOARD_BOOTCLOCKRUN_CLK_24M                    24000000UL
 #define BOARD_BOOTCLOCKRUN_CSI_CLK_ROOT               12000000UL
-#define BOARD_BOOTCLOCKRUN_ENET1_TX_CLK               2400000UL
 #define BOARD_BOOTCLOCKRUN_ENET2_125M_CLK             1200000UL
-#define BOARD_BOOTCLOCKRUN_ENET2_TX_CLK               1200000UL
+#define BOARD_BOOTCLOCKRUN_ENET2_REF_CLK              0UL
+#define BOARD_BOOTCLOCKRUN_ENET2_TX_CLK               0UL
 #define BOARD_BOOTCLOCKRUN_ENET_125M_CLK              2400000UL
 #define BOARD_BOOTCLOCKRUN_ENET_25M_REF_CLK           1200000UL
+#define BOARD_BOOTCLOCKRUN_ENET_REF_CLK               0UL
+#define BOARD_BOOTCLOCKRUN_ENET_TX_CLK                0UL
 #define BOARD_BOOTCLOCKRUN_FLEXIO1_CLK_ROOT           30000000UL
 #define BOARD_BOOTCLOCKRUN_FLEXIO2_CLK_ROOT           30000000UL
 #define BOARD_BOOTCLOCKRUN_FLEXSPI2_CLK_ROOT          130909090UL

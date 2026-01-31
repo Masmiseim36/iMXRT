@@ -1,9 +1,10 @@
 /*
- * Copyright 2018-2020,2021 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
+
 #ifndef _CLOCK_CONFIG_H_
 #define _CLOCK_CONFIG_H_
 
@@ -39,10 +40,16 @@ void BOARD_InitBootClocks(void);
 /*******************************************************************************
  * Definitions for BOARD_BootClockRUN configuration
  ******************************************************************************/
-#define BOARD_BOOTCLOCKRUN_CORE_CLOCK             500000000U  /*!< Core clock frequency: 500000000Hz */
+#if (defined(CPU_MIMXRT1021DAF5A) || defined(CPU_MIMXRT1021DAF5B) || defined(CPU_MIMXRT1021DAG5A) || defined(CPU_MIMXRT1021DAG5B))
+	#define BOARD_BOOTCLOCKRUN_CORE_CLOCK             500000000U  /*!< Core clock frequency: 500000000Hz */
+#elif (defined(CPU_MIMXRT1021CAF4A) || defined(CPU_MIMXRT1021CAF4B) || defined(CPU_MIMXRT1021CAG4A) || defined(CPU_MIMXRT1021CAG4B))
+	#define BOARD_BOOTCLOCKRUN_CORE_CLOCK             396000000U  /*!< Core clock frequency: 396000000Hz */
+#else
+	#error "No valid CPU defined!"
+#endif
 
 /* Clock outputs (values are in Hz): */
-#define BOARD_BOOTCLOCKRUN_AHB_CLK_ROOT               500000000UL
+#define BOARD_BOOTCLOCKRUN_AHB_CLK_ROOT               BOARD_BOOTCLOCKRUN_CORE_CLOCK
 #define BOARD_BOOTCLOCKRUN_CAN_CLK_ROOT               40000000UL
 #define BOARD_BOOTCLOCKRUN_CKIL_SYNC_CLK_ROOT         32768UL
 #define BOARD_BOOTCLOCKRUN_CLKO1_CLK                  0UL
@@ -112,3 +119,4 @@ void BOARD_BootClockRUN(void);
 #endif /* __cplusplus*/
 
 #endif /* _CLOCK_CONFIG_H_ */
+

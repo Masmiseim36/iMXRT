@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2020 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,12 +22,12 @@
 
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v7.0
-processor: MIMXRT1062xxxxA
-package_id: MIMXRT1062DVL6A
+product: Clocks v10.0
+processor: MIMXRT1062xxxxB
+package_id: MIMXRT1062DVL6B
 mcu_data: ksdk2_0
-processor_version: 0.7.9
-board: MIMXRT1060-EVK
+processor_version: 0.12.9
+board: MIMXRT1060-EVKB
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
 #include "clock_config.h"
@@ -40,8 +40,6 @@ board: MIMXRT1060-EVK
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-/* System clock frequency. */
-extern uint32_t SystemCoreClock;
 
 /*******************************************************************************
  ************************ BOARD_InitBootClocks function ************************
@@ -65,9 +63,7 @@ outputs:
 - {id: CLK_1M.outFreq, value: 1 MHz}
 - {id: CLK_24M.outFreq, value: 24 MHz}
 - {id: CSI_CLK_ROOT.outFreq, value: 12 MHz}
-- {id: ENET1_TX_CLK.outFreq, value: 2.4 MHz}
 - {id: ENET2_125M_CLK.outFreq, value: 1.2 MHz}
-- {id: ENET2_TX_CLK.outFreq, value: 1.2 MHz}
 - {id: ENET_125M_CLK.outFreq, value: 2.4 MHz}
 - {id: ENET_25M_REF_CLK.outFreq, value: 1.2 MHz}
 - {id: FLEXIO1_CLK_ROOT.outFreq, value: 30 MHz}
@@ -107,6 +103,8 @@ settings:
 - {id: CCM.FLEXSPI2_SEL.sel, value: CCM_ANALOG.PLL3_PFD0_CLK}
 - {id: CCM.FLEXSPI_PODF.scale, value: '2', locked: true}
 - {id: CCM.FLEXSPI_SEL.sel, value: CCM_ANALOG.PLL3_PFD0_CLK}
+- {id: CCM.LCDIF_PODF.scale, value: '4', locked: true}
+- {id: CCM.LCDIF_PRED.scale, value: '2', locked: true}
 - {id: CCM.LPSPI_PODF.scale, value: '5', locked: true}
 - {id: CCM.PERCLK_PODF.scale, value: '2', locked: true}
 - {id: CCM.SEMC_PODF.scale, value: '8'}
@@ -135,8 +133,8 @@ settings:
 - {id: CCM_ANALOG.PLL5.div, value: '31', locked: true}
 - {id: CCM_ANALOG.PLL5.num, value: '0'}
 - {id: CCM_ANALOG.PLL5_BYPASS.sel, value: CCM_ANALOG.PLL5_POST_DIV}
-- {id: CCM_ANALOG.PLL5_POST_DIV.scale, value: '2'}
-- {id: CCM_ANALOG.VIDEO_DIV.scale, value: '4'}
+- {id: CCM_ANALOG.PLL5_POST_DIV.scale, value: '2', locked: true}
+- {id: CCM_ANALOG.VIDEO_DIV.scale, value: '4', locked: true}
 - {id: CCM_ANALOG_PLL_ENET_POWERDOWN_CFG, value: 'Yes'}
 - {id: CCM_ANALOG_PLL_USB1_POWER_CFG, value: 'Yes'}
 - {id: CCM_ANALOG_PLL_VIDEO_POWERDOWN_CFG, value: 'No'}
@@ -148,30 +146,40 @@ sources:
  * Variables for BOARD_BootClockRUN configuration
  ******************************************************************************/
 const clock_arm_pll_config_t armPllConfig_BOARD_BootClockRUN =
-    {
-        .loopDivider = 100,                       /* PLL loop divider, Fout = Fin * 50 */
-        .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
-    };
+{
+	#if (defined(CPU_MIMXRT1061DVJ6A) || defined(CPU_MIMXRT1061DVL6A) || defined(CPU_MIMXRT1061DVJ6B) || defined(CPU_MIMXRT1061DVL6B) || \
+		 defined(CPU_MIMXRT1062DVJ6A) || defined(CPU_MIMXRT1062DVL6A) || defined(CPU_MIMXRT1062DVJ6B) || defined(CPU_MIMXRT1062DVL6B) || \
+		 defined(CPU_MIMXRT1062DVN6B))
+		.loopDivider = 100,                    /* PLL loop divider, Fout = Fin * 50  --> 600 MHz */
+	#elif (defined(CPU_MIMXRT1061CVJ5A) || defined(CPU_MIMXRT1061CVL5A) || defined(CPU_MIMXRT1061CVJ5B) || defined(CPU_MIMXRT1061CVL5B) || \
+		   defined(CPU_MIMXRT1061XVN5B) || defined(CPU_MIMXRT1062CVJ5A) || defined(CPU_MIMXRT1062CVL5A) || defined(CPU_MIMXRT1062CVJ5B) || \
+		   defined(CPU_MIMXRT1062CVL5B) || defined(CPU_MIMXRT1062XVN5B))
+		.loopDivider = 88,                    /* PLL loop divider, Fout = Fin * 44  --> 528 MHz */
+	#else
+		#error "Unknown iMXRT1060 device"
+	#endif
+	.src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
+};
 const clock_sys_pll_config_t sysPllConfig_BOARD_BootClockRUN =
-    {
-        .loopDivider = 1,                         /* PLL loop divider, Fout = Fin * ( 20 + loopDivider*2 + numerator / denominator ) */
-        .numerator = 0,                           /* 30 bit numerator of fractional loop divider */
-        .denominator = 1,                         /* 30 bit denominator of fractional loop divider */
-        .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
-    };
+{
+	.loopDivider = 1,                         /* PLL loop divider, Fout = Fin * ( 20 + loopDivider*2 + numerator / denominator ) */
+	.numerator = 0,                           /* 30 bit numerator of fractional loop divider */
+	.denominator = 1,                         /* 30 bit denominator of fractional loop divider */
+	.src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
+};
 const clock_usb_pll_config_t usb1PllConfig_BOARD_BootClockRUN =
-    {
-        .loopDivider = 0,                         /* PLL loop divider, Fout = Fin * 20 */
-        .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
-    };
+{
+	.loopDivider = 0,                         /* PLL loop divider, Fout = Fin * 20 */
+	.src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
+};
 const clock_video_pll_config_t videoPllConfig_BOARD_BootClockRUN =
-    {
-        .loopDivider = 31,                        /* PLL loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
-        .postDivider = 8,                         /* Divider after PLL */
-        .numerator = 0,                           /* 30 bit numerator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
-        .denominator = 1,                         /* 30 bit denominator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
-        .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
-    };
+{
+	.loopDivider = 31,                        /* PLL loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
+	.postDivider = 8,                         /* Divider after PLL */
+	.numerator = 0,                           /* 30 bit numerator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
+	.denominator = 1,                         /* 30 bit denominator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
+	.src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
+};
 /*******************************************************************************
  * Code for BOARD_BootClockRUN configuration
  ******************************************************************************/
@@ -196,12 +204,16 @@ void BOARD_BootClockRUN(void)
     /* Setting PeriphClk2Mux and PeriphMux to provide stable clock before PLLs are initialed */
     CLOCK_SetMux(kCLOCK_PeriphClk2Mux, 1); /* Set PERIPH_CLK2 MUX to OSC */
     CLOCK_SetMux(kCLOCK_PeriphMux, 1);     /* Set PERIPH_CLK MUX to PERIPH_CLK2 */
-    /* Setting the VDD_SOC to 1.275V. It is necessary to config AHB to 600Mhz. */
-    DCDC->REG3 = (DCDC->REG3 & (~DCDC_REG3_TRG_MASK)) | DCDC_REG3_TRG(0x13);
-    /* Waiting for DCDC_STS_DC_OK bit is asserted */
-    while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & DCDC->REG0))
-    {
-    }
+	#if (defined(CPU_MIMXRT1061DVJ6A) || defined(CPU_MIMXRT1061DVL6A) || defined(CPU_MIMXRT1061DVJ6B) || defined(CPU_MIMXRT1061DVL6B) || \
+		 defined(CPU_MIMXRT1062DVJ6A) || defined(CPU_MIMXRT1062DVL6A) || defined(CPU_MIMXRT1062DVJ6B) || defined(CPU_MIMXRT1062DVL6B) || \
+		 defined(CPU_MIMXRT1062DVN6B))
+		/* Setting the VDD_SOC to 1.275V. It is necessary to config AHB to 600Mhz. */
+		DCDC->REG3 = (DCDC->REG3 & (~DCDC_REG3_TRG_MASK)) | DCDC_REG3_TRG(0x13);
+		/* Waiting for DCDC_STS_DC_OK bit is asserted */
+		while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & DCDC->REG0))
+		{
+		}
+	#endif
     /* Set AHB_PODF. */
     CLOCK_SetDiv(kCLOCK_AhbDiv, 0);
     /* Disable IPG clock gate. */
@@ -247,7 +259,7 @@ void BOARD_BootClockRUN(void)
     /* Set Semc alt clock source. */
     CLOCK_SetMux(kCLOCK_SemcAltMux, 0);
     /* Set Semc clock source. */
-    CLOCK_SetMux(kCLOCK_SemcMux, 3);
+    CLOCK_SetMux(kCLOCK_SemcMux, 0);
 #endif
     /* In SDK projects, external flash (configured by FLEXSPI) will be initialized by dcd.
      * With this macro XIP_EXTERNAL_FLASH, usb1 pll (selected to be FLEXSPI clock source in SDK projects) will be left unchanged.
@@ -498,14 +510,10 @@ void BOARD_BootClockRUN(void)
     IOMUXC_SetSaiMClkClockSource(IOMUXC_GPR, kIOMUXC_GPR_SAI3MClk3Sel, 0);
     /* Set MQS configuration. */
     IOMUXC_MQSConfig(IOMUXC_GPR,kIOMUXC_MqsPwmOverSampleRate32, 0);
-    /* Set ENET1 Tx clock source. */
-    IOMUXC_EnableMode(IOMUXC_GPR, kIOMUXC_GPR_ENET1RefClkMode, false);
-    /* Set ENET2 Tx clock source. */
-#if defined(FSL_IOMUXC_DRIVER_VERSION) && (FSL_IOMUXC_DRIVER_VERSION != (MAKE_VERSION(2, 0, 0)))
-    IOMUXC_EnableMode(IOMUXC_GPR, kIOMUXC_GPR_ENET2RefClkMode, false);
-#else
-    IOMUXC_EnableMode(IOMUXC_GPR, IOMUXC_GPR_GPR1_ENET2_CLK_SEL_MASK, false);
-#endif
+    /* Set ENET Ref clock source. */
+    IOMUXC_GPR->GPR1 &= ~IOMUXC_GPR_GPR1_ENET1_TX_CLK_DIR_MASK;
+    /* Set ENET2 Ref clock source. */
+    IOMUXC_GPR->GPR1 &= ~IOMUXC_GPR_GPR1_ENET2_TX_CLK_DIR_MASK;
     /* Set GPT1 High frequency reference clock source. */
     IOMUXC_GPR->GPR5 &= ~IOMUXC_GPR_GPR5_VREF_1M_CLK_GPT1_MASK;
     /* Set GPT2 High frequency reference clock source. */
@@ -513,4 +521,3 @@ void BOARD_BootClockRUN(void)
     /* Set SystemCoreClock variable. */
     SystemCoreClock = BOARD_BOOTCLOCKRUN_CORE_CLOCK;
 }
-

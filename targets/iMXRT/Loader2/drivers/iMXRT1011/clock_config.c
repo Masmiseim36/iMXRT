@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2020 ,2021 NXP
+ * Copyright 2022 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -22,11 +22,11 @@
 
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v8.0
+product: Clocks v10.0
 processor: MIMXRT1011xxxxx
 package_id: MIMXRT1011DAE5A
 mcu_data: ksdk2_0
-processor_version: 10.0.0
+processor_version: 0.12.10
 board: MIMXRT1010-EVK
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
@@ -40,8 +40,6 @@ board: MIMXRT1010-EVK
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-/* System clock frequency. */
-extern uint32_t SystemCoreClock;
 
 /*******************************************************************************
  ************************ BOARD_InitBootClocks function ************************
@@ -141,6 +139,17 @@ const clock_enet_pll_config_t enetPllConfig_BOARD_BootClockRUN =
         .enableClkOutput500M = true,              /* Enable the PLL providing the ENET 500MHz reference clock */
         .src = 0,                                 /* Bypass clock source, 0 - OSC 24M, 1 - CLK1_P and CLK1_N */
     };
+
+#if (defined(CPU_MIMXRT1011DAE5A))
+	static const uint8_t SysPfd3_Div  = 18; // PLL2Pfd3 ==> 528 MHz *18/18 ==> 528 MHz
+	static const uint8_t PrePeriphMux = 3;  // Derive clock from divided PLL6 ==> 500 MHz
+#elif (defined(CPU_MIMXRT1011CAE4A))
+	static const uint8_t SysPfd3_Div  = 24; // PLL2 ==> 528 MHz *18/24 ==> 396 MHz
+	static const uint8_t PrePeriphMux = 2;  // Derive clock from PLL2 PFD3 ==> 396 MHz
+#else
+	#error "No valid CPU defined!"
+#endif
+
 /*******************************************************************************
  * Code for BOARD_BootClockRUN configuration
  ******************************************************************************/
@@ -168,8 +177,6 @@ void BOARD_BootClockRUN(void)
     while (DCDC_REG0_STS_DC_OK_MASK != (DCDC_REG0_STS_DC_OK_MASK & DCDC->REG0))
     {
     }
-    /* Set AHB_PODF. */
-    CLOCK_SetDiv(kCLOCK_AhbDiv, 0);
     /* Disable IPG clock gate. */
     CLOCK_DisableClock(kCLOCK_Adc1);
     CLOCK_DisableClock(kCLOCK_Xbar1);
@@ -177,14 +184,6 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetDiv(kCLOCK_IpgDiv, 3);
     /* Init Enet PLL. */
     CLOCK_InitEnetPll(&enetPllConfig_BOARD_BootClockRUN);
-    /* Set preperiph clock source. */
-    CLOCK_SetMux(kCLOCK_PrePeriphMux, 3);
-    /* Set periph clock source. */
-    CLOCK_SetMux(kCLOCK_PeriphMux, 0);
-    /* Set periph clock2 clock source. */
-    CLOCK_SetMux(kCLOCK_PeriphClk2Mux, 0);
-    /* Set per clock source. */
-    CLOCK_SetMux(kCLOCK_PerclkMux, 0);
     /* Disable PERCLK clock gate. */
     CLOCK_DisableClock(kCLOCK_Gpt1);
     CLOCK_DisableClock(kCLOCK_Gpt1S);
@@ -270,18 +269,6 @@ void BOARD_BootClockRUN(void)
     CLOCK_SetDiv(kCLOCK_Flexio1Div, 7);
     /* Set Flexio1 clock source. */
     CLOCK_SetMux(kCLOCK_Flexio1Mux, 3);
-    /* Set Pll3 sw clock source. */
-    CLOCK_SetMux(kCLOCK_Pll3SwMux, 0);
-    /* Init System PLL. */
-    CLOCK_InitSysPll(&sysPllConfig_BOARD_BootClockRUN);
-    /* Init System pfd0. */
-    CLOCK_InitSysPfd(kCLOCK_Pfd0, 27);
-    /* Init System pfd1. */
-    CLOCK_InitSysPfd(kCLOCK_Pfd1, 16);
-    /* Init System pfd2. */
-    CLOCK_InitSysPfd(kCLOCK_Pfd2, 18);
-    /* Init System pfd3. */
-    CLOCK_InitSysPfd(kCLOCK_Pfd3, 18);
     /* In SDK projects, external flash (configured by FLEXSPI) will be initialized by dcd.
      * With this macro XIP_EXTERNAL_FLASH, usb1 pll (selected to be FLEXSPI clock source in SDK projects) will be left unchanged.
      * Note: If another clock source is selected for FLEXSPI, user may want to avoid changing that clock as well.*/
@@ -299,6 +286,27 @@ void BOARD_BootClockRUN(void)
     /* Disable Usb1 PLL output for USBPHY1. */
     CCM_ANALOG->PLL_USB1 &= ~CCM_ANALOG_PLL_USB1_EN_USB_CLKS_MASK;
 #endif
+    /* Set periph clock source to use the USB1 PLL output (PLL3_SW_CLK) temporarily. */
+    /* Set Pll3 SW clock source to use the USB1 PLL output. */
+    CLOCK_SetMux(kCLOCK_Pll3SwMux, 0);
+    /* Set safe value of the AHB_PODF. */
+    CLOCK_SetDiv(kCLOCK_AhbDiv, 1);
+    /* Set periph clock2 clock source to use the PLL3_SW_CLK. */
+    CLOCK_SetMux(kCLOCK_PeriphClk2Mux, 0);
+    /* Set peripheral clock source (glitchless mux) to select the temporary core clock. */
+    CLOCK_SetMux(kCLOCK_PeriphMux, 1);
+    /* Set per clock source. */
+    CLOCK_SetMux(kCLOCK_PerclkMux, 0);
+    /* Init System PLL. */
+    CLOCK_InitSysPll(&sysPllConfig_BOARD_BootClockRUN);
+    /* Init System pfd0. */
+    CLOCK_InitSysPfd(kCLOCK_Pfd0, 27);
+    /* Init System pfd1. */
+    CLOCK_InitSysPfd(kCLOCK_Pfd1, 16);
+    /* Init System pfd2. */
+    CLOCK_InitSysPfd(kCLOCK_Pfd2, 18);
+    /* Init System pfd3. */
+    CLOCK_InitSysPfd(kCLOCK_Pfd3, SysPfd3_Div);
     /* DeInit Audio PLL. */
     CLOCK_DeinitAudioPll();
     /* Bypass Audio PLL. */
@@ -308,6 +316,14 @@ void BOARD_BootClockRUN(void)
     CCM_ANALOG->MISC2 &= ~CCM_ANALOG_MISC2_AUDIO_DIV_MSB_MASK;
     /* Enable Audio PLL output. */
     CCM_ANALOG->PLL_AUDIO |= CCM_ANALOG_PLL_AUDIO_ENABLE_MASK;
+    /* Set preperiph clock source. */
+    CLOCK_SetMux(kCLOCK_PrePeriphMux, PrePeriphMux);
+    /* Set periph clock source. */
+    CLOCK_SetMux(kCLOCK_PeriphMux, 0);
+    /* Set periph clock2 clock source. */
+    CLOCK_SetMux(kCLOCK_PeriphClk2Mux, 0);
+    /* Set AHB_PODF. */
+    CLOCK_SetDiv(kCLOCK_AhbDiv, 0);
     /* Set clock out1 divider. */
     CCM->CCOSR = (CCM->CCOSR & (~CCM_CCOSR_CLKO1_DIV_MASK)) | CCM_CCOSR_CLKO1_DIV(0);
     /* Set clock out1 source. */

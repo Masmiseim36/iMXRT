@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2024 NXP
- * All rights reserved.
+ * Copyright 2016-2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -22,12 +21,16 @@
 /*! @name Driver version */
 /*! @{ */
 /*! @brief LPUART driver version. */
-#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 8, 2))
+#define FSL_LPUART_DRIVER_VERSION (MAKE_VERSION(2, 10, 0))
 /*! @} */
 
 /*! @brief Retry times for waiting flag. */
 #ifndef UART_RETRY_TIMES
+#ifdef CONFIG_UART_RETRY_TIMES
+#define UART_RETRY_TIMES CONFIG_UART_RETRY_TIMES
+#else
 #define UART_RETRY_TIMES 0U /* Defining to zero means to keep waiting for the flag until it is assert/deassert. */
+#endif
 #endif
 
 /*! @brief Error codes for the LPUART driver. */
@@ -255,11 +258,17 @@ typedef struct _lpuart_config
     bool enableTxCTS;                         /*!< TX CTS enable */
     lpuart_transmit_cts_source_t txCtsSource; /*!< TX CTS source */
     lpuart_transmit_cts_config_t txCtsConfig; /*!< TX CTS configure */
+#if defined(FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER) && FSL_FEATURE_LPUART_HAS_MODIR_RTSWATER
+    uint8_t rtsWatermark;                     /*!< RTS watermark */
+#endif
 #endif
     lpuart_idle_type_select_t rxIdleType;     /*!< RX IDLE type. */
     lpuart_idle_config_t rxIdleConfig;        /*!< RX IDLE configuration. */
     bool enableTx;                            /*!< Enable TX */
     bool enableRx;                            /*!< Enable RX */
+#if defined(FSL_FEATURE_LPUART_HAS_CTRL_SWAP) && FSL_FEATURE_LPUART_HAS_CTRL_SWAP
+    bool swapTxdRxd;                          /*!< Swap TXD and RXD pins */
+#endif
 } lpuart_config_t;
 
 /*! @brief LPUART transfer structure. */
@@ -412,8 +421,10 @@ status_t LPUART_Init(LPUART_Type *base, const lpuart_config_t *config, uint32_t 
  * This function waits for transmit to complete, disables TX and RX, and disables the LPUART clock.
  *
  * @param base LPUART peripheral base address.
+ * @retval kStatus_Success Deinit is success.
+ * @retval kStatus_LPUART_Timeout Timeout during deinit.
  */
-void LPUART_Deinit(LPUART_Type *base);
+status_t LPUART_Deinit(LPUART_Type *base);
 
 /*!
  * @brief Gets the default configuration structure.
@@ -530,6 +541,7 @@ static inline void LPUART_EnableMatchAddress(LPUART_Type *base, bool match1, boo
  */
 static inline void LPUART_SetRxFifoWatermark(LPUART_Type *base, uint8_t water)
 {
+    assert(FSL_FEATURE_LPUART_FIFO_SIZEn(base) > 0);
     assert((uint8_t)FSL_FEATURE_LPUART_FIFO_SIZEn(base) > water);
     base->WATER = (base->WATER & ~LPUART_WATER_RXWATER_MASK) | LPUART_WATER_RXWATER(water);
 }
@@ -542,6 +554,7 @@ static inline void LPUART_SetRxFifoWatermark(LPUART_Type *base, uint8_t water)
  */
 static inline void LPUART_SetTxFifoWatermark(LPUART_Type *base, uint8_t water)
 {
+    assert(FSL_FEATURE_LPUART_FIFO_SIZEn(base) > 0);
     assert((uint8_t)FSL_FEATURE_LPUART_FIFO_SIZEn(base) > water);
     base->WATER = (base->WATER & ~LPUART_WATER_TXWATER_MASK) | LPUART_WATER_TXWATER(water);
 }
@@ -812,7 +825,7 @@ static inline uint8_t LPUART_ReadByte(LPUART_Type *base)
      * If ctrl & LPUART_CTRL_M7_MASK is 0, it can't be !0 in next judge.
      */
     bool isSevenDataBits = (((ctrl & LPUART_CTRL_M7_MASK) != 0U) ||
-                            (((ctrl & LPUART_CTRL_M7_MASK) == 0U) && ((ctrl & LPUART_CTRL_M_MASK) == 0U) &&
+                            (((ctrl & LPUART_CTRL_M7_MASK) == 0U) && ((ctrl & LPUART_CTRL_M_MASK) == 0U) && /* GCOVR_EXCL_BR_LINE */
                              ((ctrl & LPUART_CTRL_PE_MASK) != 0U)));
 
     if (isSevenDataBits)
@@ -1116,6 +1129,15 @@ void LPUART_TransferHandleIRQ(LPUART_Type *base, void *irqHandle);
  * @param irqHandle LPUART handle pointer.
  */
 void LPUART_TransferHandleErrorIRQ(LPUART_Type *base, void *irqHandle);
+
+/*!
+ * @brief LPUART driver IRQ handler common entry.
+ *
+ * This function provides the common IRQ request entry for LPUART.
+ *
+ * @param instance LPUART instance.
+ */
+void LPUART_DriverIRQHandler(uint32_t instance);
 
 /*! @} */
 
