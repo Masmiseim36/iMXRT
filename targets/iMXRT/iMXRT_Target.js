@@ -206,11 +206,17 @@ function Connect ()
 			break;
 		case "MIMXRT1181":
 		case "MIMXRT1182":
+		case "MIMXRT118C_cm33":
+		case "MIMXRT1185_cm33":
+		case "MIMXRT1186_cm33":
 		case "MIMXRT1187_cm33":
 		case "MIMXRT1189_cm33":
 //			TargetInterface.setDeviceTypeProperty ("MIMXRT1189xxxx_M33");
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // LPC Solution
 			break;
+		case "MIMXRT118C_cm7":
+		case "MIMXRT1185_cm7":
+		case "MIMXRT1186_cm7":
 		case "MIMXRT1187_cm7":
 		case "MIMXRT1189_cm7":
 //			TargetInterface.setDeviceTypeProperty ("MCIMXRT1180_M7");
@@ -258,6 +264,9 @@ function GetPartName ()
 		{
 			case "MIMXRT1181":
 			case "MIMXRT1182":
+			case "MIMXRT118C_cm33":
+			case "MIMXRT1185_cm33":
+			case "MIMXRT1186_cm33":
 			case "MIMXRT1187_cm33":
 			case "MIMXRT1189_cm33":
 				// Invalidate and disable XCACHEs
@@ -266,6 +275,9 @@ function GetPartName ()
 
 				TargetInterface.resetDebugInterface ();
 				break;
+			case "MIMXRT118C_cm7":
+			case "MIMXRT1185_cm7":
+			case "MIMXRT118&_cm7":
 			case "MIMXRT1187_cm7":
 			case "MIMXRT1189_cm7":
 				TargetInterface.resetDebugInterface ();
@@ -577,6 +589,9 @@ function Reset ()
 			break;
 		case "MIMXRT1181":
 		case "MIMXRT1182":
+		case "MIMXRT118C_cm33":
+		case "MIMXRT1185_cm33":
+		case "MIMXRT1186_cm33":
 		case "MIMXRT1187_cm33":
 		case "MIMXRT1189_cm33":
 			TargetInterface.resetAndStop (1000);
@@ -585,6 +600,9 @@ function Reset ()
 			FillMemory (0xE000E180, 0x40,    0xFFFFFFFF); // NVIC_ICER
 			FillMemory (0xE000E280, 0x40,    0xFFFFFFFF); // NVIC_ICPR
 			break;
+		case "MIMXRT118C_cm7":
+		case "MIMXRT1185_cm7":
+		case "MIMXRT1186_cm7":
 		case "MIMXRT1187_cm7":
 		case "MIMXRT1189_cm7":
 			TargetInterface.stop ();
@@ -866,6 +884,9 @@ function FlexRAM_Restore ()
 			break;
 		case "MIMXRT1181":
 		case "MIMXRT1182":
+		case "MIMXRT118C_cm33":
+		case "MIMXRT1185_cm33":
+		case "MIMXRT1186_cm33":
 		case "MIMXRT1187_cm33":
 		case "MIMXRT1189_cm33":
 //			var BLK_CTRL_S_AONMIX = 0x444F0000;
@@ -877,6 +898,9 @@ function FlexRAM_Restore ()
 			// * 11 = Reserved
 //			AlterRegister (BLK_CTRL_S_AONMIX_M33_CFG, 0x3 << 3, 0);
 			break;
+		case "MIMXRT118C_cm7":
+		case "MIMXRT1185_cm7":
+		case "MIMXRT1186_cm7":
 		case "MIMXRT1187_cm7":
 		case "MIMXRT1189_cm7":
 //			var BLK_CTRL_S_AONMIX = 0x444F0000;
@@ -963,6 +987,9 @@ function Clock_Init ()
 			break;
 		case "MIMXRT1181":
 		case "MIMXRT1182":
+		case "MIMXRT118C_cm33":
+		case "MIMXRT1185_cm33":
+		case "MIMXRT1186_cm33":
 		case "MIMXRT1187_cm33":
 		case "MIMXRT1189_cm33":
 			Clock_Init_118x ();
@@ -1213,6 +1240,9 @@ function SDRAM_Init ()
 			break;
 		case "MIMXRT1181":
 		case "MIMXRT1182":
+		case "MIMXRT118C_cm33":
+		case "MIMXRT1185_cm33":
+		case "MIMXRT1186_cm33":
 		case "MIMXRT1187_cm33":
 		case "MIMXRT1189_cm33":
 			SDRAM_Init_1180 ();
@@ -1649,6 +1679,9 @@ function FlexSPI_GetBaseAddress (FlexSPI)
 			break;
 		case "MIMXRT1181":
 		case "MIMXRT1182":
+		case "MIMXRT118C_cm33":
+		case "MIMXRT1185_cm33":
+		case "MIMXRT1186_cm33":
 		case "MIMXRT1187_cm33":
 		case "MIMXRT1189_cm33":
 		case "MIMXRT1187_cm7":

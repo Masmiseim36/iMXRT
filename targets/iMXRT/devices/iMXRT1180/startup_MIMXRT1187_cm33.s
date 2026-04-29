@@ -152,8 +152,8 @@ ISR_HANDLER2 EDGELOCK_REALTIME_CORE_MUA_RX_FULL   // EDGELOCK_REALTIME_CORE_MUA_
 ISR_HANDLER2 EDGELOCK_REALTIME_CORE_MUA_TX_EMPTY  // EDGELOCK_REALTIME_CORE_MUA_TX_EMPTY_IRQHandler - Edgelock Realtime Core MUA TX empty interrupt
 ISR_HANDLER2 EDGELOCK_SECURE                      // EDGELOCK_SECURE_IRQHandler                     - Edgelock secure interrupt
 ISR_HANDLER2 EDGELOCK_NONSECURE                   // EDGELOCK_NONSECURE_IRQHandler                  - Edgelock non-secure interrupt
-ISR_HANDLER2 TPM1_XBAR1_CH0_CH1                   // TPM1_XBAR1_CH0_CH1_IRQHandler                  - TPM1 interrupt, XBAR channel 0/1 interrupt
-ISR_HANDLER2 TPM2_XBAR1_CH2_CH3                   // TPM2_XBAR1_CH2_CH3_IRQHandler                  - TPM2 interrupt, XBAR channel 2/3 interrupt
+ISR_HANDLER2 TPM1                                 // TPM1_IRQHandler                                - TPM1 interrupt
+ISR_HANDLER2 TPM2                                 // TPM2_IRQHandler                                - TPM2 interrupt
 ISR_HANDLER2 RTWDOG1                              // RTWDOG1_IRQHandler                             - RTWDOG1 interrupt
 ISR_HANDLER2 RTWDOG2                              // RTWDOG2_IRQHandler                             - RTWDOG2 interrupt
 ISR_HANDLER2 TRDC_MGR_AON                         // TRDC_MGR_AON_IRQHandler                        - AONMIX TRDC transfer error interrupt
@@ -188,13 +188,13 @@ ISR_HANDLER2 LPUART3                              // LPUART3_IRQHandler         
 ISR_HANDLER2 LPUART4                              // LPUART4_IRQHandler                             - LPUART4 interrupt
 ISR_HANDLER2 LPUART5                              // LPUART5_IRQHandler                             - LPUART5 interrupt
 ISR_HANDLER2 LPUART6                              // LPUART6_IRQHandler                             - LPUART6 interrupt
-ISR_HANDLER2 ASRC                                 // ASRC_IRQHandler                                - ASRC interrupt
+ISR_RESERVED                                      // Reserved88_IRQHandler                          - Reserved interrupt 88
 ISR_HANDLER2 BBNSM                                // BBNSM_IRQHandler                               - BBNSM iterrupt
 ISR_HANDLER2 SYS_CTR1                             // SYS_CTR1_IRQHandler                            - System Counter compare interrupt 0 and 1
-ISR_HANDLER2 TPM3_EWM                             // TPM3_EWM_IRQHandler                            - TPM3 interrupt, EWM reset out interrupt
-ISR_HANDLER2 TPM4_SEMC                            // TPM4_SEMC_IRQHandler                           - TPM4 interrupt, SEMC interrupt
-ISR_HANDLER2 TPM5_LPIT3                           // TPM5_LPIT3_IRQHandler                          - TPM5 interrupt, LPIT interrupt
-ISR_HANDLER2 TPM6_LPTMR3                          // TPM6_LPTMR3_IRQHandler                         - TPM6 interrupt, LPTMR interrupt
+ISR_HANDLER2 TPM3                                 // TPM3_IRQHandler                                - TPM3 interrupt
+ISR_HANDLER2 TPM4                                 // TPM4_IRQHandler                                - TPM4 interrupt
+ISR_HANDLER2 TPM5                                 // TPM5_IRQHandler                                - TPM5 interrupt
+ISR_HANDLER2 TPM6                                 // TPM6_IRQHandler                                - TPM6 interrupt
 ISR_HANDLER2 RTWDOG3                              // RTWDOG3_IRQHandler                             - RTWDOG3 interrupt
 ISR_HANDLER2 RTWDOG4                              // RTWDOG4_IRQHandler                             - RTWDOG4 interrupt
 ISR_HANDLER2 RTWDOG5                              // RTWDOG5_IRQHandler                             - RTWDOG5 interrupt
@@ -205,7 +205,7 @@ ISR_HANDLER2 LDO_AON_ANA                          // LDO_AON_ANA_IRQHandler     
 ISR_HANDLER2 USDHC1                               // USDHC1_IRQHandler                              - USDHC1
 ISR_HANDLER2 USDHC2                               // USDHC2_IRQHandler                              - USDHC2
 ISR_HANDLER2 TRDC_MGR_MEGA                        // TRDC_MGR_MEGA_IRQHandler                       - MEGAMIX TRDC transfer error interrupt
-ISR_HANDLER2 SFA_TMR2                             // SFA_TMR2_IRQHandler                            - Signal Frequency Analyzer interrupt, TMR2 interrupt
+ISR_HANDLER2 SFA                                  // SFA_IRQHandler                                 - Signal Frequency Analyzer interrupt
 ISR_HANDLER2 LDO_AON_DIG                          // LDO_AON_DIG_IRQHandler                         - Brown out interrupt
 ISR_HANDLER2 MECC1                                // MECC1_IRQHandler                               - MECC1 interrupt
 ISR_HANDLER2 MECC2                                // MECC2_IRQHandler                               - MECC2 interrupt
@@ -239,49 +239,49 @@ ISR_HANDLER2 DMA3_CH24                            // DMA3_CH24_IRQHandler       
 ISR_HANDLER2 DMA3_CH25                            // DMA3_CH25_IRQHandler                           - AON Domain eDMA channel 25 interrupt
 ISR_HANDLER2 DMA3_CH26                            // DMA3_CH26_IRQHandler                           - AON Domain eDMA channel 26 interrupt
 ISR_HANDLER2 DMA3_CH27                            // DMA3_CH27_IRQHandler                           - AON Domain eDMA channel 27 interrupt
-ISR_HANDLER2 DMA3_CH28_SINC3_CH0                  // DMA3_CH28_SINC3_CH0_IRQHandler                 - AON Domain eDMA channel 28 interrupt
-ISR_HANDLER2 DMA3_CH29_SINC3_CH1                  // DMA3_CH29_SINC3_CH1_IRQHandler                 - AON Domain eDMA channel 29 interrupt
-ISR_HANDLER2 DMA3_CH30_SINC3_CH2                  // DMA3_CH30_SINC3_CH2_IRQHandler                 - AON Domain eDMA channel 30 interrupt
-ISR_HANDLER2 DMA3_CH31_SINC3_CH3                  // DMA3_CH31_SINC3_CH3_IRQHandler                 - AON Domain eDMA channel 31 interrupt
+ISR_HANDLER2 DMA3_CH28                            // DMA3_CH28_IRQHandler                           - AON Domain eDMA channel 28 interrupt
+ISR_HANDLER2 DMA3_CH29                            // DMA3_CH29_IRQHandler                           - AON Domain eDMA channel 29 interrupt
+ISR_HANDLER2 DMA3_CH30                            // DMA3_CH30_IRQHandler                           - AON Domain eDMA channel 30 interrupt
+ISR_HANDLER2 DMA3_CH31                            // DMA3_CH31_IRQHandler                           - AON Domain eDMA channel 31 interrupt
 ISR_HANDLER2 DMA4_ERROR                           // DMA4_ERROR_IRQHandler                          - WAKEUP Domain eDMA error interrupt
-ISR_HANDLER2 DMA4_CH0_CH1                         // DMA4_CH0_CH1_IRQHandler                        - WAKEUP Domain eDMA channel 0/1 interrupt
-ISR_HANDLER2 DMA4_CH2_CH3                         // DMA4_CH2_CH3_IRQHandler                        - WAKEUP Domain eDMA channel 2/3 interrupt
-ISR_HANDLER2 DMA4_CH4_CH5                         // DMA4_CH4_CH5_IRQHandler                        - WAKEUP Domain eDMA channel 4/5 interrupt
-ISR_HANDLER2 DMA4_CH6_CH7                         // DMA4_CH6_CH7_IRQHandler                        - WAKEUP Domain eDMA channel 6/7 interrupt
-ISR_HANDLER2 DMA4_CH8_CH9                         // DMA4_CH8_CH9_IRQHandler                        - WAKEUP Domain eDMA channel 8/9 interrupt
-ISR_HANDLER2 DMA4_CH10_CH11                       // DMA4_CH10_CH11_IRQHandler                      - WAKEUP Domain eDMA channel 10/11 interrupt
-ISR_HANDLER2 DMA4_CH12_CH13                       // DMA4_CH12_CH13_IRQHandler                      - WAKEUP Domain eDMA channel 12/13 interrupt
-ISR_HANDLER2 DMA4_CH14_CH15                       // DMA4_CH14_CH15_IRQHandler                      - WAKEUP Domain eDMA channel 14/15 interrupt
-ISR_HANDLER2 DMA4_CH16_CH17                       // DMA4_CH16_CH17_IRQHandler                      - WAKEUP Domain eDMA channel 16/17 interrupt
-ISR_HANDLER2 DMA4_CH18_CH19                       // DMA4_CH18_CH19_IRQHandler                      - WAKEUP Domain eDMA channel 18/19 interrupt
-ISR_HANDLER2 DMA4_CH20_CH21                       // DMA4_CH20_CH21_IRQHandler                      - WAKEUP Domain eDMA channel 20/21 interrupt
-ISR_HANDLER2 DMA4_CH22_CH23                       // DMA4_CH22_CH23_IRQHandler                      - WAKEUP Domain eDMA channel 22/23 interrupt
-ISR_HANDLER2 DMA4_CH24_CH25                       // DMA4_CH24_CH25_IRQHandler                      - WAKEUP Domain eDMA channel 24/25 interrupt
-ISR_HANDLER2 DMA4_CH26_CH27                       // DMA4_CH26_CH27_IRQHandler                      - WAKEUP Domain eDMA channel 26/27 interrupt
-ISR_HANDLER2 DMA4_CH28_CH29                       // DMA4_CH28_CH29_IRQHandler                      - WAKEUP Domain eDMA channel 28/29 interrupt
-ISR_HANDLER2 DMA4_CH30_CH31                       // DMA4_CH30_CH31_IRQHandler                      - WAKEUP Domain eDMA channel 30/31 interrupt
-ISR_HANDLER2 DMA4_CH32_CH33                       // DMA4_CH32_CH33_IRQHandler                      - WAKEUP Domain eDMA channel 32/33 interrupt
-ISR_HANDLER2 DMA4_CH34_CH35                       // DMA4_CH34_CH35_IRQHandler                      - WAKEUP Domain eDMA channel 34/35 interrupt
-ISR_HANDLER2 DMA4_CH36_CH37                       // DMA4_CH36_CH37_IRQHandler                      - WAKEUP Domain eDMA channel 36/37 interrupt
-ISR_HANDLER2 DMA4_CH38_CH39                       // DMA4_CH38_CH39_IRQHandler                      - WAKEUP Domain eDMA channel 38/39 interrupt
-ISR_HANDLER2 DMA4_CH40_CH41                       // DMA4_CH40_CH41_IRQHandler                      - WAKEUP Domain eDMA channel 40/41 interrupt
-ISR_HANDLER2 DMA4_CH42_CH43                       // DMA4_CH42_CH43_IRQHandler                      - WAKEUP Domain eDMA channel 42/43 interrupt
-ISR_HANDLER2 DMA4_CH44_CH45                       // DMA4_CH44_CH45_IRQHandler                      - WAKEUP Domain eDMA channel 44/45 interrupt
-ISR_HANDLER2 DMA4_CH46_CH47                       // DMA4_CH46_CH47_IRQHandler                      - WAKEUP Domain eDMA channel 46/47 interrupt
-ISR_HANDLER2 DMA4_CH48_CH49_LPI2C5                // DMA4_CH48_CH49_LPI2C5_IRQHandler               - WAKEUP Domain eDMA channel 48/49 interrupt, LPI2C5 interrupt
-ISR_HANDLER2 DMA4_CH50_CH51_LPI2C6                // DMA4_CH50_CH51_LPI2C6_IRQHandler               - WAKEUP Domain eDMA channel 50/51 interrupt, LPI2C6 interrupt
-ISR_HANDLER2 DMA4_CH52_CH53_SAI4                  // DMA4_CH52_CH53_SAI4_IRQHandler                 - WAKEUP Domain eDMA channel 46/47 interrupt, SAI4 interrupt
-ISR_HANDLER2 DMA4_CH54_CH55_SPDIF                 // DMA4_CH54_CH55_SPDIF_IRQHandler                - WAKEUP Domain eDMA channel 46/47 interrupt, SPDIF interrupt
-ISR_HANDLER2 DMA4_CH56_CH57_LPUART9               // DMA4_CH56_CH57_LPUART9_IRQHandler              - WAKEUP Domain eDMA channel 46/47 interrupt, LPUART9 interrupt
-ISR_HANDLER2 DMA4_CH58_CH59_LPUART10              // DMA4_CH58_CH59_LPUART10_IRQHandler             - WAKEUP Domain eDMA channel 46/47 interrupt, LPUART10 interrupt
-ISR_HANDLER2 DMA4_CH60_CH61_LPUART11              // DMA4_CH60_CH61_LPUART11_IRQHandler             - WAKEUP Domain eDMA channel 46/47 interrupt, LPUART11 interrupt
-ISR_HANDLER2 DMA4_CH62_CH63_LPUART12              // DMA4_CH62_CH63_LPUART12_IRQHandler             - WAKEUP Domain eDMA channel 46/47 interrupt, LPUART12 interrupt
+ISR_HANDLER2 DMA4_CH0_CH1_CH32_CH33               // DMA4_CH0_CH1_CH32_CH33_IRQHandler              - WAKEUP Domain eDMA channel 0/1/32/33 interrupt
+ISR_HANDLER2 DMA4_CH2_CH3_CH34_CH35               // DMA4_CH2_CH3_CH34_CH35_IRQHandler              - WAKEUP Domain eDMA channel 2/3/34/35 interrupt
+ISR_HANDLER2 DMA4_CH4_CH5_CH36_CH37               // DMA4_CH4_CH5_CH36_CH37_IRQHandler              - WAKEUP Domain eDMA channel 4/5/36/37 interrupt
+ISR_HANDLER2 DMA4_CH6_CH7_CH38_CH39               // DMA4_CH6_CH7_CH38_CH39_IRQHandler              - WAKEUP Domain eDMA channel 6/7/38/39 interrupt
+ISR_HANDLER2 DMA4_CH8_CH9_CH40_CH41               // DMA4_CH8_CH9_CH40_CH41_IRQHandler              - WAKEUP Domain eDMA channel 8/9/40/41 interrupt
+ISR_HANDLER2 DMA4_CH10_CH11_CH42_CH43             // DMA4_CH10_CH11_CH42_CH43_IRQHandler            - WAKEUP Domain eDMA channel 10/11/42/43 interrupt
+ISR_HANDLER2 DMA4_CH12_CH13_CH44_CH45             // DMA4_CH12_CH13_CH44_CH45_IRQHandler            - WAKEUP Domain eDMA channel 12/13/44/45 interrupt
+ISR_HANDLER2 DMA4_CH14_CH15_CH46_CH47             // DMA4_CH14_CH15_CH46_CH47_IRQHandler            - WAKEUP Domain eDMA channel 14/15/46/47 interrupt
+ISR_HANDLER2 DMA4_CH16_CH17_CH48_CH49             // DMA4_CH16_CH17_CH48_CH49_IRQHandler            - WAKEUP Domain eDMA channel 16/17/48/49 interrupt
+ISR_HANDLER2 DMA4_CH18_CH19_CH50_CH51             // DMA4_CH18_CH19_CH50_CH51_IRQHandler            - WAKEUP Domain eDMA channel 18/19/50/51 interrupt
+ISR_HANDLER2 DMA4_CH20_CH21_CH52_CH53             // DMA4_CH20_CH21_CH52_CH53_IRQHandler            - WAKEUP Domain eDMA channel 20/21/52/53 interrupt
+ISR_HANDLER2 DMA4_CH22_CH23_CH54_CH55             // DMA4_CH22_CH23_CH54_CH55_IRQHandler            - WAKEUP Domain eDMA channel 22/23/54/55 interrupt
+ISR_HANDLER2 DMA4_CH24_CH25_CH56_CH57             // DMA4_CH24_CH25_CH56_CH57_IRQHandler            - WAKEUP Domain eDMA channel 24/25/56/57 interrupt
+ISR_HANDLER2 DMA4_CH26_CH27_CH58_CH59             // DMA4_CH26_CH27_CH58_CH59_IRQHandler            - WAKEUP Domain eDMA channel 26/27/58/59 interrupt
+ISR_HANDLER2 DMA4_CH28_CH29_CH60_CH61             // DMA4_CH28_CH29_CH60_CH61_IRQHandler            - WAKEUP Domain eDMA channel 28/29/60/61 interrupt
+ISR_HANDLER2 DMA4_CH30_CH31_CH62_CH63             // DMA4_CH30_CH31_CH62_CH63_IRQHandler            - WAKEUP Domain eDMA channel 30/31/62/63 interrupt
+ISR_HANDLER2 XBAR1_CH0_CH1                        // XBAR1_CH0_CH1_IRQHandler                       - XBAR1 channel 0/1 interrupt
+ISR_HANDLER2 XBAR1_CH2_CH3                        // XBAR1_CH2_CH3_IRQHandler                       - XBAR1 channel 2/3 interrupt
+ISR_HANDLER2 SINC3_CH0_CH1_CH2_CH3                // SINC3_CH0_CH1_CH2_CH3_IRQHandler               - SINC Filter Glue 3 channel 0/1/2/3
+ISR_HANDLER2 EWM                                  // EWM_IRQHandler                                 - EWM reset out interrupt
+ISR_HANDLER2 SEMC                                 // SEMC_IRQHandler                                - SEMC interrupt
+ISR_HANDLER2 LPIT3                                // LPIT3_IRQHandler                               - LPIT3 interrupt
+ISR_HANDLER2 LPTMR3                               // LPTMR3_IRQHandler                              - LPTMR3 interrupt
+ISR_HANDLER2 TMR4                                 // TMR4_IRQHandler                                - TMR4 interrupt
+ISR_HANDLER2 LPI2C5                               // LPI2C5_IRQHandler                              - LPI2C5 interrupt
+ISR_HANDLER2 LPI2C6                               // LPI2C6_IRQHandler                              - LPI2C6 interrupt
+ISR_HANDLER2 SAI4                                 // SAI4_IRQHandler                                - SAI4 interrupt
+ISR_HANDLER2 SPDIF                                // SPDIF_IRQHandler                               - SPDIF interrupt
+ISR_HANDLER2 LPUART9                              // LPUART9_IRQHandler                             - LPUART9 interrupt
+ISR_HANDLER2 LPUART10                             // LPUART10_IRQHandler                            - LPUART10 interrupt
+ISR_HANDLER2 LPUART11                             // LPUART11_IRQHandler                            - LPUART11 interrupt
+ISR_HANDLER2 LPUART12                             // LPUART12_IRQHandler                            - LPUART12 interrupt
 ISR_HANDLER2 INTG_BOOTROM_DEBUG_CTRL              // INTG_BOOTROM_DEBUG_CTRL_IRQHandler             - CM33, CM7, DAP access IRQ
-ISR_HANDLER2 EDGELOCK_REQ1                        // EDGELOCK_REQ1_IRQHandler                       - 
-ISR_HANDLER2 EDGELOCK_REQ2                        // EDGELOCK_REQ2_IRQHandler                       - 
-ISR_HANDLER2 EDGELOCK_REQ3                        // EDGELOCK_REQ3_IRQHandler                       - 
-ISR_HANDLER2 DBG_TRACE_TMR3                       // DBG_TRACE_TMR3_IRQHandler                      - TMR3 interrupt
-ISR_HANDLER2 JTAGC_TMR4                           // JTAGC_TMR4_IRQHandler                          - TMR4 interrupt
+ISR_HANDLER2 EDGELOCK_REQ1                        // EDGELOCK_REQ1_IRQHandler                       - Edgelock reuqest 1 interrupt
+ISR_HANDLER2 EDGELOCK_REQ2                        // EDGELOCK_REQ2_IRQHandler                       - Edgelock reuqest 2 interrupt
+ISR_HANDLER2 EDGELOCK_REQ3                        // EDGELOCK_REQ3_IRQHandler                       - Edgelock reuqest 3 interrupt
+ISR_HANDLER2 TMR3                                 // TMR3_IRQHandler                                - TMR3 interrupt
+ISR_HANDLER2 JTAGC                                // JTAGC_IRQHandler                               - JTAGC SRC reset source
 ISR_HANDLER2 M33_SYSRESET_REQ                     // M33_SYSRESET_REQ_IRQHandler                    - CM33 SYSREQRST SRC reset source
 ISR_HANDLER2 M33_LOCKUP                           // M33_LOCKUP_IRQHandler                          - CM33 LOCKUP SRC reset source
 ISR_HANDLER2 M7_SYSRESET_REQ                      // M7_SYSRESET_REQ_IRQHandler                     - CM33 SYSREQRST SRC reset source
@@ -323,7 +323,7 @@ ISR_HANDLER2 ACMP4                                // ACMP4_IRQHandler           
 ISR_HANDLER2 CM7_PS                               // CM7_PS_IRQHandler                              - M7 PS Tag/Data Parity Error
 ISR_HANDLER2 CM7_MCM                              // CM7_MCM_IRQHandler                             - M7 MCM interrupt
 ISR_HANDLER2 CM33_MCM                             // CM33_MCM_IRQHandler                            - M33 MCM interrupt
-ISR_HANDLER2 ECAT_INT                             // ECAT_INT_IRQHandler                            - EtherCAT interrupt
+ISR_RESERVED                                      // Reserved223_IRQHandler                         - Reserved interrupt
 ISR_HANDLER2 SAFETY_CLK_MON                       // SAFETY_CLK_MON_IRQHandler                      - Safety clock monitor interrupt
 ISR_HANDLER2 GPT1                                 // GPT1_IRQHandler                                - GPT1 interrupt
 ISR_HANDLER2 GPT2                                 // GPT2_IRQHandler                                - GPT2 interrupt
@@ -348,14 +348,14 @@ ISR_HANDLER2 SINC2_CH0                            // SINC2_CH0_IRQHandler       
 ISR_HANDLER2 SINC2_CH1                            // SINC2_CH1_IRQHandler                           - SINC Filter Glue 2 channel 1
 ISR_HANDLER2 SINC2_CH2                            // SINC2_CH2_IRQHandler                           - SINC Filter Glue 2 channel 2
 ISR_HANDLER2 SINC2_CH3                            // SINC2_CH3_IRQHandler                           - SINC Filter Glue 2 channel 3
-ISR_HANDLER2 GPIO4_0                              // GPIO4_0_IRQHandler                             - GPIO4 interrupt 0
-ISR_HANDLER2 GPIO4_1                              // GPIO4_1_IRQHandler                             - GPIO4 interrupt 1
-ISR_HANDLER2 GPIO5_0                              // GPIO5_0_IRQHandler                             - GPIO5 interrupt 0
-ISR_HANDLER2 GPIO5_1                              // GPIO5_1_IRQHandler                             - GPIO5 interrupt 1
-ISR_HANDLER2 GPIO6_0                              // GPIO6_0_IRQHandler                             - GPIO6 interrupt 0
-ISR_HANDLER2 GPIO6_1                              // GPIO6_1_IRQHandler                             - GPIO6 interrupt 1
-ISR_RESERVED                                      //                                                - Reserved interrupt
-ISR_RESERVED                                      // 255
+ISR_HANDLER2 GPIO4                                // GPIO4_IRQHandler                               - GPIO4 interrupt
+ISR_HANDLER2 TMR2                                 // TMR2_IRQHandler                                - TMR2 interrupt
+ISR_HANDLER2 GPIO5                                // GPIO5_IRQHandler                               - GPIO5 interrupt
+ISR_HANDLER2 ASRC                                 // ASRC_IRQHandler                                - ASRC interrupt
+ISR_HANDLER2 GPIO6                                // GPIO6_IRQHandler                               - GPIO6 interrupt
+ISR_HANDLER2 DBG_TRACE                            // DBG_TRACE_IRQHandler                           - JTAGSW DAP MDM-AP SRC reset source
+ISR_RESERVED                                      // Reserved254_IRQHandler                         - Reserved interrupt
+ISR_RESERVED                                      // DefaultISR                                     - 255
 
   .section .vectors, "ax"
 _vectors_end:

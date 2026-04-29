@@ -329,8 +329,9 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
 
 		const uint32_t ClockHz = CLOCK_GetRootClockFreq (FlexSPIClock);
-	#elif (defined(MIMXRT1181_SERIES)     || defined(MIMXRT1182_SERIES)     || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1187_cm33_SERIES) ||\
-		   defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
+	#elif (defined(MIMXRT1181_SERIES)      || defined(MIMXRT1182_SERIES)     || defined(MIMXRT118C_cm33_SERIES) || defined(MIMXRT118C_cm7_SERIES) || \
+		   defined(MIMXRT1185_cm33_SERIES) || defined(MIMXRT1185_cm7_SERIES) || defined(MIMXRT1186_cm33_SERIES) || defined(MIMXRT1186_cm7_SERIES) || \
+		   defined(MIMXRT1187_cm33_SERIES) || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES) || defined(MIMXRT1189_cm7_SERIES))
 		uint32_t ClockHz{};
 		switch (reinterpret_cast<uint32_t>(base))
 		{
@@ -535,8 +536,9 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 			CLOCK_SetRootClockDiv (FlexSPIClock, 2); // --> 528 MHz / 2 = ~264 MHz
 			CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
 			deviceconfig.flexspiRootClk = CLOCK_GetRootClockFreq (FlexSPIClock);
-		#elif (defined(MIMXRT1181_SERIES)     || defined(MIMXRT1182_SERIES)     || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1187_cm33_SERIES) ||\
-			   defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
+	#elif (defined(MIMXRT1181_SERIES)      || defined(MIMXRT1182_SERIES)     || defined(MIMXRT118C_cm33_SERIES) || defined(MIMXRT118C_cm7_SERIES) || \
+		   defined(MIMXRT1185_cm33_SERIES) || defined(MIMXRT1185_cm7_SERIES) || defined(MIMXRT1186_cm33_SERIES) || defined(MIMXRT1186_cm7_SERIES) || \
+		   defined(MIMXRT1187_cm33_SERIES) || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES) || defined(MIMXRT1189_cm7_SERIES))
 			switch (reinterpret_cast<uint32_t>(base))
 			{
 				case FLEXSPI1_BASE:
