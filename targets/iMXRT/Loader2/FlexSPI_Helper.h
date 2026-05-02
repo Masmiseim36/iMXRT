@@ -29,18 +29,20 @@ OF SUCH DAMAGE. */
 #include "fsl_flexspi.h"
 #include "pin_mux.h"
 #include "DebugPrint.h"
+#include "libmem_Tools.h"
 
 /*! MemoryType:
 \brief Supported Memory/Interface types */
-enum MemoryType
+enum class MemoryType
 {
-	MemType_Invalid     = 0,
-	MemType_Hyperflash  = 1,
-	MemType_OctaSPI_DDR = 2,
-	MemType_OctaSPI     = 3,
-	MemType_QuadSPI_DDR = 4,
-	MemType_QuadSPI     = 5,
-	MemType_SPI         = 6,
+	Invalid     = 0,
+	Hyperflash  = 1,
+	OctaSPI_DDR = 2,
+	OctaSPI     = 3,
+	QuadSPI_DDR = 4,
+	QuadSPI     = 5,
+	SPI         = 6,
+	Hyperram    = 7,
 };
 
 static const char *MemoryTypeName[]
@@ -51,7 +53,8 @@ static const char *MemoryTypeName[]
 	"OctaSPI",
 	"QuadSPI-DDR",
 	"QuadSPI",
-	"SPI"
+	"SPI",
+	"Hyperram"
 };
 
 enum LUT_CommandOffsets
@@ -419,17 +422,18 @@ public:
 	{
 		switch (type)
 		{
-			case MemType_Hyperflash:
-			case MemType_OctaSPI_DDR:
-			case MemType_OctaSPI:
+			case MemoryType::Hyperflash:
+			case MemoryType::Hyperram:
+			case MemoryType::OctaSPI_DDR:
+			case MemoryType::OctaSPI:
 				this->InitOctaSPIPins ();
 				break;
-			case MemType_QuadSPI_DDR:
-			case MemType_QuadSPI:
+			case MemoryType::QuadSPI_DDR:
+			case MemoryType::QuadSPI:
 				this->InitQuadSPIPins ();
 				break;
-			case MemType_Invalid:
-			case MemType_SPI:
+			case MemoryType::Invalid:
+			case MemoryType::SPI:
 				break;
 		}
 	}
@@ -490,6 +494,6 @@ inline int GetPortWidth ([[maybe_unused]]const FLEXSPI_Type *base)
 
 inline void PrintMemTypeInfor (MemoryType memoryType)
 {
-	DebugPrintf ("Init Loader for %s\r\n", MemoryTypeName[memoryType]);
+	DebugPrintf ("Init Loader for %s\r\n", MemoryTypeName[static_cast<int>(memoryType)]);
 }
 #endif // FLEX_SPI_HELPER_H_

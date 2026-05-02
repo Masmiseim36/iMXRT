@@ -65,6 +65,32 @@ namespace Xspi
 		#endif
 	};
 
+
+	static const flexspi_device_config_t Deviceconfig_Hyperram
+	{
+		.flexspiRootClk       = 0, // SPI root clock (will be set up later)
+		.isSck2Enabled        = false,
+		.flashSize            = 1024 * 8, // expressed in KByte, set a dummy value for now, will be changed after read the JEDEC information. This is necessarry for reading the JEDEC information
+		.CSIntervalUnit       = kFLEXSPI_CsIntervalUnit1SckCycle,
+		.CSInterval           = 0,
+		.CSHoldTime           = 3,
+		.CSSetupTime          = 3,
+		.dataValidTime        = 2, // DLLCR_OVRDVAL und sollte 0 sein
+		.columnspace          = 3,
+		.enableWordAddress    = true,
+		.AWRSeqIndex          = 9,
+		.AWRSeqNumber         = 1,
+		.ARDSeqIndex          = 0,
+		.ARDSeqNumber         = 1,
+		.AHBWriteWaitUnit     = kFLEXSPI_AhbWriteWaitUnit2AhbCycle,
+		.AHBWriteWaitInterval = 0,
+		.enableWriteMask      = true,
+		#if defined(FSL_FEATURE_FLEXSPI_HAS_ERRATA_051426) && (FSL_FEATURE_FLEXSPI_HAS_ERRATA_051426)
+			.isFroClockSource = false //!<  \brief Is FRO clock source or not.
+		#endif
+	};
+
+
 	static status_t EraseChip     (FlexSPI_Helper *base);
 	static int EraseSector        (libmem_driver_handle_t *h, libmem_sector_info_t *si);
 	static int ProgramPage        (libmem_driver_handle_t *h, uint8_t *destination, const uint8_t *source);
@@ -161,10 +187,10 @@ static libmem_geometry_t geometry[]
 
 inline int GetPageSize (MemoryType memType)
 {
-	if (memType == MemType_Hyperflash)
+	if (memType == MemoryType::Hyperflash)
 		return HYPERFLASH_PAGE_SIZE;
-	else
-		return QSPIFLASH_PAGE_SIZE;
+
+	return QSPIFLASH_PAGE_SIZE;
 
 }
 
@@ -302,7 +328,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 		CLOCK_SetRootClockMux (FlexSPIClock, 6); // ClockSource_SysPll2Pfd2 --> 396 MHz  -  SYSPLL2=528 MHz
 		CLOCK_ControlGate (FlexSPIClockGate, kCLOCK_On);
 
-		uint32_t ClockHz = CLOCK_GetRootClockFreq (FlexSPIClock);
+		const uint32_t ClockHz = CLOCK_GetRootClockFreq (FlexSPIClock);
 	#elif (defined(MIMXRT1181_SERIES)     || defined(MIMXRT1182_SERIES)     || defined(MIMXRT1187_cm7_SERIES) || defined(MIMXRT1187_cm33_SERIES) ||\
 		   defined(MIMXRT1189_cm7_SERIES) || defined(MIMXRT1189_cm33_SERIES))
 		uint32_t ClockHz{};
@@ -328,11 +354,15 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 	flexspi_device_config_t deviceconfig {Xspi::Deviceconfig};
 	const libmem_driver_functions_t *pDriverFunctions {&Xspi::DriverFunctions};
 	libmem_driver_page_write_fn_t ProgramPage {Xspi::ProgramPage};
-	if (memType == MemType_Hyperflash)
+	if (memType == MemoryType::Hyperflash)
 	{
 		deviceconfig     =  Hyperflash::Deviceconfig;
 		pDriverFunctions = &Hyperflash::DriverFunctions;
 		ProgramPage      =  Hyperflash::ProgramPage;
+	}
+	else if (memType == MemoryType::Hyperram)
+	{
+		deviceconfig     =  Xspi::Deviceconfig_Hyperram;
 	}
 	deviceconfig.flexspiRootClk = ClockHz;
 
@@ -344,14 +374,18 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 	// 4 data lines from FlexSPI channel B to form an 8-line bus for octal. On this SoC this is the only way to enable octal.
 	#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
 		if (GetPortWidth (base) != 8)
-			config.enableCombination      = (memType == MemType_OctaSPI_DDR || memType == MemType_OctaSPI || memType == MemType_Hyperflash);	// Only true when using Octa-Mode
+		{
+			// Only true when using Octa-Mode
+			config.enableCombination = (memType == MemoryType::OctaSPI_DDR || memType == MemoryType::OctaSPI || 
+										memType == MemoryType::Hyperflash  || memType == MemoryType::Hyperram);
+		}
 	#endif
 	config.ahbConfig.enableAHBPrefetch    = true;	// Enable AHB prefetching
 	config.ahbConfig.enableReadAddressOpt = true;
 	config.ahbConfig.enableAHBBufferable  = true;
 	config.ahbConfig.enableAHBCachable    = true;
 	#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR2_SCKBDIFFOPT)
-		config.enableSckBDiffOpt          = (memType == MemType_Hyperflash);	// enable diff clock and DQS for hyperflash
+		config.enableSckBDiffOpt          = (memType == MemoryType::Hyperflash || memType == MemoryType::Hyperram);	// enable diff clock and DQS for hyperflash
 	#endif
 	config.rxSampleClock                  = kFLEXSPI_ReadSampleClkLoopbackInternally;
 
@@ -363,7 +397,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 	// Get the Flash Informations by CFI or JEDEC depending on the interface type
 	DeviceInfo info {};
 	status_t status {};
-	if (memType == MemType_Hyperflash)
+	if (memType == MemoryType::Hyperflash)
 	{
 		// Read the CFI information
 		union
@@ -385,11 +419,25 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 		if (data.data16[5] != 0x5100 || data.data16[6] != 0x5200 || data.data16[7] != 0x5900)
 			return LibmemStaus_InvalidDevice;
 
-		info.Capacity      = static_cast<Capacity>(data.data16[28] >> 8);
+		info.Capacity      = static_cast<Capacity>(data.data16[28] >> 8U);
 		info.ManufactureID = ManufactureID_Spansion; // Only Spansion/Infinion is supported
 		info.Type          = 0;
 		
 		geometry[0].size = 0x40000; // 256 KByte / 2MBit
+
+		config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad; // To achieve high speeds - always use DQS
+	}
+	else if (memType == MemoryType::Hyperram)
+	{
+		base->UpdateLUT (Generic::LUT_Hyperram);
+		info.Capacity      = static_cast<Capacity>(Capacity_256MBit);
+		config.rxWatermark = 64;
+		config.txWatermark = 0;
+		config.enableDoze  = false;
+		#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
+		config.enableCombination = true;
+		#endif
+		config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad; // To achieve high speeds - always use DQS
 	}
 	else
 	{
@@ -413,41 +461,38 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 			DebugPrint ("JEDEC read Error\r\n");
 			return LibmemStaus_InvalidDevice;
 		}
-	}
 
-	// Check for the Manufacture-ID and adapt the Configuration
-	LibmemStatus_t res = LibmemStaus_Success;
-	switch (info.ManufactureID)
-	{
-		case ManufactureID_AdestoTechnologies:
-		case ManufactureID_Atmel:		// Renesas
-			res = Adesto::Initialize (*base, memType, info, config, deviceconfig);
-			break;
-		case ManufactureID_Nexcom:		// Winbond
-			res = Winbond::Initialize (*base, memType, info, config, deviceconfig);
-			break;
-		case ManufactureID_Macronix:	// Macronix
-			res = Macronix::Initialize (*base, memType, info, config, deviceconfig);
-			break;
-		case ManufactureID_Lucent:		// ISSI
-			res = ISSI::Initialize (*base, memType, info, config, deviceconfig);
-			break;
-		case ManufactureID_MicronTechnology:
-			res = Micron::Initialize (*base, memType, info, config, deviceconfig);
-			break;
-		case ManufactureID_Spansion:
-			config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad; // To achieve high speeds - always use DQS
-			break;
-		default:
-			DebugPrint ("unknown Flash-memory\r\n");
-			return LibmemStaus_InvalidDevice;
-	}
+		// Check for the Manufacture-ID and adapt the Configuration
+		LibmemStatus_t res = LibmemStaus_Success;
+		switch (info.ManufactureID)
+		{
+			case ManufactureID_AdestoTechnologies:
+			case ManufactureID_Atmel:		// Renesas
+				res = Adesto::Initialize (*base, memType, info, config, deviceconfig);
+				break;
+			case ManufactureID_Nexcom:		// Winbond
+				res = Winbond::Initialize (*base, memType, info, config, deviceconfig);
+				break;
+			case ManufactureID_Macronix:	// Macronix
+				res = Macronix::Initialize (*base, memType, info, config, deviceconfig);
+				break;
+			case ManufactureID_Lucent:		// ISSI
+				res = ISSI::Initialize (*base, memType, info, config, deviceconfig);
+				break;
+			case ManufactureID_MicronTechnology:
+				res = Micron::Initialize (*base, memType, info, config, deviceconfig);
+				break;
+			default:
+				DebugPrint ("unknown Flash-memory\r\n");
+				return LibmemStaus_InvalidDevice;
+		}
 
-	if (res != LibmemStaus_Success)
-		return res;
+		if (res != LibmemStaus_Success)
+			return res;
+	}
 
 	// Reconfigure the interface according to the gathered flash information and configuration
-	if (memType == MemType_OctaSPI_DDR || memType == MemType_QuadSPI_DDR || memType == MemType_Hyperflash)
+	if (memType == MemoryType::OctaSPI_DDR || memType == MemoryType::QuadSPI_DDR || memType == MemoryType::Hyperflash || memType == MemoryType::Hyperram)
 	{
 		#if (defined(MIMXRT533S_SERIES)   || defined(MIMXRT555S_SERIES) || defined(MIMXRT595S_cm33_SERIES))
 			clockDiv = 2;
@@ -474,7 +519,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 		#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
 			   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
 			   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))
-			if (memType == MemType_Hyperflash)
+			if (memType == MemoryType::Hyperflash)
 				clockDiv = 7;	// With Hyperflash writing must be done with reduces speed (50 HMz max)
 			else
 				clockDiv = 2;
@@ -520,19 +565,14 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 	FlashSize *= 1024;	// Convert kBytes to bytes
 
 	FLEXSPI_SetFlashConfig (base, &deviceconfig, FlexSPI_Helper::port);	// Configure flash settings according to serial flash feature.
-
 	FLEXSPI_SoftwareReset (base);
-//	status_t stat = base->WaitBusBusy ();
-//	if (stat != kStatus_Success)
-//		return LibmemStaus_Error;
-
 
 	static uint8_t writeBuffer[HYPERFLASH_PAGE_SIZE];
 	LibmemDriver *FlashHandle = LibmemDriver::GetDriver ();
 //	libmem_register_driver (FlashHandle, GetBaseAddress(base), FlashSize, geometry, nullptr, &DriverFunctions, &DriverFunctions_Extended);
 	libmem_register_driver (FlashHandle, base->GetAmbaAddress (), FlashSize, geometry, nullptr, pDriverFunctions, nullptr);
 	int err = libmem_driver_paged_write_init (&FlashHandle->PageWriteControlBlock, writeBuffer, GetPageSize (memType), ProgramPage, 4, 0);
-	FlashHandle->user_data = (uint32_t)base;
+	FlashHandle->user_data = reinterpret_cast<uint32_t>(base);
 
 	uint8_t *AliasAddress = base->GetAliasBaseAddress ();
 	if (AliasAddress != nullptr && err == LIBMEM_STATUS_SUCCESS)
@@ -540,7 +580,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 		FlashHandle = LibmemDriver::GetDriver ();
 		libmem_register_driver (FlashHandle, AliasAddress, FlashSize, geometry, nullptr, pDriverFunctions, nullptr);
 		err = libmem_driver_paged_write_init (&FlashHandle->PageWriteControlBlock, writeBuffer, GetPageSize (memType), ProgramPage, 4, 0);
-		FlashHandle->user_data = (uint32_t)base;
+		FlashHandle->user_data = reinterpret_cast<uint32_t>(base);
 		DebugPrint ("### Add Driver for Alias\r\n");
 	}
 	return static_cast<LibmemStatus_t>(err);

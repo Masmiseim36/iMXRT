@@ -25,7 +25,7 @@ OF SUCH DAMAGE. */
 
 namespace Micron
 {
-	static MemoryType tryDetectMemoryType = MemType_Invalid;
+	static MemoryType tryDetectMemoryType = MemoryType::Invalid;
 	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &info)
 	{
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
@@ -34,7 +34,7 @@ namespace Micron
 		if (status != kStatus_Success)
 		{
 			// We were able to read the JEDEC ID via octaspi-DDR, so we are in this mode
-			tryDetectMemoryType = MemType_OctaSPI_DDR;
+			tryDetectMemoryType = MemoryType::OctaSPI_DDR;
 		}
 		if (info.ManufactureID == ManufactureID_MicronTechnology) // Lucent ==> Issi
 			return kStatus_Success; 

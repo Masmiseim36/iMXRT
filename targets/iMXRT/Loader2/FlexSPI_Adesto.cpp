@@ -42,13 +42,14 @@ namespace Adesto
 
 
 	
-	static_assert (MemType_Invalid     == 0, "Invalid MemType definition for MemType_Invalid");
-	static_assert (MemType_Hyperflash  == 1, "Invalid MemType definition for MemType_Hyperflash");
-	static_assert (MemType_OctaSPI_DDR == 2, "Invalid MemType definition for MemType_OctaSPI_DDR");
-	static_assert (MemType_OctaSPI     == 3, "Invalid MemType definition for MemType_OctaSPI");
-	static_assert (MemType_QuadSPI_DDR == 4, "Invalid MemType definition for MemType_QuadSPI_DDR");
-	static_assert (MemType_QuadSPI     == 5, "Invalid MemType definition for MemType_QuadSPI");
-	static_assert (MemType_SPI         == 6, "Invalid MemType definition for MemType_SPI");
+	static_assert (MemoryType::Invalid     == static_cast<MemoryType>(0), "Invalid MemType definition for Invalid");
+	static_assert (MemoryType::Hyperflash  == static_cast<MemoryType>(1), "Invalid MemType definition for Hyperflash");
+	static_assert (MemoryType::OctaSPI_DDR == static_cast<MemoryType>(2), "Invalid MemType definition for OctaSPI_DDR");
+	static_assert (MemoryType::OctaSPI     == static_cast<MemoryType>(3), "Invalid MemType definition for OctaSPI");
+	static_assert (MemoryType::QuadSPI_DDR == static_cast<MemoryType>(4), "Invalid MemType definition for QuadSPI_DDR");
+	static_assert (MemoryType::QuadSPI     == static_cast<MemoryType>(5), "Invalid MemType definition for QuadSPI");
+	static_assert (MemoryType::SPI         == static_cast<MemoryType>(6), "Invalid MemType definition for SPI");
+	static_assert (MemoryType::Hyperram    == static_cast<MemoryType>(7), "Invalid MemType definition for Hyperram");
 
 	// Compare Status Register Byte 2 in the Adesto Datasheet - chapter "11.2 Status Register Byte 2"
 	static constexpr std::array <uint32_t, 7> StatusReg2
@@ -76,7 +77,7 @@ namespace Adesto
 	LibmemStatus_t InitializeOcta (FlexSPI_Helper &flexSPI, const MemoryType memType, DeviceInfo &info, flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &deviceConfig)
 	{
 		(void)info;
-		if (memType == MemType_Invalid || memType == MemType_Hyperflash)
+		if (memType == MemoryType::Invalid || memType == MemoryType::Hyperflash)
 			return LibmemStaus_Error;
 
 		// Unlock all sectors
@@ -89,12 +90,12 @@ namespace Adesto
 
 		// Write to status/control register 2 to switch to chosen memory-Type
 		static constexpr uint8_t CtrlReg_Byte3Value (((ATXP::DummyCycles - 8U) >> 1U) | 0x10U);
-		uint32_t value = 0x00U | (static_cast<uint32_t>(StatusReg2[memType]) << 8U) | (static_cast<uint32_t>(CtrlReg_Byte3Value) << 16U);
+		uint32_t value = 0x00U | (static_cast<uint32_t>(StatusReg2[static_cast<int>(memType)]) << 8U) | (static_cast<uint32_t>(CtrlReg_Byte3Value) << 16U);
 		stat = flexSPI.WriteRegister (1, value, LUT_WriteStatusReg_Adesto, 3);
 		if (stat != kStatus_Success)
 			return LibmemStaus_Error;
 
-		flexSPI.UpdateLUT (*LUT[memType]);
+		flexSPI.UpdateLUT (*LUT[static_cast<int>(memType)]);
 
 		config.rxSampleClock = kFLEXSPI_ReadSampleClkExternalInputFromDqsPad;// To achieve high speeds - always use DQS
 

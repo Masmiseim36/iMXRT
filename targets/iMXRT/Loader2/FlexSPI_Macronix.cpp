@@ -66,14 +66,14 @@ namespace Macronix
 	} // namespace MX25UW
 
 
-	static MemoryType tryDetectMemoryType = MemType_Invalid;
+	static MemoryType tryDetectMemoryType = MemoryType::Invalid;
 	status_t TryDetect (FlexSPI_Helper &flexSPI, DeviceInfo &info)
 	{
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
 /*		if (kStatus_Success == flexSPI.ReadJEDEC (&info))
 		{
 			// We were able to read the JEDEC ID via OctaSpi-DDR, so we are in tis mode
-			tryDetectMemoryType = MemType_OctaSPI_DDR;
+			tryDetectMemoryType = MemoryType::OctaSPI_DDR;
 //			info.Capacity = static_cast<Capacity>(info.Capacity & 0x1F);
 			flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, Generic::LUT_SPI, 4);
 			return kStatus_Success;
@@ -86,7 +86,7 @@ namespace Macronix
 			if (identification[0] != 0 && identification[0] != 0xFF) // Sanity check of the data, first byte must not be zero or 0xFF
 			{
 				// We were able to read the JEDEC ID via OctaSpi-DDR, so we are in this mode
-				tryDetectMemoryType = MemType_OctaSPI_DDR;
+				tryDetectMemoryType = MemoryType::OctaSPI_DDR;
 				int i=0;
 				for (; i<8; i++)
 				{
@@ -108,7 +108,7 @@ namespace Macronix
 		if (kStatus_Success == flexSPI.ReadJEDEC (&info))
 		{
 			// We were able to read the JEDEC ID via OctaSpi (none DDR), so we are in tis mode
-			tryDetectMemoryType = MemType_OctaSPI;
+			tryDetectMemoryType = MemoryType::OctaSPI;
 //			info.Capacity = static_cast<Capacity>(info.Capacity & 0x1F);
 			flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, Generic::LUT_SPI, 4); 
 			return kStatus_Success;
@@ -149,7 +149,7 @@ namespace Macronix
 
 	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, DeviceInfo &info, [[maybe_unused]] flexspi_config_t &config,  [[maybe_unused]]flexspi_device_config_t &deviceConfig)
 	{
-		if (memType == MemType_Invalid || memType == MemType_Hyperflash)
+		if (memType == MemoryType::Invalid || memType == MemoryType::Hyperflash)
 			return LibmemStaus_Error;
 
 		DebugPrint ("Found Macronix Flash\r\n");
@@ -157,11 +157,11 @@ namespace Macronix
 		// Adjust JEDEC information
 		info.Capacity = static_cast<Capacity>(info.Capacity & 0x1F);
 
-		if (memType == MemType_SPI)
+		if (memType == MemoryType::SPI)
 		{
 			flexSPI.UpdateLUT (0, LUT_SPI);
 		}
-		else if (memType == MemType_QuadSPI)
+		else if (memType == MemoryType::QuadSPI)
 		{
 			flexSPI.UpdateLUT (LUT_SPI);
 
@@ -211,12 +211,12 @@ namespace Macronix
 			const FlexSPI_LUT *lut = nullptr;
 			switch (memType)
 			{
-				case MemType_OctaSPI_DDR:
+				case MemoryType::OctaSPI_DDR:
 					// Enter Octal-Mode with DDR.
 					stateReg = 2;
 					lut = &LUT_OctaSPI_DDR;
 					break;
-				case MemType_OctaSPI:
+				case MemoryType::OctaSPI:
 					stateReg = 1;
 					lut = &LUT_OctaSPI;
 					break;
@@ -226,10 +226,10 @@ namespace Macronix
 
 			switch (tryDetectMemoryType)
 			{
-				case MemType_OctaSPI_DDR:
+				case MemoryType::OctaSPI_DDR:
 					flexSPI.UpdateLUT (0, LUT_OctaSPI_DDR); // Load the Octa-SPI-DDR LUT if we are already in this mode
 					break;
-				case MemType_OctaSPI:
+				case MemoryType::OctaSPI:
 					flexSPI.UpdateLUT (0, LUT_OctaSPI);     // Load the Octa-SPI LUT if we are already in this mode
 					break;
 				default:

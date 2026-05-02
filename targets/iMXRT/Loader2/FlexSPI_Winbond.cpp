@@ -118,7 +118,7 @@ namespace Winbond
 	
 	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, DeviceInfo &info, [[maybe_unused]] flexspi_config_t &config, [[maybe_unused]]flexspi_device_config_t &deviceConfig)
 	{
-		if (memType != MemType_QuadSPI && memType != MemType_SPI)
+		if (memType != MemoryType::QuadSPI && memType != MemoryType::SPI)
 			return LibmemStaus_Error;
 
 		// Adjust JEDEC information
@@ -146,7 +146,7 @@ namespace Winbond
 		stat = statReg2.Read (flexSPI);
 		if (stat != kStatus_Success)
 			return LibmemStaus_Error;
-		if (statReg2.QuadEnable == 0 && memType == MemType_QuadSPI)
+		if (statReg2.QuadEnable == 0 && memType == MemoryType::QuadSPI)
 		{
 			// Enable Quad Mode
 			statReg2.QuadEnable = 1;
@@ -154,7 +154,7 @@ namespace Winbond
 			if (stat != kStatus_Success)
 				return LibmemStaus_Error;
 		}
-		else if (statReg2.QuadEnable == 1 && memType == MemType_SPI)
+		else if (statReg2.QuadEnable == 1 && memType == MemoryType::SPI)
 		{
 			// Disable Quad Mode
 			statReg2.QuadEnable = 0;

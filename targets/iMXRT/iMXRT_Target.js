@@ -1709,6 +1709,27 @@ function FlexSPI_WaitBusIdle (base)
 	TargetInterface.message ("## FlexSPI_WaitBusIdle - done");
 }
 
+function FlexSPI_PinInit (pin)
+{
+	for (var i = 0; i < pin.length; i++)
+//	for (var p of pin)
+	{
+		// Configure the IOMUX for the SDRAM interface. First set the Mux configuration
+		TargetInterface.pokeUint32 (IOMUXC_SW_MUX_CTL_PAD + pin, 0x00000000);
+
+		// now set the PAD configuration
+		// PDRV = 1b (normal); PULL = 10b (PD)
+		TargetInterface.pokeUint32 (IOMUXC_SW_PAD_CTL_PAD + pin, 0x00000008);
+
+// ToDo - We need to inittialize Daisy registers
+	}
+}
+
+//#define IOMUXC_BASE                              (0x400E8000u) // 1170 / 1160
+//                                 DQS,   SS0,   SCLKA, SCLKB,  D0,    D1,    D2,    D3,    D4,    D5,    D6,    D7
+var FlexSPI_PinsFlexSpi1_1170 = [0x1C8, 0x1CC, 0x1D0, 0x1C4, 0x1D4, 0x1D8, 0x1DC, 0x1E0, 0x1C0, 0x1BC, 0x1B8, 0x1B4];
+var FlexSPI_PinsFlexSpi2_1170 = [0x0E8, 0x0E4, 0x0E0, 0x0DC, 0x0EC, 0x0F0, 0x0F4, 0x0F8, 0x0FC, 0x100, 0x104, 0x108];
+
 function FlexSPI_Init (FlexSPI)
 {
 	var CCM = 0x400FC000;

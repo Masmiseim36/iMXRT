@@ -54,15 +54,16 @@ The Development-Environment instructs the Loader which interface should be used.
 The following options are supported:
 
 ```C
-enum MemoryType
+enum class MemoryType
 {
-    MemType_Invalid     = 0,
-    MemType_Hyperflash  = 1,
-    MemType_OctaSPI_DDR = 2,
-    MemType_OctaSPI     = 3,
-    MemType_QuadSPI_DDR = 4,
-    MemType_QuadSPI     = 5,
-    MemType_SPI         = 6,
+	Invalid     = 0,
+	Hyperflash  = 1,
+	OctaSPI_DDR = 2,
+	OctaSPI     = 3,
+	QuadSPI_DDR = 4,
+	QuadSPI     = 5,
+	SPI         = 6,
+	Hyperram    = 7,
 };
 ```
 

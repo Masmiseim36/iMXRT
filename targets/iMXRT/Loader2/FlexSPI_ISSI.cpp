@@ -56,7 +56,7 @@ namespace ISSI
 	}
 
 
-	static MemoryType tryDetectMemoryType = MemType_Invalid;
+	static MemoryType tryDetectMemoryType = ::MemoryType::Invalid;
 	status_t TryDetect  (FlexSPI_Helper &flexSPI, DeviceInfo &info)
 	{
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID*4, LUT_OctaSPI_DDR, 4);
@@ -65,7 +65,7 @@ namespace ISSI
 		if (status != kStatus_Success)
 		{
 			// We were able to read the JEDEC ID via octaspi-DDR, so we are in this mode
-			tryDetectMemoryType = MemType_OctaSPI_DDR;
+			tryDetectMemoryType = MemoryType::OctaSPI_DDR;
 		}
 		if (info.ManufactureID == ManufactureID_Lucent) // Lucent ==> Issi
 			return kStatus_Success; 
@@ -144,7 +144,7 @@ namespace ISSI
 		}
 		else if (info.Type == 0x5A || info.Type == 0x5B)
 		{
-			if (tryDetectMemoryType != MemType_OctaSPI_DDR)
+			if (tryDetectMemoryType != MemoryType::OctaSPI_DDR)
 			{
 				flexSPI.UpdateLUT (ISSI::LUT_QuadSPI);
 

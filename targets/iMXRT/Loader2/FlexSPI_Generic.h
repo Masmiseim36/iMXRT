@@ -22,12 +22,11 @@ OF SUCH DAMAGE. */
 #ifndef XSPI_LUT_GENERIC_H_
 #define XSPI_LUT_GENERIC_H_
 
-#include "libmem_Tools.h"
-#include <array>
+#include "FlexSPI_Helper.h"
 
 namespace Generic
 {
-	constexpr FlexSPI_LUT LUT_SPI
+	inline constexpr FlexSPI_LUT LUT_SPI
 	{
 		// (0) Read Array --> compare @LUT_CommandOffsets
 		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_SDR,        kFLEXSPI_1PAD, 0x0B, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 32),
@@ -84,6 +83,71 @@ namespace Generic
 		0,	// Dummy to fill a block of four
 		0,	// Dummy to fill a block of four
 	};
+
+	inline constexpr FlexSPI_LUT LUT_Hyperram
+	{
+		// (0) Read
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xA0, kFLEXSPI_Command_RADDR_DDR,      kFLEXSPI_8PAD, 0x18),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_CADDR_DDR,   kFLEXSPI_8PAD, 0x10, kFLEXSPI_Command_DUMMY_RWDS_DDR, kFLEXSPI_8PAD, 0x06),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 0x04, kFLEXSPI_Command_STOP,           kFLEXSPI_1PAD, 0x00),
+		0,	// Dummy to fill a block of four
+
+		// (1) Write Register
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x60, kFLEXSPI_Command_RADDR_DDR,      kFLEXSPI_8PAD, 0x18),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_CADDR_DDR,   kFLEXSPI_8PAD, 0x10, kFLEXSPI_Command_WRITE_DDR,      kFLEXSPI_8PAD, 0x02),
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (2) Read Register
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0xE0, kFLEXSPI_Command_RADDR_DDR,      kFLEXSPI_8PAD, 0x18),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_CADDR_DDR,   kFLEXSPI_8PAD, 0x10, kFLEXSPI_Command_DUMMY_RWDS_DDR, kFLEXSPI_8PAD, 0x06),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_READ_DDR,    kFLEXSPI_8PAD, 0x04, kFLEXSPI_Command_STOP,           kFLEXSPI_1PAD, 0x00),
+		0,	// Dummy to fill a block of four
+
+		// (3) Enter free
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (4) Enter free
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (5) Enter free
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (6) Enter free
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (7) Enter free
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (8) Enter free
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+		0,	// Dummy to fill a block of four
+
+		// (9) Read
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_DDR,         kFLEXSPI_8PAD, 0x20, kFLEXSPI_Command_RADDR_DDR,      kFLEXSPI_8PAD, 0x18),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_CADDR_DDR,   kFLEXSPI_8PAD, 0x10, kFLEXSPI_Command_DUMMY_RWDS_DDR, kFLEXSPI_8PAD, 0x06),
+		FLEXSPI_LUT_SEQ (kFLEXSPI_Command_WRITE_DDR,   kFLEXSPI_8PAD, 0x04, kFLEXSPI_Command_STOP,           kFLEXSPI_1PAD, 0x00),
+		0,	// Dummy to fill a block of four
+	};
+
+//	#define FLEXSPI_LUT_SEQ(cmd0, pad0, op0, cmd1, pad1, op1)
 }
 
 #endif // XSPI_LUT_GENERIC_H_

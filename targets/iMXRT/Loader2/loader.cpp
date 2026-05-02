@@ -64,14 +64,20 @@ void ExecuteTest (uint32_t *memPointer)
 	size_t erase_size = 0;
 	LibmemStatus_t res = static_cast<LibmemStatus_t>(libmem_erase (reinterpret_cast<uint8_t *>(memPointer), buffer.size() * sizeof(uint32_t), &erase_start, &erase_size));
 	if (res != LIBMEM_STATUS_SUCCESS)
+	{
 		DebugPrintf ("Error '%s' occurred\r\n", Libmem_GetErrorString (res));
+		__BKPT(1);
+	}
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
 	// Check if everything is erased
 	libmem_read (reinterpret_cast<uint8_t *>(buffer.data()), reinterpret_cast<const uint8_t *>(memPointer), buffer.size() * sizeof(uint32_t));
 	uint32_t errorCounter = Compare (memPointer, 0xFFFFFFFF, erase_size);
 	if (errorCounter > 0)
+	{
 		DebugPrintf ("Invalid memory-chunks on erase: %d\r\n", errorCounter);
+		__BKPT(2);
+	}
 
 	// Initialize the array with test data
 	for (size_t i=0; i<sizeof(buffer)/sizeof(buffer[0]); i++)
@@ -81,7 +87,10 @@ void ExecuteTest (uint32_t *memPointer)
 
 	errorCounter = Compare (memPointer, &buffer[0], sizeof (buffer));
 	if (errorCounter > 0)
+	{
 		DebugPrintf ("Invalid memory-chunks on write %d\r\n", errorCounter);
+		__BKPT(3);
+	}
 }
 
 //static constexpr uint32_t FourMegabyteOffset = 4 * 1024 * 1024;
@@ -109,16 +118,16 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 	#ifdef DEBUG
 		// some test code, because the loader can not be debugged while using it in real scenarios
 		#ifdef FLEXSPI
-			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI), MemType_QuadSPI); // MemType_Hyperflash - MemType_OctaSPI_DDR - MemType_QuadSPI
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI), MemoryType::QuadSPI); // MemoryType::Hyperflash - MemoryType::OctaSPI_DDR - MemoryType::QuadSPI
 		#endif
 		#ifdef FLEXSPI0
-			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI0), MemType_OctaSPI_DDR);
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI0), MemoryType::OctaSPI_DDR);
 		#endif
 		#ifdef FLEXSPI1
-			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI1), MemType_OctaSPI_DDR);
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI1), MemoryType::OctaSPI_DDR);
 		#endif
 		#ifdef FLEXSPI2
-			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI2), MemType_QuadSPI);
+			InitializeAndTest (static_cast<FlexSPI_Helper *>(FLEXSPI2), MemoryType::QuadSPI);
 		#endif
 	#else
 		if (param != 0)
@@ -211,7 +220,7 @@ enum LibmemStatus Init_Libmem (FlexSPI_Helper *base, MemoryType memoryType)
 	enum LibmemStatus status {LibmemStaus_Success};
 	uint32_t trials = 0;
 
-	if (memoryType == MemType_Invalid)
+	if (memoryType == MemoryType::Invalid)
 		return status;
 
 	PrintMemTypeInfor (memoryType);
