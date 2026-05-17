@@ -46,6 +46,9 @@ namespace Xspi
 		.flexspiRootClk       = 0, // SPI root clock (will be set up later)
 		.isSck2Enabled        = false,
 		.flashSize            = 1024 * 8, // expressed in KByte, set a dummy value for now, will be changed after read the JEDEC information. This is necessarry for reading the JEDEC information
+		#if defined(FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT) && (FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT)
+			.addressShift     = 0,
+		#endif
 		.CSIntervalUnit       = kFLEXSPI_CsIntervalUnit1SckCycle,
 		.CSInterval           = 2,
 		.CSHoldTime           = 3,
@@ -71,6 +74,9 @@ namespace Xspi
 		.flexspiRootClk       = 0, // SPI root clock (will be set up later)
 		.isSck2Enabled        = false,
 		.flashSize            = 1024 * 8, // expressed in KByte, set a dummy value for now, will be changed after read the JEDEC information. This is necessarry for reading the JEDEC information
+		#if defined(FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT) && (FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT)
+			.addressShift     = 0,
+		#endif
 		.CSIntervalUnit       = kFLEXSPI_CsIntervalUnit1SckCycle,
 		.CSInterval           = 0,
 		.CSHoldTime           = 3,
@@ -91,14 +97,17 @@ namespace Xspi
 	};
 
 
-	static status_t EraseChip     (FlexSPI_Helper *base);
-	static int EraseSector        (libmem_driver_handle_t *h, libmem_sector_info_t *si);
-	static int ProgramPage        (libmem_driver_handle_t *h, uint8_t *destination, const uint8_t *source);
-	static int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
-	static int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size);
-	static int libmem_Flush       (libmem_driver_handle_t *h);
-	static int libmem_Read        (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
-	static uint32_t libmem_CRC32  (libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc);
+	namespace
+	{
+		status_t EraseChip     (FlexSPI_Helper *base);
+		int EraseSector        (libmem_driver_handle_t *h, libmem_sector_info_t *si);
+		int ProgramPage        (libmem_driver_handle_t *h, uint8_t *destination, const uint8_t *source);
+		int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
+		int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size);
+		int libmem_Flush       (libmem_driver_handle_t *h);
+		int libmem_Read        (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
+		uint32_t libmem_CRC32  (libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc);
+	}
 
 
 	static const libmem_driver_functions_t DriverFunctions
@@ -126,6 +135,9 @@ namespace Hyperflash
 		.flexspiRootClk       = 0, // SPI root clock (will be set up later)
 		.isSck2Enabled        = false,
 		.flashSize            = 0x4000000 / 1024,	// Size in KBytes
+		#if defined(FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT) && (FSL_FEATURE_FLEXSPI_SUPPORT_ADDRESS_SHIFT)
+			.addressShift     = 0,
+		#endif
 		.CSIntervalUnit       = kFLEXSPI_CsIntervalUnit1SckCycle,
 		.CSInterval           = 2,
 		.CSHoldTime           = 0,
@@ -146,16 +158,19 @@ namespace Hyperflash
 	};
 
 
-	static int WriteEnable    (FlexSPI_Helper *base, uint32_t baseAddr);
-	static status_t EraseChip (FlexSPI_Helper *base);
+	namespace
+	{
+		int WriteEnable    (FlexSPI_Helper *base, uint32_t baseAddr);
+		status_t EraseChip (FlexSPI_Helper *base);
 
-	static int EraseSector        (libmem_driver_handle_t *h, libmem_sector_info_t *si);
-	static int ProgramPage        (libmem_driver_handle_t *h, uint8_t *destination, const uint8_t *source);
-	static int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
-	static int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size);
-	static int libmem_Flush       (libmem_driver_handle_t *h);
-	static int libmem_Read        (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
-	static uint32_t libmem_CRC32  (libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc);
+		int EraseSector        (libmem_driver_handle_t *h, libmem_sector_info_t *si);
+		int ProgramPage        (libmem_driver_handle_t *h, uint8_t *destination, const uint8_t *source);
+		int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
+		int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size);
+		int libmem_Flush       (libmem_driver_handle_t *h);
+		int libmem_Read        (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size);
+		uint32_t libmem_CRC32  (libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc);
+	}
 
 
 	static const libmem_driver_functions_t DriverFunctions
@@ -177,21 +192,23 @@ namespace Hyperflash
 }
 
 
-// Define the structure of the Flash (Sector Count and Size)
-static libmem_geometry_t geometry[]
-{ // count - size
-	{0x2000, 4096},
-	{0, 0} 
-};
-
-
-inline int GetPageSize (MemoryType memType)
+namespace
 {
-	if (memType == MemoryType::Hyperflash)
-		return HYPERFLASH_PAGE_SIZE;
+	// Define the structure of the Flash (Sector Count and Size)
+	libmem_geometry_t geometry []
+	{ // count - size
+		{0x2000, 4096},
+		{0, 0} 
+	};
 
-	return QSPIFLASH_PAGE_SIZE;
+	inline int GetPageSize (MemoryType memType)
+	{
+		if (memType == MemoryType::Hyperflash)
+			return HYPERFLASH_PAGE_SIZE;
 
+		return QSPIFLASH_PAGE_SIZE;
+
+	}
 }
 
 
@@ -571,17 +588,17 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 
 	static uint8_t writeBuffer[HYPERFLASH_PAGE_SIZE];
 	LibmemDriver *FlashHandle = LibmemDriver::GetDriver ();
-//	libmem_register_driver (FlashHandle, GetBaseAddress(base), FlashSize, geometry, nullptr, &DriverFunctions, &DriverFunctions_Extended);
-	libmem_register_driver (FlashHandle, base->GetAmbaAddress (), FlashSize, geometry, nullptr, pDriverFunctions, nullptr);
-	int err = libmem_driver_paged_write_init (&FlashHandle->PageWriteControlBlock, writeBuffer, GetPageSize (memType), ProgramPage, 4, 0);
+//	libmem_register_driver (FlashHandle, GetBaseAddress(base), FlashSize, &geometry[0], nullptr, &DriverFunctions, &DriverFunctions_Extended);
+	libmem_register_driver (FlashHandle, base->GetAmbaAddress (), FlashSize, &geometry[0], nullptr, pDriverFunctions, nullptr);
+	int err = libmem_driver_paged_write_init (&FlashHandle->PageWriteControlBlock, &writeBuffer[0], GetPageSize (memType), ProgramPage, 4, 0);
 	FlashHandle->user_data = reinterpret_cast<uint32_t>(base);
 
 	uint8_t *AliasAddress = base->GetAliasBaseAddress ();
 	if (AliasAddress != nullptr && err == LIBMEM_STATUS_SUCCESS)
 	{
 		FlashHandle = LibmemDriver::GetDriver ();
-		libmem_register_driver (FlashHandle, AliasAddress, FlashSize, geometry, nullptr, pDriverFunctions, nullptr);
-		err = libmem_driver_paged_write_init (&FlashHandle->PageWriteControlBlock, writeBuffer, GetPageSize (memType), ProgramPage, 4, 0);
+		libmem_register_driver (FlashHandle, AliasAddress, FlashSize, &geometry[0], nullptr, pDriverFunctions, nullptr);
+		err = libmem_driver_paged_write_init (&FlashHandle->PageWriteControlBlock, &writeBuffer[0], GetPageSize (memType), ProgramPage, 4, 0);
 		FlashHandle->user_data = reinterpret_cast<uint32_t>(base);
 		DebugPrint ("### Add Driver for Alias\r\n");
 	}
@@ -591,439 +608,442 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 
 namespace Xspi
 {
-	/*! EraseChip:
-	\brief Erase the whole-Flash-memory
-	\param base The FlexSPI-Interface where the Flash is located which should be erased
-	\return static status_t Status of the Operation - kStatus_Success when successfully */
-	[[maybe_unused]] static status_t EraseChip (FlexSPI_Helper *base)
+	namespace
 	{
-		DebugPrint ("EraseChip\r\n");
-
-		status_t stat = base->WriteEnable (0);
-		if (stat != kStatus_Success)
-			return stat;
-
-		stat = base->SendCommand (0, LUT_EraseChip);
-		if (stat != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
-
-		return base->WaitBusBusy ();
-	}
-
-	/*! EraseSector:
-	\brief Erase a sector of the Flash-Memory
-	\param h Handle to the Flash-Driver
-	\param si Information about the sector which should be erased
-	\return static int LibmemStaus_Success when the erase operation was successfully, otherwise LibmemStaus_Error */
-	static int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
-	{
-		if (IsSectorEmpty (reinterpret_cast<uint32_t *>(si->start)))
+		/*! EraseChip:
+		\brief Erase the whole-Flash-memory
+		\param base The FlexSPI-Interface where the Flash is located which should be erased
+		\return static status_t Status of the Operation - kStatus_Success when successfully */
+		[[maybe_unused]] status_t EraseChip (FlexSPI_Helper *base)
 		{
-			DebugPrintf ("EraseSector at 0x%x, is allready erased\r\n", si->start);
-			return LIBMEM_STATUS_SUCCESS;
+			DebugPrint ("EraseChip\r\n");
+
+			status_t stat = base->WriteEnable (0);
+			if (stat != kStatus_Success)
+				return stat;
+
+			stat = base->SendCommand (0, LUT_EraseChip);
+			if (stat != kStatus_Success)
+				return LIBMEM_STATUS_ERROR;
+
+			return base->WaitBusBusy ();
 		}
 
-		FlexSPI_Helper *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
-		uint32_t sectorAddr = libmem_CalculateOffset (h, si->start);
-		if (sectorAddr == UINT32_MAX)
-			return LibmemStaus_Error;
-
-		DebugPrintf ("EraseSector at 0x%x, size: %d\r\n", sectorAddr, si->size);
-
-		status_t status = base->WriteEnable (sectorAddr);
-		if (status != kStatus_Success)
-			return LibmemStaus_Error;
-
-		status = base->SendCommand (sectorAddr, LUT_EraseSector);
-		if (status != kStatus_Success)
-			return LibmemStaus_Error;
-
-		status = base->WaitBusBusy ();
-		if (status != kStatus_Success)
-			return LibmemStaus_Error;
-
-		return LibmemStaus_Success;
-	}
-
-	/*! ProgramPage:
-	\brief Write Data to a Flash-Page
-	\param h Handle to the Flash-Driver
-	\param destination Address to write the Data to. This Address is in the Address-Range of the Controller
-	\param source Address of the Array with the data to write
-	\return static int LibmemStaus_Success when the write operation was successfully, otherwise LibmemStaus_Error */
-	static int ProgramPage (libmem_driver_handle_t *h, uint8_t *destination, const uint8_t *source)
-	{
-		FlexSPI_Helper *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
-		const uint32_t deviceAddress = libmem_CalculateOffset (h, destination);
-		if (deviceAddress == UINT32_MAX)
-			return LibmemStaus_Error;
-
-		DebugPrintf ("ProgramPage at 0x%X\r\n", deviceAddress);
-
-		// Write enable
-		status_t status = base->WriteEnable (deviceAddress);
-		if (status != kStatus_Success)
-			return LibmemStaus_Error;
-
-		// Prepare page program command
-		flexspi_transfer_t flashXfer
+		/*! EraseSector:
+		\brief Erase a sector of the Flash-Memory
+		\param h Handle to the Flash-Driver
+		\param si Information about the sector which should be erased
+		\return static int LibmemStaus_Success when the erase operation was successfully, otherwise LibmemStaus_Error */
+		int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 		{
-			deviceAddress,				// deviceAddress	- Operation device address.
-			FlexSPI_Helper::port,		// port				- Operation port
-			kFLEXSPI_Write,				// cmdType			- Execution command type.
-			LUT_ProgramPage,			// seqIndex			- Sequence ID for command.
-			1,							// SeqNumber		- Sequence number for command.
-			(uint32_t *)source,			// data				- Data buffer.
-			QSPIFLASH_PAGE_SIZE			// dataSize			- Data size in bytes.
-		};
-		status = FLEXSPI_TransferBlocking (base, &flashXfer);
-		if (status != kStatus_Success)
-			return LibmemStaus_Error;
+			if (IsSectorEmpty (reinterpret_cast<uint32_t *>(si->start)))
+			{
+				DebugPrintf ("EraseSector at 0x%x, is allready erased\r\n", si->start);
+				return LIBMEM_STATUS_SUCCESS;
+			}
 
-		status = base->WaitBusBusy ();
-		if (status != kStatus_Success)
-			return LibmemStaus_Error;
+			auto *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
+			const uint32_t sectorAddr = libmem_CalculateOffset (h, si->start);
+			if (sectorAddr == UINT32_MAX)
+				return LibmemStaus_Error;
 
-		// Do software reset or clear AHB buffer directly depending on the device capabilities
-		#if defined(FSL_FEATURE_SOC_OTFAD_COUNT) && defined(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK) && defined(FLEXSPI_AHBCR_CLRAHBTXBUF_MASK)
-			base->AHBCR |= FLEXSPI_AHBCR_CLRAHBRXBUF_MASK | FLEXSPI_AHBCR_CLRAHBTXBUF_MASK;
-			base->AHBCR &= ~(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK | FLEXSPI_AHBCR_CLRAHBTXBUF_MASK);
-		#else
+			DebugPrintf ("EraseSector at 0x%x, size: %d\r\n", sectorAddr, si->size);
+
+			status_t status = base->WriteEnable (sectorAddr);
+			if (status != kStatus_Success)
+				return LibmemStaus_Error;
+
+			status = base->SendCommand (sectorAddr, LUT_EraseSector);
+			if (status != kStatus_Success)
+				return LibmemStaus_Error;
+
+			status = base->WaitBusBusy ();
+			if (status != kStatus_Success)
+				return LibmemStaus_Error;
+
+			return LibmemStaus_Success;
+		}
+
+		/*! ProgramPage:
+		\brief Write Data to a Flash-Page
+		\param h Handle to the Flash-Driver
+		\param destination Address to write the Data to. This Address is in the Address-Range of the Controller
+		\param source Address of the Array with the data to write
+		\return static int LibmemStaus_Success when the write operation was successfully, otherwise LibmemStaus_Error */
+		int ProgramPage (libmem_driver_handle_t *h, uint8_t *destination, const uint8_t *source)
+		{
+			auto *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
+			const uint32_t deviceAddress = libmem_CalculateOffset (h, destination);
+			if (deviceAddress == UINT32_MAX)
+				return LibmemStaus_Error;
+
+			DebugPrintf ("ProgramPage at 0x%08X (Offset:0x%X)\r\n", destination, deviceAddress);
+
+			// Write enable
+			status_t status = base->WriteEnable (deviceAddress);
+			if (status != kStatus_Success)
+				return LibmemStaus_Error;
+
+			// Prepare page program command
+			flexspi_transfer_t flashXfer
+			{
+				deviceAddress,				// deviceAddress	- Operation device address.
+				FlexSPI_Helper::port,		// port				- Operation port
+				kFLEXSPI_Write,				// cmdType			- Execution command type.
+				LUT_ProgramPage,			// seqIndex			- Sequence ID for command.
+				1,							// SeqNumber		- Sequence number for command.
+				(uint32_t *)source,			// data				- Data buffer.
+				QSPIFLASH_PAGE_SIZE			// dataSize			- Data size in bytes.
+			};
+			status = FLEXSPI_TransferBlocking (base, &flashXfer);
+			if (status != kStatus_Success)
+				return LibmemStaus_Error;
+
+			status = base->WaitBusBusy ();
+			if (status != kStatus_Success)
+				return LibmemStaus_Error;
+
+			// Do software reset or clear AHB buffer directly depending on the device capabilities
+			#if defined(FSL_FEATURE_SOC_OTFAD_COUNT) && defined(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK) && defined(FLEXSPI_AHBCR_CLRAHBTXBUF_MASK)
+				base->AHBCR |= FLEXSPI_AHBCR_CLRAHBRXBUF_MASK | FLEXSPI_AHBCR_CLRAHBTXBUF_MASK;
+				base->AHBCR &= ~(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK | FLEXSPI_AHBCR_CLRAHBTXBUF_MASK);
+			#else
+				FLEXSPI_SoftwareReset (base);
+			#endif
+			return LibmemStaus_Success;
+		}
+
+		/*! libmem_ProgramPage:
+		\brief The LIBMEM driver's write function.
+		\param h    A pointer to the handle of the LIBMEM driver.
+		\param dest A pointer to the memory address in memory range handled by driver to write data to.
+		\param src  pointer to the memory address to read data from.
+		\param size The number of bytes to write.
+		\return int The LIBMEM status result */
+		int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
+		{
+			DebugPrintf ("libmem_ProgramPage at 0x%08X - size: %d\r\n", dest, size);
+			auto *driver = static_cast<LibmemDriver *>(h);
+			return libmem_driver_paged_write (h, dest, src, size, &driver->PageWriteControlBlock);
+		}
+
+		/*! libmem_EraseSector:
+		\brief The LIBMEM driver's erase function
+		\param h           A pointer to the handle of the LIBMEM driver.
+		\param start       A pointer to the initial memory address in memory range handled by driver to erase.
+		\param size        The number of bytes to erase.
+		\param erase_start A pointer to a location in memory to store a pointer to the start of the memory range that has actually been erased or nullptr if not required.
+		\param erase_size  A pointer to a location in memory to store the size in bytes of the memory range that has actually been erased or nullptr if not required.
+		\return int        The LIBMEM status result */
+		int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size)
+		{
+			DebugPrintf ("libmem_EraseSector at 0x%08X - size: %d\r\n", start, size);
+			const int ret = libmem_foreach_sector_in_range (h, start, size, EraseSector, erase_start, erase_size);
+
+			auto *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
 			FLEXSPI_SoftwareReset (base);
-		#endif
-		return LibmemStaus_Success;
-	}
 
-	/*! libmem_ProgramPage:
-	\brief The LIBMEM driver's write function.
-	\param h    A pointer to the handle of the LIBMEM driver.
-	\param dest A pointer to the memory address in memory range handled by driver to write data to.
-	\param src  pointer to the memory address to read data from.
-	\param size The number of bytes to write.
-	\return int The LIBMEM status result */
-	static int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
-	{
-		DebugPrintf ("libmem_ProgramPage at 0x%x - size: %d\r\n", dest, size);
-		LibmemDriver *driver = static_cast<LibmemDriver *>(h);
-		return libmem_driver_paged_write (h, dest, src, size, &driver->PageWriteControlBlock);
-	}
-
-	/*! libmem_EraseSector:
-	\brief The LIBMEM driver's erase function
-	\param h           A pointer to the handle of the LIBMEM driver.
-	\param start       A pointer to the initial memory address in memory range handled by driver to erase.
-	\param size        The number of bytes to erase.
-	\param erase_start A pointer to a location in memory to store a pointer to the start of the memory range that has actually been erased or nullptr if not required.
-	\param erase_size  A pointer to a location in memory to store the size in bytes of the memory range that has actually been erased or nullptr if not required.
-	\return int        The LIBMEM status result */
-	static int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size)
-	{
-		DebugPrintf ("libmem_EraseSector at 0x%x - size: %d\r\n", start, size);
-		int ret = libmem_foreach_sector_in_range (h, start, size, EraseSector, erase_start, erase_size);
-
-		FlexSPI_Helper *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
-		FLEXSPI_SoftwareReset (base);
-
-		return ret;
-	}
-
-	/*! libmem_Flush:
-	\brief The LIBMEM driver's flush function.
-	\param h    A pointer to the handle of the LIBMEM driver. 
-	\return int The LIBMEM status result */
-	static int libmem_Flush (libmem_driver_handle_t *h)
-	{
-		DebugPrint ("libmem_Flush\r\n");
-		LibmemDriver *driver = static_cast<LibmemDriver *>(h);
-		return libmem_driver_paged_write_flush (h, &driver->PageWriteControlBlock);
-	}
-
-	/*! libmem_Read:
-	\brief The LIBMEM driver's read extended function.
-	\param h    A pointer to the handle of the LIBMEM driver.
-	\param dest A pointer to the initial memory address to write data to.
-	\param src  A pointer to the initial memory address in the memory range handled by the driver to read data from.
-	\param size The number of bytes to write.
-	\return int The LIBMEM status result */
-	static int libmem_Read (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
-	{
-		DebugPrintf ("Read at 0x%x, size: %d\r\n", src, size);
-		if (size == 0)
-			return LibmemStaus_InvalidParameter;
-	//	memcpy (dest, src, size);
-
-		flexspi_transfer_t flashXfer
-		{
-			(uint32_t)src,		  // Operation device address.
-			FlexSPI_Helper::port, // Operation port.
-			kFLEXSPI_Read,		  // Execution command type.
-			LUT_ReadArray,		  // Sequence ID for command.
-			1,					  // Sequence number for command.
-			(uint32_t *)dest,	  // Data buffer.
-			size				  // Data size in bytes.
-		};
-
-		FlexSPI_Helper *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
-		status_t status = FLEXSPI_TransferBlocking (base, &flashXfer);
-		if (status != kStatus_Success)
-			return status;
-
-		return LibmemStaus_Success;
-	}
-
-
-	/*! libmem_CRC32:
-	\brief The LIBMEM driver's crc32 extended function.
-	\param h     A pointer to the handle of the LIBMEM driver.
-	\param start A pointer to the start of the address range.
-	\param size  The size of the address range in bytes.
-	\param crc   The initial CRC-32 value.
-	\return uint32_t The computed CRC-32 value. */
-	static uint32_t libmem_CRC32 ([[maybe_unused]]libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc)
-	{
-		DebugPrintf ("Calculate CRC from 0x%X, size 0x%X, calculated CRC: 0x%X\r\n", start, size, crc);
-		static uint8_t page_buffer[4096];
-		static constexpr size_t BufferSize = sizeof (page_buffer);
-
-		while (size >= BufferSize)
-		{
-			libmem_Read (h, page_buffer, const_cast<uint8_t *>(start), BufferSize);
-			crc = libmem_crc32_direct (page_buffer,  BufferSize, crc);
-			start += BufferSize;
-			size  -= BufferSize;
+			return ret;
 		}
-		if (size)
+
+		/*! libmem_Flush:
+		\brief The LIBMEM driver's flush function.
+		\param h    A pointer to the handle of the LIBMEM driver. 
+		\return int The LIBMEM status result */
+		int libmem_Flush (libmem_driver_handle_t *h)
 		{
-			libmem_Read (h, page_buffer, const_cast<uint8_t *>(start), BufferSize);
-			crc = libmem_crc32_direct (page_buffer, size, crc);
+			DebugPrint ("libmem_Flush\r\n");
+			auto *driver = static_cast<LibmemDriver *>(h);
+			return libmem_driver_paged_write_flush (h, &driver->PageWriteControlBlock);
 		}
-		return crc;
-	}
+
+		/*! libmem_Read:
+		\brief The LIBMEM driver's read extended function.
+		\param h    A pointer to the handle of the LIBMEM driver.
+		\param dest A pointer to the initial memory address to write data to.
+		\param src  A pointer to the initial memory address in the memory range handled by the driver to read data from.
+		\param size The number of bytes to write.
+		\return int The LIBMEM status result */
+		int libmem_Read (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
+		{
+			DebugPrintf ("Read at 0x%x, size: %d\r\n", src, size);
+			if (size == 0)
+				return LibmemStaus_InvalidParameter;
+//			memcpy (dest, src, size);
+
+			flexspi_transfer_t flashXfer
+			{
+				(uint32_t)src,		  // Operation device address.
+				FlexSPI_Helper::port, // Operation port.
+				kFLEXSPI_Read,		  // Execution command type.
+				LUT_ReadArray,		  // Sequence ID for command.
+				1,					  // Sequence number for command.
+				(uint32_t *)dest,	  // Data buffer.
+				size				  // Data size in bytes.
+			};
+
+			auto *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
+			const status_t status = FLEXSPI_TransferBlocking (base, &flashXfer);
+			if (status != kStatus_Success)
+				return status;
+
+			return LibmemStaus_Success;
+		}
+
+
+		/*! libmem_CRC32:
+		\brief The LIBMEM driver's crc32 extended function.
+		\param h     A pointer to the handle of the LIBMEM driver.
+		\param start A pointer to the start of the address range.
+		\param size  The size of the address range in bytes.
+		\param crc   The initial CRC-32 value.
+		\return uint32_t The computed CRC-32 value. */
+		uint32_t libmem_CRC32 ([[maybe_unused]]libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc)
+		{
+			DebugPrintf ("Calculate CRC from 0x%X, size 0x%X, calculated CRC: 0x%X\r\n", start, size, crc);
+			static std::array <uint8_t, 4096> pageBuffer;
+
+			while (size >= pageBuffer.size())
+			{
+				libmem_Read (h, pageBuffer.data(), const_cast<uint8_t *>(start), pageBuffer.size());
+				crc = libmem_crc32_direct (pageBuffer.data(),  pageBuffer.size(), crc);
+				start += pageBuffer.size();
+				size  -= pageBuffer.size();
+			}
+			if (size > 0)
+			{
+				libmem_Read (h, pageBuffer.data(), const_cast<uint8_t *>(start), pageBuffer.size());
+				crc = libmem_crc32_direct (pageBuffer.data(), size, crc);
+			}
+			return crc;
+		}
+	} // namespace
 } // namespace Xspi
 
 namespace Hyperflash
 {
-	/*! WriteEnable:
-	\brief Send write-enable command
-	\param base The Flex-SPI-base to use
-	\param baseAddr The base-address of the command
-	\return status_t kStatus_Success if the operation was successfully */
-	static status_t WriteEnable (FlexSPI_Helper *base, uint32_t baseAddr)
+	namespace
 	{
-		return base->SendCommand (baseAddr, static_cast<LUT_CommandOffsets>(Spansion::Command::WriteEnable), 2);
-	}
-
-	/*! WaitBusBusy:
-	\brief Wait until the Write/erase operation is finished and the Flash is not busy anymore
-	\param base The Flex-SPI-base to use
-	\return status_t kStatus_Success if the operation was successfully */
-	status_t WaitBusBusy (FlexSPI_Helper *base)
-	{
-		// Wait status ready.
-		bool isBusy{false};
-		uint32_t readValue{};
-		status_t status{};
-		flexspi_transfer_t flashXfer
+		/*! WriteEnable:
+		\brief Send write-enable command
+		\param base The Flex-SPI-base to use
+		\param baseAddr The base-address of the command
+		\return status_t kStatus_Success if the operation was successfully */
+		status_t WriteEnable (FlexSPI_Helper *base, uint32_t baseAddr)
 		{
-			0,														// deviceAddress	- Operation device address.
-			FlexSPI_Helper::port,									// port				- Operation port
-			kFLEXSPI_Read,											// cmdType			- Execution command type.
-			static_cast<uint8_t>(Spansion::Command::ReadStatus),	// seqIndex			- Sequence ID for command.
-			2,														// SeqNumber		- Sequence number for command.
-			&readValue,												// data				- Data buffer.
-			2														// dataSize			- Data size in bytes.
-		};
-
-		do
-		{
-			status = FLEXSPI_TransferBlocking (base, &flashXfer);
-			if (status != kStatus_Success)
-				return status;
-
-			if (readValue & 0x8000)
-				isBusy = false;
-			else
-				isBusy = true;
-
-			if (readValue & 0x3200)
-			{
-				status = kStatus_Fail;
-				break;
-			}
+			return base->SendCommand (baseAddr, static_cast<LUT_CommandOffsets>(Spansion::Command::WriteEnable), 2);
 		}
-		while (isBusy);
 
-		return status;
-	}
-	/*! EraseChip:
-	\brief Erase the whole-Flash-memory
-	\param base The FlexSPI-Interface where the Flash is located which should be erased
-	\return static status_t Status of the Operation - kStatus_Success when successfully */
-	[[maybe_unused]] static status_t EraseChip (FlexSPI_Helper *base)
-	{
-		DebugPrintf ("EraseChip\r\n");
-
-		status_t stat = WriteEnable (base, 0);
-		if (stat != kStatus_Success)
-			return stat;
-
-		stat = base->SendCommand (0, static_cast<LUT_CommandOffsets>(Spansion::Command::EraseChip), 4);
-		if (stat != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
-
-		return WaitBusBusy (base);
-	}
-
-	/*! EraseSector:
-	\brief Erase a sector of the Flash-Memory
-	\param h Handle to the Flash-Driver
-	\param si Information about the sector which should be erased
-	\return static int LIBMEM_STATUS_SUCCESS when the erase operation was successfully, otherwise LIBMEM_STATUS_ERROR */
-	static status_t EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
-	{
-		static constexpr uint32_t SectorSize = 256 * 1024;
-		if (IsSectorEmpty (reinterpret_cast<uint32_t *>(si->start), SectorSize))
+		/*! WaitBusBusy:
+		\brief Wait until the Write/erase operation is finished and the Flash is not busy anymore
+		\param base The Flex-SPI-base to use
+		\return status_t kStatus_Success if the operation was successfully */
+		status_t WaitBusBusy (FlexSPI_Helper *base)
 		{
-			DebugPrintf ("EraseSector at 0x%x, is allready erased\r\n", si->start);
+			// Wait status ready.
+			bool isBusy{false};
+			uint32_t readValue{};
+			status_t status{};
+			flexspi_transfer_t flashXfer
+			{
+				0,														// deviceAddress	- Operation device address.
+				FlexSPI_Helper::port,									// port				- Operation port
+				kFLEXSPI_Read,											// cmdType			- Execution command type.
+				static_cast<uint8_t>(Spansion::Command::ReadStatus),	// seqIndex			- Sequence ID for command.
+				2,														// SeqNumber		- Sequence number for command.
+				&readValue,												// data				- Data buffer.
+				2														// dataSize			- Data size in bytes.
+			};
+
+			do
+			{
+				status = FLEXSPI_TransferBlocking (base, &flashXfer);
+				if (status != kStatus_Success)
+					return status;
+
+				isBusy = !(readValue & 0x8000U);
+
+				if (readValue & 0x3200U)
+				{
+					status = kStatus_Fail;
+					break;
+				}
+			}
+			while (isBusy);
+
+			return status;
+		}
+
+		/*! EraseChip:
+		\brief Erase the whole-Flash-memory
+		\param base The FlexSPI-Interface where the Flash is located which should be erased
+		\return static status_t Status of the Operation - kStatus_Success when successfully */
+		[[maybe_unused]] status_t EraseChip (FlexSPI_Helper *base)
+		{
+			DebugPrintf ("EraseChip\r\n");
+
+			status_t stat = WriteEnable (base, 0);
+			if (stat != kStatus_Success)
+				return stat;
+
+			stat = base->SendCommand (0, static_cast<LUT_CommandOffsets>(Spansion::Command::EraseChip), 4);
+			if (stat != kStatus_Success)
+				return LIBMEM_STATUS_ERROR;
+
+			return WaitBusBusy (base);
+		}
+
+		/*! EraseSector:
+		\brief Erase a sector of the Flash-Memory
+		\param h Handle to the Flash-Driver
+		\param si Information about the sector which should be erased
+		\return static int LIBMEM_STATUS_SUCCESS when the erase operation was successfully, otherwise LIBMEM_STATUS_ERROR */
+		status_t EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
+		{
+			static constexpr uint32_t SectorSize = 256 * 1024;
+			if (IsSectorEmpty (reinterpret_cast<uint32_t *>(si->start), SectorSize))
+			{
+				DebugPrintf ("EraseSector at 0x%08X, is allready erased\r\n", si->start);
+				return LIBMEM_STATUS_SUCCESS;
+			}
+
+			auto *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
+			const uint32_t sectorAddr = libmem_CalculateOffset (h, si->start);
+			if (sectorAddr == UINT32_MAX)
+				return LIBMEM_STATUS_INVALID_RANGE;
+
+			DebugPrintf ("EraseSector at 0x%08X, size: %d\r\n", sectorAddr, si->size);
+
+			// Write enable
+			status_t status = WriteEnable (base, sectorAddr);
+			if (status != kStatus_Success)
+				return LIBMEM_STATUS_ERROR;
+
+			status = base->SendCommand (sectorAddr, static_cast<LUT_CommandOffsets>(Spansion::Command::EraseSector), 4);
+			if (status != kStatus_Success)
+				return LibmemStaus_Error;
+
+			status = WaitBusBusy (base);
+			if (status != kStatus_Success)
+				return LIBMEM_STATUS_ERROR;
+
 			return LIBMEM_STATUS_SUCCESS;
 		}
 
-		FlexSPI_Helper *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
-		const uint32_t sectorAddr = libmem_CalculateOffset (h, si->start);
-		if (sectorAddr == UINT32_MAX)
-			return LIBMEM_STATUS_INVALID_RANGE;
-
-		DebugPrintf ("EraseSector at 0x%x, size: %d\r\n", sectorAddr, si->size);
-
-		// Write enable
-		status_t status = WriteEnable (base, sectorAddr);
-		if (status != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
-
-		status = base->SendCommand (sectorAddr, static_cast<LUT_CommandOffsets>(Spansion::Command::EraseSector), 4);
-		if (status != kStatus_Success)
-			return LibmemStaus_Error;
-
-		status = WaitBusBusy (base);
-		if (status != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
-
-		return LIBMEM_STATUS_SUCCESS;
-	}
-
-	/*! ProgramPage:
-	\brief Write Data to a Flash-Page
-	\param h Handle to the Flash-Driver
-	\param destination Address to write the Data to. This Address is in the Address-Range of the Controller
-	\param source Address of the Array with the Data to write
-	\return static int LIBMEM_STATUS_SUCCESS when the write operation was successfully, otherwise LIBMEM_STATUS_ERROR */
-	static int ProgramPage (libmem_driver_handle_t *h, uint8_t *destination, const uint8_t *source)
-	{
-		FlexSPI_Helper *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
-		const uint32_t deviceAddress = libmem_CalculateOffset (h, destination);
-		if (deviceAddress == UINT32_MAX)
-			return LIBMEM_STATUS_INVALID_RANGE;
-
-		DebugPrintf ("ProgramPage at 0x%X\r\n", deviceAddress);
-
-		// Write enable
-		status_t status = WriteEnable (base, deviceAddress);
-		if (status != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
-
-		// Prepare page program command
-		flexspi_transfer_t flashXfer
+		/*! ProgramPage:
+		\brief Write Data to a Flash-Page
+		\param h Handle to the Flash-Driver
+		\param destination Address to write the Data to. This Address is in the Address-Range of the Controller
+		\param source Address of the Array with the Data to write
+		\return static int LIBMEM_STATUS_SUCCESS when the write operation was successfully, otherwise LIBMEM_STATUS_ERROR */
+		int ProgramPage (libmem_driver_handle_t *h, uint8_t *destination, const uint8_t *source)
 		{
-			deviceAddress,											// deviceAddress	- Operation device address.
-			FlexSPI_Helper::port,									// port				- Operation port
-			kFLEXSPI_Write,											// cmdType			- Execution command type.
-			static_cast<uint8_t>(Spansion::Command::PageProgram),	// seqIndex			- Sequence ID for command.
-			2,														// SeqNumber		- Sequence number for command.
-			(uint32_t *)source,										// data				- Data buffer.
-			HYPERFLASH_PAGE_SIZE									// dataSize			- Data size in bytes.
-		};
-		status = FLEXSPI_TransferBlocking (base, &flashXfer);
-		if (status != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
+			auto *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
+			const uint32_t deviceAddress = libmem_CalculateOffset (h, destination);
+			if (deviceAddress == UINT32_MAX)
+				return LIBMEM_STATUS_INVALID_RANGE;
 
-		status = WaitBusBusy (base);
-		if (status != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
+			DebugPrintf ("ProgramPage at 0x%X\r\n", deviceAddress);
 
-//		// Do software reset or clear AHB buffer directly depending on the device capabilities
-//		#if defined(FSL_FEATURE_SOC_OTFAD_COUNT) && defined(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK) && defined(FLEXSPI_AHBCR_CLRAHBTXBUF_MASK)
-//			base->AHBCR |= FLEXSPI_AHBCR_CLRAHBRXBUF_MASK | FLEXSPI_AHBCR_CLRAHBTXBUF_MASK;
-//			base->AHBCR &= ~(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK | FLEXSPI_AHBCR_CLRAHBTXBUF_MASK);
-//		#else
-//			FLEXSPI_SoftwareReset (base);
-//		#endif
-		return LIBMEM_STATUS_SUCCESS;
-	}
+			// Write enable
+			status_t status = WriteEnable (base, deviceAddress);
+			if (status != kStatus_Success)
+				return LIBMEM_STATUS_ERROR;
 
-	/*! libmem_ProgramPage:
-	\brief The LIBMEM driver's write function.
-	\param h    A pointer to the handle of the LIBMEM driver.
-	\param dest A pointer to the memory address in memory range handled by driver to write data to.
-	\param src  pointer to the memory address to read data from.
-	\param size The number of bytes to write.
-	\return int The LIBMEM status result */
-	static int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
-	{
-		DebugPrintf ("libmem_ProgramPage at 0x%x - size: %d\r\n", dest, size);
-		LibmemDriver *driver = static_cast<LibmemDriver *>(h);
-		return libmem_driver_paged_write (h, dest, src, size, &driver->PageWriteControlBlock);
-	}
+			// Prepare page program command
+			flexspi_transfer_t flashXfer
+			{
+				deviceAddress,											// deviceAddress	- Operation device address.
+				FlexSPI_Helper::port,									// port				- Operation port
+				kFLEXSPI_Write,											// cmdType			- Execution command type.
+				static_cast<uint8_t>(Spansion::Command::PageProgram),	// seqIndex			- Sequence ID for command.
+				2,														// SeqNumber		- Sequence number for command.
+				const_cast<uint32_t *>(reinterpret_cast<const uint32_t *>(source)),// data				- Data buffer.
+				HYPERFLASH_PAGE_SIZE									// dataSize			- Data size in bytes.
+			};
+			status = FLEXSPI_TransferBlocking (base, &flashXfer);
+			if (status != kStatus_Success)
+				return LIBMEM_STATUS_ERROR;
 
-	/*! libmem_EraseSector:
-	\brief The LIBMEM driver's erase function
-	\param h           A pointer to the handle of the LIBMEM driver.
-	\param start       A pointer to the initial memory address in memory range handled by driver to erase.
-	\param size        The number of bytes to erase.
-	\param erase_start A pointer to a location in memory to store a pointer to the start of the memory range that has actually been erased or nullptr if not required.
-	\param erase_size  A pointer to a location in memory to store the size in bytes of the memory range that has actually been erased or nullptr if not required.
-	\return int        The LIBMEM status result */
-	static int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size)
-	{
-		return libmem_foreach_sector_in_range (h, start, size, EraseSector, erase_start, erase_size);
-	}
+			status = WaitBusBusy (base);
+			if (status != kStatus_Success)
+				return LIBMEM_STATUS_ERROR;
 
-	/*! libmem_Flush:
-	\brief The LIBMEM driver's flush function.
-	\param h    A pointer to the handle of the LIBMEM driver. 
-	\return int The LIBMEM status result */
-	static int libmem_Flush (libmem_driver_handle_t *h)
-	{
-		DebugPrint ("libmem_Flush\r\n");
-		LibmemDriver *driver = static_cast<LibmemDriver *>(h);
-		return libmem_driver_paged_write_flush (h, &driver->PageWriteControlBlock);
-	}
+//			// Do software reset or clear AHB buffer directly depending on the device capabilities
+//			#if defined(FSL_FEATURE_SOC_OTFAD_COUNT) && defined(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK) && defined(FLEXSPI_AHBCR_CLRAHBTXBUF_MASK)
+//				base->AHBCR |= FLEXSPI_AHBCR_CLRAHBRXBUF_MASK | FLEXSPI_AHBCR_CLRAHBTXBUF_MASK;
+//				base->AHBCR &= ~(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK | FLEXSPI_AHBCR_CLRAHBTXBUF_MASK);
+//			#else
+//				FLEXSPI_SoftwareReset (base);
+//			#endif
+			return LIBMEM_STATUS_SUCCESS;
+		}
 
-	/*! libmem_Read:
-	\brief The LIBMEM driver's read extended function.
-	\param h    A pointer to the handle of the LIBMEM driver.
-	\param dest A pointer to the initial memory address to write data to.
-	\param src  A pointer to the initial memory address in the memory range handled by the driver to read data from.
-	\param size The number of bytes to write.
-	\return int The LIBMEM status result */
-	static int libmem_Read (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
-	{
-		(void)h;
-		if (size != 0)
-			memcpy (dest, src, size);
-		return LIBMEM_STATUS_SUCCESS;
-	}
+		/*! libmem_ProgramPage:
+		\brief The LIBMEM driver's write function.
+		\param h    A pointer to the handle of the LIBMEM driver.
+		\param dest A pointer to the memory address in memory range handled by driver to write data to.
+		\param src  pointer to the memory address to read data from.
+		\param size The number of bytes to write.
+		\return int The LIBMEM status result */
+		int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
+		{
+			DebugPrintf ("libmem_ProgramPage at 0x%x - size: %d\r\n", dest, size);
+			auto *driver = static_cast<LibmemDriver *>(h);
+			return libmem_driver_paged_write (h, dest, src, size, &driver->PageWriteControlBlock);
+		}
 
-	/*! libmem_CRC32:
-	\brief The LIBMEM driver's crc32 extended function.
-	\param h     A pointer to the handle of the LIBMEM driver.
-	\param start A pointer to the start of the address range.
-	\param size  The size of the address range in bytes.
-	\param crc   The initial CRC-32 value.
-	\return uint32_t The computed CRC-32 value. */
-	static uint32_t libmem_CRC32 (libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc)
-	{
-		(void)h;
-		crc = libmem_crc32_direct (start, size, crc);
-		return crc;
-	}
-}
+		/*! libmem_EraseSector:
+		\brief The LIBMEM driver's erase function
+		\param h           A pointer to the handle of the LIBMEM driver.
+		\param start       A pointer to the initial memory address in memory range handled by driver to erase.
+		\param size        The number of bytes to erase.
+		\param erase_start A pointer to a location in memory to store a pointer to the start of the memory range that has actually been erased or nullptr if not required.
+		\param erase_size  A pointer to a location in memory to store the size in bytes of the memory range that has actually been erased or nullptr if not required.
+		\return int        The LIBMEM status result */
+		int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size)
+		{
+			return libmem_foreach_sector_in_range (h, start, size, EraseSector, erase_start, erase_size);
+		}
+
+		/*! libmem_Flush:
+		\brief The LIBMEM driver's flush function.
+		\param h    A pointer to the handle of the LIBMEM driver. 
+		\return int The LIBMEM status result */
+		int libmem_Flush (libmem_driver_handle_t *h)
+		{
+			DebugPrint ("libmem_Flush\r\n");
+			auto *driver = static_cast<LibmemDriver *>(h);
+			return libmem_driver_paged_write_flush (h, &driver->PageWriteControlBlock);
+		}
+
+		/*! libmem_Read:
+		\brief The LIBMEM driver's read extended function.
+		\param h    A pointer to the handle of the LIBMEM driver.
+		\param dest A pointer to the initial memory address to write data to.
+		\param src  A pointer to the initial memory address in the memory range handled by the driver to read data from.
+		\param size The number of bytes to write.
+		\return int The LIBMEM status result */
+		int libmem_Read (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
+		{
+			(void)h;
+			if (size != 0)
+				memcpy (dest, src, size);
+			return LIBMEM_STATUS_SUCCESS;
+		}
+
+		/*! libmem_CRC32:
+		\brief The LIBMEM driver's crc32 extended function.
+		\param h     A pointer to the handle of the LIBMEM driver.
+		\param start A pointer to the start of the address range.
+		\param size  The size of the address range in bytes.
+		\param crc   The initial CRC-32 value.
+		\return uint32_t The computed CRC-32 value. */
+		uint32_t libmem_CRC32 (libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc)
+		{
+			(void)h;
+			crc = libmem_crc32_direct (start, size, crc);
+			return crc;
+		}
+	} // namespace 
+} // namesapce Hyperflash

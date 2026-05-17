@@ -1,12 +1,6 @@
 # CPU Support package for the iMXRT-Family from NXP
 
-This CPU Support package enables the development for the iMXRT microcontroller family using the [Crossworks development environment](https://rowley.co.uk/arm/index.htm) from Rowley. The package provides all needed data and information to enabled the Development Environment to compile and debug applications on the iMXRT microcontroller
-This Includes:
-
-- CMSIS-Specific Code Files
-- Memory-Map-Files
-- Register-Descriptions for debugging
-- Loader for programming the application to the Flash-memory
+This repository contains a [CrossWorks](https://rowley.co.uk/arm/index.htm) CPU Support package for NXP i.MXRT microcontrollers. It provides CMSIS files, memory maps, register descriptions, and an external flash loader so CrossWorks can compile, debug, and program i.MX RT targets.
 
 The Package is based on the [work from Rowley](https://www.rowleydownload.co.uk/arm/packages/iMXRT.htm). The original versions are included in the git-History and are tagged with a Rowley label.
 This package enhances the original package by

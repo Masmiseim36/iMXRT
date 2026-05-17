@@ -1015,62 +1015,6 @@
 		</groupEntry>
 
 
-		<groupEntry name="MIMXRT633SFAWBR" aka="MIMXRT633SFxxxR" family="iMXRT600">
-			<property name="macros" value="DeviceName=MIMXRT633S;Family=iMXRT600" />
-			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT600.xml" />
-			<property name="arm_core_type" value="Cortex-M33" />
-			<property name="arm_fpu_type" value="FPv5-SP-D16" />
-			<property name="arm_v8M_has_cmse" value="Yes" />
-			<property name="arm_v8M_has_dsp" value="Yes" />
-			<cdefine name="CPU_MIMXRT633SFAWBR" />
-		</groupEntry>
-		<groupEntry name="MIMXRT633SFFOB" aka="MIMXRT633SxxxB" family="iMXRT600">
-			<property name="macros" value="DeviceName=MIMXRT633S;Family=iMXRT600" />
-			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT600.xml" />
-			<property name="arm_core_type" value="Cortex-M33" />
-			<property name="arm_fpu_type" value="FPv5-SP-D16" />
-			<property name="arm_v8M_has_cmse" value="Yes" />
-			<property name="arm_v8M_has_dsp" value="Yes" />
-			<cdefine name="CPU_MIMXRT633SFFOB" />
-		</groupEntry>
-		<groupEntry name="MIMXRT633SFVKB" aka="MIMXRT633SxxxB" family="iMXRT600">
-			<property name="macros" value="DeviceName=MIMXRT633S;Family=iMXRT600" />
-			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT600.xml" />
-			<property name="arm_core_type" value="Cortex-M33" />
-			<property name="arm_fpu_type" value="FPv5-SP-D16" />
-			<property name="arm_v8M_has_cmse" value="Yes" />
-			<property name="arm_v8M_has_dsp" value="Yes" />
-			<cdefine name="CPU_MIMXRT633SFVKB" />
-		</groupEntry>
-
-		<groupEntry name="MIMXRT685SFAWBR_cm33" aka="MIMXRT685SFxxxR_cm33" family="iMXRT600">
-			<property name="macros" value="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
-			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT600.xml" />
-			<property name="arm_core_type" value="Cortex-M33" />
-			<property name="arm_fpu_type" value="FPv5-SP-D16" />
-			<property name="arm_v8M_has_cmse" value="Yes" />
-			<property name="arm_v8M_has_dsp" value="Yes" />
-			<cdefine name="CPU_MIMXRT685SFAWBR_cm33" />
-		</groupEntry>
-		<groupEntry name="MIMXRT685SFFOB_cm33" aka="MIMXRT685SxxxB_cm33" family="iMXRT600">
-			<property name="macros" value="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
-			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT600.xml" />
-			<property name="arm_core_type" value="Cortex-M33" />
-			<property name="arm_fpu_type" value="FPv5-SP-D16" />
-			<property name="arm_v8M_has_cmse" value="Yes" />
-			<property name="arm_v8M_has_dsp" value="Yes" />
-			<cdefine name="CPU_MIMXRT685SFFOB_cm33" />
-		</groupEntry>
-		<groupEntry name="MIMXRT685SFVKB_cm33" aka="MIMXRT685SxxxB_cm33" family="iMXRT600">
-			<property name="macros" value="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
-			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT600.xml" />
-			<property name="arm_core_type" value="Cortex-M33" />
-			<property name="arm_fpu_type" value="FPv5-SP-D16" />
-			<property name="arm_v8M_has_cmse" value="Yes" />
-			<property name="arm_v8M_has_dsp" value="Yes" />
-			<cdefine name="CPU_MIMXRT685SFVKB_cm33" />
-		</groupEntry>
-
 		<groupEntry name="MIMXRT533SFAWC" aka="MIMXRT533SFxxC" family="iMXRT500">
 			<property name="macros" value="DeviceName=MIMXRT533SF;Family=iMXRT500" />
 			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT500.xml" />
@@ -1126,6 +1070,63 @@
 			<property name="arm_v8M_has_cmse" value="Yes" />
 			<property name="arm_v8M_has_dsp" value="Yes" />
 			<cdefine name="CPU_MIMXRT595SFFOC_cm33" />
+		</groupEntry>
+
+
+		<groupEntry name="MIMXRT633SFAWBR" aka="MIMXRT633SFxxxR" family="iMXRT600">
+			<property name="macros" value="DeviceName=MIMXRT633S;Family=iMXRT600" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT600.xml" />
+			<property name="arm_core_type" value="Cortex-M33" />
+			<property name="arm_fpu_type" value="FPv5-SP-D16" />
+			<property name="arm_v8M_has_cmse" value="Yes" />
+			<property name="arm_v8M_has_dsp" value="Yes" />
+			<cdefine name="CPU_MIMXRT633SFAWBR" />
+		</groupEntry>
+		<groupEntry name="MIMXRT633SFFOB" aka="MIMXRT633SxxxB" family="iMXRT600">
+			<property name="macros" value="DeviceName=MIMXRT633S;Family=iMXRT600" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT600.xml" />
+			<property name="arm_core_type" value="Cortex-M33" />
+			<property name="arm_fpu_type" value="FPv5-SP-D16" />
+			<property name="arm_v8M_has_cmse" value="Yes" />
+			<property name="arm_v8M_has_dsp" value="Yes" />
+			<cdefine name="CPU_MIMXRT633SFFOB" />
+		</groupEntry>
+		<groupEntry name="MIMXRT633SFVKB" aka="MIMXRT633SxxxB" family="iMXRT600">
+			<property name="macros" value="DeviceName=MIMXRT633S;Family=iMXRT600" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT600.xml" />
+			<property name="arm_core_type" value="Cortex-M33" />
+			<property name="arm_fpu_type" value="FPv5-SP-D16" />
+			<property name="arm_v8M_has_cmse" value="Yes" />
+			<property name="arm_v8M_has_dsp" value="Yes" />
+			<cdefine name="CPU_MIMXRT633SFVKB" />
+		</groupEntry>
+
+		<groupEntry name="MIMXRT685SFAWBR_cm33" aka="MIMXRT685SFxxxR_cm33" family="iMXRT600">
+			<property name="macros" value="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT600.xml" />
+			<property name="arm_core_type" value="Cortex-M33" />
+			<property name="arm_fpu_type" value="FPv5-SP-D16" />
+			<property name="arm_v8M_has_cmse" value="Yes" />
+			<property name="arm_v8M_has_dsp" value="Yes" />
+			<cdefine name="CPU_MIMXRT685SFAWBR_cm33" />
+		</groupEntry>
+		<groupEntry name="MIMXRT685SFFOB_cm33" aka="MIMXRT685SxxxB_cm33" family="iMXRT600">
+			<property name="macros" value="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT600.xml" />
+			<property name="arm_core_type" value="Cortex-M33" />
+			<property name="arm_fpu_type" value="FPv5-SP-D16" />
+			<property name="arm_v8M_has_cmse" value="Yes" />
+			<property name="arm_v8M_has_dsp" value="Yes" />
+			<cdefine name="CPU_MIMXRT685SFFOB_cm33" />
+		</groupEntry>
+		<groupEntry name="MIMXRT685SFVKB_cm33" aka="MIMXRT685SxxxB_cm33" family="iMXRT600">
+			<property name="macros" value="DeviceName=MIMXRT685S_cm33;Family=iMXRT600" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT600.xml" />
+			<property name="arm_core_type" value="Cortex-M33" />
+			<property name="arm_fpu_type" value="FPv5-SP-D16" />
+			<property name="arm_v8M_has_cmse" value="Yes" />
+			<property name="arm_v8M_has_dsp" value="Yes" />
+			<cdefine name="CPU_MIMXRT685SFVKB_cm33" />
 		</groupEntry>
 	</group>
 
