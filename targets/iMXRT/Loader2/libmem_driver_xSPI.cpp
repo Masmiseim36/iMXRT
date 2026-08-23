@@ -85,7 +85,9 @@ OF SUCH DAMAGE. */
 				.sampleClkConfig
 				{
 					.sampleClkSource   = kXSPI_SampleClkFromDqsPadLoopback, // ToDo Check this // kXSPI_SampleClkFromExternalDQS,  /*!< Device support Data strobe signal.  */
-					.enableDQSLatency  = false,
+					#if (defined(FSL_FEATURE_XSPI_HAS_DQS_LAT_EN) && FSL_FEATURE_XSPI_HAS_DQS_LAT_EN)
+						.enableDQSLatency  = false,
+					#endif
 					.dllConfig
 					{
 						.dllMode       = kXSPI_AutoUpdateMode,
@@ -113,7 +115,9 @@ OF SUCH DAMAGE. */
 						.enableCdl8           = true,
 					},
 				},
-				.ptrDeviceDdrConfig    = &FlashDDrConfig,
+				#if (defined(FSL_FEATURE_XSPI_HAS_DDR) && FSL_FEATURE_XSPI_HAS_DDR)
+					.ptrDeviceDdrConfig    = &FlashDDrConfig,
+				#endif
 				.addrMode              = kXSPI_DeviceByteAddressable,
 				.columnAddrWidth       = 0U,
 				.enableCASInterleaving = false,
@@ -157,6 +161,9 @@ OF SUCH DAMAGE. */
 	\return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
 	LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryType memType)
 	{
+	#if (defined(MIMXRT735S_cm33_core0_SERIES) || defined(MIMXRT735S_cm33_core1_SERIES) || \
+		   defined(MIMXRT758S_cm33_core0_SERIES) || defined(MIMXRT758S_cm33_core1_SERIES) || \
+		   defined(MIMXRT798S_cm33_core0_SERIES) || defined(MIMXRT798S_cm33_core1_SERIES))
 		// Clock source, divider and power domains are per instance. Every instance has its own PLL-PFD.
 		switch (base->GetBaseAddr ())
 		{
@@ -191,6 +198,9 @@ OF SUCH DAMAGE. */
 				return LibmemStaus_InvalidDevice;
 		}
 		POWER_ApplyPD   ();
+	#elif (defined(MIMXRT2661_SERIES) || defined(MIMXRT2662_SERIES) || defined(MIMXRT2663_SERIES))
+		#warning "Fill me"
+	#endif
 
 		xspi_ahb_access_config_t xspiAhbAccessConfig
 		{
@@ -255,7 +265,10 @@ OF SUCH DAMAGE. */
 			{
 				.highPayload           = 0x5A5A5A5AUL,
 				.lowPayload            = 0x5A5A5A5AUL
-			}
+			},
+			#if (defined(FSL_FEATURE_XSPI_HAS_WRTER_EN_BIT) && FSL_FEATURE_XSPI_HAS_WRTER_EN_BIT)
+				.enableWriteTerminate = true,
+			#endif                         /* FSL_FEATURE_XSPI_HAS_WRTER_EN_BIT */
 		};
 		xspi_ip_access_config_t xspiIpAccessConfig
 		{
@@ -268,17 +281,19 @@ OF SUCH DAMAGE. */
 		{
 			#if (defined(FSL_FEATURE_XSPI_HAS_END_CFG) && FSL_FEATURE_XSPI_HAS_END_CFG)
 				.byteOrder = kXSPI_64BitLE,
-			#else
-				.byteOrder = kXSPI_32BitLE,
 			#endif
-			.enableDoze         = false,
+			#if (defined(FSL_FEATURE_XSPI_HAS_DOZE_MODE) && FSL_FEATURE_XSPI_HAS_DOZE_MODE)
+				.enableDoze         = false,
+			#endif
 			.ptrAhbAccessConfig = &xspiAhbAccessConfig,
 			.ptrIpAccessConfig  = &xspiIpAccessConfig
 		};
 
-		// Disable the caches. Otherwise written data may not be visible
-		XSPI_Cache64_DisableCache (CACHE64_CTRL0_NS);
-		XSPI_Cache64_DisableCache (CACHE64_CTRL1_NS);
+		#if defined(CACHE64_CTRL0_BASE)
+			// Disable the caches. Otherwise written data may not be visible
+			XSPI_Cache64_DisableCache (CACHE64_CTRL0_NS);
+			XSPI_Cache64_DisableCache (CACHE64_CTRL1_NS);
+		#endif
 
 		XSPI_Init            (base, &config);
 		XSPI_SetDeviceConfig (base, &Xspi::DeviceConfig);

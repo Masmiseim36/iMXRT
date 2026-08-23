@@ -20,7 +20,7 @@ IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
 OF SUCH DAMAGE. */
 #include "fsl_common.h"
 #include "fsl_iopctl.h"
-#include "fsl_gpio.h"
+#include "fsl_lpc_gpio.h"
 #include "pin_mux.h"
 
 
