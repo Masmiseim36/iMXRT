@@ -26,6 +26,22 @@ OF SUCH DAMAGE. */
 #include <array>
 
 #include "fsl_device_registers.h"
+#ifdef MAIN__XSPI_0
+	#define XSPI0         MAIN__XSPI_0
+	#define XSPI0_BASE    MAIN__XSPI_0_BASE
+	#define XSPI0_BASE_NS MAIN__XSPI_0_BASE_NS
+#endif
+#ifdef MAIN__XSPI_1
+	#define XSPI1         MAIN__XSPI_1
+	#define XSPI1_BASE    MAIN__XSPI_1_BASE
+	#define XSPI1_BASE_NS MAIN__XSPI_1_BASE_NS
+#endif
+#ifdef MAIN__XSPI_2
+	#define XSPI2         MAIN__XSPI_2
+	#define XSPI2_BASE    MAIN__XSPI_2_BASE
+	#define XSPI2_BASE_NS MAIN__XSPI_2_BASE_NS
+#endif
+
 #if defined FLEXSPI || defined FLEXSPI0 || defined FLEXSPI1
 	#include "fsl_flexspi.h"
 #endif

@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#include "fsl_gpio.h"
+#include "fsl_lpc_gpio.h"
 
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID

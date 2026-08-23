@@ -24,6 +24,15 @@ OF SUCH DAMAGE. */
 #define _PIN_MUX_H_
 
 #include "fsl_device_registers.h"
+#ifdef MAIN__XSPI_0
+	#define XSPI0         MAIN__XSPI_0
+#endif
+#ifdef MAIN__XSPI_1
+	#define XSPI1         MAIN__XSPI_1
+#endif
+#ifdef MAIN__XSPI_2
+	#define XSPI2         MAIN__XSPI_2
+#endif
 
 #if defined(__cplusplus)
 extern "C" {

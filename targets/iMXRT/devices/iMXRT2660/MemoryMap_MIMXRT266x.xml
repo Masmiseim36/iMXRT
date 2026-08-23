@@ -1,0 +1,14 @@
+<!DOCTYPE Board_Memory_Definition_File>
+<Root name="iMXRT" >
+	<MemorySegment name="ITCM"        start="$(ITCM_START:0x00000000)"         size="$(ITCM_SIZE:0x00020000)"/>
+	<MemorySegment name="ITCM_Alias1" start="$(ITCM_ALIAS1_START:0x210C0000)"  size="$(ITCM_ALIAS1_SIZE:0x00020000)"/>
+	<MemorySegment name="ITCM_Alias2" start="$(ITCM_ALIAS2_START:0x21F40000)"  size="$(ITCM_ALIAS2_SIZE:0x00020000)"/>
+	<MemorySegment name="DTCM"        start="$(DTCM_START:0x20000000)"         size="$(DTCM_SIZE:0x00020000)"/>
+	<MemorySegment name="DTCM_Alias1" start="$(DTCM_ALIAS1_START:0x21100000)"  size="$(DTCM_ALIAS1_SIZE:0x00020000)"/>
+	<MemorySegment name="DTCM_Alias2" start="$(DTCM_ALIAS2_START:0x21F80000)"  size="$(DTCM_ALIAS2_SIZE:0x00020000)"/>
+	<MemorySegment name="OCRAM0"      start="$(OCRAM0_START:0x22000000)"       size="$(OCRAM0_SIZE:0x40000)"/>
+	<MemorySegment name="OCRAM1"      start="$(OCRAM1_START:0x22040000)"       size="$(OCRAM1_SIZE:0x40000)"/>
+	<MemorySegment name="OCRAM2"      start="$(OCRAM2_START:0x22080000)"       size="$(OCRAM2_SIZE:0x40000)"/>
+	<MemorySegment name="XSPI0"       start="$(XSPI0_START:0x60000000)"        size="$(XSPI0_SIZE:0x10000000)" access="ReadOnly"/>
+	<MemorySegment name="XSPI1"       start="$(XSPI1_START:0x80000000)"        size="$(XSPI1_SIZE:0x10000000)" access="ReadOnly"/>
+</Root>

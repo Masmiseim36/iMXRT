@@ -84,7 +84,6 @@
   <configuration
     Name="1160_CM4"
     Target="MIMXRT1165CVM5A_cm4"
-    arm_fpu_type="FPv4-SP-D16"
     c_preprocessor_definitions="CPU_MIMXRT1165CVM5A_cm4"
     c_user_include_directories=".;./drivers/iMXRT1160/."
     hidden="Yes"
@@ -102,7 +101,6 @@
   <configuration
     Name="1170_CM4"
     Target="MIMXRT1176AVM8A_cm4"
-    arm_fpu_type="FPv4-SP-D16"
     c_preprocessor_definitions="CPU_MIMXRT1176AVM8A_cm4"
     c_user_include_directories=".;./drivers/iMXRT1170/."
     hidden="Yes"
@@ -136,6 +134,16 @@
     hidden="Yes"
     linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT118x_cm7.xml"
     macros="DeviceName=MIMXRT1189_cm7;Family=iMXRT1180;Core=CM7" />
+  <configuration
+    Name="2660"
+    Target="CPU_MIMXRT2663AHP8A"
+    arm_fpu_type="FPv5-D16"
+    c_preprocessor_definitions="CPU_MIMXRT2663AHP8A"
+    c_user_include_directories=".;./drivers/iMXRT2660/."
+    hidden="Yes"
+    linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT266x.xml"
+    linker_section_placement_file="../placement_tcm.xml"
+    macros="DeviceName=MIMXRT2663;Family=iMXRT2660;Core=CM85" />
   <configuration
     Name="500"
     Placement="SRAM"
@@ -185,6 +193,7 @@
     Placement="TCM"
     arm_architecture="v7EM"
     arm_core_type="Cortex-M4"
+    arm_fpu_type="FPv4-SP-D16"
     c_user_include_directories=".;./drivers/cache/lmem"
     hidden="Yes"
     linker_section_placement_file="../placement_tcm.xml" />
@@ -196,6 +205,14 @@
     c_user_include_directories=".;./drivers/cache/armv7-m7"
     hidden="Yes"
     linker_section_placement_file="../placement_tcm.xml" />
+  <configuration
+    Name="CM85"
+    arm_architecture="v8.1M_Mainline"
+    arm_core_type="Cortex-M85"
+    arm_fpu_type="FPv5-D16"
+    arm_v8M_has_cmse="Yes"
+    arm_v8M_has_dsp="Yes"
+    hidden="Yes" />
   <configuration
     Name="Common"
     Platform="ARM"
@@ -338,6 +355,14 @@
     build_output_file_name="Loader_iMXRT1180_CM7.elf"
     inherited_configurations="CM7;1180_CM7;Release" />
   <configuration
+    Name="MIMXRT2660_Debug"
+    build_output_file_name="Loader_iMXRT2660_Debug.elf"
+    inherited_configurations="CM85;2660;Debug" />
+  <configuration
+    Name="MIMXRT2660_Release"
+    build_output_file_name="Loader_iMXRT2660.elf"
+    inherited_configurations="CM85;2660;Release" />
+  <configuration
     Name="MIMXRT500_Debug"
     build_output_file_name="Loader_iMXRT500_CM33_Debug.elf"
     inherited_configurations="CM33;500;Debug" />
@@ -377,10 +402,11 @@
       arm_library_optimization="Small"
       arm_linker_heap_size="1024"
       arm_linker_stack_size="2048"
+      arm_target_interface_type="JTAG"
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
       arm_target_loader_reset_after_download="No"
-      batch_build_configurations="MIMXRT500_Release;MIMXRT600_Release;MIMXRT700_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1040_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1150_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release;MIMXRT1180_CM7_Release;MIMXRT1180_CM33_Release"
+      batch_build_configurations="MIMXRT500_Release;MIMXRT600_Release;MIMXRT700_Release;MIMXRT1011_Release;MIMXRT1015_Release;MIMXRT1021_Release;MIMXRT1024_Release;MIMXRT1040_Release;MIMXRT1050_Release;MIMXRT1060_Release;MIMXRT1064_Release;MIMXRT1150_Release;MIMXRT1160_CM7_Release;MIMXRT1160_CM4_Release;MIMXRT1170_CM7_Release;MIMXRT1170_CM4_Release;MIMXRT1180_CM7_Release;MIMXRT1180_CM33_Release;MIMXRT2660_Release"
       c_system_include_directories="$(StudioDir)/include;$(PackagesDir)/include;$(ProjectDir)/../devices/$(Family);$(PackagesDir)/libraries/libmem_drivers"
       c_user_include_directories=".;./.."
       debug_register_definition_file="../devices/$(Family)/$(DeviceName)_registers.xml"
@@ -718,6 +744,32 @@
         <file file_name="drivers/fsl_rgpio.h" />
         <file file_name="drivers/iMXRT1180/pin_mux.cpp" />
       </folder>
+      <folder Name="iMXRT2660">
+        <configuration Name="2660" build_exclude_from_build="No" />
+        <configuration Name="Common" build_exclude_from_build="Yes" />
+        <file file_name="drivers/iMXRT2660/board.h" />
+        <file file_name="drivers/iMXRT2660/clock_config.c" />
+        <file file_name="drivers/iMXRT2660/clock_config.h" />
+        <file file_name="drivers/iMXRT2660/fsl_clock.c" />
+        <file file_name="drivers/iMXRT2660/fsl_clock.h" />
+        <file file_name="drivers/fsl_gpio.c" />
+        <file file_name="drivers/fsl_gpio.h" />
+        <file file_name="drivers/iMXRT2660/fsl_iomuxc.h" />
+        <file file_name="drivers/fsl_lpuart.c" />
+        <file file_name="drivers/fsl_lpuart.h" />
+        <file file_name="drivers/iMXRT2660/fsl_modcon.c" />
+        <file file_name="drivers/iMXRT2660/fsl_modcon.h" />
+        <file file_name="drivers/iMXRT2660/fsl_pdcon.c" />
+        <file file_name="drivers/iMXRT2660/fsl_pdcon.h" />
+        <file file_name="drivers/iMXRT2660/fsl_pmu.c" />
+        <file file_name="drivers/iMXRT2660/fsl_pmu.h" />
+        <file file_name="drivers/iMXRT2660/fsl_power.c" />
+        <file file_name="drivers/iMXRT2660/fsl_power.h" />
+        <file file_name="../devices/$(Family)/MemoryMap_MIMXRT266x.xml">
+          <configuration Name="Common" file_type="Memory Map" />
+        </file>
+        <file file_name="drivers/iMXRT2660/pin_mux.cpp" />
+      </folder>
       <folder Name="iMXRT500">
         <configuration Name="500" build_exclude_from_build="No" />
         <configuration Name="Common" build_exclude_from_build="Yes" />
@@ -732,9 +784,9 @@
         <file file_name="drivers/iMXRT500/fsl_dma.h" />
         <file file_name="drivers/fsl_flexcomm.c" />
         <file file_name="drivers/fsl_flexcomm.h" />
-        <file file_name="drivers/iMXRT500/fsl_gpio.c" />
-        <file file_name="drivers/iMXRT500/fsl_gpio.h" />
         <file file_name="drivers/iMXRT500/fsl_iopctl.h" />
+        <file file_name="drivers/fsl_lpc_gpio.c" />
+        <file file_name="drivers/fsl_lpc_gpio.h" />
         <file file_name="drivers/iMXRT500/fsl_power.c" />
         <file file_name="drivers/iMXRT500/fsl_power.h" />
         <file file_name="drivers/iMXRT500/fsl_reset.c" />
@@ -758,9 +810,9 @@
         <file file_name="drivers/iMXRT600/fsl_dma.h" />
         <file file_name="drivers/fsl_flexcomm.c" />
         <file file_name="drivers/fsl_flexcomm.h" />
-        <file file_name="drivers/iMXRT600/fsl_gpio.c" />
-        <file file_name="drivers/iMXRT600/fsl_gpio.h" />
         <file file_name="drivers/iMXRT600/fsl_iopctl.h" />
+        <file file_name="drivers/fsl_lpc_gpio.c" />
+        <file file_name="drivers/fsl_lpc_gpio.h" />
         <file file_name="drivers/iMXRT600/fsl_power.c" />
         <file file_name="drivers/iMXRT600/fsl_power.h" />
         <file file_name="drivers/iMXRT600/fsl_reset.c" />
@@ -793,16 +845,20 @@
       <file file_name="drivers/fsl_common_arm.c" />
       <file file_name="drivers/fsl_common_arm.h" />
       <file file_name="drivers/fsl_flexspi.c">
+        <configuration Name="2660" build_exclude_from_build="Yes" />
         <configuration Name="700" build_exclude_from_build="Yes" />
       </file>
       <file file_name="drivers/fsl_flexspi.h">
+        <configuration Name="2660" build_exclude_from_build="Yes" />
         <configuration Name="700" build_exclude_from_build="Yes" />
       </file>
       <file file_name="drivers/fsl_xspi.c">
+        <configuration Name="2660" build_exclude_from_build="No" />
         <configuration Name="700" build_exclude_from_build="No" />
         <configuration Name="Common" build_exclude_from_build="Yes" />
       </file>
       <file file_name="drivers/fsl_xspi.h">
+        <configuration Name="2660" build_exclude_from_build="No" />
         <configuration Name="700" build_exclude_from_build="No" />
         <configuration Name="Common" build_exclude_from_build="Yes" />
       </file>

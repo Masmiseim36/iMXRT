@@ -28,7 +28,6 @@ OF SUCH DAMAGE. */
 
 /*! BOARD_InitUARTPins
 Set pin muxing and configure electrical properties for the UART */
-
 void BOARD_InitUARTPins (void)
 {
 	CLOCK_EnableClock (kCLOCK_Iomuxc1);          /* Turn on LPCG: LPCG is ON. */
@@ -52,7 +51,7 @@ struct PinConfig
 	uint32_t configRegister;
 };
 
-namespace 
+namespace
 {
 	inline void SetPinMux (struct PinConfig config, uint32_t inputOnfield)
 	{
@@ -78,7 +77,7 @@ namespace
 		PinConfig dqs;
 		std::array<PinConfig, 8> data;
 
-		// For JTAG Reset we need the GPIO config of chipselect, clock and data 0
+		// For JEDEC Reset we need the GPIO configuration of chipselect, clock and data 0
 		PinConfig clock_gpio;
 		PinConfig chipSelect_gpio;
 		PinConfig data_gpio;
@@ -320,7 +319,6 @@ void BOARD_PerformJEDECReset_FlexSPI1 (void)
 
 
 ////////////////////////// FlexSPI 2 //////////////////////////////////
-
 void BOARD_InitQuadSPI2Pins (void)
 {
 	InitQuadSpi (FlexSpi2_PinConfig[3]);
