@@ -1,7 +1,5 @@
 <!DOCTYPE CrossStudio_Project_File>
 <solution Name="iMXRT" target="8" version="2">
-  <import file_name="targets/iMXRT/Loader2/Loader.hzp" />
-  <import file_name="targets/iMXRT/Loader/Loader.hzp" />
   <project Name="iMXRT">
     <configuration
       Name="Common"
@@ -175,6 +173,30 @@
           <file file_name="targets/iMXRT/devices/iMXRT1064/startup_MIMXRT1064.s" />
           <file file_name="targets/iMXRT/devices/iMXRT1064/system_MIMXRT1064.c" />
           <file file_name="targets/iMXRT/devices/iMXRT1064/system_MIMXRT1064.h" />
+        </folder>
+        <folder Name="115x">
+          <folder
+            Name="periph"
+            exclude=""
+            filter="*.*"
+            path="targets/iMXRT/devices/iMXRT1150/periph"
+            recurse="No" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/fsl_device_registers.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/MemoryMap_MIMXRT115x.xml" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/MIMXRT1151.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/MIMXRT1151_COMMON.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/MIMXRT1151_features.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/MIMXRT1151_Registers.xml" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/MIMXRT1152.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/MIMXRT1152_COMMON.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/MIMXRT1152_features.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/MIMXRT1152_Registers.xml" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/startup_MIMXRT1151.s" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/startup_MIMXRT1152.s" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/system_MIMXRT1151.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/system_MIMXRT1151.h" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/system_MIMXRT1152.c" />
+          <file file_name="targets/iMXRT/devices/iMXRT1150/system_MIMXRT1152.h" />
         </folder>
         <folder Name="116x">
           <folder
@@ -579,6 +601,7 @@
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1050_CM7.elf" />
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1060_CM7.elf" />
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1064_CM7.elf" />
+        <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1150_CM7.elf" />
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1160_CM4.elf" />
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1160_CM7.elf" />
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1170_CM4.elf" />
@@ -595,4 +618,6 @@
       <file file_name="targets/iMXRT/propertyGroups.xml" />
     </folder>
   </project>
+  <import file_name="targets/iMXRT/Loader2/Loader.hzp" />
+  <import file_name="targets/iMXRT/Loader/Loader.hzp" />
 </solution>

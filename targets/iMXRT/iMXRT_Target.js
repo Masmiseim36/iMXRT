@@ -561,6 +561,8 @@ function Reset ()
 			TargetInterface.resetAndStop (1000);
 			DcDc_Init_10xx ();
 			break;
+		case "MIMXRT1151":
+		case "MIMXRT1152":
 		case "MIMXRT1171_cm7":
 		case "MIMXRT1172_cm7":
 			TargetInterface.resetAndStop (1000);
@@ -863,6 +865,8 @@ function FlexRAM_Restore ()
 		case "MIMXRT1064":
 			TargetInterface.pokeUint32 (IOMUXC_GPR_GPR17, 0x55AFFA55);	// 256 KByte OCRAM - 128 kByte ITCM - 128 kByte DTCM
 			break;
+		case "MIMXRT1151":
+		case "MIMXRT1152":
 		case "MIMXRT1165_cm7":
 		case "MIMXRT1166_cm7":
 		case "MIMXRT1171_cm7":
@@ -984,6 +988,8 @@ function Clock_Init ()
 		case "MIMXRT1064":
 			Clock_Init_105x ();
 			break;
+		case "MIMXRT1151":
+		case "MIMXRT1152":
 		case "MIMXRT1165_cm7":
 		case "MIMXRT1166_cm7":
 		case "MIMXRT1171_cm7":
@@ -1237,6 +1243,8 @@ function SDRAM_Init ()
 		case "MIMXRT1064":
 			SDRAM_Init_10xx ();
 			break;
+		case "MIMXRT1151":
+		case "MIMXRT1152":
 		case "MIMXRT1165_cm7":
 		case "MIMXRT1166_cm7":
 		case "MIMXRT1171_cm7":
@@ -1675,6 +1683,8 @@ function FlexSPI_GetBaseAddress (FlexSPI)
 		case "MIMXRT1062":
 		case "MIMXRT1064":
 			break;					// do nothing
+		case "MIMXRT1151":
+		case "MIMXRT1152":
 		case "MIMXRT1165_cm7":
 		case "MIMXRT1166_cm7":
 		case "MIMXRT1171_cm7":

@@ -21,7 +21,7 @@ OF SUCH DAMAGE. */
 
 #include "fsl_common.h"
 #include "fsl_iomuxc.h"
-#include "fsl_gpio.h"
+#include "fsl_igpio.h"
 #include "pin_mux.h"
 
 /** BOARD_InitUARTPins

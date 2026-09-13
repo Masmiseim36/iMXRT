@@ -498,6 +498,28 @@
 			<cdefine name="CPU_MIMXRT1064DVL6B" />
 		</groupEntry>
 
+		<groupEntry name="MIMXRT1151DHM8B" aka="MIMXRT1151xxx8B" family="iMXRT1150">
+			<property name="macros" value="DeviceName=MIMXRT1151;Family=iMXRT1150;Core=CM7;Loader=iMXRT1150" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT115x.xml" />
+			<property name="arm_core_type" value="Cortex-M7" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1151DHM8B" />
+		</groupEntry>
+		<groupEntry name="MIMXRT1152AHM6B" aka="MIMXRT1152xxx6B" family="iMXRT1150">
+			<property name="macros" value="DeviceName=MIMXRT1152;Family=iMXRT1150;Core=CM7;Loader=iMXRT1150" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT115x.xml" />
+			<property name="arm_core_type" value="Cortex-M7" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1152AHM6B" />
+		</groupEntry>
+		<groupEntry name="MIMXRT1152DHM8B" aka="MIMXRT1152xxx8B" family="iMXRT1150">
+			<property name="macros" value="DeviceName=MIMXRT1152;Family=iMXRT1150;Core=CM7;Loader=iMXRT1150" />
+			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT115x.xml" />
+			<property name="arm_core_type" value="Cortex-M7" />
+			<property name="arm_fpu_type" value="FPv5-D16" />
+			<cdefine name="CPU_MIMXRT1152DHM8B" />
+		</groupEntry>
+
 		<groupEntry name="MIMXRT1165CVM5A_cm7" aka="MIMXRT1165xxx5_M7" family="iMXRT1160">
 			<property name="macros" value="DeviceName=MIMXRT1165_cm7;Family=iMXRT1160;Core=CM7;Loader=iMXRT1160" />
 			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT116x_cm7.xml" />

@@ -173,8 +173,8 @@ ISR_HANDLER2 PXP                                  // PXP_IRQHandler             
 ISR_HANDLER2 MIPI_CSI                             // MIPI_CSI_IRQHandler                - MIPI_CSI interrupt
 ISR_HANDLER2 MIPI_DSI                             // MIPI_DSI_IRQHandler                - MIPI_DSI interrupt
 ISR_HANDLER2 GPU2D                                // GPU2D_IRQHandler                   - GPU2D interrupt
-ISR_HANDLER2 GPIO12_Combined_0_15                 // GPIO12_Combined_0_15_IRQHandler     - Combined interrupt indication for GPIO6 signal 0 throughout 15
-ISR_HANDLER2 GPIO12_Combined_16_31                // GPIO12_Combined_16_31_IRQHandler    - Combined interrupt indication for GPIO6 signal 16 throughout 31
+ISR_HANDLER2 GPIO12_Combined_0_15                 // GPIO12_Combined_0_15_IRQHandler    - Combined interrupt indication for GPIO6 signal 0 throughout 15
+ISR_HANDLER2 GPIO12_Combined_16_31                // GPIO12_Combined_16_31_IRQHandler   - Combined interrupt indication for GPIO6 signal 16 throughout 31
 ISR_HANDLER2 DAC                                  // DAC_IRQHandler                     - DAC interrupt
 ISR_HANDLER2 KEY_MANAGER                          // KEY_MANAGER_IRQHandler             - PUF interrupt
 ISR_HANDLER2 WDOG2                                // WDOG2_IRQHandler                   - WDOG2 interrupt
@@ -211,7 +211,7 @@ ISR_HANDLER2 DCIC1                                // DCIC1_IRQHandler           
 ISR_HANDLER2 DCIC2                                // DCIC2_IRQHandler                   - DCIC2 interrupt
 ISR_HANDLER2 ASRC                                 // ASRC_IRQHandler                    - ASRC interrupt
 ISR_HANDLER2 FLEXRAM_ECC                          // FLEXRAM_ECC_IRQHandler             - FlexRAM ECC fatal interrupt
-ISR_HANDLER2 GPIO7_8_9_10_11_                     // GPIO7_8_9_10_11_IRQHandler             - CM7_GPIO2,CM7_GPIO3 interrupt
+ISR_HANDLER2 GPIO7_8_9_10_11_                     // GPIO7_8_9_10_11_IRQHandler         - CM7_GPIO2,CM7_GPIO3 interrupt
 ISR_HANDLER2 GPIO1_Combined_0_15                  // GPIO1_Combined_0_15_IRQHandler     - Combined interrupt indication for GPIO1 signal 0 throughout 15
 ISR_HANDLER2 GPIO1_Combined_16_31                 // GPIO1_Combined_16_31_IRQHandler    - Combined interrupt indication for GPIO1 signal 16 throughout 31
 ISR_HANDLER2 GPIO2_Combined_0_15                  // GPIO2_Combined_0_15_IRQHandler     - Combined interrupt indication for GPIO2 signal 0 throughout 15

@@ -260,7 +260,8 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 				break;
 		}
 		CLOCK_SetDiv (FlexSPIDiv, clockDiv-1);
-	#elif (defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
+	#elif (defined(MIMXRT1151_SERIES)     || defined(MIMXRT1152_SERIES)     || \
+		   defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
 		   defined(MIMXRT1171_SERIES)     || defined(MIMXRT1172_SERIES)     || defined(MIMXRT1173_cm7_SERIES) || defined(MIMXRT1173_cm4_SERIES) || \
 		   defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1175_cm4_SERIES) || defined(MIMXRT1176_cm7_SERIES) || defined(MIMXRT1176_cm4_SERIES))
 		clock_root_t FlexSPIClock = kCLOCK_Root_Flexspi1;
@@ -490,7 +491,8 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 			CLOCK_SetDiv (FlexSPIDiv, clockDiv-1);	// flexspi clock divide by two --> 240 MHz.
 			ClockHz = sourceClock_Hz / clockDiv;
 			deviceconfig.flexspiRootClk = ClockHz;
-		#elif (defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
+		#elif (defined(MIMXRT1151_SERIES)     || defined(MIMXRT1152_SERIES)     || \
+			   defined(MIMXRT1165_cm7_SERIES) || defined(MIMXRT1166_cm7_SERIES) || defined(MIMXRT1165_cm4_SERIES) || defined(MIMXRT1166_cm4_SERIES) || \
 			   defined(MIMXRT1171_SERIES)     || defined(MIMXRT1172_SERIES)     || \
 			   defined(MIMXRT1173_cm7_SERIES) || defined(MIMXRT1175_cm7_SERIES) || defined(MIMXRT1176_cm7_SERIES) || \
 			   defined(MIMXRT1173_cm4_SERIES) || defined(MIMXRT1175_cm4_SERIES) || defined(MIMXRT1176_cm4_SERIES))
