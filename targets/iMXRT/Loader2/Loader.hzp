@@ -83,36 +83,36 @@
     macros="DeviceName=MIMXRT1152;Family=iMXRT1150" />
   <configuration
     Name="1160_CM4"
-    Target="MIMXRT1166DVM6A_cm4"
+    Target="MIMXRT1165CVM5A_cm4"
     arm_fpu_type="FPv4-SP-D16"
-    c_preprocessor_definitions="CPU_MIMXRT1166DVM6A_cm4"
+    c_preprocessor_definitions="CPU_MIMXRT1165CVM5A_cm4"
     c_user_include_directories=".;./drivers/iMXRT1160/."
     hidden="Yes"
     linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT116x_cm4.xml"
     macros="DeviceName=MIMXRT1166_cm4;Family=iMXRT1160" />
   <configuration
     Name="1160_CM7"
-    Target="MIMXRT1166DVM6A_cm7"
+    Target="MIMXRT1165CVM5A_cm7"
     arm_fpu_type="FPv5-D16"
-    c_preprocessor_definitions="CPU_MIMXRT1166DVM6A_cm7"
+    c_preprocessor_definitions="CPU_MIMXRT1165CVM5A_cm7"
     c_user_include_directories=".;./drivers/iMXRT1160/."
     hidden="Yes"
     linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT116x_cm7.xml"
     macros="DeviceName=MIMXRT1166_cm7;Family=iMXRT1160" />
   <configuration
     Name="1170_CM4"
-    Target="MIMXRT1176DVMAA_cm4"
+    Target="MIMXRT1176AVM8A_cm4"
     arm_fpu_type="FPv4-SP-D16"
-    c_preprocessor_definitions="CPU_MIMXRT1176DVMAA_cm4"
+    c_preprocessor_definitions="CPU_MIMXRT1176AVM8A_cm4"
     c_user_include_directories=".;./drivers/iMXRT1170/."
     hidden="Yes"
     linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT117x_cm4.xml"
     macros="DeviceName=MIMXRT1176_cm4;Family=iMXRT1170;Core=CM4" />
   <configuration
     Name="1170_CM7"
-    Target="MIMXRT1176DVMAA_cm7"
+    Target="MIMXRT1176AVM8A_cm7"
     arm_fpu_type="FPv5-D16"
-    c_preprocessor_definitions="CPU_MIMXRT1176DVMAA_cm7"
+    c_preprocessor_definitions="CPU_MIMXRT1176AVM8A_cm7"
     c_user_include_directories=".;./drivers/iMXRT1170/."
     hidden="Yes"
     linker_memory_map_file="../devices/$(Family)/MemoryMap_MIMXRT117x_cm7.xml"

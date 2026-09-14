@@ -1,6 +1,5 @@
 /*
- * Copyright 2021 NXP
- * All rights reserved.
+ * Copyright 2022-2023 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -18,7 +17,7 @@
 
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v8.0
+product: Clocks v11.0
 processor: MIMXRT1166xxxxx
 package_id: MIMXRT1166DVM6A
 mcu_data: ksdk2_0
@@ -39,8 +38,6 @@ board: MIMXRT1160-EVK
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-/* System clock frequency. */
-extern uint32_t SystemCoreClock;
 
 /*******************************************************************************
  ************************ BOARD_InitBootClocks function ************************
@@ -200,7 +197,8 @@ settings:
 - {id: ANADIG_OSC_OSC_24M_CTRL_LP_EN_CFG, value: Low}
 - {id: ANADIG_OSC_OSC_24M_CTRL_OSC_EN_CFG, value: Enabled}
 - {id: ANADIG_PLL.ARM_PLL_POST_DIV.scale, value: '4'}
-- {id: ANADIG_PLL.ARM_PLL_VDIV.scale, value: '100'}
+- {id: ANADIG_PLL.ARM_PLL_PREDIV.scale, value: '1', locked: true}
+- {id: ANADIG_PLL.ARM_PLL_VDIV.scale, value: '200', locked: true}
 - {id: ANADIG_PLL.PLL_AUDIO_BYPASS.sel, value: ANADIG_OSC.OSC_24M}
 - {id: ANADIG_PLL.PLL_VIDEO.denom, value: '960000'}
 - {id: ANADIG_PLL.PLL_VIDEO.div, value: '41'}
@@ -250,27 +248,35 @@ settings:
 #endif
 
 const clock_arm_pll_config_t armPllConfig_BOARD_BootClockRUN =
-    {
-        .postDivider = kCLOCK_PllPostDiv4,        /* Post divider, 0 - DIV by 2, 1 - DIV by 4, 2 - DIV by 8, 3 - DIV by 1 */
-        .loopDivider = 200,                       /* PLL Loop divider, Fout = Fin * ( loopDivider / ( 2 * postDivider ) ) */
-    };
+{
+	.postDivider = kCLOCK_PllPostDiv4,        /* Post divider, 0 - DIV by 2, 1 - DIV by 4, 2 - DIV by 8, 3 - DIV by 1 */
+	#if defined(CPU_MIMXRT1166DVM6A_cm7) || defined(CPU_MIMXRT1165DVM6A_cm7) || \
+		defined(CPU_MIMXRT1166DVM6A_cm4) || defined(CPU_MIMXRT1165DVM6A_cm4)
+		.loopDivider = 200,                   /* PLL Loop divider, Fout = Fin * ( loopDivider / ( 2 * postDivider ) ) */
+	#elif defined(CPU_MIMXRT1165CVM5A_cm7) || defined(CPU_MIMXRT1165XVM5A_cm7) || defined(CPU_MIMXRT1166XVM5A_cm7) || defined(CPU_MIMXRT1166CVM5A_cm7) || \
+		  defined(CPU_MIMXRT1165CVM5A_cm4) || defined(CPU_MIMXRT1165XVM5A_cm4) || defined(CPU_MIMXRT1166XVM5A_cm4) || defined(CPU_MIMXRT1166CVM5A_cm4)
+		.loopDivider = 166,                   /* PLL Loop divider, Fout = Fin * ( loopDivider / ( 2 * postDivider ) ) */
+	#else
+		#error "Unknown iMXRT1170 device"
+	#endif
+};
 
 const clock_sys_pll2_config_t sysPll2Config_BOARD_BootClockRUN =
-    {
-        .mfd = 268435455,                         /* Denominator of spread spectrum */
-        .ss = NULL,                               /* Spread spectrum parameter */
-        .ssEnable = false,                        /* Enable spread spectrum or not */
-    };
+{
+	.mfd = 268435455,                         /* Denominator of spread spectrum */
+	.ss = NULL,                               /* Spread spectrum parameter */
+	.ssEnable = false,                        /* Enable spread spectrum or not */
+};
 
 const clock_video_pll_config_t videoPllConfig_BOARD_BootClockRUN =
-    {
-        .loopDivider = 41,                        /* PLL Loop divider, valid range for DIV_SELECT divider value: 27 ~ 54. */
-        .postDivider = 0,                         /* Divider after PLL, should only be 1, 2, 4, 8, 16, 32 */
-        .numerator = 1,                           /* 30 bit numerator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
-        .denominator = 960000,                    /* 30 bit denominator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
-        .ss = NULL,                               /* Spread spectrum parameter */
-        .ssEnable = false,                        /* Enable spread spectrum or not */
-    };
+{
+	.loopDivider = 41,                        /* PLL Loop divider, valid range for DIV_SELECT divider value: 27 ~ 54. */
+	.postDivider = 0,                         /* Divider after PLL, should only be 1, 2, 4, 8, 16, 32 */
+	.numerator = 1,                           /* 30 bit numerator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
+	.denominator = 960000,                    /* 30 bit denominator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
+	.ss = NULL,                               /* Spread spectrum parameter */
+	.ssEnable = false,                        /* Enable spread spectrum or not */
+};
 
 /*******************************************************************************
  * Code for BOARD_BootClockRUN configuration
@@ -295,7 +301,7 @@ void BOARD_BootClockRUN(void)
 
     /* Init OSC RC 400M */
     CLOCK_OSC_EnableOscRc400M();
-    CLOCK_OSC_GateOscRc400M(true);
+    CLOCK_OSC_GateOscRc400M(false);
 
     /* Init OSC RC 48M */
     CLOCK_OSC_EnableOsc48M(true);
@@ -309,7 +315,7 @@ void BOARD_BootClockRUN(void)
     {
     }
 
-    /* Swicth both core, M7 Systick and Bus_Lpsr to OscRC48MDiv2 first */
+    /* Switch both core, M7 Systick and Bus_Lpsr to OscRC48MDiv2 first */
 #if __CORTEX_M == 7
     rootCfg.mux = kCLOCK_M7_ClockRoot_MuxOscRc48MDiv2;
     rootCfg.div = 1;

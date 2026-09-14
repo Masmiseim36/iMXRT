@@ -62,9 +62,9 @@ namespace Winbond
 
 		status_t Write (FlexSPI_Helper &flexSPI)
 		{
-			status_t stat = flexSPI.WriteEnable (0); // send write-enable 
+			const status_t stat = flexSPI.WriteEnable (0); // send write-enable 
 			if (stat != kStatus_Success)
-				return LibmemStaus_Error;
+				return stat;
 			return flexSPI.WriteRegister (0, *this, static_cast<LUT_CommandOffsets>(Command::WriteStatus2));
 		}
 
@@ -85,7 +85,7 @@ namespace Winbond
 
 		status_t Read (FlexSPI_Helper &flexSPI)
 		{
-			return flexSPI.ReadRegister (0, *this, static_cast<LUT_CommandOffsets>(Command::ReadStatus2));
+			return flexSPI.ReadRegister (0, *this, static_cast<LUT_CommandOffsets>(Command::ReadStatus3));
 		}
 
 		operator uint32_t& ()

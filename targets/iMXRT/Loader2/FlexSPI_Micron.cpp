@@ -52,9 +52,23 @@ namespace Micron
 		OctalSPI     = 0xC7		// without DQS
 	};
 
-	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, [[maybe_unused]] MemoryType memType, [[maybe_unused]] DeviceInfo &info)
+	LibmemStatus_t Initialize (FlexSPI_Helper &flexSPI, MemoryType memType, [[maybe_unused]] DeviceInfo &info)
 	{
 		DebugPrint ("Found Micron Flash\r\n");
+
+		// Only Octa-SPI DDR is implemented, and switching the device into that mode is not:
+		// the non-volatile mode, DQS and dummy-cycle registers are never written. So the flash
+		// has to be in Octa-SPI DDR already, which is exactly what TryDetect establishes.
+		if (memType != MemoryType::OctaSPI_DDR)
+		{
+			DebugPrint ("Micron: only Octa-SPI DDR is implemented\r\n");
+			return LibmemStaus_InvalidDevice;
+		}
+		if (tryDetectMemoryType != MemoryType::OctaSPI_DDR)
+		{
+			DebugPrint ("Micron: flash is not in Octa-SPI DDR mode, switching it is not implemented\r\n");
+			return LibmemStaus_InvalidDevice;
+		}
 
 		// Octa SPI
 		flexSPI.UpdateLUT (LUT_OctaSPI_DDR);

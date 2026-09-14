@@ -43,7 +43,7 @@ namespace Xspi
 
 			stat = base->SendCommand (0, LUT_EraseChip);
 			if (stat != kStatus_Success)
-				return LIBMEM_STATUS_ERROR;
+				return stat;
 
 			return base->WaitBusBusy ();
 		}
@@ -58,15 +58,15 @@ namespace Xspi
 			if (IsSectorEmpty (reinterpret_cast<uint32_t *>(si->start)))
 			{
 				DebugPrintf ("EraseSector at 0x%x, is allready erased\r\n", si->start);
-				return LIBMEM_STATUS_SUCCESS;
+				return LibmemStaus_Success;
 			}
 
 			auto *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
 			const uint32_t sectorAddr = libmem_CalculateOffset (h, si->start);
 			if (sectorAddr == UINT32_MAX)
-				return LibmemStaus_Error;
+				return LibmemStaus_InvalidRange;
 
-			DebugPrintf ("EraseSector at 0x%x, size: %d\r\n", sectorAddr, si->size);
+			DebugPrintf ("EraseSector at 0x%08X, size: %d\r\n", sectorAddr, si->size);
 
 			status_t status = base->WriteEnable (sectorAddr);
 			if (status != kStatus_Success)
@@ -95,7 +95,7 @@ namespace Xspi
 		auto *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
 		const uint32_t deviceAddress = libmem_CalculateOffset (h, destination);
 		if (deviceAddress == UINT32_MAX)
-			return LibmemStaus_Error;
+			return LibmemStaus_InvalidRange;
 
 		DebugPrintf ("ProgramPage at 0x%08X (Offset:0x%X)\r\n", destination, deviceAddress);
 
@@ -209,7 +209,7 @@ namespace Xspi
 			auto *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
 			const status_t status = base->TransferBlocking (&flashXfer);
 			if (status != kStatus_Success)
-				return status;
+				return LibmemStaus_Error;
 
 			return LibmemStaus_Success;
 		}
@@ -320,7 +320,7 @@ namespace Hyperflash
 		\return static status_t Status of the Operation - kStatus_Success when successfully */
 		[[maybe_unused]] status_t EraseChip (FlexSPI_Helper *base)
 		{
-			DebugPrintf ("EraseChip\r\n");
+			DebugPrint ("EraseChip\r\n");
 
 			status_t stat = ::Hyperflash::WriteEnable (base, 0);
 			if (stat != kStatus_Success)
@@ -328,7 +328,7 @@ namespace Hyperflash
 
 			stat = base->SendCommand (0, static_cast<LUT_CommandOffsets>(Spansion::Command::EraseChip), 4);
 			if (stat != kStatus_Success)
-				return LIBMEM_STATUS_ERROR;
+				return stat;
 
 			return ::Hyperflash::WaitBusBusy (base);
 		}
@@ -337,27 +337,26 @@ namespace Hyperflash
 		\brief Erase a sector of the Flash-Memory
 		\param h Handle to the Flash-Driver
 		\param si Information about the sector which should be erased
-		\return static int LIBMEM_STATUS_SUCCESS when the erase operation was successfully, otherwise LIBMEM_STATUS_ERROR */
-		status_t EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
+		\return static int LibmemStaus_Success when the erase operation was successfully, otherwise LibmemStaus_Error */
+		int EraseSector (libmem_driver_handle_t *h, libmem_sector_info_t *si)
 		{
 			static constexpr uint32_t SectorSize = 256 * 1024;
 			if (IsSectorEmpty (reinterpret_cast<uint32_t *>(si->start), SectorSize))
 			{
 				DebugPrintf ("EraseSector at 0x%08X, is allready erased\r\n", si->start);
-				return LIBMEM_STATUS_SUCCESS;
+				return LibmemStaus_Success;
 			}
 
 			auto *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
 			const uint32_t sectorAddr = libmem_CalculateOffset (h, si->start);
 			if (sectorAddr == UINT32_MAX)
-				return LIBMEM_STATUS_INVALID_RANGE;
+				return LibmemStaus_InvalidRange;
 
 			DebugPrintf ("EraseSector at 0x%08X, size: %d\r\n", sectorAddr, si->size);
 
-			// Write enable
 			status_t status = ::Hyperflash::WriteEnable (base, 0);
 			if (status != kStatus_Success)
-				return LIBMEM_STATUS_ERROR;
+				return LibmemStaus_Error;
 
 			status = base->SendCommand (sectorAddr, static_cast<LUT_CommandOffsets>(Spansion::Command::EraseSector), 4);
 			if (status != kStatus_Success)
@@ -365,31 +364,31 @@ namespace Hyperflash
 
 			status = ::Hyperflash::WaitBusBusy (base);
 			if (status != kStatus_Success)
-				return LIBMEM_STATUS_ERROR;
+				return LibmemStaus_Error;
 
-			return LIBMEM_STATUS_SUCCESS;
+			return LibmemStaus_Success;
 		}
-	} // namespace 
+	} // namespace
 
 	/*! ProgramPage:
 	\brief Write Data to a Flash-Page
 	\param h Handle to the Flash-Driver
 	\param destination Address to write the Data to. This Address is in the Address-Range of the Controller
-	\param source Address of the Array with the Data to write
-	\return static int LIBMEM_STATUS_SUCCESS when the write operation was successfully, otherwise LIBMEM_STATUS_ERROR */
+	\param source Address of the Array with the data to write
+	\return static int LibmemStaus_Success when the write operation was successfully, otherwise LibmemStaus_Error */
 	int ProgramPage (libmem_driver_handle_t *h, uint8_t *destination, const uint8_t *source)
 	{
 		auto *base = reinterpret_cast<FlexSPI_Helper *>(h->user_data);
 		const uint32_t deviceAddress = libmem_CalculateOffset (h, destination);
 		if (deviceAddress == UINT32_MAX)
-			return LIBMEM_STATUS_INVALID_RANGE;
+			return LibmemStaus_InvalidRange;
 
-		DebugPrintf ("ProgramPage at 0x%X\r\n", deviceAddress);
+		DebugPrintf ("ProgramPage at 0x%08X (Offset:0x%X)\r\n", destination, deviceAddress);
 
 		// Write enable
 		status_t status = ::Hyperflash::WriteEnable (base, 0);
 		if (status != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
+			return LibmemStaus_Error;
 
 		// Prepare page program command
 		Transfer flashXfer
@@ -403,11 +402,11 @@ namespace Hyperflash
 		};
 		status = base->TransferBlocking (&flashXfer);
 		if (status != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
+			return LibmemStaus_Error;
 
 		status = ::Hyperflash::WaitBusBusy (base);
 		if (status != kStatus_Success)
-			return LIBMEM_STATUS_ERROR;
+			return LibmemStaus_Error;
 
 //		// Do software reset or clear AHB buffer directly depending on the device capabilities
 //		#if defined(FSL_FEATURE_SOC_OTFAD_COUNT) && defined(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK) && defined(FLEXSPI_AHBCR_CLRAHBTXBUF_MASK)
@@ -416,7 +415,7 @@ namespace Hyperflash
 //		#else
 //			FLEXSPI_SoftwareReset (base);
 //		#endif
-		return LIBMEM_STATUS_SUCCESS;
+		return LibmemStaus_Success;
 	}
 
 	namespace
@@ -430,7 +429,7 @@ namespace Hyperflash
 		\return int The LIBMEM status result */
 		int libmem_ProgramPage (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
 		{
-			DebugPrintf ("libmem_ProgramPage at 0x%x - size: %d\r\n", dest, size);
+			DebugPrintf ("libmem_ProgramPage at 0x%08X - size: %d\r\n", dest, size);
 			auto *driver = static_cast<LibmemDriver *>(h);
 			return libmem_driver_paged_write (h, dest, src, size, &driver->PageWriteControlBlock);
 		}
@@ -445,6 +444,7 @@ namespace Hyperflash
 		\return int        The LIBMEM status result */
 		int libmem_EraseSector (libmem_driver_handle_t *h, uint8_t *start, size_t size, uint8_t **erase_start, size_t *erase_size)
 		{
+			DebugPrintf ("libmem_EraseSector at 0x%08X - size: %d\r\n", start, size);
 			return libmem_foreach_sector_in_range (h, start, size, EraseSector, erase_start, erase_size);
 		}
 
@@ -466,11 +466,17 @@ namespace Hyperflash
 		\param src  A pointer to the initial memory address in the memory range handled by the driver to read data from.
 		\param size The number of bytes to write.
 		\return int The LIBMEM status result */
-		int libmem_Read ([[maybe_unused]] libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
+		int libmem_Read (libmem_driver_handle_t *h, uint8_t *dest, const uint8_t *src, size_t size)
 		{
-			if (size != 0)
-				memcpy (dest, src, size);
-			return LIBMEM_STATUS_SUCCESS;
+			const uint32_t deviceAddress = libmem_CalculateOffset (h, src);
+			if (deviceAddress == UINT32_MAX)
+				return LibmemStaus_Error;
+
+			DebugPrintf ("Read at 0x%x, size: %d\r\n", src, size);
+			if (size == 0)
+				return LibmemStaus_InvalidParameter;
+			memcpy (dest, src, size);
+			return LibmemStaus_Success;
 		}
 
 		/*! libmem_CRC32:
@@ -482,10 +488,11 @@ namespace Hyperflash
 		\return uint32_t The computed CRC-32 value. */
 		uint32_t libmem_CRC32 ([[maybe_unused]] libmem_driver_handle_t *h, const uint8_t *start, size_t size, uint32_t crc)
 		{
+			DebugPrintf ("Calculate CRC from 0x%X, size 0x%X, calculated CRC: 0x%X\r\n", start, size, crc);
 			crc = libmem_crc32_direct (start, size, crc);
 			return crc;
 		}
-	} // namespace 
+	} // namespace
 
 	const libmem_driver_functions_t DriverFunctions
 	{
@@ -504,5 +511,4 @@ namespace Hyperflash
 		libmem_CRC32
 	};
 } // namesapce Hyperflash
-
 

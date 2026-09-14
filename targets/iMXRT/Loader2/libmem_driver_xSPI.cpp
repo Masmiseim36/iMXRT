@@ -157,11 +157,39 @@ OF SUCH DAMAGE. */
 	\return LibmemStatus_t LibmemStaus_Success if the operation was successfully */
 	LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, enum MemoryType memType)
 	{
-		CLOCK_AttachClk (kMAIN_PLL_PFD1_to_XSPI0);
-		CLOCK_SetClkDiv (kCLOCK_DivXspi0Clk, 1U);     // 400MHz
-
-		POWER_DisablePD (kPDRUNCFG_APD_XSPI0);
-		POWER_DisablePD (kPDRUNCFG_PPD_XSPI0);
+		// Clock source, divider and power domains are per instance. Every instance has its own PLL-PFD.
+		switch (base->GetBaseAddr ())
+		{
+			#ifdef XSPI0
+				case XSPI0_BASE:
+				case XSPI0_BASE_NS:
+					CLOCK_AttachClk (kMAIN_PLL_PFD1_to_XSPI0);
+					CLOCK_SetClkDiv (kCLOCK_DivXspi0Clk, 1U);     // 400MHz
+					POWER_DisablePD (kPDRUNCFG_APD_XSPI0);
+					POWER_DisablePD (kPDRUNCFG_PPD_XSPI0);
+					break;
+			#endif
+			#ifdef XSPI1
+				case XSPI1_BASE:
+				case XSPI1_BASE_NS:
+					CLOCK_AttachClk (kMAIN_PLL_PFD2_to_XSPI1);
+					CLOCK_SetClkDiv (kCLOCK_DivXspi1Clk, 1U);
+					POWER_DisablePD (kPDRUNCFG_APD_XSPI1);
+					POWER_DisablePD (kPDRUNCFG_PPD_XSPI1);
+					break;
+			#endif
+			#ifdef XSPI2
+				case XSPI2_BASE:
+				case XSPI2_BASE_NS:
+					CLOCK_AttachClk (kMAIN_PLL_PFD3_to_XSPI2);
+					CLOCK_SetClkDiv (kCLOCK_DivXspi2Clk, 1U);
+					POWER_DisablePD (kPDRUNCFG_APD_XSPI2);
+					POWER_DisablePD (kPDRUNCFG_PPD_XSPI2);
+					break;
+			#endif
+			default:
+				return LibmemStaus_InvalidDevice;
+		}
 		POWER_ApplyPD   ();
 
 		xspi_ahb_access_config_t xspiAhbAccessConfig
@@ -248,9 +276,9 @@ OF SUCH DAMAGE. */
 			.ptrIpAccessConfig  = &xspiIpAccessConfig
 		};
 
-        // Disable the caches. Otherwise written data may not be visible
-        XSPI_Cache64_DisableCache (CACHE64_CTRL0_NS);
-        XSPI_Cache64_DisableCache (CACHE64_CTRL1_NS);
+		// Disable the caches. Otherwise written data may not be visible
+		XSPI_Cache64_DisableCache (CACHE64_CTRL0_NS);
+		XSPI_Cache64_DisableCache (CACHE64_CTRL1_NS);
 
 		XSPI_Init            (base, &config);
 		XSPI_SetDeviceConfig (base, &Xspi::DeviceConfig);
@@ -267,7 +295,7 @@ OF SUCH DAMAGE. */
 		{
 			// ToDo: We need to implement this
 		}
-		else if (memType == MemoryType::OctaSPI_DDR || memType == MemoryType::QuadSPI_DDR || memType == MemoryType::Hyperflash || memType == MemoryType::Hyperram)
+		else
 		{
 			DeviceInfo info {};
 			status_t status {};

@@ -95,7 +95,11 @@ extern "C"
 	};
 
 	/*! LibmemStatus:
-	\brief Libmem Status */
+	\brief Libmem Status.
+	Caution: these codes are inverted with respect to the NXP SDK's status_t. LibmemStaus_Success is 1
+	while kStatus_Success is 0, and LibmemStaus_Error is 0 while kStatus_Fail is 1. So returning one
+	vocabulary from a function declared with the other turns a failure into a success. Use status_t
+	with kStatus_* exclusively for SDK calls, and LibmemStatus_t with LibmemStaus_* for libmem. */
 	typedef enum LibmemStatus
 	{
 		LibmemStaus_Success          = (int)LIBMEM_STATUS_SUCCESS,

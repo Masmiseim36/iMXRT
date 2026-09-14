@@ -182,6 +182,17 @@ int main ([[maybe_unused]]uint32_t flags, [[maybe_unused]]uint32_t param)
 				LibmemStatus res1 = Init_Libmem (static_cast<FlexSPI_Helper *>(FLEXSPI1), static_cast<MemoryType>(param & 0x0F));
 				LibmemStatus res2 = Init_Libmem (static_cast<FlexSPI_Helper *>(FLEXSPI2), static_cast<MemoryType>((param & 0xF0) >> 4));
 				if (res1 == LibmemStatus_InvalidMemoryType && res2 == LibmemStatus_InvalidMemoryType)
+			#elif defined XSPI0
+				// devices with xSPI interfaces instead of FlexSPI (iMXRT700)
+				LibmemStatus resX0 = Init_Libmem (static_cast<FlexSPI_Helper *>(XSPI0), static_cast<MemoryType>(param & 0x0F));
+				#if defined XSPI1
+					LibmemStatus resX1 = Init_Libmem (static_cast<FlexSPI_Helper *>(XSPI1), static_cast<MemoryType>((param & 0xF0) >> 4));
+				#endif
+				if (resX0 == LibmemStatus_InvalidMemoryType
+				#if defined XSPI1
+					&& resX1 == LibmemStatus_InvalidMemoryType
+				#endif
+				)
 			#endif
 			{
 				// No valid option for an Flash-memory-interface selected

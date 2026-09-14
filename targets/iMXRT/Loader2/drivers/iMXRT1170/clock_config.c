@@ -1,6 +1,5 @@
 /*
- * Copyright 2020-2021 NXP
- * All rights reserved.
+ * Copyright 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -18,12 +17,11 @@
 
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Clocks v8.0
+product: Clocks v16.0
 processor: MIMXRT1176xxxxx
-package_id: MIMXRT1176DVMAA
+package_id: MIMXRT1176DVMAB
 mcu_data: ksdk2_0
-processor_version: 0.0.0
-board: MIMXRT1170-EVK
+processor_version: 0.2506.20
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 
 #include "clock_config.h"
@@ -243,37 +241,52 @@ settings:
  ******************************************************************************/
 
 #ifndef SKIP_POWER_ADJUSTMENT
-#if __CORTEX_M == 7
-#define BYPASS_LDO_LPSR 1
-#define SKIP_LDO_ADJUSTMENT 1
-#elif __CORTEX_M == 4
-#define SKIP_DCDC_ADJUSTMENT 1
-#define SKIP_FBB_ENABLE 1
-#endif
+	#if __CORTEX_M == 7
+		#define BYPASS_LDO_LPSR 1
+		#define SKIP_LDO_ADJUSTMENT 1
+	#elif __CORTEX_M == 4
+		#define SKIP_DCDC_ADJUSTMENT 1
+		#define SKIP_FBB_ENABLE 1
+	#endif
 #endif
 
 const clock_arm_pll_config_t armPllConfig_BOARD_BootClockRUN =
-    {
-        .postDivider = kCLOCK_PllPostDiv2,        /* Post divider, 0 - DIV by 2, 1 - DIV by 4, 2 - DIV by 8, 3 - DIV by 1 */
-        .loopDivider = 166,                       /* PLL Loop divider, Fout = Fin * ( loopDivider / ( 2 * postDivider ) ) */
-    };
+{
+	.postDivider = kCLOCK_PllPostDiv2,        /* Post divider, 0 - DIV by 2, 1 - DIV by 4, 2 - DIV by 8, 3 - DIV by 1 */
+	#if (defined(CPU_MIMXRT1176DVMAA_cm7) || defined(CPU_MIMXRT1176DVMAB_cm7) || defined(CPU_MIMXRT1175DVMAA_cm7) || defined(CPU_MIMXRT1175DVMAB_cm7) || \
+		 defined(CPU_MIMXRT1172DVMAA)     || defined(CPU_MIMXRT1172DVMAB)     || defined(CPU_MIMXRT1171DVMAA)     || defined(CPU_MIMXRT1171DVMAB) || \
+		 defined(CPU_MIMXRT1175DVMAA_cm4) || defined(CPU_MIMXRT1175DVMAB_cm4) || defined(CPU_MIMXRT1176DVMAA_cm4) || defined(CPU_MIMXRT1176DVMAB_cm4))
+		.loopDivider = 166,                   /* PLL Loop divider, Fout = Fin * 41.5  --> 996 MHz */
+	#elif (defined(CPU_MIMXRT1176AVM8A_cm7) || defined(CPU_MIMXRT1176AVM8B_cm7) || defined(CPU_MIMXRT1176CVM8A_cm7) || defined(CPU_MIMXRT1176CVM8B_cm7) || \
+		   defined(CPU_MIMXRT1175AVM8A_cm7) || defined(CPU_MIMXRT1175AVM8B_cm7) || defined(CPU_MIMXRT1173CVM8A_cm7) || defined(CPU_MIMXRT1173CVM8B_cm7) || \
+		   defined(CPU_MIMXRT1175CVM8A_cm7) || defined(CPU_MIMXRT1175CVM8B_cm7) || defined(CPU_MIMXRT1171AVM8A)     || defined(CPU_MIMXRT1171AVM8B)     || \
+		   defined(CPU_MIMXRT1171CVM8A)     || defined(CPU_MIMXRT1171CVM8B)     || defined(CPU_MIMXRT1172AVM8A)     || defined(CPU_MIMXRT1172AVM8B)     || \
+		   defined(CPU_MIMXRT1172CVM8A)     || defined(CPU_MIMXRT1172CVM8B)     || \
+		   defined(CPU_MIMXRT1173CVM8A_cm4) || defined(CPU_MIMXRT1173CVM8B_cm4) || \
+		   defined(CPU_MIMXRT1175AVM8A_cm4) || defined(CPU_MIMXRT1175AVM8B_cm4) || defined(CPU_MIMXRT1175CVM8A_cm4) || defined(CPU_MIMXRT1175CVM8B_cm4) || \
+		   defined(CPU_MIMXRT1176AVM8A_cm4) || defined(CPU_MIMXRT1176AVM8B_cm4) || defined(CPU_MIMXRT1176CVM8A_cm4) || defined(CPU_MIMXRT1176CVM8B_cm4))
+		.loopDivider = 133,                   /* PLL Loop divider, Fout = Fin * 41.5  --> 798 MHz */
+	#else
+		#error "Unknown iMXRT1170 device"
+	#endif
+};
 
 const clock_sys_pll2_config_t sysPll2Config_BOARD_BootClockRUN =
-    {
-        .mfd = 268435455,                         /* Denominator of spread spectrum */
-        .ss = NULL,                               /* Spread spectrum parameter */
-        .ssEnable = false,                        /* Enable spread spectrum or not */
-    };
+{
+	.mfd = 268435455,                         /* Denominator of spread spectrum */
+	.ss = NULL,                               /* Spread spectrum parameter */
+	.ssEnable = false,                        /* Enable spread spectrum or not */
+};
 
 const clock_video_pll_config_t videoPllConfig_BOARD_BootClockRUN =
-    {
-        .loopDivider = 41,                        /* PLL Loop divider, valid range for DIV_SELECT divider value: 27 ~ 54. */
-        .postDivider = 0,                         /* Divider after PLL, should only be 1, 2, 4, 8, 16, 32 */
-        .numerator = 1,                           /* 30 bit numerator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
-        .denominator = 960000,                    /* 30 bit denominator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
-        .ss = NULL,                               /* Spread spectrum parameter */
-        .ssEnable = false,                        /* Enable spread spectrum or not */
-    };
+{
+	.loopDivider = 41,                        /* PLL Loop divider, valid range for DIV_SELECT divider value: 27 ~ 54. */
+	.postDivider = 0,                         /* Divider after PLL, should only be 1, 2, 4, 8, 16, 32 */
+	.numerator = 1,                           /* 30 bit numerator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
+	.denominator = 960000,                    /* 30 bit denominator of fractional loop divider, Fout = Fin * ( loopDivider + numerator / denominator ) */
+	.ss = NULL,                               /* Spread spectrum parameter */
+	.ssEnable = false,                        /* Enable spread spectrum or not */
+};
 
 /*******************************************************************************
  * Code for BOARD_BootClockRUN configuration
@@ -282,8 +295,9 @@ void BOARD_BootClockRUN(void)
 {
     clock_root_config_t rootCfg = {0};
 
-    /* Set DCDC to DCM mode to improve the efficiency for light loading in run mode and transient performance with a big loading step. */
-    DCDC_BootIntoDCM(DCDC);
+#if !defined(SKIP_DCDC_CONFIGURATION) || (!SKIP_DCDC_CONFIGURATION)
+    /* Set DCDC to CCM mode to improve stablility. */
+    DCDC_BootIntoCCM(DCDC);
 
 #if !defined(SKIP_DCDC_ADJUSTMENT) || (!SKIP_DCDC_ADJUSTMENT)
     if((OCOTP->FUSEN[16].FUSE == 0x57AC5969U) && ((OCOTP->FUSEN[17].FUSE & 0xFFU) == 0x0BU))
@@ -295,7 +309,8 @@ void BOARD_BootClockRUN(void)
         /* Set 1.125V for production samples to align with data sheet requirement */
         DCDC_SetVDD1P0BuckModeTargetVoltage(DCDC, kDCDC_1P0BuckTarget1P125V);
     }
-#endif
+#endif /* SKIP_DCDC_ADJUSTMENT */
+#endif /* SKIP_DCDC_CONFIGURATION */
 
 #if !defined(SKIP_FBB_ENABLE) || (!SKIP_FBB_ENABLE)
     /* Check if FBB need to be enabled in OverDrive(OD) mode */
@@ -340,7 +355,6 @@ void BOARD_BootClockRUN(void)
 
     /* Init OSC RC 400M */
     CLOCK_OSC_EnableOscRc400M();
-    CLOCK_OSC_GateOscRc400M(true);
 
     /* Init OSC RC 48M */
     CLOCK_OSC_EnableOsc48M(true);
@@ -354,22 +368,29 @@ void BOARD_BootClockRUN(void)
     {
     }
 
-    /* Swicth both core, M7 Systick and Bus_Lpsr to OscRC48MDiv2 first */
+    /* Switch core M7 clock root to OscRC48MDiv2 first */
 #if __CORTEX_M == 7
     rootCfg.mux = kCLOCK_M7_ClockRoot_MuxOscRc48MDiv2;
     rootCfg.div = 1;
     CLOCK_SetRootClock(kCLOCK_Root_M7, &rootCfg);
+#endif
 
+    /* Switch core M7 systick clock root to OscRC48MDiv2 first */
+#if __CORTEX_M == 7
     rootCfg.mux = kCLOCK_M7_SYSTICK_ClockRoot_MuxOscRc48MDiv2;
     rootCfg.div = 1;
     CLOCK_SetRootClock(kCLOCK_Root_M7_Systick, &rootCfg);
 #endif
 
+    /* Switch core M4 clock root to OscRC48MDiv2 first */
 #if __CORTEX_M == 4
     rootCfg.mux = kCLOCK_M4_ClockRoot_MuxOscRc48MDiv2;
     rootCfg.div = 1;
     CLOCK_SetRootClock(kCLOCK_Root_M4, &rootCfg);
+#endif
 
+    /* Switch the Bus_Lpsr clock root to OscRC48MDiv2 first */
+#if __CORTEX_M == 4
     rootCfg.mux = kCLOCK_BUS_LPSR_ClockRoot_MuxOscRc48MDiv2;
     rootCfg.div = 1;
     CLOCK_SetRootClock(kCLOCK_Root_Bus_Lpsr, &rootCfg);

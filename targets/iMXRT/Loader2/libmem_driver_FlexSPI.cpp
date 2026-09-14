@@ -178,7 +178,6 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 			while ((CLKCTL0->FLEXSPI0FCLKDIV) & CLKCTL0_FLEXSPI0FCLKDIV_REQFLAG_MASK)
 				;
 //			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
-			ClockHz = CLOCK_GetFlexspiClkFreq (0);
 		}
 		else if (base == FLEXSPI1 &&
 			(CLKCTL0->FLEXSPI1FCLKSEL != CLKCTL0_FLEXSPI1FCLKSEL_SEL(src) || (CLKCTL0->FLEXSPI1FCLKDIV & CLKCTL0_FLEXSPI1FCLKDIV_DIV_MASK) != (clockDiv - 1)))
@@ -196,8 +195,16 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 			while ((CLKCTL0->FLEXSPI1FCLKDIV) & CLKCTL0_FLEXSPI1FCLKDIV_REQFLAG_MASK)
 				;
 //			CLKCTL0->PSCCTL0_SET = CLKCTL0_PSCCTL0_SET_FLEXSPI_OTFAD_CLK_MASK;	// Enable FLEXSPI clock again
-			ClockHz = CLOCK_GetFlexspiClkFreq (1);
 		}
+
+		// Read the frequency back unconditionally. The branches above are skipped when the clock
+		// already has the wanted source and divider, which would otherwise leave ClockHz at zero.
+		if (base == FLEXSPI0)
+			ClockHz = CLOCK_GetFlexspiClkFreq (0);
+		else if (base == FLEXSPI1)
+			ClockHz = CLOCK_GetFlexspiClkFreq (1);
+		else
+			return LibmemStaus_InvalidDevice;
 	#elif (defined(MIMXRT633S_SERIES) || defined(MIMXRT685S_cm33_SERIES))
 		// Clock Source
 		// 0 --> Main Clock.
@@ -368,16 +375,22 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 		} data{};
 		base->UpdateLUT (Spansion::LUT_HyperFlash);
 		FLEXSPI_SoftwareReset  (base);
-		status = base->WriteRegister (0x555 * 2, 0x9800,                     static_cast<LUT_CommandOffsets>(Spansion::Command::WriteData), 2);
+		status = base->WriteRegister (0x555 * 2, 0x9800,                     static_cast<LUT_CommandOffsets>(Spansion::Command::WriteData), 2);	// Enter CFI mode
+		if (status != kStatus_Success)
+			return LibmemStaus_Error;
 		status = base->Read          (0x10  * 2, data.data32,  sizeof(data), static_cast<LUT_CommandOffsets>(Spansion::Command::ReadData));
-		status = base->WriteRegister (0,         0xF000,                     static_cast<LUT_CommandOffsets>(Spansion::Command::WriteData), 2);
+		if (status != kStatus_Success)
+			return LibmemStaus_Error;
+		status = base->WriteRegister (0,         0xF000,                     static_cast<LUT_CommandOffsets>(Spansion::Command::WriteData), 2);	// Leave CFI mode
+		if (status != kStatus_Success)
+			return LibmemStaus_Error;
 
 		// Search for the Query Unique ASCII string "QRY" for Infinion Hyperflash
 		size_t position {};
 		constexpr size_t EndPos {std::size(data.data16)-23};
 		for (; position < EndPos; position++)
 		{
-			if (data.data16[position] == 0x5100 || data.data16[position+1] == 0x5200 || data.data16[position+2] == 0x5900)
+			if (data.data16[position] == 0x5100 && data.data16[position+1] == 0x5200 && data.data16[position+2] == 0x5900)
 				break;
 		}
 		if (position >= EndPos)
@@ -395,8 +408,7 @@ LibmemStatus_t Libmem_InitializeDriver_xSPI (FlexSPI_Helper *base, MemoryType me
 	{
 		base->UpdateLUT (Generic::LUT_Hyperram);
 		info.Capacity      = static_cast<Capacity>(Capacity_256MBit);
-		config.rxWatermark = 64;
-		config.txWatermark = 0;
+		config.rxWatermark = 64;	// txWatermark keeps the default of 8; it must be a non-zero multiple of 8
 		config.enableDoze  = false;
 		#if !(defined(FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN) && FSL_FEATURE_FLEXSPI_HAS_NO_MCR0_COMBINATIONEN)
 		config.enableCombination = true;

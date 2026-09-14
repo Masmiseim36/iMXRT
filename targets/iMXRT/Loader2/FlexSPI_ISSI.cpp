@@ -62,7 +62,7 @@ namespace ISSI
 		flexSPI.UpdateLUT (LUT_ReadJEDEC_ID * Lut::BlockSize, LUT_OctaSPI_DDR, Lut::BlockSize);
 		const status_t status = flexSPI.ReadJEDEC (&info);
 
-		if (status != kStatus_Success)
+		if (status == kStatus_Success)
 		{
 			// We were able to read the JEDEC ID via octaspi-DDR, so we are in this mode
 			tryDetectMemoryType = MemoryType::OctaSPI_DDR;
