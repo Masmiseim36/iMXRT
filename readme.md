@@ -8,13 +8,17 @@ This package enhances the original package by
 - Using the latest CMSIS-Files and register-descriptions provided by NXP
 - Enabling debugging in the external-SDRAM-memory
 - Added a loader (in Source code) which supports different Flash memory targets
-- Adding support for iMXRT600 / iMXRT1180 (with restrictions)
+- Supporting both the FlexSPI and the newer xSPI memory interface
+- Adding support for iMXRT600 / iMXRT700 / iMXRT1150 / iMXRT1180 (with restrictions)
 
 Sample code for booting from external Flash can be found in this repository: https://github.com/Masmiseim36/Coremark_iMXRT
 
 The following Controllers are supported:
 
 - [iMXRT600](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt600-crossover-mcu-with-arm-cortex-m33-and-dsp-cores:i.MX-RT600)
+- iMXRT700  
+  Limited functionality:
+  - the support is not yet complete
 - [iMXRT1010](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1010-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1010)
 - [iMXRT1015](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1015-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1015)
 - [iMXRT1020](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1020-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1020)
@@ -23,6 +27,7 @@ The following Controllers are supported:
 - [iMXRT1050](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1050-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1050)
 - [iMXRT1060](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1060-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1060)
 - [iMXRT1064](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1064-crossover-mcu-with-arm-cortex-m7-core:i.MX-RT1064)
+- iMXRT1150
 - [iMXRT1160](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1160-crossover-high-performance-mcu-with-arm-cortex-m7-and-cortex-m4-cores:i.MX-RT1160)
 - [iMXRT1170](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1170-crossover-mcu-family-first-ghz-mcu-with-arm-cortex-m7-and-cortex-m4-cores:i.MX-RT1170)
 - [iMXRT1180](https://www.nxp.com/products/processors-and-microcontrollers/arm-microcontrollers/i-mx-rt-crossover-mcus/i-mx-rt1180-crossover-mcu-with-tsn-switch-and-edgelock:i.MX-RT1180)  
@@ -30,6 +35,8 @@ The following Controllers are supported:
   - Native dual-core debugging is not yet possible
   - the controller must be reset manually after each debugging process
   - Only the internal RAM memory is supported
+
+Support for the iMXRT500 is prepared - CMSIS files, memory map, register descriptions and a loader configuration are present - but the family is not offered for selection yet, because the loader binary is still missing.
 
 ## Build and Install
 
@@ -61,7 +68,9 @@ enum class MemoryType
 };
 ```
 
-The lowest Nibble of the parameter is used to configure the first FlexSPI-Interface, the next nibble for the second interface if available on the target device.
+The lowest Nibble of the parameter is used to configure the first FlexSPI- or xSPI-Interface, the next nibble for the second interface if available on the target device.
+
+`Hyperram` does not describe a flash memory. It only initializes the attached HyperRAM so that the memory can be used before and while debugging.
 
 ### Supported Flashes
 
@@ -82,6 +91,8 @@ The following flash memories were tested, and derivatives of these memories will
   - IS25WP128
   - IS25LX064/032 (OctaSPI DDR)
   - IS25WX064/032 (OctaSPI DDR)
+- Micron (initial support)
+  - MT35XU512ABA (OctaSPI DDR)
 - Winbond
   - W25Q32JV-IQ/JQ
   - W25Q64JV

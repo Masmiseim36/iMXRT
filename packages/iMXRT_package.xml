@@ -6,9 +6,17 @@
 	</group>
 	<targets>
 		<category name="iMXRT600">
-			<cpu name="MIMXRT685SFAWB"/>
+			<cpu name="MIMXRT633SFAWBR"/>
+			<cpu name="MIMXRT633SFFOB"/>
+			<cpu name="MIMXRT633SFVKB"/>
+			<cpu name="MIMXRT685SFAWBR"/>
 			<cpu name="MIMXRT685SFFOB"/>
 			<cpu name="MIMXRT685SFVKB"/>
+		</category>
+		<category name="iMXRT700">
+			<cpu name="MIMXRT735SGAWBR"/>
+			<cpu name="MIMXRT758SGAWBR"/>
+			<cpu name="MIMXRT798SGAWBR"/>
 		</category>
 		<category name="iMXRT1011">
 			<cpu name="MIMXRT1011CAE4A"/>
@@ -37,22 +45,26 @@
 			<cpu name="MIMXRT1024DAG5B"/>
 		</category>
 		<category name="iMXRT1040">
-			<cpu name="MIMXRT1041XFP5B"/>
-			<cpu name="MIMXRT1041XJM5B"/>
 			<cpu name="MIMXRT1041DFP6B"/>
 			<cpu name="MIMXRT1041DJM6B"/>
-			<cpu name="MIMXRT1042XFP5B"/>
-			<cpu name="MIMXRT1042XJM5B"/>
+			<cpu name="MIMXRT1041XFP5B"/>
+			<cpu name="MIMXRT1041XJM5B"/>
 			<cpu name="MIMXRT1042DFP6B"/>
 			<cpu name="MIMXRT1042DJM6B"/>
+			<cpu name="MIMXRT1042XFP5B"/>
+			<cpu name="MIMXRT1042XJM5B"/>
+			<cpu name="MIMXRT1043DFP6B"/>
+			<cpu name="MIMXRT1043XFP5B"/>
+			<cpu name="MIMXRT1046DFQ6B"/>
+			<cpu name="MIMXRT1046XFQ5B"/>
 		</category>
 		<category name="iMXRT1050">
+			<cpu name="MIMXRT1051CVJ5B"/>
 			<cpu name="MIMXRT1051CVL5A"/>
 			<cpu name="MIMXRT1051CVL5B"/>
-			<cpu name="MIMXRT1051CVJ5B"/>
+			<cpu name="MIMXRT1051DVJ6B"/>
 			<cpu name="MIMXRT1051DVL6A"/>
 			<cpu name="MIMXRT1051DVL6B"/>
-			<cpu name="MIMXRT1051DVJ6B"/>
 			<cpu name="MIMXRT1052CVL5A"/>
 			<cpu name="MIMXRT1052CVL5B"/>
 			<cpu name="MIMXRT1052CVJ5B"/>
@@ -61,32 +73,39 @@
 			<cpu name="MIMXRT1052DVJ6B"/>
 		</category>
 		<category name="iMXRT1060">
-			<cpu name="MIMXRT1061CVJ5A"/>
-			<cpu name="MIMXRT1061CVJ5B"/>
 			<cpu name="MIMXRT1061CVL5A"/>
-			<cpu name="MIMXRT1061CVL5B"/>
-			<cpu name="MIMXRT1061DVJ6A"/>
-			<cpu name="MIMXRT1061DVJ6B"/>
+			<cpu name="MIMXRT1061CVJ5A"/>
 			<cpu name="MIMXRT1061DVL6A"/>
+			<cpu name="MIMXRT1061DVJ6A"/>
+			<cpu name="MIMXRT1061CVL5B"/>
+			<cpu name="MIMXRT1061CVJ5B"/>
 			<cpu name="MIMXRT1061DVL6B"/>
+			<cpu name="MIMXRT1061DVJ6B"/>
 			<cpu name="MIMXRT1061XVN5B"/>
-			<cpu name="MIMXRT1062CVJ5A"/>
-			<cpu name="MIMXRT1062CVJ5B"/>
 			<cpu name="MIMXRT1062CVL5A"/>
-			<cpu name="MIMXRT1062CVL5B"/>
-			<cpu name="MIMXRT1062DVJ6A"/>
-			<cpu name="MIMXRT1062DVJ6B"/>
+			<cpu name="MIMXRT1062CVJ5A"/>
 			<cpu name="MIMXRT1062DVL6A"/>
+			<cpu name="MIMXRT1062DVJ6A"/>
+			<cpu name="MIMXRT1062CVL5B"/>
+			<cpu name="MIMXRT1062CVJ5B"/>
 			<cpu name="MIMXRT1062DVL6B"/>
+			<cpu name="MIMXRT1062DVJ6B"/>
 			<cpu name="MIMXRT1062DVN6B"/>
 			<cpu name="MIMXRT1062XVN5B"/>
 		</category>
 		<category name="iMXRT1064">
+			<cpu name="MIMXRT1064CVJ5A"/>
+			<cpu name="MIMXRT1064CVJ5B"/>
 			<cpu name="MIMXRT1064CVL5A"/>
-			<cpu name="MIMXRT1064DVL6A"/>
-			<cpu name="MIMXRT1064DVL6B"/>
+			<cpu name="MIMXRT1064CVL5B"/>
 			<cpu name="MIMXRT1064DVJ6A"/>
 			<cpu name="MIMXRT1064DVJ6B"/>
+			<cpu name="MIMXRT1064DVL6A"/>
+			<cpu name="MIMXRT1064DVL6B"/>
+		</category>
+		<category name="iMXRT1150">
+			<cpu name="MIMXRT1151DHM8B"/>
+			<cpu name="MIMXRT1152AHM6B"/>
 		</category>
 		<category name="iMXRT1160">
 			<cpu name="MIMXRT1165CVM5A"/>
@@ -98,35 +117,39 @@
 		</category>
 		<category name="iMXRT1170">
 			<cpu name="MIMXRT1171AVM8A"/>
+			<cpu name="MIMXRT1171AVM8B"/>
 			<cpu name="MIMXRT1171CVM8A"/>
+			<cpu name="MIMXRT1171CVM8B"/>
 			<cpu name="MIMXRT1171DVMAA"/>
+			<cpu name="MIMXRT1171DVMAB"/>
 			<cpu name="MIMXRT1172AVM8A"/>
+			<cpu name="MIMXRT1172AVM8B"/>
 			<cpu name="MIMXRT1172CVM8A"/>
+			<cpu name="MIMXRT1172CVM8B"/>
 			<cpu name="MIMXRT1172DVMAA"/>
-			<cpu name="MIMXRT1173CVM8A_cm7"/>
-			<cpu name="MIMXRT1173CVM8A_cm4"/>
-			<cpu name="MIMXRT1175AVM8A_cm7"/>
-			<cpu name="MIMXRT1175CVM8A_cm7"/>
-			<cpu name="MIMXRT1175DVMAA_cm7"/>
-			<cpu name="MIMXRT1175AVM8A_cm4"/>
-			<cpu name="MIMXRT1175CVM8A_cm4"/>
-			<cpu name="MIMXRT1175DVMAA_cm4"/>
-			<cpu name="MIMXRT1176AVM8A_cm7"/>
-			<cpu name="MIMXRT1176CVM8A_cm7"/>
-			<cpu name="MIMXRT1176DVMAA_cm7"/>
-			<cpu name="MIMXRT1176AVM8A_cm4"/>
-			<cpu name="MIMXRT1176CVM8A_cm4"/>
-			<cpu name="MIMXRT1176DVMAA_cm4"/>
+			<cpu name="MIMXRT1172DVMAB"/>
+			<cpu name="MIMXRT1173CVM8A"/>
+			<cpu name="MIMXRT1173CVM8B"/>
+			<cpu name="MIMXRT1175AVM8A"/>
+			<cpu name="MIMXRT1175AVM8B"/>
+			<cpu name="MIMXRT1175CVM8A"/>
+			<cpu name="MIMXRT1175CVM8B"/>
+			<cpu name="MIMXRT1175DVMAA"/>
+			<cpu name="MIMXRT1175DVMAB"/>
+			<cpu name="MIMXRT1176AVM8A"/>
+			<cpu name="MIMXRT1176AVM8B"/>
+			<cpu name="MIMXRT1176CVM8A"/>
+			<cpu name="MIMXRT1176CVM8B"/>
+			<cpu name="MIMXRT1176DVMAA"/>
+			<cpu name="MIMXRT1176DVMAB"/>
 		</category>
 		<category name="iMXRT1180">
-			<cpu name="MIMXRT1181XVP2B"/>
-			<cpu name="MIMXRT1181CVP2B"/>
-			<cpu name="MIMXRT1182XVP2B"/>
-			<cpu name="MIMXRT1182CVP2B"/>
-			<cpu name="MIMXRT1187XVM8B"/>
+			<cpu name="MIMXRT1181CVM8B"/>
+			<cpu name="MIMXRT1182CVM8B"/>
+			<cpu name="MIMXRT118CXVJ8C"/>
+			<cpu name="MIMXRT1185XVJ8C"/>
+			<cpu name="MIMXRT1186XVJ8C"/>
 			<cpu name="MIMXRT1187CVM8B"/>
-			<cpu name="MIMXRT1187AVM8B"/>
-			<cpu name="MIMXRT1189XVM8B"/>
 			<cpu name="MIMXRT1189CVM8B"/>
 		</category>
 	</targets>
@@ -178,6 +201,8 @@
       <p>For iMXRT projects the set of placements are:</p>
       <ul>
         <li><b>TCM</b> application runs ITCM and DTCM memories.</li>
+        <li><b>SRAM</b> application runs in internal SRAM memory.</li>
+        <li><b>OCRAM</b> application runs in On-Chip RAM, ITCM and DTCM memories.</li>
         <li><b>SDRAM</b> application runs in External SD-RAM memory.</li>
         <li><b>FlexSPI (HYPER)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
         <li><b>FlexSPI (OctaSPI)</b> application runs in FlexSPI, ITCM, DTCM and OCRAM memories.</li>
@@ -185,6 +210,20 @@
         <li><b>FlexSPI2 (HYPER)</b> application runs in FlexSPI2, ITCM, DTCM and OCRAM memories.</li>
         <li><b>FlexSPI2 (OctaSPI)</b> application runs in FlexSPI2, ITCM, DTCM and OCRAM memories.</li>
         <li><b>FlexSPI2 (QuadSPI)</b> application runs in FlexSPI2, ITCM, DTCM and OCRAM memories.</li>
+      </ul>
+      <p>The <b>FlexSPI</b> and <b>FlexSPI2</b> placements also select the flash loader and the memory type it should
+      configure. The memory type is passed to the loader through the <b>Loader Parameter</b> property: the lowest nibble
+      selects the memory attached to the first FlexSPI/xSPI interface, the next nibble the memory on the second interface
+      if the device has one.</p>
+
+      <h5>Configuration Data</h5>
+      <p>The <b>Configuration Data</b> property controls which boot configuration structures are emitted into the boot
+      header of an application that runs from external flash. The available options are:</p>
+      <ul>
+        <li><b>Disabled</b> no additional configuration data is generated.</li>
+        <li><b>DCD Enabled</b> generates Device Configuration Data.</li>
+        <li><b>XMCD Enabled</b> generates eXternal Memory Configuration Data.</li>
+        <li><b>DCD and XMCD Enabled</b> generates both.</li>
       </ul>
 
       <h5>Stack and Heap Sizes</h5>
@@ -210,6 +249,18 @@
     </section>
   </documentation>
   <history>
+    <version name="4.4.3">
+      <description>Added support for iMXRT700 and iMXRT1150</description>
+      <description>Added support for iMXRT1180, including the iMXRT118C, iMXRT1185 and iMXRT1186 devices</description>
+      <description>iMXRT600 is now officially supported</description>
+      <description>Added the iMXRT1043 and iMXRT1046 devices</description>
+      <description>New flash loader (Loader2), provided in source code, with drivers for Adesto, Cypress/Infineon, ISSI, Macronix, Micron and Winbond memories</description>
+      <description>The loader supports both the FlexSPI and the xSPI peripheral, and HyperFlash, OctaSPI (SDR/DDR), QuadSPI (SDR/DDR), SPI and HyperRAM memories</description>
+      <description>The memory interface used by the loader is selected with the Section Placement property and passed through the Loader Parameter property</description>
+      <description>Updated the CMSIS header files, startup files and register description files from the NXP SDK</description>
+      <description>Added a Configuration Data property to enable Device Configuration Data (DCD) and eXternal Memory Configuration Data (XMCD)</description>
+      <description>Added SRAM and OCRAM section placements</description>
+    </version>
     <version name="4.4.2">
       <description>Added Support for iMXRT117x</description>
       <description>FlexSPI-Configurations are also using TCM- and OCRAM-memory now</description>
