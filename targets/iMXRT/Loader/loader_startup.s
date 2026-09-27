@@ -33,6 +33,10 @@ Reset_Handler:
   ldr r2, =__stack_end__
   mov sp, r2
 #else
+#if defined(__ARM_ARCH_8M_MAINLINE__)
+  ldr r0, =__stack_start__
+  msr msplim, r0
+#endif
   ldr sp, =__stack_end__
 #endif
 

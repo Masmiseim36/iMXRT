@@ -1,13 +1,18 @@
 <projects>
-  <project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT Executable" description="An executable for NXP iMXRT processor." type="Executable" template_name="iMXRT_EXE">
+  <project cpu_manufacturer="NXP" cpu_name="iMXRT" description="An executable for NXP iMXRT processor." name="iMXRT Executable" template_name="iMXRT_EXE" type="Executable">
     <configuration name="THUMB Debug" />
     <configuration name="THUMB Release" />
     <property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
-    <propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
-    <propertygroup name="Placement" value="TCM" choose="Yes" />
+    <propertygroup choose="Yes" name="Target" value="MIMXRT1052DVL6B" />
+    <propertygroup choose="Yes" name="Placement" value="TCM" />
     <property name="arm_fpu_abi" value="Hard" />
     <property name="arm_target_interface_type" value="SWD" />
-    <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
+    <property configuration="Flash" name="arm_target_loader_parameter" value="24000000" />
+    <property configuration="Flash" name="arm_target_loader_can_lock_all" value="No" />
+    <property configuration="Flash" name="arm_target_loader_can_unlock_all" value="No" />
+    <property configuration="Flash" name="arm_target_loader_can_lock_range" value="No" />
+    <property configuration="Flash" name="arm_target_loader_can_unlock_range" value="No" />
+    <property name="target_connect_script" value="Connect()" />
     <property name="target_get_partname_script" value="GetPartName()" />
     <property name="target_match_partname_script" value="MatchPartName(&quot;$(Target)&quot;)" />
     <property name="target_trace_initialize_script" value="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
@@ -23,27 +28,31 @@
     <property name="linker_scanf_fmt_level" />
     <property name="linker_scanf_fp_enabled" />
     <property name="linker_scanf_character_group_matching_enabled" />
-    <property name="link_symbol_definitions" value="__NCACHE_REGION_START=__NCACHE_REGION_segment_start__;__NCACHE_REGION_SIZE=__NCACHE_REGION_segment_size__;__base_NCACHE_REGION=__NCACHE_REGION_segment_start__;__top_NCACHE_REGION=__NCACHE_REGION_segment_end__" />
     <propertygroup name="CMSIS_CORE" value="Yes" />
-    <property name="c_user_include_directories" value="$(TargetsDir)/iMXRT/drivers/common;$(TargetsDir)/iMXRT/devices/$(DeviceFamily);$(TargetsDir)/iMXRT/devices/$(DeviceFamily)/drivers" />
-    <folder name="Source Files" filter="c;cpp;cxx;cc;h;s;asm;inc">
+    <property name="add_project_directories_to_user_include_directories" value="Yes" />
+    <folder filter="c;cpp;cxx;cc;h;s;asm;inc" name="Source Files">
       <file name="main.c" source="$(StudioDir)/samples/Shared/main.c" />
     </folder>
     <folder name="System Files">
-      <file name="$(StudioDir)/source/thumb_crt0.s" expand="no" />
-      <file name="$(DeviceStartFile)" expand="no" />
-      <file name="$(DeviceSystemFile)" expand="no" />
+      <file expand="no" name="$(StudioDir)/source/thumb_crt0.s" />
+      <file expand="no" name="$(DeviceStartFile)" />
+      <file expand="no" name="$(DeviceSystemFile)" />
     </folder>
   </project>
-  <project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT CTL Executable" description="A CrossWorks Tasking Library executable for NXP iMXRT processor." type="Executable" template_name="iMXRT_CTL_EXE">
+  <project cpu_manufacturer="NXP" cpu_name="iMXRT" description="A CrossWorks Tasking Library executable for NXP iMXRT processor." name="iMXRT CTL Executable" template_name="iMXRT_CTL_EXE" type="Executable">
     <configuration name="THUMB Debug" />
     <configuration name="THUMB Release" />
     <property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
-    <propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
-    <propertygroup name="Placement" value="TCM" choose="Yes" />
+    <propertygroup choose="Yes" name="Target" value="MIMXRT1052DVL6B" />
+    <propertygroup choose="Yes" name="Placement" value="TCM" />
     <property name="arm_fpu_abi" value="Hard" />
     <property name="arm_target_interface_type" value="SWD" />
-    <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
+    <property configuration="Flash" name="arm_target_loader_parameter" value="24000000" />
+    <property configuration="Flash" name="arm_target_loader_can_lock_all" value="No" />
+    <property configuration="Flash" name="arm_target_loader_can_unlock_all" value="No" />
+    <property configuration="Flash" name="arm_target_loader_can_lock_range" value="No" />
+    <property configuration="Flash" name="arm_target_loader_can_unlock_range" value="No" />
+    <property name="target_connect_script" value="Connect()" />
     <property name="target_get_partname_script" value="GetPartName()" />
     <property name="target_match_partname_script" value="MatchPartName(&quot;$(Target)&quot;)" />
     <property name="target_trace_initialize_script" value="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
@@ -60,28 +69,32 @@
     <property name="linker_scanf_fmt_level" />
     <property name="linker_scanf_fp_enabled" />
     <property name="linker_scanf_character_group_matching_enabled" />
-    <property name="link_symbol_definitions" value="__NCACHE_REGION_START=__NCACHE_REGION_segment_start__;__NCACHE_REGION_SIZE=__NCACHE_REGION_segment_size__;__base_NCACHE_REGION=__NCACHE_REGION_segment_start__;__top_NCACHE_REGION=__NCACHE_REGION_segment_end__" />
     <propertygroup name="CMSIS_CORE" value="Yes" />
     <propertygroup name="libctl" value="Yes" />
-    <property name="c_user_include_directories" value="$(TargetsDir)/iMXRT/drivers/common;$(TargetsDir)/iMXRT/devices/$(DeviceFamily);$(TargetsDir)/iMXRT/devices/$(DeviceFamily)/drivers" />
-    <folder name="Source Files" filter="c;cpp;cxx;cc;h;s;asm;inc">
+    <property name="add_project_directories_to_user_include_directories" value="Yes" />
+    <folder filter="c;cpp;cxx;cc;h;s;asm;inc" name="Source Files">
       <file name="main_ctl.c" source="$(StudioDir)/ctl/source/main_ctl.c" />
     </folder>
     <folder name="System Files">
-      <file name="$(StudioDir)/source/thumb_crt0.s" expand="no" />
-      <file name="$(DeviceStartFile)" expand="no" />
-      <file name="$(DeviceSystemFile)" expand="no" />
-      <file name="$(TargetsDir)/iMXRT/iMXRT_ctl.c" expand="no" />
+      <file expand="no" name="$(StudioDir)/source/thumb_crt0.s" />
+      <file expand="no" name="$(DeviceStartFile)" />
+      <file expand="no" name="$(DeviceSystemFile)" />
+      <file expand="no" name="$(TargetsDir)/iMXRT/iMXRT_ctl.c" />
     </folder>
   </project>
-  <project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT External GCC Built Executable" description="An external GCC built executable for NXP iMXRT processor." type="Executable" template_name="iMXRT_GCC_EXE">
+  <project cpu_manufacturer="NXP" cpu_name="iMXRT" description="An external GCC built executable for NXP iMXRT processor." name="iMXRT External GCC Built Executable" template_name="iMXRT_GCC_EXE" type="Executable">
     <configuration name="$(Configuration)" />
     <property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
-    <propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
-    <propertygroup name="Placement" value="TCM" choose="Yes" />
+    <propertygroup choose="Yes" name="Target" value="MIMXRT1052DVL6B" />
+    <propertygroup choose="Yes" name="Placement" value="TCM" />
     <property name="arm_fpu_abi" value="Hard" />
     <property name="arm_target_interface_type" value="SWD" />
-    <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
+    <property configuration="Flash" name="arm_target_loader_parameter" value="24000000" />
+    <property configuration="Flash" name="arm_target_loader_can_lock_all" value="No" />
+    <property configuration="Flash" name="arm_target_loader_can_unlock_all" value="No" />
+    <property configuration="Flash" name="arm_target_loader_can_lock_range" value="No" />
+    <property configuration="Flash" name="arm_target_loader_can_unlock_range" value="No" />
+    <property name="target_connect_script" value="Connect()" />
     <property name="target_get_partname_script" value="GetPartName()" />
     <property name="target_match_partname_script" value="MatchPartName(&quot;$(Target)&quot;)" />
     <property name="target_trace_initialize_script" value="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />
@@ -92,13 +105,18 @@
     <property name="build_toolchain_directory" value="$(ARMGCCDIR)" />
     <property name="gcc_prefix" value="$(ARMGCCPREFIX)" />
   </project>
-  <project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT Externally Built Executable" description="An externally built executable for NXP iMXRT processor." type="Externally Built Executable" template_name="iMXRT_EXT_EXE">
+  <project cpu_manufacturer="NXP" cpu_name="iMXRT" description="An externally built executable for NXP iMXRT processor." name="iMXRT Externally Built Executable" template_name="iMXRT_EXT_EXE" type="Externally Built Executable">
     <property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
-    <propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
-    <propertygroup name="Placement" value="TCM" choose="Yes" />
+    <propertygroup choose="Yes" name="Target" value="MIMXRT1052DVL6B" />
+    <propertygroup choose="Yes" name="Placement" value="TCM" />
     <property name="arm_fpu_abi" value="Hard" />
     <property name="arm_target_interface_type" value="SWD" />
-    <property name="arm_target_loader_parameter" value="24000000" configuration="Flash" />
+    <property configuration="Flash" name="arm_target_loader_parameter" value="24000000" />
+    <property configuration="Flash" name="arm_target_loader_can_lock_all" value="No" />
+    <property configuration="Flash" name="arm_target_loader_can_unlock_all" value="No" />
+    <property configuration="Flash" name="arm_target_loader_can_lock_range" value="No" />
+    <property configuration="Flash" name="arm_target_loader_can_unlock_range" value="No" />
+    <property name="target_connect_script" value="Connect()" />
     <property name="target_get_partname_script" value="GetPartName()" />
     <property name="target_match_partname_script" value="MatchPartName(&quot;$(Target)&quot;)" />
     <property name="target_trace_initialize_script" value="EnableTrace(&quot;$(TraceInterfaceType)&quot;)" />

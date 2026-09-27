@@ -1,0 +1,24 @@
+<!DOCTYPE Board_Memory_Definition_File>
+<Root name="iMXRT11_CM4">
+  <MemorySegment address_symbol="__NCACHE_REGION_START" name="NCACHE_REGION" size="$(NCACHE_REGION_SIZE:0x0)" size_symbol="__NCACHE_REGION_SIZE" start="$(NCACHE_REGION_START:0x20210000)" />
+  <MemorySegment name="PPB" size="0x00100000" start="0xE0000000" />
+  <MemorySegment name="SDRAM" size="$(RAMSIZE:0x1e00000)" start="0x80000000" />
+  <MemorySegment access="ReadOnly" name="FlexSPI2" size="$(FlexSPI2SIZE:0x04000000)-$(FlexSPI2OFFSET:0)" start="$(FlexSPI2START:0x60000000)+$(FlexSPI2OFFSET:0)" />
+  <MemorySegment name="CDOG" size="0x00100000" start="0x41900000" />
+  <MemorySegment name="GPU2D" size="0x00100000" start="0x41800000" />
+  <MemorySegment name="SIM_M7" size="0x00100000" start="0x41400000" />
+  <MemorySegment name="SIM_M" size="0x00100000" start="0x41100000" />
+  <MemorySegment name="SIM_DISP" size="0x00100000" start="0x41000000" />
+  <MemorySegment name="AIPS-4" size="0x00400000" start="0x40C00000" />
+  <MemorySegment name="AIPS-3" size="0x00400000" start="0x40800000" />
+  <MemorySegment name="AIPS-2" size="0x00400000" start="0x40400000" />
+  <MemorySegment name="AIPS-1" size="0x00400000" start="0x40000000" />
+  <MemorySegment name="OCRAM2" size="$(OCRAM2SIZE:0x10000)" start="$(OCRAM2START:0x202C0000)" />
+  <MemorySegment name="OCRAM1" size="$(OCRAM1SIZE:0x10000)" start="$(OCRAM1START:0x20240000)" />
+  <MemorySegment name="SRAM" size="$(SRAMSIZE:0x10000)" start="$(SRAMSTART:0x20240000)" />
+  <MemorySegment name="OCRAM" size="$(OCRAMSIZE:0x10000)-$(OCRAMOFFSET:0)" start="$(OCRAMSTART:0x20240000)+$(OCRAMOFFSET:0)" />
+  <MemorySegment name="OCRAM_M4" size="0x00040000" start="0x20200000" />
+  <MemorySegment name="DTCM" size="$(DTCMSIZE:0x00020000)" start="$(DTCMSTART:0x20000000)" />
+  <MemorySegment name="ITCM" size="$(ITCMSIZE:0x00020000)" start="$(ITCMSTART:0x1FFE0000)" />
+  <MemorySegment access="ReadOnly" name="FlexSPI" size="$(FlexSPISIZE:0x04000000)-$(FlexSPIOFFSET:0)" start="$(FlexSPISTART:0x08000000)+$(FlexSPIOFFSET:0)" />
+</Root>

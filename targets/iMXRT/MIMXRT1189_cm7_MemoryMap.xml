@@ -1,0 +1,38 @@
+<!DOCTYPE Board_Memory_Definition_File>
+<Root name="iMXRT118x">
+  <MemorySegment address_symbol="__NCACHE_REGION_START" name="NCACHE_REGION" size="$(NCACHE_REGION_SIZE:0x0)" size_symbol="__NCACHE_REGION_SIZE" start="$(NCACHE_REGION_START:0x20210000)" />
+  <MemorySegment name="PPB" size="0x00100000" start="0xE0000000" />
+  <MemorySegment name="SDRAM" size="$(RAMSIZE:0x1e00000)" start="0x80000000" />
+  <MemorySegment name="NETC" size="0x00100000" start="0x01000000" />
+  <MemorySegment name="FlexSPI2_TX_FIFO" size="0x00001000" start="0x4DE10000" />
+  <MemorySegment name="FlexSPI2_RX_FIFO" size="0x00001000" start="0x4DE00000" />
+  <MemorySegment name="CM7_DOMAIN_Process_Monitor" size="0x00010000" start="0x4B870000" />
+  <MemorySegment name="CM7_DOMAIN_EIM" size="0x00010000" start="0x4B860000" />
+  <MemorySegment name="CM7_DOMAIN_MCM" size="0x00010000" start="0x4B850000" />
+  <MemorySegment name="Edgelock_AHB" size="0x00080000" start="0x47500000" />
+  <MemorySegment name="FlexSPI1_TX_FIFO" size="0x00001000" start="0x47430000" />
+  <MemorySegment name="FlexSPI1_RX_FIFO" size="0x00001000" start="0x47420000" />
+  <MemorySegment name="GPIO1" size="0x00010000" start="0x47400000" />
+  <MemorySegment name="AIPS" size="0x00800000" start="0x44000000" />
+  <MemorySegment name="NIC_MAIN_GPV" size="0x00100000" start="0x43900000" />
+  <MemorySegment name="SRAMC" size="0x00800000" start="0x43880000" />
+  <MemorySegment name="GPIO6" size="0x00010000" start="0x43850000" />
+  <MemorySegment name="GPIO5" size="0x00010000" start="0x43840000" />
+  <MemorySegment name="GPIO4" size="0x00010000" start="0x43830000" />
+  <MemorySegment name="GPIO3" size="0x00010000" start="0x43820000" />
+  <MemorySegment name="GPIO2" size="0x00010000" start="0x43810000" />
+  <MemorySegment name="Edgelock_ISP_AP" size="0x00010000" start="0x43800000" />
+  <MemorySegment name="AIPS-2" size="0x00800000" start="0x42800000" />
+  <MemorySegment name="AIPS-1" size="0x00800000" start="0x42000000" />
+  <MemorySegment access="ReadOnly" name="FlexSPI" size="$(FlexSPISIZE:0x04000000)-$(FlexSPIOFFSET:0)" start="$(FlexSPISTART:0x28000000)+$(FlexSPIOFFSET:0)" />
+  <MemorySegment name="OCRAM2" size="$(OCRAM2SIZE:0x00040000)" start="$(OCRAM2START:0x20500000)" />
+  <MemorySegment name="OCRAM1" size="$(OCRAM1SIZE:0x0007C000)" start="$(OCRAM1START:0x20484000)" />
+  <MemorySegment name="OCRAM" size="$(OCRAMSIZE:0x0007C000)-$(OCRAMOFFSET:0)" start="$(OCRAMSTART:0x20484000)+$(OCRAMOFFSET:0)" />
+  <MemorySegment name="SRAM" size="$(SRAMSIZE:0x0007C000)" start="$(SRAMSTART:0x20484000)" />
+  <MemorySegment name="M33DTCM" size="$(M33DTCMSIZE:0x00020000)" start="$(M33DTCMSTART:0x20200000)" />
+  <MemorySegment name="M33ITCM" size="$(M33ITCMSIZE:0x00020000)" start="$(M33ITCMSTART:0x201E0000)" />
+  <MemorySegment name="DTCM" size="$(DTCMSIZE:0x00080000)" start="$(DTCMSTART:0x20000000)" />
+  <MemorySegment access="ReadOnly" name="FlexSPI2" size="$(FlexSPI2SIZE:0x04000000)-$(FlexSPI2OFFSET:0)" start="$(FlexSPI2START:0x04000000)+$(FlexSPI2OFFSET:0)" />
+  <MemorySegment access="ReadOnly" name="M33ROM" size="$(ROMSIZE:0x00040000)" start="$(ROMSTART:0x00100000)" />
+  <MemorySegment name="ITCM" size="$(ITCMSIZE:0x00040000)" start="$(ITCMSTART:0x00000000)" />
+</Root>

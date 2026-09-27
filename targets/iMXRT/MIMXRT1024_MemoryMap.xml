@@ -1,0 +1,18 @@
+<!DOCTYPE Board_Memory_Definition_File>
+<Root name="iMXRT">
+  <MemorySegment name="PPB" size="0x00100000" start="0xE0000000" />
+  <MemorySegment name="SDRAM" size="0x1e00000" start="0x80000000" />
+  <MemorySegment access="ReadOnly" name="FlexSPI2" size="$(FlexSPI2SIZE:0x04000000)" start="$(FlexSPI2START:0x70000000)" />
+  <MemorySegment access="ReadOnly" name="FlexSPI" size="$(FlexSPISIZE:0x04000000)" start="$(FlexSPISTART:0x60000000)" />
+  <MemorySegment name="AIPS-5" size="0x00100000" start="0x42000000" />
+  <MemorySegment name="AIPS-4" size="0x00100000" start="0x40300000" />
+  <MemorySegment name="AIPS-3" size="0x00100000" start="0x40200000" />
+  <MemorySegment name="AIPS-2" size="0x00100000" start="0x40100000" />
+  <MemorySegment name="AIPS-1" size="0x00100000" start="0x40000000" />
+  <MemorySegment address_symbol="__NCACHE_REGION_START" name="NCACHE_REGION" size="$(NCACHE_REGION_SIZE:0x0)" size_symbol="__NCACHE_REGION_SIZE" start="$(OCRAMSTART:0x20200000)+$(NCACHE_REGION_SIZE:0x0)" />
+  <MemorySegment name="OCRAM" size="$(OCRAMSIZE:0x20000)-$(NCACHE_REGION_SIZE:0x0)" start="$(OCRAMSTART:0x20200000)" />
+  <MemorySegment name="SRAM" size="$(OCRAMSIZE:0x20000)" start="$(OCRAMSTART:0x20200000)" />
+  <MemorySegment name="DTCM" size="$(DTCMSIZE:0x10000)" start="$(DTCMSTART:0x20000000)" />
+  <MemorySegment access="ReadOnly" name="ROM" size="$(ROMSIZE:0x00018000)" start="$(ROMSTART:0x00200000)" />
+  <MemorySegment name="ITCM" size="$(ITCMSIZE:0x10000)" start="$(ITCMSTART:0x00000000)" />
+</Root>

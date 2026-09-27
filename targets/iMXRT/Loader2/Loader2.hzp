@@ -1,25 +1,27 @@
 <!DOCTYPE CrossStudio_Project_File>
 <solution Name="Loader2" target="8" version="2">
-  <configuration Name="MIMXRT1166DVM6A_M4" />
-  <configuration Name="MIMXRT1166DVM6A_M7" />
-  <configuration Name="MIMXRT1176DVMAA_M4" />
-  <configuration Name="MIMXRT1176DVMAA_M7" />
-  <configuration Name="MIMXRT1042XJM5B" /> 
-  <configuration Name="MIMXRT1062DVL6B" />
-  <configuration Name="MIMXRT1064DVL6A" />
+  <configuration Name="MIMXRT104x_106x_FlexSPI0_NOR_API" />
+  <configuration Name="MIMXRT104x_106x_FlexSPI1_NOR_API" />
+  <configuration Name="MIMXRT116x_FlexSPI_NOR_API_M4" />
+  <configuration Name="MIMXRT116x_FlexSPI_NOR_API_M7" />
+  <configuration Name="MIMXRT117x_FlexSPI_NOR_API_M4" />
+  <configuration Name="MIMXRT117x_FlexSPI_NOR_API_M7" />
+  <configuration Name="MIMXRT118x_FlexSPI_NOR_API_M33" />
+  <configuration Name="MIMXRT118x_FlexSPI_NOR_API_M7" />
   <project Name="FlexSPI_NOR_Loader">
     <configuration
-      CMSIS_CORE="Yes"
+      CMSIS_6_Core="Yes"
       Name="Common"
       Placement="TCM"
       arm_architecture="v7EM"
       arm_linker_heap_size="0"
       arm_linker_stack_size="4096"
+      add_property_group_includes_defines="No"
       arm_target_interface_type="SWD"
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
-      batch_build_configurations="MIMXRT1166DVM6A_M7;MIMXRT1166DVM6A_M4;MIMXRT1176DVMAA_M7;MIMXRT1176DVMAA_M4;MIMXRT1042XJM5B;MIMXRT1062DVL6B;MIMXRT1064DVL6A"
-      c_user_include_directories="$(TargetsDir)/iMXRT/drivers/common;$(TargetsDir)/iMXRT/devices/$(DeviceFamily);$(TargetsDir)/iMXRT/devices/$(DeviceFamily)/drivers"
+      batch_build_configurations="MIMXRT104x_106x_FlexSPI0_NOR_API;MIMXRT104x_106x_FlexSPI1_NOR_API;MIMXRT116x_FlexSPI_NOR_API_M4;MIMXRT116x_FlexSPI_NOR_API_M7;MIMXRT117x_FlexSPI_NOR_API_M4;MIMXRT117x_FlexSPI_NOR_API_M7;MIMXRT118x_FlexSPI_NOR_API_M33;MIMXRT118x_FlexSPI_NOR_API_M7"
+      c_user_include_directories="$(PackagesDir)/libraries/CMSIS_6/CMSIS/Core/Include;../drivers/common;../devices/$(DeviceFamily);../devices/$(DeviceFamily)/drivers"
       gcc_debugging_level="None"
       gcc_entry_point="Reset_Handler"
       gcc_optimization_level="Level 1"
@@ -32,133 +34,153 @@
       target_reset_script="Reset()"
       target_script_file="$(TargetsDir)/iMXRT/iMXRT_Target.js" />
     <configuration
-      Name="MIMXRT1166DVM6A_M4"
+      Name="MIMXRT104x_106x_FlexSPI0_NOR_API"
+      Target="MIMXRT1062DVL6B"
+      arm_core_type="Cortex-M7"
+      arm_fpu_type="FPv5-D16"
+      arm_target_device_name="MIMXRT1062DVL6B"
+      build_output_file_name="../Loader/MIMXRT104x_106x_FlexSPI0_NOR_API_Loader.elf"
+      c_preprocessor_definitions="FlexSpiInstance=0;FLASH_START=0x60000000;CPU_MIMXRT1062DVL6B"
+      c_user_include_directories="../devices/RT1060/periph;../devices/RT1060/MIMXRT1062/drivers/romapi"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1062_Registers.xml"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/MIMXRT1062_MemoryMap.xml"
+      macros="DeviceFamily=RT1060/MIMXRT1062"
+      target_get_partname_script=""
+      target_reset_script="Reset()" />
+    <configuration
+      Name="MIMXRT104x_106x_FlexSPI1_NOR_API"
+      Target="MIMXRT1062DVL6B"
+      arm_core_type="Cortex-M7"
+      arm_fpu_type="FPv5-D16"
+      arm_target_device_name="MIMXRT1062DVL6B"
+      build_output_file_name="../Loader/MIMXRT104x_106x_FlexSPI1_NOR_API_Loader.elf"
+      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x70000000;CPU_MIMXRT1062DVL6B"
+      c_user_include_directories="../devices/RT1060/periph;../devices/RT1060/MIMXRT1062/drivers/romapi"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1064_Registers.xml"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/MIMXRT1062_MemoryMap.xml"
+      macros="DeviceFamily=RT1060/MIMXRT1062"
+      target_get_partname_script=""
+      target_reset_script="Reset()" />
+    <configuration
+      Name="MIMXRT116x_FlexSPI_NOR_API_M4"
       Target="MIMXRT1166DVM6A_M4"
       arm_core_type="Cortex-M4"
       arm_fpu_type="FPv4-SP-D16"
       arm_target_device_name="MIMXRT1166xxxA_M4"
       build_output_file_name="../Loader/MIMXRT116x_FlexSPI_NOR_API_M4_Loader.elf"
-      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x08000000"
+      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x08000000;CPU_MIMXRT1166DVM6A_cm4"
+      c_user_include_directories="../devices/RT1160/periph;../devices/RT1160/MIMXRT1166/drivers/romapi"
       debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_Registers.xml"
-      linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml"
-      macros="DeviceFamily=MIMXRT1166"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/MIMXRT1166_cm4_MemoryMap.xml"
+      macros="DeviceFamily=RT1160/MIMXRT1166"
       target_get_partname_script="EnableCM4()"
       target_reset_script="ResetCM4()" />
     <configuration
-      Name="MIMXRT1166DVM6A_M7"
+      Name="MIMXRT116x_FlexSPI_NOR_API_M7"
       Target="MIMXRT1166DVM6A_M7"
       arm_core_type="Cortex-M7"
       arm_fpu_type="FPv5-D16"
       arm_target_device_name="MIMXRT1166xxxA_M7"
       build_output_file_name="../Loader/MIMXRT116x_FlexSPI_NOR_API_M7_Loader.elf"
-      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x30000000"
+      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x30000000;CPU_MIMXRT1166DVM6A_cm7"
+      c_user_include_directories="../devices/RT1160/periph;../devices/RT1160/MIMXRT1166/drivers/romapi"
       debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_Registers.xml"
-      linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml"
-      macros="DeviceFamily=MIMXRT1166"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/MIMXRT1166_cm7_MemoryMap.xml"
+      macros="DeviceFamily=RT1160/MIMXRT1166"
       target_get_partname_script=""
       target_reset_script="Reset()" />
     <configuration
-      Name="MIMXRT1176DVMAA_M4"
+      Name="MIMXRT117x_FlexSPI_NOR_API_M4"
       Target="MIMXRT1176DVMAA_M4"
       arm_core_type="Cortex-M4"
       arm_fpu_type="FPv4-SP-D16"
       arm_target_device_name="MIMXRT1176xxxA_M4"
       build_output_file_name="../Loader/MIMXRT117x_FlexSPI_NOR_API_M4_Loader.elf"
-      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x08000000;has_ROM_API_Init"
+      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x08000000;has_ROM_API_Init;CPU_MIMXRT1176DVMAA_cm4"
+      c_user_include_directories="../devices/RT1170/periph;../devices/RT1170/MIMXRT1176/drivers/romapi"
       debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm4_Registers.xml"
-      linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT11_cm4_MemoryMap.xml"
-      macros="DeviceFamily=MIMXRT1176"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/MIMXRT1176_cm4_MemoryMap.xml"
+      macros="DeviceFamily=RT1170/MIMXRT1176"
       target_get_partname_script="EnableCM4()"
       target_reset_script="ResetCM4()" />
     <configuration
-      Name="MIMXRT1176DVMAA_M7"
+      Name="MIMXRT117x_FlexSPI_NOR_API_M7"
       Target="MIMXRT1176DVMAA_M7"
       arm_core_type="Cortex-M7"
       arm_fpu_type="FPv5-D16"
       arm_target_device_name="MIMXRT1176xxxA_M7"
       build_output_file_name="../Loader/MIMXRT117x_FlexSPI_NOR_API_M7_Loader.elf"
-      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x30000000;has_ROM_API_Init"
+      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x30000000;has_ROM_API_Init;CPU_MIMXRT1176DVMAA_cm7"
+      c_user_include_directories="../devices/RT1170/periph;../devices/RT1170/MIMXRT1176/drivers/romapi"
       debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT11_cm7_Registers.xml"
-      linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT11_cm7_MemoryMap.xml"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/MIMXRT1176_cm7_MemoryMap.xml"
       linker_section_placement_macros="FILLSIZE=0x400"
-      macros="DeviceFamily=MIMXRT1176"
+      macros="DeviceFamily=RT1170/MIMXRT1176"
       target_get_partname_script=""
       target_reset_script="Reset()" />
     <configuration
-      Name="MIMXRT1042XJM5B"
-      Target="MIMXRT1042XJM5B"
-      arm_core_type="Cortex-M7"
-      arm_fpu_type="FPv5-D16"
-      arm_target_device_name="MIMXRT1042XJM5B"
-      build_output_file_name="../Loader/MIMXRT104x_FlexSPI_NOR_API_Loader.elf"
-      c_preprocessor_definitions="FlexSpiInstance=0;FLASH_START=0x60000000"
-      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1042_Registers.xml"
-      linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml"
-      macros="DeviceFamily=MIMXRT1042"
-      target_get_partname_script=""
-      target_reset_script="Reset()" />    
-    <configuration
-      Name="MIMXRT1062DVL6B"
-      Target="MIMXRT1062DVL6B"
-      arm_core_type="Cortex-M7"
-      arm_fpu_type="FPv5-D16"
-      arm_target_device_name="MIMXRT1062DVL6B"
-      build_output_file_name="../Loader/MIMXRT106x_FlexSPI_NOR_API_Loader.elf"
-      c_preprocessor_definitions="FlexSpiInstance=0;FLASH_START=0x60000000"
-      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1062_Registers.xml"
-      linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml"
-      macros="DeviceFamily=MIMXRT1062"
-      target_get_partname_script=""
+      Name="MIMXRT118x_FlexSPI_NOR_API_M33"
+      Target="MIMXRT1189CVM8B_M33"
+      arm_architecture="v8M_Mainline"
+      arm_core_type="Cortex-M33"
+      arm_fpu_type="FPv5-SP-D16"
+      arm_target_device_name="MIMXRT1189xxx8_M33"
+      arm_v8M_has_cmse="Yes"
+      arm_v8M_has_dsp="Yes"
+      build_output_file_name="../Loader/MIMXRT118x_FlexSPI_NOR_API_M33_Loader.elf"
+      c_preprocessor_definitions="FlexSpiInstance=2;FLASH_START=0x04000000;has_ROM_API_Init;CPU_MIMXRT1189CVM8B_cm33"
+      c_user_include_directories="../devices/RT1180/periph;../devices/RT1180/MIMXRT1189/drivers/romapi"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT118x_cm33_Registers.xml"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/MIMXRT1189_cm33_MemoryMap.xml"
+      macros="DeviceFamily=RT1180/MIMXRT1189"
+      target_get_partname_script="GetPartName()"
       target_reset_script="Reset()" />
     <configuration
-      Name="MIMXRT1064DVL6A"
-      Target="MIMXRT1064DVL6A"
+      Name="MIMXRT118x_FlexSPI_NOR_API_M7"
+      Target="MIMXRT1189CVM8B_M7"
       arm_core_type="Cortex-M7"
       arm_fpu_type="FPv5-D16"
-      arm_target_device_name="MIMXRT1064DVL6A"
-      build_output_file_name="../Loader/MIMXRT1064_FlexSPI_NOR_API_Loader.elf"
-      c_preprocessor_definitions="FlexSpiInstance=1;FLASH_START=0x70000000"
-      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT1064_Registers.xml"
-      linker_memory_map_file="$(TargetsDir)/iMXRT/iMXRT_MemoryMap.xml"
-      macros="DeviceFamily=MIMXRT1064"
-      target_get_partname_script=""
+      arm_target_device_name="MIMXRT1189xxx8_M7"
+      build_output_file_name="../Loader/MIMXRT118x_FlexSPI_NOR_API_M7_Loader.elf"
+      c_preprocessor_definitions="FlexSpiInstance=2;FLASH_START=0x04000000;has_ROM_API_Init;CPU_MIMXRT1189CVM8B_cm7"
+      c_user_include_directories="../devices/RT1180/periph;../devices/RT1180/MIMXRT1189/drivers/romapi"
+      debug_register_definition_file="$(TargetsDir)/iMXRT/XML/MIMXRT118x_cm7_Registers.xml"
+      linker_memory_map_file="$(TargetsDir)/iMXRT/MIMXRT1189_cm7_MemoryMap.xml"
+      macros="DeviceFamily=RT1180/MIMXRT1189"
+      target_get_partname_script="GetPartName()"
       target_reset_script="Reset()" />
+    <folder Name="fsl_romapi_MIMXRT1062">
+      <configuration Name="Common" build_exclude_from_build="Yes"/>
+      <configuration Name="MIMXRT104x_106x_FlexSPI0_NOR_API" build_exclude_from_build="No" />
+      <configuration Name="MIMXRT104x_106x_FlexSPI1_NOR_API" build_exclude_from_build="No" />
+      <file file_name="../devices/RT1060/MIMXRT1062/drivers/romapi/fsl_romapi.c" />
+      <file file_name="../devices/RT1060/MIMXRT1062/drivers/romapi/fsl_romapi.h" />
+    </folder>
+    <folder Name="fsl_romapi_MIMXRT1166">
+      <configuration Name="Common" build_exclude_from_build="Yes" />
+      <configuration Name="MIMXRT116x_FlexSPI_NOR_API_M4" build_exclude_from_build="No" />
+      <configuration Name="MIMXRT116x_FlexSPI_NOR_API_M7" build_exclude_from_build="No" />
+      <file file_name="../devices/RT1160/MIMXRT1166/drivers/romapi/fsl_romapi.c" />
+      <file file_name="../devices/RT1160/MIMXRT1166/drivers/romapi/fsl_romapi.h" />
+    </folder>
+    <folder Name="fsl_romapi_MIMXRT1176">
+      <configuration Name="Common" build_exclude_from_build="Yes" />
+      <configuration Name="MIMXRT117x_FlexSPI_NOR_API_M4" build_exclude_from_build="No" />
+      <configuration Name="MIMXRT117x_FlexSPI_NOR_API_M7" build_exclude_from_build="No" />
+      <file file_name="../devices/RT1170/MIMXRT1176/drivers/romapi/fsl_romapi.c" />
+      <file file_name="../devices/RT1170/MIMXRT1176/drivers/romapi/fsl_romapi.h" />
+    </folder>
+    <folder Name="fsl_romapi_MIMXRT1189">
+      <configuration Name="Common" build_exclude_from_build="Yes" />
+      <configuration Name="MIMXRT118x_FlexSPI_NOR_API_M33" build_exclude_from_build="No" />
+      <configuration Name="MIMXRT118x_FlexSPI_NOR_API_M7" build_exclude_from_build="No" />
+      <file file_name="../devices/RT1180/MIMXRT1189/drivers/romapi/fsl_romapi.c" />
+      <file file_name="../devices/RT1180/MIMXRT1189/drivers/romapi/fsl_romapi.h" />
+    </folder>
     <folder Name="Source Files">
       <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc" />
       <file file_name="loader2.c" />
       <file file_name="../Loader/loader_startup.s" />
-    </folder>
-    <folder Name="fsl_romapi_MIMXRT1042">
-      <configuration Name="Common" build_exclude_from_build="Yes"/>
-      <configuration Name="MIMXRT1042XJM5B" build_exclude_from_build="No"/>
-      <file file_name="../devices/MIMXRT1042/drivers/fsl_romapi.c" />
-      <file file_name="../devices/MIMXRT1042/drivers/fsl_romapi.h" />
-    </folder>   
-    <folder Name="fsl_romapi_MIMXRT1062">
-      <configuration Name="Common" build_exclude_from_build="Yes"/>
-      <configuration Name="MIMXRT1062DVL6B" build_exclude_from_build="No"/>
-      <file file_name="../devices/MIMXRT1062/drivers/fsl_romapi.c" />
-      <file file_name="../devices/MIMXRT1062/drivers/fsl_romapi.h" />
-    </folder>
-    <folder Name="fsl_romapi_MIMXRT1064">
-      <configuration Name="Common" build_exclude_from_build="Yes"/>
-      <configuration Name="MIMXRT1064DVL6A" build_exclude_from_build="No"/>
-      <file file_name="../devices/MIMXRT1064/drivers/fsl_romapi.c" />
-      <file file_name="../devices/MIMXRT1064/drivers/fsl_romapi.h" />
-    </folder>
-    <folder Name="fsl_romapi_MIMXRT1166">
-      <configuration Name="Common" build_exclude_from_build="Yes"/>
-      <configuration Name="MIMXRT1166DVM6A_M7" build_exclude_from_build="No"/>
-      <configuration Name="MIMXRT1166DVM6A_M4" build_exclude_from_build="No"/>
-      <file file_name="../devices/MIMXRT1166/drivers/fsl_romapi.c" />
-      <file file_name="../devices/MIMXRT1166/drivers/fsl_romapi.h" />
-    </folder>
-    <folder Name="fsl_romapi_MIMXRT1176">
-      <configuration Name="Common" build_exclude_from_build="Yes"/>
-      <configuration Name="MIMXRT1176DVMAA_M7" build_exclude_from_build="No"/>
-      <configuration Name="MIMXRT1176DVMAA_M4" build_exclude_from_build="No"/>
-      <file file_name="../devices/MIMXRT1176/drivers/fsl_romapi.c" />
-      <file file_name="../devices/MIMXRT1176/drivers/fsl_romapi.h" />
     </folder>
   </project>
 </solution>

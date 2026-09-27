@@ -50,7 +50,7 @@ function EnableCM4()
   TargetInterface.pokeUint32 (IOMUXC_LPSR_GPR1, (start >> 16) & 0xFFFF);
 
   // Set m4_clk_root to OSC_RC_400M / 2: CLOCK_ROOT1 = mux(2), div(1)
-  //TargetInterface.pokeUint32 (CCM_CLOCK_ROOT_M4_CONTROL, 0x201);
+  TargetInterface.pokeUint32 (CCM_CLOCK_ROOT_M4_CONTROL, 0x201);
 
   // Save current reset SRMR and prevent M4 SW reset affecting the system
   var srmr = TargetInterface.peekUint32 (SRC_SRMR); 
@@ -63,13 +63,126 @@ function EnableCM4()
   TargetInterface.setDebugInterfaceProperty("set_adiv5_AHB_ap_num", 1);
 }
 
+function EnableCM7()
+{
+  var d = 0x00000000 // M7 ITCM
+  var c = 0x303c0000 // M7 ITCM Aliased to M33
+  // Clock Preparation
+  TargetInterface.pokeUint32 (0x54484310, 0x007901F2); // ANADIG_OSC->OSC_RC24M_CTRL
+  TargetInterface.pokeUint32 (0x54484320, 0x40000014); // ANADIG_OSC->OSC_24M_CTRL
+  TargetInterface.pokeUint32 (0x54450080, 0x0); // CCM->CLOCK_ROOT1_CONTROL
+  TargetInterface.delay (50);
+  TargetInterface.pokeUint32 (0x54484680, 0x105); // PHY_LDO->CTRL0 LinReg 1V
+  TargetInterface.delay (50);
+  TargetInterface.pokeUint32 (0x54484710, 0x70); // ??
+  TargetInterface.pokeUint32 (0x54484000, 0x400020a6); // ARM_PLL_CTL - ARM_PLL_GATE, POWER_UP
+  TargetInterface.delay (50);
+  // check 54484000
+  TargetInterface.pokeUint32 (0x54484000, 0x000060a6); // ARM_PLL_CTL - ARM_PLL_GATE, POWER_UP, ENABLE
+  
+  // DCDC_SetVDD1P0BuckModeTargetVoltage(DCDC, kDCDC_1P0Target1P1V);
+  TargetInterface.pokeUint32 (0x5452000C, 0x980000);
+  TargetInterface.pokeUint32 (0x54520024, 0x100C14);
+  
+  // M7 Clk
+  TargetInterface.pokeUint32 (0x54450000, 0x201); // CCM->CLOCK_ROOT0_CONTROL
+
+  TargetInterface.pokeUint32 (0x54458000, 0x1); // CCM->LPCG0 - ON
+  TargetInterface.delay (50);
+  
+  // VTOR
+  TargetInterface.pokeUint32 (0x544F0080, ((d >> 7) << 7) | 0x00000010); // BLK_CTRL_S_AON->M7_CFG = VTOR | WAIT
+  
+  // Release CM7
+  TargetInterface.pokeUint32 (0x54460010, 0x1); // Release CM7 (SRC->SCR)
+  
+  // DMA initialization
+  InitCM7DMA (0x303C0000); // M7 ITCM
+  InitCM7DMA (0x303E0000);
+  InitCM7DMA (0x30400000); // M7 DTCM
+  InitCM7DMA (0x30420000);
+  
+  // Making Landing Zone
+  TargetInterface.pokeUint32 (c + 0x0, d + 0x2000);
+  TargetInterface.pokeUint32 (c + 0x4, d + 0x9);
+  TargetInterface.pokeUint32 (c + 0x8, 0xE7FEE7FE);
+  TargetInterface.pokeUint32 (c + 0xC, 0xE7FEE7FE);
+
+  TargetInterface.delay (200);
+  //TargetInterface.peekUint32 (0x303C0000);
+  //TargetInterface.peekUint32 (0x303C0004);
+  //TargetInterface.peekUint32 (0x303C0008);
+  
+  // Trigger S401 - EdgeLock APC Request
+  TargetInterface.pokeUint32 (0x57540200, 0x17d20106); // MU_RT_S3MUA->TR[0]
+  TargetInterface.delay (200);
+  var resp1 = TargetInterface.peekUint32 (0x57540280); // MU_RT_S3MUA->RR[0]
+  var resp2 = TargetInterface.peekUint32 (0x57540284); // MU_RT_S3MUA->RR[1]
+  //TargetInterface.message ("RESP1 : " + resp1);
+  //TargetInterface.message ("RESP2 : " + resp2);
+  
+  // Deassert CM7 Wait
+  TargetInterface.pokeUint32 (0x544F0080, (d >> 7) << 7); // BLK_CTRL_S_AON->M7_CFG = VTOR
+  TargetInterface.delay (200);
+}
+
+function InitCM7DMA (targetAddr)
+{
+  TargetInterface.pokeUint32 (0x52010020, 0x20200000);	// DMA4->TCD[0].SADDR
+  TargetInterface.pokeUint32 (0x52010030, targetAddr);	// DMA4->TCD[0].DADDR
+  TargetInterface.pokeUint32 (0x52010028, 0x00020000);	// DMA4->TCD[0].NBYTES_MLOFFNO
+  TargetInterface.pokeUint16 (0x52010036, 0x1);			// DMA4->TCD[0].ELINKNO
+  TargetInterface.pokeUint16 (0x5201003E, 0x1);			// DMA4->TCD[0].BITER_ELINKNO
+  TargetInterface.pokeUint16 (0x52010026, 0x0303);		// DMA4->TCD[0].ATTR
+  TargetInterface.pokeUint16 (0x52010024, 0x0);			// DMA4->TCD[0].SOFF
+  TargetInterface.pokeUint16 (0x52010034, 0x8);			// DMA4->TCD[0].DOFF
+  TargetInterface.pokeUint32 (0x52010000, 0x7);			// DMA4->TDC[0].CH_CSR
+  TargetInterface.pokeUint16 (0x5201003C, 0x8);			// DMA4->TCD[0].CSR
+  TargetInterface.pokeUint32 (0x5201003C, 0x9);			// DMA4->TCD[0].CSR
+  TargetInterface.delay (50);
+  TargetInterface.pokeUint32 (0x52010000, 0x40000006);
+}
+
 function Connect()
 {
+  var Target = TargetInterface.getProjectProperty("Target");
+  if (Target.indexOf("MIMXRT118") == 0)
+    {
+      // MIMXRT118 doesn't like attempt to access AP5
+      TargetInterface.setDebugInterfaceProperty("valid_ap_num", (1<<0)|(1<<1)|(1<<2)|(1<<3)|(1<<4)|(1<<6));
+      TargetInterface.setDebugInterfaceProperty("component_base", 0xe000e000) // SCS
+      TargetInterface.setDebugInterfaceProperty("component_base", 0xe0001000); // DWT
+      TargetInterface.setDebugInterfaceProperty("component_base", 0xe0002000); // FPB
+      TargetInterface.setDebugInterfaceProperty("component_base", 0xe0000000); // ITM
+      TargetInterface.setDebugInterfaceProperty("component_base", 0xe0041000); // ETM
+      //TargetInterface.setDebugInterfaceProperty("component_base", 0xe0042000); // CTI
+      TargetInterface.setDebugInterfaceProperty("component_base", 0xe0043000); // CSTF
+      TargetInterface.setDebugInterfaceProperty("use_adiv5_APB", 0x51020000, 0x50000); // APB access
+      TargetInterface.setDebugInterfaceProperty("component_base", 0x51020000); // CS_SWO
+      TargetInterface.setDebugInterfaceProperty("component_base", 0x51030000); // CS_ETF
+      //TargetInterface.setDebugInterfaceProperty("component_base", 0x51040000); // CS_ETR
+      //TargetInterface.setDebugInterfaceProperty("component_base", 0x51050000); // CS_CT0
+      //TargetInterface.setDebugInterfaceProperty("component_base", 0x51060000); // CS_CT1
+    }
 }
 
 function GetPartName()
 {
-  if (TargetInterface.getProjectProperty("arm_core_type")=="Cortex-M4")
+  var Target = TargetInterface.getProjectProperty("Target");
+  if (Target.indexOf("MIMXRT118") == 0)
+    {
+      TargetInterface.setDebugInterfaceProperty("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // M33 Clear bit 30 of csw for secure access
+      TargetInterface.resetDebugInterface(); // Why is this needed?
+      if (TargetInterface.getProjectProperty("arm_core_type")=="Cortex-M7")
+        {
+          if (TargetInterface.peekWord(0x54460010) == 0) // SRC->SCR.BT_RELEASE_M7
+            {
+              EnableCM7();
+            }
+          TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2, 0x0, 0x0);
+        }
+    }
+  else if (TargetInterface.getProjectProperty("arm_core_type")=="Cortex-M4")
     {
       EnableCM4();
     }
@@ -86,8 +199,24 @@ function Reset()
     {
       TargetInterface.resetAndStop(1000);
       return;
-    }  
-  if (TargetInterface.getProjectProperty("Target").indexOf("MIMXRT11")==0)
+    }
+  var Target = TargetInterface.getProjectProperty("Target");
+  if (Target.indexOf("MIMXRT118")==0)
+    {
+      if (TargetInterface.getProjectProperty("arm_core_type")=="Cortex-M7")
+        {
+          TargetInterface.stop(1000);
+        }
+      else
+        {
+          TargetInterface.resetAndStop(1000);
+          EnableCM7();
+          TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2, 0x0, 0x0);
+          TargetInterface.stop(1000);
+          TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000);
+        }
+    }
+  else if (Target.indexOf("MIMXRT11")==0)
     {      
       if (TargetInterface.getProjectProperty("arm_core_type")=="Cortex-M4")
         {
@@ -101,8 +230,8 @@ function Reset()
           TargetInterface.resetAndStop(1000);
           TargetInterface.pokeUint32(SRC_CTRL_M7CORE, 1);
           TargetInterface.delay(1);
-          while (TargetInterface.peekUint32 (SRC_STAT_M7CORE) & 1);
           TargetInterface.resetDebugInterface();
+          while (TargetInterface.peekUint32 (SRC_STAT_M7CORE) & 1);
           TargetInterface.stop();
           EnableCM4();
           TargetInterface.setDebugInterfaceProperty("set_adiv5_AHB_ap_num", 0);
@@ -122,8 +251,20 @@ function Reset2()
 }
 
 function ResetCM4()
-{  
-  Reset(); 
+{
+  TargetInterface.setDebugInterfaceProperty("set_adiv5_AHB_ap_num", 0);
+  TargetInterface.resetAndStop(1000);
+  EnableCM4();
+  TargetInterface.stop();
+}
+
+function ResetCM7_MIXMRT118()
+{
+  TargetInterface.setDebugInterfaceProperty("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000);
+  TargetInterface.resetAndStop(1000);
+  EnableCM7();
+  TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2, 0x0, 0x0);
+  TargetInterface.stop();
 }
 
 function InitDCDC()
@@ -209,7 +350,7 @@ function EnableTrace(TraceInterfaceType)
   if (((CPUID>>4)&0xf)==4)
     return; // not supported for Cortex-M4
   if (TraceInterfaceType == "TracePort")
-    {        
+    {
     }
   else if (TraceInterfaceType == "SWO")
     {
@@ -242,17 +383,26 @@ function EnableTrace(TraceInterfaceType)
           TargetInterface.pokeWord(0x400FC018, TargetInterface.peekWord(0x400FC018) | (3<<14)); // CCM_CBCMR.TRACE_CLK_SEL
           TargetInterface.pokeWord(0x400FC024, TargetInterface.peekWord(0x400FC024) & ~(3<<25)); // CCM_CSCDR1.TRACE_PODF
         }
-      else if(target.indexOf("MIMXRT11")==0)
+      else if (target.indexOf("MIMXRT118")==0)
+        {
+        }
+      else if (target.indexOf("MIMXRT11")==0)
         {
           TargetInterface.pokeWord(0x40C08000+0x2C, 7); // IOMUXC_LPSR_SW_MUX_CTL_PAD_GPIO_LPSR_11.MUX_MODE=ALT7(ARM_TRACE_SWO)
           TargetInterface.pokeWord(0x40C08000+0x6C, 2); // IOMUXC_LPSR_SW_PAD_CTL_PAD_GPIO_LPSR_11
           TargetInterface.pokeWord(0x40CC0300, 0x703);  // CLOCK_ROOT6_CONTROL - SYS_PLL2_CLK/4
-          // CSFT
+          // CSTF
           TargetInterface.pokeWord(0xE0045FB0, 0xC5ACCE55);
           TargetInterface.pokeWord(0xE0045000, 0xF);
           // M7
           TargetInterface.pokeWord(0xE0043FB0, 0xC5ACCE55);
           TargetInterface.pokeWord(0xE0043000, 0xF);
         }
+    }
+  else if (TraceInterfaceType == "ETB")
+    {
+      // CSTF
+      TargetInterface.pokeWord(0xE0043FB0, 0xC5ACCE55);
+      TargetInterface.pokeWord(0xE0043000, 0xF);
     }
 }

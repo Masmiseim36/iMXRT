@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2015-2016, Freescale Semiconductor, Inc.
- * Copyright 2016-2022 NXP
+ * Copyright 2016-2022,2024-2025 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#ifndef _FSL_COMMON_H_
-#define _FSL_COMMON_H_
+#ifndef FSL_COMMON_H_
+#define FSL_COMMON_H_
 
 #include <assert.h>
 #include <stdbool.h>
@@ -57,12 +57,13 @@
 #define MAKE_VERSION(major, minor, bugfix) (((major)*65536L) + ((minor)*256L) + (bugfix))
 
 /*! @name Driver version */
-/*@{*/
+/*! @{ */
 /*! @brief common driver version. */
-#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 4, 0))
-/*@}*/
+#define FSL_COMMON_DRIVER_VERSION (MAKE_VERSION(2, 6, 4))
+/*! @} */
 
-/* Debug console type definition. */
+/*! @name Debug console type definition. */
+/*! @{ */
 #define DEBUG_CONSOLE_DEVICE_TYPE_NONE       0U  /*!< No debug console.             */
 #define DEBUG_CONSOLE_DEVICE_TYPE_UART       1U  /*!< Debug console based on UART.   */
 #define DEBUG_CONSOLE_DEVICE_TYPE_LPUART     2U  /*!< Debug console based on LPUART. */
@@ -74,6 +75,7 @@
 #define DEBUG_CONSOLE_DEVICE_TYPE_MINI_USART 8U  /*!< Debug console based on LPC_USART. */
 #define DEBUG_CONSOLE_DEVICE_TYPE_SWO        9U  /*!< Debug console based on SWO. */
 #define DEBUG_CONSOLE_DEVICE_TYPE_QSCI       10U /*!< Debug console based on QSCI. */
+/*! @} */
 
 /*! @brief Status group numbers. */
 enum _status_groups
@@ -156,6 +158,10 @@ enum _status_groups
     kStatusGroup_PUF                   = 105, /*!< Group number for PUF status codes. */
     kStatusGroup_TOUCH_PANEL           = 106, /*!< Group number for touch panel status codes */
     kStatusGroup_VBAT                  = 107, /*!< Group number for VBAT status codes */
+    kStatusGroup_XSPI                  = 108, /*!< Group number for XSPI status codes */
+    kStatusGroup_PNGDEC                = 109, /*!< Group number for PNGDEC status codes */
+    kStatusGroup_JPEGDEC               = 110, /*!< Group number for JPEGDEC status codes */
+    kStatusGroup_AUDMIX                = 111, /*!< Group number for AUDMIX status codes */
 
     kStatusGroup_HAL_GPIO       = 121, /*!< Group number for HAL GPIO status codes. */
     kStatusGroup_HAL_UART       = 122, /*!< Group number for HAL UART status codes. */
@@ -166,6 +172,7 @@ enum _status_groups
     kStatusGroup_HAL_PWM        = 127, /*!< Group number for HAL PWM status codes. */
     kStatusGroup_HAL_RNG        = 128, /*!< Group number for HAL RNG status codes. */
     kStatusGroup_HAL_I2S        = 129, /*!< Group number for HAL I2S status codes. */
+    kStatusGroup_HAL_ADC_SENSOR = 130, /*!< Group number for HAL ADC SENSOR status codes. */
     kStatusGroup_TIMERMANAGER   = 135, /*!< Group number for TiMER MANAGER status codes. */
     kStatusGroup_SERIALMANAGER  = 136, /*!< Group number for SERIAL MANAGER status codes. */
     kStatusGroup_LED            = 137, /*!< Group number for LED status codes. */
@@ -188,15 +195,27 @@ enum _status_groups
     kStatusGroup_LOG            = 154, /*!< Group number for LOG status codes. */
     kStatusGroup_I3CBUS         = 155, /*!< Group number for I3CBUS status codes. */
     kStatusGroup_QSCI           = 156, /*!< Group number for QSCI status codes. */
-    kStatusGroup_SNT            = 157, /*!< Group number for SNT status codes. */
+    kStatusGroup_ELEMU          = 157, /*!< Group number for ELEMU status codes. */
     kStatusGroup_QUEUEDSPI      = 158, /*!< Group number for QSPI status codes. */
     kStatusGroup_POWER_MANAGER  = 159, /*!< Group number for POWER_MANAGER status codes. */
     kStatusGroup_IPED           = 160, /*!< Group number for IPED status codes. */
-    kStatusGroup_CSS_PKC        = 161, /*!< Group number for CSS PKC status codes. */
-    kStatusGroup_HOSTIF         = 162, /*!< Group number for HOSTIF status codes. */
-    kStatusGroup_CLIF           = 163, /*!< Group number for CLIF status codes. */
-    kStatusGroup_BMA            = 164, /*!< Group number for BMA status codes. */
-    kStatusGroup_NETC           = 165, /*!< Group number for NETC status codes. */
+    kStatusGroup_ELS_PKC        = 161, /*!< Group number for ELS PKC status codes. */
+    kStatusGroup_CSS_PKC        = 162, /*!< Group number for CSS PKC status codes. */
+    kStatusGroup_HOSTIF         = 163, /*!< Group number for HOSTIF status codes. */
+    kStatusGroup_CLIF           = 164, /*!< Group number for CLIF status codes. */
+    kStatusGroup_BMA            = 165, /*!< Group number for BMA status codes. */
+    kStatusGroup_NETC           = 166, /*!< Group number for NETC status codes. */
+    kStatusGroup_ELE            = 167, /*!< Group number for ELE status codes. */
+    kStatusGroup_GLIKEY         = 168, /*!< Group number for GLIKEY status codes. */
+    kStatusGroup_AON_POWER      = 169, /*!< Group number for AON_POWER status codes. */
+    kStatusGroup_AON_COMMON     = 170, /*!< Group number for AON_COMMON status codes. */
+    kStatusGroup_ENDAT3     	= 171, /*!< Group number for ENDAT3 status codes. */
+    kStatusGroup_HIPERFACE      = 172, /*!< Group number for HIPERFACE status codes. */
+    kStatusGroup_NPX            = 173, /*!< Group number for NPX status codes. */
+    kStatusGroup_ELA_CSEC       = 174, /*!< Group number for ELA_CSEC status codes. */
+    kStatusGroup_FLEXIO_T_FORMAT= 175, /*!< Group number for T-format status codes. */
+    kStatusGroup_FLEXIO_A_FORMAT= 176, /*!< Group number for A-format status codes. */
+    kStatusGroup_LPC_QSPI       = 177, /*!< Group number for LPC QSPI status codes. */
 };
 
 /*! \public
@@ -220,61 +239,202 @@ enum
 /*! @brief Type used for all status and error return values. */
 typedef int32_t status_t;
 
+#ifdef __ZEPHYR__
+#include <zephyr/sys/util.h>
+#else
 /*!
  * @name Min/max macros
  * @{
  */
 #if !defined(MIN)
+/*! Computes the minimum of \a a and \a b. */
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #endif
 
 #if !defined(MAX)
+/*! Computes the maximum of \a a and \a b. */
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #endif
-/* @} */
+/*! @} */
 
 /*! @brief Computes the number of elements in an array. */
 #if !defined(ARRAY_SIZE)
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 #endif
+#endif /* __ZEPHYR__ */
 
 /*! @name UINT16_MAX/UINT32_MAX value */
-/* @{ */
+/*! @{ */
 #if !defined(UINT16_MAX)
+/*! Max value of uint16_t type. */
 #define UINT16_MAX ((uint16_t)-1)
 #endif
 
 #if !defined(UINT32_MAX)
+/*! Max value of uint32_t type. */
 #define UINT32_MAX ((uint32_t)-1)
 #endif
-/* @} */
+/*! @} */
 
-/*! @name UINTPTR_SIZE value */
-/* @{ */
-#if !defined(UINTPTR_SIZE)
-#if UINTPTR_MAX > UINT32_MAX
-  #define UINTPTR_SIZE 8 /* 64-bit processor */
-#elif UINTPTR_MAX > UINT16_MAX
-  #define UINTPTR_SIZE 4 /* 32-bit processor */
-#else
-  #error "UINTPTR_SIZE is unknown!"
+/*! Macro to get upper 32 bits of a 64-bit value */
+#if !defined(UINT64_H)
+#define UINT64_H(X)        ((uint32_t)((((uint64_t) (X)) >> 32U) & 0x0FFFFFFFFULL))
 #endif
-#endif
-/* @} */
 
-/*! @name Suppress fallthrough warning macro */
-/* For switch case code block, if case section ends without "break;" statement, there wil be
- fallthrough warning with compiler flag -Wextra or -Wimplicit-fallthrough=n when using armgcc.
- To suppress this warning, "SUPPRESS_FALL_THROUGH_WARNING();" need to be added at the end of each
- case section which misses "break;"statement.
+/*! Macro to get lower 32 bits of a 64-bit value */
+#if !defined(UINT64_L)
+#define UINT64_L(X)        ((uint32_t)(((uint64_t) (X)) & 0x0FFFFFFFFULL))
+#endif
+
+/*!
+ * @brief Bit mask inversion macros to avoid type promotion
+ * 
+ * These macros are designed to solve INT-31 (integer conversion result in 
+ * lost or misinterpreted data) issues when inverting bit masks for register
+ * operations. The bitwise NOT operator (~) promotes operands to int type, 
+ * which can cause issues when assigning to smaller register types.
+ * 
+ * Example:
+ * @code
+ * uint16_t reg = 0x1234;
+ * uint16_t mask = 0x00F0;
+ * 
+ * // Problem: ~mask promotes to int (0xFFFFFF0F)
+ * reg &= ~mask;  // May cause INT-31 violation
+ * 
+ * // Solution: Use type-safe inversion
+ * reg &= MCUX_MASK_INVERT_16(mask);  // Result: 0xFF0F (uint16_t)
+ * @endcode
  */
-/* @{ */
+/*!
+ * @name Bit mask inversion macros to avoid type promotion.
+ * @{
+ */
+#if !defined(MCUX_MASK_INVERT_8)
+/*! @brief 8-bit mask inversion. */
+#define MCUX_MASK_INVERT_8(mask) ((uint8_t)(mask) ^ 0xFFU)
+#endif
+
+#if !defined(MCUX_MASK_INVERT_16)
+/*! @brief 16-bit mask inversion. */
+#define MCUX_MASK_INVERT_16(mask) ((uint16_t)(mask) ^ 0xFFFFU)
+#endif
+
+#if !defined(MCUX_MASK_INVERT_32)
+/*! @brief 32-bit mask inversion for completeness. */
+#define MCUX_MASK_INVERT_32(mask) ((uint32_t)(mask) ^ 0xFFFFFFFFUL)
+#endif
+/*! @} */
+
+/*!
+ * @name Register operation macros.
+ * @{
+ */
+#if !defined(MCUX_REG_WRITE8)
+/*! @brief 8-bit register write macro */
+#define MCUX_REG_WRITE8(reg, value)         ((reg) = (uint8_t)(value))
+#endif
+
+#if !defined(MCUX_REG_WRITE16)
+/*! @brief 16-bit register write macro */
+#define MCUX_REG_WRITE16(reg, value)        ((reg) = (uint16_t)(value))
+#endif
+
+#if !defined(MCUX_REG_WRITE32)
+/*! @brief 32-bit register write macro */
+#define MCUX_REG_WRITE32(reg, value)        ((reg) = (uint32_t)(value))
+#endif
+
+#if !defined(MCUX_REG_READ8)
+/*! @brief 8-bit register read macro */
+#define MCUX_REG_READ8(reg)                 (uint8_t)((reg))
+#endif
+
+#if !defined(MCUX_REG_READ16)
+/*! @brief 16-bit register read macro */
+#define MCUX_REG_READ16(reg)                (uint16_t)((reg))
+#endif
+
+#if !defined(MCUX_REG_READ32)
+/*! @brief 32-bit register read macro */
+#define MCUX_REG_READ32(reg)                (uint32_t)((reg))
+#endif
+
+#if !defined(MCUX_REG_BIT_SET8)
+/*! @brief 8-bit register bit set macro */
+#define MCUX_REG_BIT_SET8(reg, mask)        ((reg) |= (uint8_t)(mask))
+#endif
+
+#if !defined(MCUX_REG_BIT_SET16)
+/*! @brief 16-bit register bit set macro */
+#define MCUX_REG_BIT_SET16(reg, mask)       ((reg) |= (uint16_t)(mask))
+#endif
+
+#if !defined(MCUX_REG_BIT_SET32)
+/*! @brief 32-bit register bit set macro */
+#define MCUX_REG_BIT_SET32(reg, mask)       ((reg) |= (uint32_t)(mask))
+#endif
+
+#if !defined(MCUX_REG_BIT_CLEAR8)
+/*! @brief 8-bit register bit clear macro */
+#define MCUX_REG_BIT_CLEAR8(reg, mask)      ((reg) &= ((uint8_t)(mask) ^ 0xFFU))
+#endif
+
+#if !defined(MCUX_REG_BIT_CLEAR16)
+/*! @brief 16-bit register bit clear macro */
+#define MCUX_REG_BIT_CLEAR16(reg, mask)     ((reg) &= ((uint16_t)(mask) ^ 0xFFFFU))
+#endif
+
+#if !defined(MCUX_REG_BIT_CLEAR32)
+/*! @brief 32-bit register bit clear macro */
+#define MCUX_REG_BIT_CLEAR32(reg, mask)     ((reg) &= ((uint32_t)(mask) ^ 0xFFFFFFFFUL))
+#endif
+
+#if !defined(MCUX_REG_BIT_GET8)
+/*! @brief 8-bit register bit get macro */
+#define MCUX_REG_BIT_GET8(reg, mask)        ((reg) & (uint8_t)(mask))
+#endif
+
+#if !defined(MCUX_REG_BIT_GET16)
+/*! @brief 16-bit register bit get macro */
+#define MCUX_REG_BIT_GET16(reg, mask)       ((reg) & (uint16_t)(mask))
+#endif
+
+#if !defined(MCUX_REG_BIT_GET32)
+/*! @brief 32-bit register bit get macro */
+#define MCUX_REG_BIT_GET32(reg, mask)       ((reg) & (uint32_t)(mask))
+#endif
+
+#if !defined(MCUX_REG_MODIFY8)
+/*! @brief 32-bit register read-modify-write macro */
+#define MCUX_REG_MODIFY8(reg, mask, value)  ((reg) = (((reg) & ((uint8_t)(mask) ^ 0xFFU)) | (uint8_t)(value)))
+#endif
+
+#if !defined(MCUX_REG_MODIFY16)
+/*! @brief 16-bit register read-modify-write macro */
+#define MCUX_REG_MODIFY16(reg, mask, value) ((reg) = (((reg) & ((uint16_t)(mask) ^ 0xFFFFU)) | (uint16_t)(value)))
+#endif
+
+#if !defined(MCUX_REG_MODIFY32)
+/*! @brief 32-bit register read-modify-write macro */
+#define MCUX_REG_MODIFY32(reg, mask, value) ((reg) = (((reg) & ((uint32_t)(mask) ^ 0xFFFFFFFFUL)) | (uint32_t)(value)))
+#endif
+
+/*! @} */
+
+/*!
+ * @def SUPPRESS_FALL_THROUGH_WARNING()
+ *
+ * For switch case code block, if case section ends without "break;" statement, there wil be
+ * fallthrough warning with compiler flag -Wextra or -Wimplicit-fallthrough=n when using armgcc.
+ * To suppress this warning, "SUPPRESS_FALL_THROUGH_WARNING();" need to be added at the end of each
+ * case section which misses "break;"statement.
+ */
 #if defined(__GNUC__) && !defined(__ARMCC_VERSION)
 #define SUPPRESS_FALL_THROUGH_WARNING() __attribute__((fallthrough))
 #else
 #define SUPPRESS_FALL_THROUGH_WARNING()
 #endif
-/* @} */
 
 /*******************************************************************************
  * API
@@ -322,10 +482,12 @@ void SDK_DelayAtLeastUs(uint32_t delayTime_us, uint32_t coreClock_Hz);
 
 #if (defined(__DSC__) && defined(__CW__))
 #include "fsl_common_dsc.h"
-#elif defined(__XCC__) || defined(__XTENSA__)
+#elif defined(__XTENSA__)
 #include "fsl_common_dsp.h"
+#elif defined(__riscv)
+#include "fsl_common_riscv.h"
 #else
 #include "fsl_common_arm.h"
 #endif
 
-#endif /* _FSL_COMMON_H_ */
+#endif /* FSL_COMMON_H_ */
