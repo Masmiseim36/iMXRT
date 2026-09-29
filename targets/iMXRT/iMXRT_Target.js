@@ -143,7 +143,7 @@ function InvalidateICache_LMEM ()
 
 	// Enables the processor code bus to invalidate all lines in both ways.
 	// and Initiate the processor code bus code cache command.
-	pcccr |= LMEM_PCCCR_INVW0_MASK | LMEM_PCCCR_INVW1_MASK | LMEM_PCCCR_GO_MAS;
+	pcccr |= LMEM_PCCCR_INVW0_MASK | LMEM_PCCCR_INVW1_MASK | LMEM_PCCCR_GO_MASK;
 	TargetInterface.pokeUint32 (LMEM_PCCCR, pcccr);
 
 	do
@@ -563,8 +563,8 @@ function Reset ()
 			break;
 		case "MIMXRT1151":
 		case "MIMXRT1152":
-		case "MIMXRT1171_cm7":
-		case "MIMXRT1172_cm7":
+		case "MIMXRT1171":
+		case "MIMXRT1172":
 			TargetInterface.resetAndStop (1000);
 			Reset_11xx_M7 ();
 			if (!TargetInterface.isStopped ())
@@ -869,8 +869,8 @@ function FlexRAM_Restore ()
 		case "MIMXRT1152":
 		case "MIMXRT1165_cm7":
 		case "MIMXRT1166_cm7":
-		case "MIMXRT1171_cm7":
-		case "MIMXRT1172_cm7":
+		case "MIMXRT1171":
+		case "MIMXRT1172":
 		case "MIMXRT1173_cm7":
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
@@ -992,8 +992,8 @@ function Clock_Init ()
 		case "MIMXRT1152":
 		case "MIMXRT1165_cm7":
 		case "MIMXRT1166_cm7":
-		case "MIMXRT1171_cm7":
-		case "MIMXRT1172_cm7":
+		case "MIMXRT1171":
+		case "MIMXRT1172":
 		case "MIMXRT1173_cm7":
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
@@ -1232,7 +1232,7 @@ function SDRAM_Init ()
 	{
 		case "MIMXRT1011":
 		case "MIMXRT1015":
-			TargetInterface.message ("SDRAM_Init: " + DeviceName - " has no memory interface");
+			TargetInterface.message ("SDRAM_Init: " + DeviceName + " has no memory interface");
 			break;
 		case "MIMXRT1021":
 		case "MIMXRT1024":
@@ -1247,8 +1247,8 @@ function SDRAM_Init ()
 		case "MIMXRT1152":
 		case "MIMXRT1165_cm7":
 		case "MIMXRT1166_cm7":
-		case "MIMXRT1171_cm7":
-		case "MIMXRT1172_cm7":
+		case "MIMXRT1171":
+		case "MIMXRT1172":
 		case "MIMXRT1173_cm7":
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
@@ -1687,8 +1687,8 @@ function FlexSPI_GetBaseAddress (FlexSPI)
 		case "MIMXRT1152":
 		case "MIMXRT1165_cm7":
 		case "MIMXRT1166_cm7":
-		case "MIMXRT1171_cm7":
-		case "MIMXRT1172_cm7":
+		case "MIMXRT1171":
+		case "MIMXRT1172":
 		case "MIMXRT1173_cm7":
 		case "MIMXRT1175_cm7":
 		case "MIMXRT1176_cm7":
