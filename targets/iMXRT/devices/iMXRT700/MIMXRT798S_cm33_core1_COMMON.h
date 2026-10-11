@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          MIMXRT798SGAWBR_cm33_core1
 **                          MIMXRT798SGFOB_cm33_core1
+**                          MIMXRT798SGVKB_cm33_core1
 **
 **     Compilers:
 **                          GNU C Compiler
@@ -9,15 +10,15 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    iMXRT700RM Rev.3, 05/2025
-**     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Reference manual:    iMXRT700RM Rev.5, 10/2025
+**     Version:             rev. 6.0, 2025-12-29
+**     Build:               b260429
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT798S_cm33_core1
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,14 +34,20 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 4.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 5.0 (2025-11-13)
+**         Add puf/sdadc irq and cache64 compatibility macros to common header.
+**     - rev. 5.1 (2025-12-08)
+**         Update RM version and add pdm irq for hifi1/hifi4.
+**     - rev. 6.0 (2025-12-29)
+**         Add new part number.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT798S_cm33_core1_COMMON.h
- * @version 4.0
- * @date 2025-06-06
+ * @version 6.0
+ * @date 2025-12-29
  * @brief CMSIS Peripheral Access Layer for MIMXRT798S_cm33_core1
  *
  * CMSIS Peripheral Access Layer for MIMXRT798S_cm33_core1
@@ -51,7 +58,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0400U
+#define MCU_MEM_MAP_VERSION 0x0600U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -2174,6 +2181,8 @@ typedef enum _dma_request_source
   /** Array initializer of SDADC peripheral base pointers */
   #define SDADC_BASE_PTRS                          { SDADC }
 #endif
+/** Interrupt vectors for the SDADC peripheral type */
+#define SDADC_IRQS                               { SDADC_IRQn }
 
 /* SEMA42 - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

@@ -1,13 +1,13 @@
 /*
 ** ###################################################################
-**     Version:             rev. 3.0, 2025-06-06
-**     Build:               b251024
+**     Version:             rev. 5.0, 2025-12-03
+**     Build:               b260717
 **
 **     Abstract:
 **         Chip specific module features.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -20,6 +20,10 @@
 **         Rev2 DraftA.
 **     - rev. 3.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 4.0 (2025-11-13)
+**         Update ocotp/cache64/trng/pdm feature to align with shared definition changes.
+**     - rev. 5.0 (2025-12-03)
+**         Added new features to rtc/xspi as part of the driver update.
 **
 ** ###################################################################
 */
@@ -130,6 +134,8 @@
 #define FSL_FEATURE_ACMP_HAS_C3_RDIVE_BIT (0)
 /* @brief If has acmp sample signal */
 #define FSL_FEATURE_ACMP_HAS_NO_SAMPLE_SIGNAL (1)
+/* @brief Has C3 PCHCTEN Bit */
+#define FSL_FEATURE_ACMP_HAS_CONTINUOUS_MODE (1)
 
 /* LPADC module features */
 
@@ -207,6 +213,10 @@
 #define FSL_FEATURE_LPADC_HAS_CMDH_CMPEN (1)
 /* @brief Has High Speed Mode Trim Request (bitfield CTRL[CALHS]). */
 #define FSL_FEATURE_LPADC_HAS_CTRL_CALHS (0)
+/* @brief Has Justified Left Enable (bitfield CFG2[JLEFT]). */
+#define FSL_FEATURE_LPADC_HAS_CFG2_JLEFT (1)
+/* @brief Trigger Control Count. */
+#define FSL_FEATURE_LPADC_TCTRL_COUNT (2)
 /* @brief Buffer size of temperature sensor (CMDHa[LOOP] value to be set in process of calculate the temperature). */
 #define FSL_FEATURE_LPADC_TEMP_SENS_BUFFER_SIZE (2U)
 /* @brief Temperature sensor parameter A (slope). */
@@ -237,6 +247,8 @@
 #define FSL_FEATURE_CTIMER_HAS_CCR_CAP3 (1)
 /* @brief CTIMER Has register MSR */
 #define FSL_FEATURE_CTIMER_HAS_MSR (1)
+/* @brief Is affected by errata with ID 53024 (CTIMER will enter interrupt twice when function clock much slower than bus clock). */
+#define FSL_FEATURE_CTIMER_HAS_ERRATA_53024 (1)
 
 /* EDMA module features */
 
@@ -288,11 +300,11 @@
 #define FSL_FEATURE_EDMA_HAS_GLOBAL_MASTER_ID_REPLICATION (1)
 /* @brief Instance has register bit field CH_CSR[SWAP]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_SWAP_SIZEn(x) (0)
-/* @brief Whether has prot register. */
+/* @brief Whether instance has prot register. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_PROT_REGISTERn(x) (0)
 /* @brief Has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_HAS_CHANNEL_ACCESS_TYPE (0)
-/* @brief Whether has MP channel mux. */
+/* @brief Whether instance has MP channel mux. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_MP_CHANNEL_MUXn(x) (0)
 /* @brief Instance has register bit field CH_SBR[INSTR]. */
 #define FSL_FEATURE_EDMA_INSTANCE_HAS_CHANNEL_ACCESS_TYPEn(x) (0)
@@ -404,6 +416,8 @@
 #define FSL_FEATURE_LPI2C_FIFO_SIZEn(x) (8)
 /* @brief Has dedicated interrupt for master and slave. */
 #define FSL_FEATURE_LPI2C_HAS_ROLE_SPLIT_IRQ (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPI2C_IS_LPFLEXCOMM (1)
 
 /* LPSPI module features */
 
@@ -417,6 +431,8 @@
 #define FSL_FEATURE_LPSPI_HAS_NO_PCSCFG (0)
 /* @brief Has no WIDTH bits in TCR register. */
 #define FSL_FEATURE_LPSPI_HAS_NO_MULTI_WIDTH (0)
+/* @brief Belong to LPFLEXCOMM */
+#define FSL_FEATURE_LPSPI_IS_LPFLEXCOMM (1)
 
 /* LPUART module features */
 
@@ -499,7 +515,7 @@
 
 /* MIPI_DSI_HOST module features */
 
-/* @brief Does not have DPHY PLL(DPHY_CM) */
+/* @brief Does not have DPHY PLL */
 #define FSL_FEATURE_MIPI_DSI_HOST_NO_DPHY_PLL (1)
 /* @brief Support TX ULPS */
 #define FSL_FEATURE_MIPI_DSI_HOST_HAS_ULPS (1)
@@ -572,6 +588,11 @@
 /* @brief The number of general purpose interrupts supported by MU. */
 #define FSL_FEATURE_MU_GPI_COUNT (4)
 
+/* OSTIMER module features */
+
+/* @brief Has binary encoded value in counter register. */
+#define FSL_FEATURE_OSTIMER_HAS_BINARY_ENCODED_COUNTER (0)
+
 /* PDM module features */
 
 /* @brief PDM FIFO offset */
@@ -586,22 +607,24 @@
 #define FSL_FEATURE_PDM_HAS_RANGE_CTRL (1)
 /* @brief PDM Has Low Frequency */
 #define FSL_FEATURE_PDM_HAS_STATUS_LOW_FREQ (0)
-/* @brief PDM Has DC_OUT_CTRL. */
-#define FSL_FEATURE_PDM_HAS_DC_OUT_CTRL (1)
-/* @brief PDM Has Fixed DC CTRL VALUE. */
-#define FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED (1)
-/* @brief PDM Has no independent error IRQ. */
-#define FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ (1)
-/* @brief PDM has no minimum clkdiv. */
-#define FSL_FEATURE_PDM_HAS_NO_MINIMUM_CLKDIV (1)
 /* @brief PDM Has No VADEF Bitfield In PDM VAD0_STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_VADEF (1)
+/* @brief PDM has no minimum clkdiv. */
+#define FSL_FEATURE_PDM_HAS_NO_MINIMUM_CLKDIV (1)
 /* @brief PDM Has no FIR_RDY Bitfield In PDM STAT Register */
 #define FSL_FEATURE_PDM_HAS_NO_FIR_RDY (1)
 /* @brief PDM Has no DOZEN Bitfield In PDM CTRL_1 Register */
 #define FSL_FEATURE_PDM_HAS_NO_DOZEN (0)
 /* @brief PDM Has DEC_BYPASS Bitfield In PDM CTRL_2 Register */
 #define FSL_FEATURE_PDM_HAS_DECIMATION_FILTER_BYPASS (1)
+/* @brief PDM Has DC_OUT_CTRL. */
+#define FSL_FEATURE_PDM_HAS_DC_OUT_CTRL (1)
+/* @brief PDM Has Fixed DC CTRL VALUE. */
+#define FSL_FEATURE_PDM_DC_CTRL_VALUE_FIXED (1)
+/* @brief PDM Has no independent error IRQ. */
+#define FSL_FEATURE_PDM_HAS_NO_INDEPENDENT_ERROR_IRQ (1)
+/* @brief PDM has no hardware Voice Activity Detector */
+#define FSL_FEATURE_PDM_HAS_NO_HWVAD (0)
 
 /* PINT module features */
 
@@ -615,7 +638,7 @@
 
 /* RTC module features */
 
-/* @brief Has Tamper Direction Register support */
+/* @brief Has Tamper Direction Register support. */
 #define FSL_FEATURE_RTC_HAS_TAMPER_DIRECTION (0)
 /* @brief Has SUBSECOND_CTRL register. */
 #define FSL_FEATURE_RTC_HAS_SUBSECOND (0)
@@ -623,7 +646,7 @@
 #define FSL_FEATURE_RTC_HAS_TAMPER_QUEUE (0)
 /* @brief Has RTC subsystem. */
 #define FSL_FEATURE_RTC_HAS_SUBSYSTEM (1)
-/* @brief Has RTC Tamper 23 Filter Configuration Register support */
+/* @brief Has RTC Tamper 23 Filter Configuration Register support. */
 #define FSL_FEATURE_RTC_HAS_FILTER23_CFG (0)
 /* @brief Has WAKEUP_MODE bitfile in CTRL2 register. */
 #define FSL_FEATURE_RTC_HAS_NO_CTRL2_WAKEUP_MODE (1)
@@ -643,6 +666,14 @@
 #define FSL_FEATURE_RTC_HAS_NO_TIMER_STB_MASK (1)
 /* @brief Target(slave) instance. */
 #define FSL_FEATURE_RTC_IS_SLAVE (1)
+/* @brief Has RTC Tamper 45 Filter Configuration Register support */
+#define FSL_FEATURE_RTC_HAS_FILTER45_CFG (0)
+/* @brief Has RTC Tamper 67 Filter Configuration Register support */
+#define FSL_FEATURE_RTC_HAS_FILTER67_CFG (0)
+/* @brief Has RTC Minutes Count Down Timer Register support */
+#define FSL_FEATURE_RTC_HAS_MINUTES_TIMER_FEATURE (0)
+/* @brief Has RTC BCD mode support */
+#define FSL_FEATURE_RTC_HAS_BCD_MODE (0)
 
 /* SAI module features */
 
@@ -813,6 +844,14 @@
 #define FSL_FEATURE_XSPI_HAS_END_CFG (1)
 /* @brief XSPI has Doze Enable */
 #define FSL_FEATURE_XSPI_HAS_DOZE_MODE (1)
+/* @brief XSPI has Write Terminate Enable */
+#define FSL_FEATURE_XSPI_HAS_WRTER_EN_BIT (1)
+/* @brief Multi IRQ count for one instance */
+#define FSL_FEATURE_XSPI_MULTI_IRQ_COUNT (0U)
+/* @brief XSPI has DDR Mode Enable */
+#define FSL_FEATURE_XSPI_HAS_DDR (1)
+/* @brief XSPI has Environment Module Configuration */
+#define FSL_FEATURE_XSPI_HAS_EENV (0)
 
 #endif /* _MIMXRT735S_cm33_core1_FEATURES_H_ */
 

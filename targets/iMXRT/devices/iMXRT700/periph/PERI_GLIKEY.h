@@ -8,6 +8,10 @@
 **                          MIMXRT735SGFOB_cm33_core1
 **                          MIMXRT735SGFOB_ezhv
 **                          MIMXRT735SGFOB_hifi1
+**                          MIMXRT735SGVKB_cm33_core0
+**                          MIMXRT735SGVKB_cm33_core1
+**                          MIMXRT735SGVKB_ezhv
+**                          MIMXRT735SGVKB_hifi1
 **                          MIMXRT758SGAWBR_cm33_core0
 **                          MIMXRT758SGAWBR_cm33_core1
 **                          MIMXRT758SGAWBR_ezhv
@@ -16,6 +20,10 @@
 **                          MIMXRT758SGFOB_cm33_core1
 **                          MIMXRT758SGFOB_ezhv
 **                          MIMXRT758SGFOB_hifi1
+**                          MIMXRT758SGVKB_cm33_core0
+**                          MIMXRT758SGVKB_cm33_core1
+**                          MIMXRT758SGVKB_ezhv
+**                          MIMXRT758SGVKB_hifi1
 **                          MIMXRT798SGAWBR_cm33_core0
 **                          MIMXRT798SGAWBR_cm33_core1
 **                          MIMXRT798SGAWBR_ezhv
@@ -26,15 +34,20 @@
 **                          MIMXRT798SGFOB_ezhv
 **                          MIMXRT798SGFOB_hifi1
 **                          MIMXRT798SGFOB_hifi4
+**                          MIMXRT798SGVKB_cm33_core0
+**                          MIMXRT798SGVKB_cm33_core1
+**                          MIMXRT798SGVKB_ezhv
+**                          MIMXRT798SGVKB_hifi1
+**                          MIMXRT798SGVKB_hifi4
 **
-**     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Version:             rev. 6.0, 2025-12-29
+**     Build:               b260330
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for GLIKEY
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -50,14 +63,20 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 4.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 5.0 (2025-11-13)
+**         Add puf/sdadc irq and cache64 compatibility macros to common header.
+**     - rev. 5.1 (2025-12-08)
+**         Update RM version and add pdm irq for hifi1/hifi4.
+**     - rev. 6.0 (2025-12-29)
+**         Add new part number.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_GLIKEY.h
- * @version 4.0
- * @date 2025-06-06
+ * @version 6.0
+ * @date 2025-12-29
  * @brief CMSIS Peripheral Access Layer for GLIKEY
  *
  * CMSIS Peripheral Access Layer for GLIKEY
@@ -66,32 +85,32 @@
 #if !defined(PERI_GLIKEY_H_)
 #define PERI_GLIKEY_H_                           /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT735SGAWBR_cm33_core0) || defined(CPU_MIMXRT735SGFOB_cm33_core0))
-#include "MIMXRT735S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWBR_cm33_core1) || defined(CPU_MIMXRT735SGFOB_cm33_core1))
-#include "MIMXRT735S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWBR_ezhv) || defined(CPU_MIMXRT735SGFOB_ezhv))
-#include "MIMXRT735S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWBR_hifi1) || defined(CPU_MIMXRT735SGFOB_hifi1))
-#include "MIMXRT735S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core0) || defined(CPU_MIMXRT758SGFOB_cm33_core0))
-#include "MIMXRT758S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core1) || defined(CPU_MIMXRT758SGFOB_cm33_core1))
-#include "MIMXRT758S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_ezhv) || defined(CPU_MIMXRT758SGFOB_ezhv))
-#include "MIMXRT758S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_hifi1) || defined(CPU_MIMXRT758SGFOB_hifi1))
-#include "MIMXRT758S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core0) || defined(CPU_MIMXRT798SGFOB_cm33_core0))
-#include "MIMXRT798S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core1) || defined(CPU_MIMXRT798SGFOB_cm33_core1))
-#include "MIMXRT798S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_ezhv) || defined(CPU_MIMXRT798SGFOB_ezhv))
-#include "MIMXRT798S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_hifi1) || defined(CPU_MIMXRT798SGFOB_hifi1))
-#include "MIMXRT798S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_hifi4) || defined(CPU_MIMXRT798SGFOB_hifi4))
-#include "MIMXRT798S_hifi4_COMMON.h"
+#if (defined(CPU_MIMXRT735SGAWBR_cm33_core0) || defined(CPU_MIMXRT735SGFOB_cm33_core0) || defined(CPU_MIMXRT735SGVKB_cm33_core0))
+#include "../MIMXRT735S_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMXRT735SGAWBR_cm33_core1) || defined(CPU_MIMXRT735SGFOB_cm33_core1) || defined(CPU_MIMXRT735SGVKB_cm33_core1))
+#include "../MIMXRT735S_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMXRT735SGAWBR_ezhv) || defined(CPU_MIMXRT735SGFOB_ezhv) || defined(CPU_MIMXRT735SGVKB_ezhv))
+#include "../MIMXRT735S_ezhv_COMMON.h"
+#elif (defined(CPU_MIMXRT735SGAWBR_hifi1) || defined(CPU_MIMXRT735SGFOB_hifi1) || defined(CPU_MIMXRT735SGVKB_hifi1))
+#include "../MIMXRT735S_hifi1_COMMON.h"
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core0) || defined(CPU_MIMXRT758SGFOB_cm33_core0) || defined(CPU_MIMXRT758SGVKB_cm33_core0))
+#include "../MIMXRT758S_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core1) || defined(CPU_MIMXRT758SGFOB_cm33_core1) || defined(CPU_MIMXRT758SGVKB_cm33_core1))
+#include "../MIMXRT758S_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMXRT758SGAWBR_ezhv) || defined(CPU_MIMXRT758SGFOB_ezhv) || defined(CPU_MIMXRT758SGVKB_ezhv))
+#include "../MIMXRT758S_ezhv_COMMON.h"
+#elif (defined(CPU_MIMXRT758SGAWBR_hifi1) || defined(CPU_MIMXRT758SGFOB_hifi1) || defined(CPU_MIMXRT758SGVKB_hifi1))
+#include "../MIMXRT758S_hifi1_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core0) || defined(CPU_MIMXRT798SGFOB_cm33_core0) || defined(CPU_MIMXRT798SGVKB_cm33_core0))
+#include "../MIMXRT798S_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core1) || defined(CPU_MIMXRT798SGFOB_cm33_core1) || defined(CPU_MIMXRT798SGVKB_cm33_core1))
+#include "../MIMXRT798S_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_ezhv) || defined(CPU_MIMXRT798SGFOB_ezhv) || defined(CPU_MIMXRT798SGVKB_ezhv))
+#include "../MIMXRT798S_ezhv_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_hifi1) || defined(CPU_MIMXRT798SGFOB_hifi1) || defined(CPU_MIMXRT798SGVKB_hifi1))
+#include "../MIMXRT798S_hifi1_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_hifi4) || defined(CPU_MIMXRT798SGFOB_hifi4) || defined(CPU_MIMXRT798SGVKB_hifi4))
+#include "../MIMXRT798S_hifi4_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -163,17 +182,20 @@ typedef struct {
 
 #define GLIKEY_CTRL_0_RESERVED15_MASK            (0xFF00U)
 #define GLIKEY_CTRL_0_RESERVED15_SHIFT           (8U)
-/*! RESERVED15 - Reserved for Future Use */
+/*! RESERVED15 - Reserved for future use */
 #define GLIKEY_CTRL_0_RESERVED15(x)              (((uint32_t)(((uint32_t)(x)) << GLIKEY_CTRL_0_RESERVED15_SHIFT)) & GLIKEY_CTRL_0_RESERVED15_MASK)
 
 #define GLIKEY_CTRL_0_WR_EN_0_MASK               (0x30000U)
 #define GLIKEY_CTRL_0_WR_EN_0_SHIFT              (16U)
-/*! WR_EN_0 - Write Enable 0 */
+/*! WR_EN_0 - Write enable associated to the SSR.
+ *  0b00..Enable
+ *  0b01..Disable
+ */
 #define GLIKEY_CTRL_0_WR_EN_0(x)                 (((uint32_t)(((uint32_t)(x)) << GLIKEY_CTRL_0_WR_EN_0_SHIFT)) & GLIKEY_CTRL_0_WR_EN_0_MASK)
 
 #define GLIKEY_CTRL_0_SFT_RST_MASK               (0x40000U)
 #define GLIKEY_CTRL_0_SFT_RST_SHIFT              (18U)
-/*! SFT_RST - Soft reset for the core reset (SFR configuration will be preseved).This register reads as 0
+/*! SFT_RST - Soft reset for the core reset.
  *  0b0..No effect
  *  0b1..Triggers the soft reset
  */
@@ -181,7 +203,7 @@ typedef struct {
 
 #define GLIKEY_CTRL_0_RESERVED31_MASK            (0xFFF80000U)
 #define GLIKEY_CTRL_0_RESERVED31_SHIFT           (19U)
-/*! RESERVED31 - Reserved for Future Use */
+/*! RESERVED31 - Reserved for future use */
 #define GLIKEY_CTRL_0_RESERVED31(x)              (((uint32_t)(((uint32_t)(x)) << GLIKEY_CTRL_0_RESERVED31_SHIFT)) & GLIKEY_CTRL_0_RESERVED31_MASK)
 /*! @} */
 
@@ -195,22 +217,28 @@ typedef struct {
 
 #define GLIKEY_CTRL_1_RESERVED15_MASK            (0xFF00U)
 #define GLIKEY_CTRL_1_RESERVED15_SHIFT           (8U)
-/*! RESERVED15 - Reserved for Future Use */
+/*! RESERVED15 - Reserved for future use */
 #define GLIKEY_CTRL_1_RESERVED15(x)              (((uint32_t)(((uint32_t)(x)) << GLIKEY_CTRL_1_RESERVED15_SHIFT)) & GLIKEY_CTRL_1_RESERVED15_MASK)
 
 #define GLIKEY_CTRL_1_WR_EN_1_MASK               (0x30000U)
 #define GLIKEY_CTRL_1_WR_EN_1_SHIFT              (16U)
-/*! WR_EN_1 - Write Enable One */
+/*! WR_EN_1 - Write Enable associated to the SSR.
+ *  0b00..Disable
+ *  0b01..Enable
+ */
 #define GLIKEY_CTRL_1_WR_EN_1(x)                 (((uint32_t)(((uint32_t)(x)) << GLIKEY_CTRL_1_WR_EN_1_SHIFT)) & GLIKEY_CTRL_1_WR_EN_1_MASK)
 
 #define GLIKEY_CTRL_1_SFR_LOCK_MASK              (0x3C0000U)
 #define GLIKEY_CTRL_1_SFR_LOCK_SHIFT             (18U)
-/*! SFR_LOCK - LOCK register for GLIKEY */
+/*! SFR_LOCK - SFR Lock
+ *  0b0101..Locked
+ *  0b1010..Unlocked
+ */
 #define GLIKEY_CTRL_1_SFR_LOCK(x)                (((uint32_t)(((uint32_t)(x)) << GLIKEY_CTRL_1_SFR_LOCK_SHIFT)) & GLIKEY_CTRL_1_SFR_LOCK_MASK)
 
 #define GLIKEY_CTRL_1_RESERVED31_MASK            (0xFFC00000U)
 #define GLIKEY_CTRL_1_RESERVED31_SHIFT           (22U)
-/*! RESERVED31 - Reserved for Future Use */
+/*! RESERVED31 - Reserved for future use */
 #define GLIKEY_CTRL_1_RESERVED31(x)              (((uint32_t)(((uint32_t)(x)) << GLIKEY_CTRL_1_RESERVED31_SHIFT)) & GLIKEY_CTRL_1_RESERVED31_MASK)
 /*! @} */
 
@@ -219,17 +247,23 @@ typedef struct {
 
 #define GLIKEY_INTR_CTRL_INT_EN_MASK             (0x1U)
 #define GLIKEY_INTR_CTRL_INT_EN_SHIFT            (0U)
-/*! INT_EN - Interrupt Enable. Writing a 1, Interrupt asserts on Interrupt output port */
+/*! INT_EN - Interrupt Enable. Writing a 1, Interrupt asserts on Interrupt output port
+ *  0b0..No effect
+ *  0b1..Interrupt enabled
+ */
 #define GLIKEY_INTR_CTRL_INT_EN(x)               (((uint32_t)(((uint32_t)(x)) << GLIKEY_INTR_CTRL_INT_EN_SHIFT)) & GLIKEY_INTR_CTRL_INT_EN_MASK)
 
 #define GLIKEY_INTR_CTRL_INT_CLR_MASK            (0x2U)
 #define GLIKEY_INTR_CTRL_INT_CLR_SHIFT           (1U)
-/*! INT_CLR - Interrupt Clear. Writing a 1 to this register creates a single interrupt clear pulse. This register reads as 0 */
+/*! INT_CLR - Interrupt Clear. Writing a 1 to this register creates a single interrupt clear pulse. This register reads as 0
+ *  0b0..No effect
+ *  0b1..Interrupt status bit cleared
+ */
 #define GLIKEY_INTR_CTRL_INT_CLR(x)              (((uint32_t)(((uint32_t)(x)) << GLIKEY_INTR_CTRL_INT_CLR_SHIFT)) & GLIKEY_INTR_CTRL_INT_CLR_MASK)
 
 #define GLIKEY_INTR_CTRL_INT_SET_MASK            (0x4U)
 #define GLIKEY_INTR_CTRL_INT_SET_SHIFT           (2U)
-/*! INT_SET - Interrupt Set. Writing a 1 to this register asserts the interrupt. This register reads as 0
+/*! INT_SET - Software Interrupt Set.
  *  0b0..No effect
  *  0b1..Triggers interrupt
  */
@@ -237,7 +271,7 @@ typedef struct {
 
 #define GLIKEY_INTR_CTRL_RESERVED31_MASK         (0xFFFFFFF8U)
 #define GLIKEY_INTR_CTRL_RESERVED31_SHIFT        (3U)
-/*! RESERVED31 - Reserved for Future Use */
+/*! RESERVED31 - Reserved for future use */
 #define GLIKEY_INTR_CTRL_RESERVED31(x)           (((uint32_t)(((uint32_t)(x)) << GLIKEY_INTR_CTRL_RESERVED31_SHIFT)) & GLIKEY_INTR_CTRL_RESERVED31_MASK)
 /*! @} */
 
@@ -247,8 +281,8 @@ typedef struct {
 #define GLIKEY_STATUS_INT_STATUS_MASK            (0x1U)
 #define GLIKEY_STATUS_INT_STATUS_SHIFT           (0U)
 /*! INT_STATUS - Interrupt Status.
- *  0b0..No effect
- *  0b1..Triggers interrupt
+ *  0b0..No trigger
+ *  0b1..Trigger captured
  */
 #define GLIKEY_STATUS_INT_STATUS(x)              (((uint32_t)(((uint32_t)(x)) << GLIKEY_STATUS_INT_STATUS_SHIFT)) & GLIKEY_STATUS_INT_STATUS_MASK)
 
@@ -275,7 +309,7 @@ typedef struct {
 
 #define GLIKEY_STATUS_RESERVED18_MASK            (0x7FFE0U)
 #define GLIKEY_STATUS_RESERVED18_SHIFT           (5U)
-/*! RESERVED18 - Reserved for Future Use */
+/*! RESERVED18 - Reserved for future use */
 #define GLIKEY_STATUS_RESERVED18(x)              (((uint32_t)(((uint32_t)(x)) << GLIKEY_STATUS_RESERVED18_SHIFT)) & GLIKEY_STATUS_RESERVED18_MASK)
 
 #define GLIKEY_STATUS_FSM_STATE_MASK             (0xFFF80000U)

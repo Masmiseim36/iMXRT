@@ -13,14 +13,14 @@
 **                          MIMXRT1024DAG5A
 **                          MIMXRT1024DAG5B
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250521
+**     Version:             rev. 3.0, 2025-11-13
+**     Build:               b260509
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for RTWDOG
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -38,14 +38,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Move enet compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_RTWDOG.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for RTWDOG
  *
  * CMSIS Peripheral Access Layer for RTWDOG
@@ -282,10 +284,6 @@ typedef struct {
 /*!
  * @}
  */ /* end of group RTWDOG_Register_Masks */
-
-/* Extra definition */
-#define RTWDOG_UPDATE_KEY                        (0xD928C520U)
-#define RTWDOG_REFRESH_KEY                       (0xB480A602U)
 
 
 /*!

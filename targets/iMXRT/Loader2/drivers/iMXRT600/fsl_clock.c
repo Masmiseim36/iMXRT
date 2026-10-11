@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2020, NXP
+ * Copyright 2016 - 2020, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -28,6 +28,8 @@
 #define FIRC_60MHZ_TRIM_TEMPCO 51
 #define FIRC_60MHZ_TRIM_COARSE 52
 #define FIRC_60MHZ_TRIM_FINE   53
+
+#define PLL_PFD_LOCK_TIMEOUT 200U
 /*******************************************************************************
  * Variables
  ******************************************************************************/
@@ -1171,7 +1173,7 @@ void CLOCK_SetFRGClock(const clock_frg_clk_config_t *config)
     }
 }
 
-#ifndef __XCC__
+#ifndef __XTENSA__
 /**
  * brief  Enable FFRO 48M/60M clock.
  * Note   Need to make sure FFRO and ROM has power(PDRUNCFG0[16] and PDRUNCFG1[28] = 0U) before calling this API
@@ -1238,7 +1240,7 @@ void CLOCK_EnableSfroClk(void)
     /* No SFRO enable/disable control in CLKCTL. Just wait SFRO stable in case SFRO just get powered on. */
     SDK_DelayAtLeastUs(sfro_delay, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
 }
-#endif /* __XCC__ */
+#endif /* __XTENSA__ */
 
 /* Initialize the SYSTEM PLL Clk */
 /*! brief  Initialize the System PLL.
@@ -1307,10 +1309,11 @@ void CLOCK_InitSysPll(const clock_sys_pll_config_t *config)
  *  param divider    : The PFD divider value.
  *  note It is recommended that PFD settings are kept between 12-35.
  */
-void CLOCK_InitSysPfd(clock_pfd_t pfd, uint8_t divider)
+status_t CLOCK_InitSysPfd(clock_pfd_t pfd, uint8_t divider)
 {
     uint32_t pfdIndex = (uint32_t)pfd;
     uint32_t syspfd;
+    uint32_t timeout = PLL_PFD_LOCK_TIMEOUT;
 
     syspfd = CLKCTL0->SYSPLL0PFD &
              ~(((uint32_t)CLKCTL0_SYSPLL0PFD_PFD0_CLKGATE_MASK | (uint32_t)CLKCTL0_SYSPLL0PFD_PFD0_MASK)
@@ -1324,9 +1327,16 @@ void CLOCK_InitSysPfd(clock_pfd_t pfd, uint8_t divider)
     /* Wait for output becomes stable. */
     while ((CLKCTL0->SYSPLL0PFD & ((uint32_t)CLKCTL0_SYSPLL0PFD_PFD0_CLKRDY_MASK << (8UL * pfdIndex))) == 0UL)
     {
+        timeout--;
+        if (timeout == 0U)
+        {
+            return kStatus_Timeout;
+        }
     }
     /* Clear ready status flag. */
     CLKCTL0->SYSPLL0PFD |= ((uint32_t)CLKCTL0_SYSPLL0PFD_PFD0_CLKRDY_MASK << (8UL * pfdIndex));
+
+    return kStatus_Success;
 }
 /* Initialize the Audio PLL Clk */
 /*! brief  Initialize the audio PLL.
@@ -1396,10 +1406,11 @@ void CLOCK_InitAudioPll(const clock_audio_pll_config_t *config)
  *  param divider    : The PFD divider value.
  *  note It is recommended that PFD settings are kept between 12-35.
  */
-void CLOCK_InitAudioPfd(clock_pfd_t pfd, uint8_t divider)
+status_t CLOCK_InitAudioPfd(clock_pfd_t pfd, uint8_t divider)
 {
     uint32_t pfdIndex = (uint32_t)pfd;
     uint32_t syspfd;
+    uint32_t timeout = PLL_PFD_LOCK_TIMEOUT;
 
     syspfd = CLKCTL1->AUDIOPLL0PFD &
              ~(((uint32_t)CLKCTL1_AUDIOPLL0PFD_PFD0_CLKGATE_MASK | (uint32_t)CLKCTL1_AUDIOPLL0PFD_PFD0_MASK)
@@ -1413,9 +1424,16 @@ void CLOCK_InitAudioPfd(clock_pfd_t pfd, uint8_t divider)
     /* Wait for output becomes stable. */
     while ((CLKCTL1->AUDIOPLL0PFD & ((uint32_t)CLKCTL1_AUDIOPLL0PFD_PFD0_CLKRDY_MASK << (8UL * pfdIndex))) == 0UL)
     {
+        timeout--;
+        if (timeout == 0U)
+        {
+            return kStatus_Timeout;
+        }
     }
     /* Clear ready status flag. */
     CLKCTL1->AUDIOPLL0PFD |= ((uint32_t)CLKCTL1_AUDIOPLL0PFD_PFD0_CLKRDY_MASK << (8UL * pfdIndex));
+
+    return kStatus_Success;
 }
 /*! @brief  Enable/Disable sys osc clock from external crystal clock.
  *  @param  enable : true to enable system osc clock, false to bypass system osc.
@@ -1536,13 +1554,19 @@ bool CLOCK_EnableUsbHs0PhyPllClock(clock_attach_id_t src, uint32_t freq)
 
     if (retVal)
     {
-        USBPHY->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_POWER(1) | USBPHY_PLL_SIC_PLL_REG_ENABLE_MASK);
+
+        /* This field controls the USB PLL regulator, set to enable the regulator. SW
+        must set this bit 15 us before setting PLL_POWER to avoid glitches on PLL
+        output clock. */
+        USBPHY->PLL_SIC_SET = USBPHY_PLL_SIC_PLL_REG_ENABLE_MASK;
+        SDK_DelayAtLeastUs(15U, SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY);
+        USBPHY->PLL_SIC_SET = USBPHY_PLL_SIC_PLL_POWER(1);
+
         USBPHY->PLL_SIC     = (USBPHY->PLL_SIC & ~(USBPHY_PLL_SIC_PLL_DIV_SEL_MASK)) | phyPllDiv;
         USBPHY->PLL_SIC_CLR = USBPHY_PLL_SIC_PLL_BYPASS_MASK;
         USBPHY->PLL_SIC_SET = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
 
         USBPHY->CTRL_CLR = USBPHY_CTRL_CLR_CLKGATE_MASK;
-        USBPHY->PWD_SET  = 0x0;
 
         while (0UL == (USBPHY->PLL_SIC & USBPHY_PLL_SIC_PLL_LOCK_MASK))
         {

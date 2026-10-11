@@ -53,14 +53,14 @@
 **                          MIMXRT117HDVMAB_cm4
 **                          MIMXRT117HDVMAB_cm7
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 4.0, 2026-01-06
+**     Build:               b260106
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for ENC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -74,14 +74,18 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
+**     - rev. 4.0 (2026-01-06)
+**         Update header files to align with IMXRT1170RM Rev.5.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_ENC.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2026-01-06
  * @brief CMSIS Peripheral Access Layer for ENC
  *
  * CMSIS Peripheral Access Layer for ENC
@@ -340,11 +344,6 @@ typedef struct {
 #define ENC_FILT_FILT_CNT_SHIFT                  (8U)
 /*! FILT_CNT - Input Filter Sample Count */
 #define ENC_FILT_FILT_CNT(x)                     (((uint16_t)(((uint16_t)(x)) << ENC_FILT_FILT_CNT_SHIFT)) & ENC_FILT_FILT_CNT_MASK)
-
-#define ENC_FILT_FILT_PRSC_MASK                  (0xE000U)
-#define ENC_FILT_FILT_PRSC_SHIFT                 (13U)
-/*! FILT_PRSC - Prescaler Divide IPBus Clock to FILT Clock */
-#define ENC_FILT_FILT_PRSC(x)                    (((uint16_t)(((uint16_t)(x)) << ENC_FILT_FILT_PRSC_SHIFT)) & ENC_FILT_FILT_PRSC_MASK)
 /*! @} */
 
 /*! @name WTR - Watchdog Timeout */

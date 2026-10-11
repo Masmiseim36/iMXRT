@@ -13,9 +13,9 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    IMXRT1170RM, Rev 1, 02/2021
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Reference manual:    IMXRT1170RM, Rev 5, 12/2025
+**     Version:             rev. 4.1, 2026-05-13
+**     Build:               b260513
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -23,7 +23,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -37,6 +37,14 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
+**     - rev. 4.0 (2026-01-06)
+**         Update header files to align with IMXRT1170RM Rev.5.
+**     - rev. 4.1 (2026-05-13)
+**         Fixed CERT-C INT31-C MSG violations on the ~(uint16_t)WDOG_*_MASK operator-precedence
+**         pattern in the watchdog-disable sequence (SystemInit) by reordering NOT before the
+**         narrowing cast and masking with 0xFFFFU.
 **
 ** ###################################################################
 */
@@ -44,7 +52,7 @@
 /*!
  * @file MIMXRT1171
  * @version 1.0
- * @date 2025-05-20
+ * @date 2026-01-06
  * @brief Device specific configuration file for MIMXRT1171 (implementation file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -82,11 +90,11 @@ void SystemInit (void) {
 #if (DISABLE_WDOG)
     if ((WDOG1->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
-        WDOG1->WCR &= ~(uint16_t) WDOG_WCR_WDE_MASK;
+        WDOG1->WCR &= (uint16_t)((~WDOG_WCR_WDE_MASK) & 0xFFFFU);
     }
     if ((WDOG2->WCR & WDOG_WCR_WDE_MASK) != 0U)
     {
-        WDOG2->WCR &= ~(uint16_t) WDOG_WCR_WDE_MASK;
+        WDOG2->WCR &= (uint16_t)((~WDOG_WCR_WDE_MASK) & 0xFFFFU);
     }
     if ((RTWDOG3->CS & RTWDOG_CS_CMD32EN_MASK) != 0U)
     {
@@ -118,12 +126,7 @@ void SystemInit (void) {
         SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
     }
 
-/* Enable instruction and data caches */
-#if defined(__ICACHE_PRESENT) && __ICACHE_PRESENT
-    if (SCB_CCR_IC_Msk != (SCB_CCR_IC_Msk & SCB->CCR)) {
-        SCB_EnableICache();
-    }
-#endif
+    BOARD_EarlyInit();
 
     /* Clear bit 13 to its reset value since it might be set by ROM. */
     IOMUXC_GPR->GPR28 &= ~IOMUXC_GPR_GPR28_CACHE_USB_MASK;
@@ -160,5 +163,24 @@ void SystemCoreClockUpdate (void) {
 
 __attribute__ ((weak)) void SystemInitHook (void) {
   /* Void implementation of the weak function. */
+}
+
+/* ----------------------------------------------------------------------------
+   -- BOARD_EarlyInit()
+   ---------------------------------------------------------------------------- */
+/**
+ * @brief BOARD_EarlyInit function.
+ *
+ * This weak function allows board to initialize MPU or memory at early stage before .data,
+ * .bss initialization.
+ * It minimizes the risk of speculative access to uninitialized memory allowed by default
+ * MPU attributes. Meanwhile it also make it possible to enable I/D caches to boost boot up
+ * speed.
+ * NOTE: No global/static data access is allowed in this function since they have not been
+ * initialized yet.
+ */
+__attribute__((weak)) void BOARD_EarlyInit(void)
+{
+    /* Void implementation of the weak function. */
 }
 

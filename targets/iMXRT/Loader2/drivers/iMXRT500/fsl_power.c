@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2022 NXP
+ * Copyright 2018-2023, 2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -14,10 +14,18 @@ AT_QUICKACCESS_SECTION_DATA(static uint32_t oscSettlingTime);
 AT_QUICKACCESS_SECTION_DATA(static uint32_t pmicVddcoreRecoveryTime);
 AT_QUICKACCESS_SECTION_DATA(static uint32_t lvdChangeFlag);
 AT_QUICKACCESS_SECTION_DATA(static power_deep_sleep_clk_t deepSleepClk);
+AT_QUICKACCESS_SECTION_DATA(static uint32_t s_pmicCfg);
 
 #define MEGA (1000000U)
 
-const uint32_t powerFreqLevel[POWER_FREQ_LEVELS_NUM] = {275U * MEGA, 230U * MEGA, 192U * MEGA, 100U * MEGA, 60U * MEGA};
+/*! Core frequency levels number. */
+#define POWER_FREQ_LEVELS_NUM (5U)
+
+static const uint32_t powerFreqLevel[POWER_FREQ_LEVELS_NUM] = {275U * MEGA, 230U * MEGA, 192U * MEGA, 100U * MEGA,
+                                                               60U * MEGA};
+
+static power_vddcore_src_t vddCoreSrc;
+static power_vddcore_set_func_t vddCoreSetCb = NULL;
 
 static const uint32_t powerLdoVoltLevel[POWER_FREQ_LEVELS_NUM] = {
     0x2FU, /* 1.1V */
@@ -35,6 +43,13 @@ static const uint32_t powerLdoVoltLevel[POWER_FREQ_LEVELS_NUM] = {
 #define FSL_COMPONENT_ID "platform.drivers.power"
 #endif
 
+/* Default configuring PMC to respond changes on pdruncfg[2:1] (PMIC mode select pin values) like below:
+ *  0b00    run mode, all supplies on.
+ *  0b01    deep sleep mode, all supplies on.
+ *  0b10    deep powerdown mode, vddcore off.
+ *  0b11    full deep powerdown mode vdd1v8 and vddcore off. */
+#define PMICCFG_DEFAULT_VALUE (0x73U)
+
 #define PCFG0_XBB_MASK \
     (SYSCTL0_PDSLEEPCFG0_RBB_PD_MASK | SYSCTL0_PDSLEEPCFG0_FBB_PD_MASK | SYSCTL0_PDSLEEPCFG0_RBBSRAM_PD_MASK)
 
@@ -48,7 +63,8 @@ static const uint32_t powerLdoVoltLevel[POWER_FREQ_LEVELS_NUM] = {
      SYSCTL0_PDSLEEPCFG0_SYSPLLANA_PD_MASK | SYSCTL0_PDSLEEPCFG0_AUDPLLLDO_PD_MASK |                                  \
      SYSCTL0_PDSLEEPCFG0_AUDPLLANA_PD_MASK | SYSCTL0_PDSLEEPCFG0_ADC_PD_MASK | SYSCTL0_PDSLEEPCFG0_ADC_LP_MASK |      \
      SYSCTL0_PDSLEEPCFG0_ADC_TEMPSNS_PD_MASK | SYSCTL0_PDSLEEPCFG0_PMC_TEMPSNS_PD_MASK |                              \
-     SYSCTL0_PDSLEEPCFG0_ACMP_PD_MASK)
+     SYSCTL0_PDSLEEPCFG0_ACMP_PD_MASK | SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI0_REF_PD_MASK |                                 \
+     SYSCTL0_PDSLEEPCFG0_HSPAD_SDIO0_REF_PD_MASK | SYSCTL0_PDSLEEPCFG0_HSPAD_FSPI1_REF_PD_MASK)
 
 /* DeepSleep PDSLEEP1 */
 #define PCFG1_DEEP_SLEEP                                                                                       \
@@ -63,7 +79,8 @@ static const uint32_t powerLdoVoltLevel[POWER_FREQ_LEVELS_NUM] = {
      SYSCTL0_PDSLEEPCFG1_MIPIDSI_SRAM_APD_MASK | SYSCTL0_PDSLEEPCFG1_MIPIDSI_SRAM_PPD_MASK |                   \
      SYSCTL0_PDSLEEPCFG1_LCDIF_SRAM_APD_MASK | SYSCTL0_PDSLEEPCFG1_LCDIF_SRAM_PPD_MASK |                       \
      SYSCTL0_PDSLEEPCFG1_DSP_PD_MASK | SYSCTL0_PDSLEEPCFG1_MIPIDSI_PD_MASK | SYSCTL0_PDSLEEPCFG1_OTP_PD_MASK | \
-     SYSCTL0_PDSLEEPCFG1_ROM_PD_MASK | SYSCTL0_PDSLEEPCFG1_SRAM_SLEEP_MASK)
+     SYSCTL0_PDSLEEPCFG1_ROM_PD_MASK | SYSCTL0_PDSLEEPCFG1_SRAM_SLEEP_MASK |                                   \
+     SYSCTL0_PDSLEEPCFG1_HSPAD_SDIO1_REF_PD_MASK)
 
 /* DeepSleep PDSLEEP2 */
 #define PCFG2_DEEP_SLEEP 0xFFFFFFFFU
@@ -134,9 +151,18 @@ static const uint32_t powerLdoVoltLevel[POWER_FREQ_LEVELS_NUM] = {
 #define PMC_MEM_SEQ_NUM                 (0x3FU)
 #define SYSCTL0_PDRUNCFG1_MEM_BITS_MASK (0x103FEFFEU)
 
+/*! Invalid voltage level. */
+#define POWER_INVALID_VOLT_LEVEL (0xFFFFFFFFU)
+
 /*******************************************************************************
  * Code
  ******************************************************************************/
+void POWER_PmicPowerModeSelectControl(uint32_t vddSelect)
+{
+    /* VDD1V8M0 and VDDCOREM0 is expected to be 1 during active mode otherwise a POR will be triggered. */
+    s_pmicCfg = vddSelect | 0x11U;
+}
+
 /*!
  * @brief Configure bias voltage level and enable/disable pull-down.
  *
@@ -155,15 +181,17 @@ AT_QUICKACCESS_SECTION_CODE(static void POWER_SetBiasConfig(void))
     }
 }
 
-static uint32_t POWER_CalcVoltLevel(uint32_t cm33_clk_freq, uint32_t dsp_clk_freq)
+static uint32_t POWER_CalcVoltLevel(uint32_t cm33_clk_freq, uint32_t dsp_clk_freq, uint32_t mini_volt)
 {
     uint32_t i;
-    uint32_t volt;
+    uint32_t index;
     uint32_t freq = MAX(cm33_clk_freq, dsp_clk_freq);
+
+    mini_volt = mini_volt < 700U ? 700U : mini_volt;
 
     for (i = 0U; i < POWER_FREQ_LEVELS_NUM; i++)
     {
-        if (freq > powerFreqLevel[i])
+        if ((freq > powerFreqLevel[i]) || ((1100U - 100U * i) < mini_volt))
         {
             break;
         }
@@ -171,14 +199,14 @@ static uint32_t POWER_CalcVoltLevel(uint32_t cm33_clk_freq, uint32_t dsp_clk_fre
 
     if (i == 0U) /* Frequency exceed max supported */
     {
-        volt = POWER_INVALID_VOLT_LEVEL;
+        index = POWER_INVALID_VOLT_LEVEL;
     }
     else
     {
-        volt = powerLdoVoltLevel[i - 1U];
+        index = i - 1U; /* The index for powerLdoVoltLevel */
     }
 
-    return volt;
+    return index;
 }
 
 void POWER_DisableLVD(void)
@@ -479,12 +507,28 @@ AT_QUICKACCESS_SECTION_CODE(void POWER_EnterNbb(void))
  */
 bool POWER_SetLdoVoltageForFreq(uint32_t cm33_clk_freq, uint32_t dsp_clk_freq)
 {
+    if (vddCoreSrc == kVddCoreSrc_LDO)
+    {
+        return POWER_SetVoltageForFreq(cm33_clk_freq, dsp_clk_freq, 0U);
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool POWER_SetVoltageForFreq(uint32_t cm33_clk_freq, uint32_t dsp_clk_freq, uint32_t mini_volt)
+{
     uint32_t pmsk;
-    uint32_t volt;
+    uint32_t idx;
     bool ret;
 
     pmsk = __get_PRIMASK();
-    __disable_irq();
+
+    if (vddCoreSrc == kVddCoreSrc_LDO)
+    {
+        __disable_irq();
+    }
 
     /* Enter FBB mode first */
     if (POWER_GetBodyBiasMode(kCfg_Run) != kPmu_Fbb)
@@ -492,22 +536,22 @@ bool POWER_SetLdoVoltageForFreq(uint32_t cm33_clk_freq, uint32_t dsp_clk_freq)
         POWER_EnterFbb();
     }
 
-    volt = POWER_CalcVoltLevel(cm33_clk_freq, dsp_clk_freq);
-    ret  = volt != POWER_INVALID_VOLT_LEVEL;
+    idx = POWER_CalcVoltLevel(cm33_clk_freq, dsp_clk_freq, mini_volt);
+    ret = idx < POWER_FREQ_LEVELS_NUM;
 
     if (ret)
     {
-        if (volt < 0x13U) /* < 0.8V */
+        if (powerLdoVoltLevel[idx] < 0x13U) /* < 0.8V */
         {
             POWER_DisableLVD();
         }
         else
         {
-            if (volt < 0x1DU) /* < 0.9V */
+            if (powerLdoVoltLevel[idx] < 0x1DU) /* < 0.9V */
             {
                 PMC_DECREASE_LVD_LEVEL_IF_HIGHER_THAN(kLvdFallingTripVol_795);
             }
-            else if (volt < 0x26U) /* < 1.0V */
+            else if (powerLdoVoltLevel[idx] < 0x26U) /* < 1.0V */
             {
                 PMC_DECREASE_LVD_LEVEL_IF_HIGHER_THAN(kLvdFallingTripVol_885);
             }
@@ -517,19 +561,35 @@ bool POWER_SetLdoVoltageForFreq(uint32_t cm33_clk_freq, uint32_t dsp_clk_freq)
             }
         }
 
-        /* Configure vddcore voltage value */
-        PMC->RUNCTRL = volt;
-        POWER_ApplyPD();
+        if (vddCoreSrc == kVddCoreSrc_LDO)
+        {
+            /* Configure vddcore voltage value */
+            PMC->RUNCTRL = powerLdoVoltLevel[idx];
+            POWER_ApplyPD();
+        }
+        else
+        {
+            if (vddCoreSetCb != NULL)
+            {
+                /* Call PMIC callback function to set VDDCORE. */
+                vddCoreSetCb(1100U - 100U * idx);
+            }
+            else
+            {
+                ret = false;
+            }
+        }
 
-        if (volt >= 0x13U) /* >= 0.8V */
+        if (powerLdoVoltLevel[idx] >= 0x13U) /* >= 0.8V */
         {
             POWER_RestoreLVD();
         }
-
-        ret = true;
     }
 
-    __set_PRIMASK(pmsk);
+    if (vddCoreSrc == kVddCoreSrc_LDO)
+    {
+        __set_PRIMASK(pmsk);
+    }
 
     return ret;
 }
@@ -826,6 +886,7 @@ AT_QUICKACCESS_SECTION_CODE(void POWER_EnterDeepSleep(const uint32_t exclude_fro
     uint32_t fro_oen   = 0;
     uint32_t pmc_ctrl;
     uint32_t otp_cfg = 0;
+    uint32_t pmicMode;
 
     __disable_irq();
     POWER_SetBiasConfig();
@@ -853,14 +914,18 @@ AT_QUICKACCESS_SECTION_CODE(void POWER_EnterDeepSleep(const uint32_t exclude_fro
     SYSCTL0->PDSLEEPCFG2 = (PCFG2_DEEP_SLEEP & ~exclude_from_pd[2]) | (SYSCTL0->PDRUNCFG2 & ~exclude_from_pd[2]);
     SYSCTL0->PDSLEEPCFG3 = (PCFG3_DEEP_SLEEP & ~exclude_from_pd[3]) | (SYSCTL0->PDRUNCFG3 & ~exclude_from_pd[3]);
 
-    /* Configuration PMC to respond changes on pdruncfg[2:1] (PMIC mode select pin values) like below:
-     *  0b00    run mode, all supplies on.
-     *  0b01    deep sleep mode, all supplies on.
-     *  0b10    deep powerdown mode, vddcore off.
-     *  0b11    full deep powerdown mode vdd1v8 and vddcore off. */
-    PMC->PMICCFG = 0x73U;
-    /* Set PMIC mode pin as 0b01 to let PMC turn on vdd1v8 and vddcore*/
-    SYSCTL0->PDSLEEPCFG0 |= SYSCTL0_PDSLEEPCFG0_PMIC_MODE0(1) | SYSCTL0_PDSLEEPCFG0_PMIC_MODE1(0);
+    PMC->PMICCFG = (s_pmicCfg == 0U) ? PMICCFG_DEFAULT_VALUE : s_pmicCfg;
+    pmicMode     = (exclude_from_pd[0] & (SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_MASK | SYSCTL0_PDSLEEPCFG0_PMIC_MODE1_MASK)) >>
+               SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_SHIFT;
+    if (pmicMode == 0U) /* Use default PMIC Mode configuration. */
+    {
+        /* Set PMIC mode pin as POWER_DEFAULT_PMICMODE_DS(0b01) to let PMC turn on vdd1v8 and vddcore*/
+        SYSCTL0->PDSLEEPCFG0 |= (POWER_DEFAULT_PMICMODE_DS & 0x3U) << SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_SHIFT;
+    }
+    else /* User defined PMIC mode. */
+    {
+        SYSCTL0->PDSLEEPCFG0 |= pmicMode << SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_SHIFT;
+    }
 
     /* Stall DSP if shut off main clock*/
     if (((SYSCTL0->PDSLEEPCFG0 & SYSCTL0_PDSLEEPCFG0_MAINCLK_SHUTOFF_MASK) != 0U) && (SYSCTL0->DSPSTALL == 0U))
@@ -962,9 +1027,9 @@ AT_QUICKACCESS_SECTION_CODE(void POWER_EnterDeepSleep(const uint32_t exclude_fro
                    SYSCTL0_PDRUNCFG0_AUDPLLLDO_PD_MASK | SYSCTL0_PDRUNCFG0_AUDPLLANA_PD_MASK);
     pll_need_rst[0] =
         IS_SYSPLL_ON(pll_need_pd) ? 0U : (CLKCTL0_SYSPLL0CTL0_RESET_MASK | CLKCTL0_SYSPLL0CTL0_HOLDRINGOFF_ENA_MASK);
-    pll_need_rst[1] = IS_AUDPLL_ON(pll_need_pd) ?
-                          0U :
-                          (CLKCTL1_AUDIOPLL0CTL0_RESET_MASK | CLKCTL1_AUDIOPLL0CTL0_HOLDRINGOFF_ENA_MASK);
+    pll_need_rst[1]  = IS_AUDPLL_ON(pll_need_pd) ?
+                           0U :
+                           (CLKCTL1_AUDIOPLL0CTL0_RESET_MASK | CLKCTL1_AUDIOPLL0CTL0_HOLDRINGOFF_ENA_MASK);
     pfd_need_gate[0] = IS_SYSPLL_ON(pll_need_pd) ? 0U : ((~CLKCTL0->SYSPLL0PFD) & SYSPLL0PFD_PFD_CLKGATE_MASK);
     pfd_need_gate[1] = IS_AUDPLL_ON(pll_need_pd) ? 0U : ((~CLKCTL1->AUDIOPLL0PFD) & AUDIOPLL0PFD_PFD_CLKGATE_MASK);
     /* Disable the PFD clock output first. */
@@ -982,6 +1047,7 @@ AT_QUICKACCESS_SECTION_CODE(void POWER_EnterDeepSleep(const uint32_t exclude_fro
     /* Wait OSC clock stable */
     if (((SYSCTL0->PDRUNCFG0 ^ SYSCTL0->PDSLEEPCFG0) & SYSCTL0_PDRUNCFG0_SYSXTAL_PD_MASK) != 0U)
     {
+        assert(oscSettlingTime < UINT32_MAX / 12U);
         delay(US2LOOP(deepSleepClk, oscSettlingTime));
     }
 
@@ -1102,6 +1168,7 @@ AT_QUICKACCESS_SECTION_CODE(void POWER_EnterDeepSleep(const uint32_t exclude_fro
 void POWER_EnterDeepPowerDown(const uint32_t exclude_from_pd[4])
 {
     uint32_t state;
+    uint32_t pmicMode;
 
     state = DisableGlobalIRQ();
     POWER_EnableDeepSleep();
@@ -1114,14 +1181,20 @@ void POWER_EnterDeepPowerDown(const uint32_t exclude_from_pd[4])
 
     /* Set DEEPPD bit in PDSLEEPCFG0*/
     SYSCTL0->PDSLEEPCFG0 |= SYSCTL0_PDSLEEPCFG0_DEEP_PD_MASK;
-    /* Configuration PMC to respond changes on pdruncfg[2:1] (PMIC mode select pin values) like below:
-     *  0b00    run mode, all supplies on.
-     *  0b01    deep sleep mode, all supplies on.
-     *  0b10    deep powerdown mode, vddcore off.
-     *  0b11    full deep powerdown mode vdd1v8 and vddcore off. */
-    PMC->PMICCFG = 0x73U;
-    /* Set PMIC mode pin as 0b10 to let PMC trun off VDDCORE */
-    POWER_SetPmicMode(0x2U, kCfg_Sleep);
+
+    PMC->PMICCFG = (s_pmicCfg == 0U) ? PMICCFG_DEFAULT_VALUE : s_pmicCfg;
+    pmicMode     = (exclude_from_pd[0] & (SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_MASK | SYSCTL0_PDSLEEPCFG0_PMIC_MODE1_MASK)) >>
+               SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_SHIFT;
+    if (pmicMode == 0U) /* Use default PMIC Mode configuration. */
+    {
+        /* Set PMIC mode pin as POWER_DEFAULT_PMICMODE_DPD(0b10) to let PMC turn off VDDCORE */
+        POWER_SetPmicMode(POWER_DEFAULT_PMICMODE_DPD, kCfg_Sleep);
+    }
+    else /* User defined PMIC mode. */
+    {
+        POWER_SetPmicMode(pmicMode, kCfg_Sleep);
+    }
+
     /* Clear all event flags before enter deep powerdown */
     PMC->FLAGS = PMC->FLAGS;
     /* Enter deep powerdown mode */
@@ -1139,6 +1212,7 @@ void POWER_EnterDeepPowerDown(const uint32_t exclude_from_pd[4])
 void POWER_EnterFullDeepPowerDown(const uint32_t exclude_from_pd[4])
 {
     uint32_t state;
+    uint32_t pmicMode;
 
     state = DisableGlobalIRQ();
     POWER_EnableDeepSleep();
@@ -1151,14 +1225,20 @@ void POWER_EnterFullDeepPowerDown(const uint32_t exclude_from_pd[4])
 
     /* Set DEEPPD bit in PDSLEEPCFG0*/
     SYSCTL0->PDSLEEPCFG0 |= SYSCTL0_PDSLEEPCFG0_DEEP_PD_MASK;
-    /* Configuration PMC to respond changes on pdruncfg[2:1] (PMIC mode select pin values) like below:
-     *  0b00    run mode, all supplies on.
-     *  0b01    deep sleep mode, all supplies on.
-     *  0b10    deep powerdown mode, vddcore off.
-     *  0b11    full deep powerdown mode vdd1v8 and vddcore off. */
-    PMC->PMICCFG = 0x73U;
-    /* Set PMIC mode pin as 0b11 to let PMC trun off VDDCORE and VDD1V8*/
-    POWER_SetPmicMode(0x3U, kCfg_Sleep);
+
+    PMC->PMICCFG = (s_pmicCfg == 0U) ? PMICCFG_DEFAULT_VALUE : s_pmicCfg;
+    pmicMode     = (exclude_from_pd[0] & (SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_MASK | SYSCTL0_PDSLEEPCFG0_PMIC_MODE1_MASK)) >>
+               SYSCTL0_PDSLEEPCFG0_PMIC_MODE0_SHIFT;
+    if (pmicMode == 0U) /* Use default PMIC Mode configuration. */
+    {
+        /* Set PMIC mode pin as POWER_DEFAULT_PMICMODE_FDPD(0b11) to let PMC turn off VDDCORE and VDD1V8*/
+        POWER_SetPmicMode(POWER_DEFAULT_PMICMODE_FDPD, kCfg_Sleep);
+    }
+    else /* User defined PMIC mode. */
+    {
+        POWER_SetPmicMode(pmicMode, kCfg_Sleep);
+    }
+
     /* Clear all event flags before enter full deep powerdown */
     PMC->FLAGS = PMC->FLAGS;
     /* Enter full deep powerdown mode */
@@ -1211,11 +1291,26 @@ void POWER_SetDeepSleepClock(power_deep_sleep_clk_t clk)
     deepSleepClk = clk;
 }
 
+void POWER_SetVddCoreSupplySrc(power_vddcore_src_t src)
+{
+    vddCoreSrc = src;
+}
+
+void POWER_SetPmicCoreSupplyFunc(power_vddcore_set_func_t func)
+{
+    vddCoreSetCb = func;
+}
+
 void EnableDeepSleepIRQ(IRQn_Type interrupt)
 {
     uint32_t intNumber = (uint32_t)interrupt;
 
-    if (intNumber >= 32U)
+    if (intNumber >= 64U)
+    {
+        /* enable interrupt wake up in the STARTEN2 register */
+        SYSCTL0->STARTEN2_SET = 1UL << (intNumber - 64U);
+    }
+    else if (intNumber >= 32U)
     {
         /* enable interrupt wake up in the STARTEN1 register */
         SYSCTL0->STARTEN1_SET = 1UL << (intNumber - 32U);
@@ -1236,7 +1331,12 @@ void DisableDeepSleepIRQ(IRQn_Type interrupt)
     /* also disable interrupt at NVIC */
     (void)DisableIRQ(interrupt);
 
-    if (intNumber >= 32U)
+    if (intNumber >= 64U)
+    {
+        /* disable interrupt wake up in the STARTEN2 register */
+        SYSCTL0->STARTEN2_CLR = 1UL << (intNumber - 64U);
+    }
+    else if (intNumber >= 32U)
     {
         /* disable interrupt wake up in the STARTEN1 register */
         SYSCTL0->STARTEN1_CLR = 1UL << (intNumber - 32U);

@@ -27,8 +27,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.7.0 */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 7, 0))
+/*! @brief CLOCK driver version 2.7.1 */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 7, 1))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
@@ -1281,13 +1281,13 @@ void CLOCK_EnableFroClk(uint32_t divOutEnable);
  */
 void CLOCK_EnableFroClkFreq(uint32_t targetFreq, uint32_t divOutEnable);
 
-#ifndef __XCC__
+#ifndef __XTENSA__
 /*! @brief  Enable/Disable FRO192M or FRO96M clock output.
  *  @param  froFreq : target fro frequency.
  *  @param  divOutEnable : Or'ed value of clock_fro_output_en_t to enable certain clock freq output.
  */
 void CLOCK_EnableFroClkRange(clock_fro_freq_t froFreq, uint32_t divOutEnable);
-#endif /* __XCC__ */
+#endif /* __XTENSA__ */
 
 /*! @brief  Enable LPOSC 1MHz clock.
  */
@@ -1454,9 +1454,10 @@ static inline void CLOCK_DeinitSysPll(void)
 /*! @brief Initialize the System PLL PFD.
  *  @param pfd    : Which PFD clock to enable.
  *  @param divider    : The PFD divider value.
+ *  @return kStatus_Success if successfully, kStatus_Timeout if timeout happen.
  *  @note It is recommended that PFD settings are kept between 12-35.
  */
-void CLOCK_InitSysPfd(clock_pfd_t pfd, uint8_t divider);
+status_t CLOCK_InitSysPfd(clock_pfd_t pfd, uint8_t divider);
 
 /*! brief Disable the audio PLL PFD.
  *  param pfd    : Which PFD clock to disable.
@@ -1485,9 +1486,10 @@ static inline void CLOCK_DeinitAudioPll(void)
 /*! @brief Initialize the audio PLL PFD.
  *  @param pfd    : Which PFD clock to enable.
  *  @param divider    : The PFD divider value.
+ *  @return kStatus_Success if successfully, kStatus_Timeout if timeout happen.
  *  @note It is recommended that PFD settings are kept between 12-35.
  */
-void CLOCK_InitAudioPfd(clock_pfd_t pfd, uint8_t divider);
+status_t CLOCK_InitAudioPfd(clock_pfd_t pfd, uint8_t divider);
 
 /*! brief Disable the audio PLL PFD.
  *  param pfd    : Which PFD clock to disable.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 - 2021, 2024 NXP
+ * Copyright 2018 - 2021, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,8 +39,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.5.3. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 3))
+/*! @brief CLOCK driver version 2.5.4. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 4))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -385,12 +385,8 @@ extern volatile uint32_t g_rtcXtalFreq;
             {kCLOCK_Usb1Sw60MClk, kCLOCK_OscClk, kCLOCK_Usb1Sw80MClk, kCLOCK_NoneName},     /*!< CAN clock root. */    \
             {kCLOCK_Usb1Sw80MClk, kCLOCK_OscClk, kCLOCK_NoneName, kCLOCK_NoneName},         /*!< UART clock root. */   \
             {kCLOCK_AudioPllClk, kCLOCK_Usb1PllPfd2Clk, kCLOCK_NoneName, kCLOCK_Usb1SwClk}, /*!< SPDIF clock root. */  \
-            {                                                                                                          \
-                kCLOCK_AudioPllClk,                                                                                    \
-                kCLOCK_Usb1PllPfd2Clk,                                                                                 \
-                kCLOCK_NoneName,                                                                                       \
-                kCLOCK_Usb1SwClk,                                                                                      \
-            }, /*!< FLEXIO1 clock root. */                                                                             \
+            {kCLOCK_AudioPllClk, kCLOCK_Usb1PllPfd2Clk, kCLOCK_NoneName,                                               \
+             kCLOCK_Usb1SwClk}, /*!< FLEXIO1 clock root. */                                                            \
     }
 
 #define CLOCK_ROOT_MUX_TUPLE                                                                                     \
@@ -468,8 +464,7 @@ typedef enum _clock_ip_name
     /* CCM CCGR0 */
     kCLOCK_Aips_tz1    = (0U << 8U) | CCM_CCGR0_CG0_SHIFT,  /*!< CCGR0, CG0   */
     kCLOCK_Aips_tz2    = (0U << 8U) | CCM_CCGR0_CG1_SHIFT,  /*!< CCGR0, CG1   */
-    kCLOCK_Mqs         = (0U << 8U) | CCM_CCGR0_CG2_SHIFT,  /*!< CCGR0, CG2, Reserved  */
-    kCLOCK_FlexSpiExsc = (0U << 8U) | CCM_CCGR0_CG3_SHIFT,  /*!< CCGR0, CG3   */
+    kCLOCK_Mqs         = (0U << 8U) | CCM_CCGR0_CG2_SHIFT,  /*!< CCGR0, CG2   */
     kCLOCK_Sim_m_clk_r = (0U << 8U) | CCM_CCGR0_CG4_SHIFT,  /*!< CCGR0, CG4   */
     kCLOCK_Dcp         = (0U << 8U) | CCM_CCGR0_CG5_SHIFT,  /*!< CCGR0, CG5   */
     kCLOCK_Lpuart3     = (0U << 8U) | CCM_CCGR0_CG6_SHIFT,  /*!< CCGR0, CG6   */
@@ -531,7 +526,6 @@ typedef enum _clock_ip_name
     kCLOCK_IomuxcGpr    = (4U << 8U) | CCM_CCGR4_CG2_SHIFT,  /*!< CCGR4, CG2   */
     kCLOCK_Bee          = (4U << 8U) | CCM_CCGR4_CG3_SHIFT,  /*!< CCGR4, CG3   */
     kCLOCK_SimM7        = (4U << 8U) | CCM_CCGR4_CG4_SHIFT,  /*!< CCGR4, CG4   */
-    kCLOCK_Tsc          = (4U << 8U) | CCM_CCGR4_CG5_SHIFT,  /*!< CCGR4, CG5, Reserved */
     kCLOCK_SimM         = (4U << 8U) | CCM_CCGR4_CG6_SHIFT,  /*!< CCGR4, CG6   */
     kCLOCK_SimEms       = (4U << 8U) | CCM_CCGR4_CG7_SHIFT,  /*!< CCGR4, CG7   */
     kCLOCK_Pwm1         = (4U << 8U) | CCM_CCGR4_CG8_SHIFT,  /*!< CCGR4, CG8   */
@@ -793,7 +787,7 @@ typedef enum _clock_div
     kCLOCK_Sai2Div    = CCM_TUPLE(CS2CDR_OFFSET,
                                CCM_CS2CDR_SAI2_CLK_PODF_SHIFT,
                                CCM_CS2CDR_SAI2_CLK_PODF_MASK,
-                               CCM_NO_BUSY_WAIT), /*!< sai2 pre div name */
+                               CCM_NO_BUSY_WAIT), /*!< sai2 div name */
 
     kCLOCK_Spdif0PreDiv = CCM_TUPLE(CDCDR_OFFSET,
                                     CCM_CDCDR_SPDIF0_CLK_PRED_SHIFT,
@@ -1217,7 +1211,9 @@ static inline void CLOCK_SetMux(clock_mux_t mux, uint32_t value)
 {
     uint32_t busyShift;
 
+    /* coverity[cert_int31_c_violation] -- clock_mux_t values are SoC-defined non-negative bit patterns. */
     busyShift               = CCM_TUPLE_BUSY_SHIFT(mux);
+    /* coverity[cert_int31_c_violation] -- clock_mux_t values are SoC-defined non-negative bit patterns. */
     CCM_TUPLE_REG(CCM, mux) = (CCM_TUPLE_REG(CCM, mux) & (~CCM_TUPLE_MASK(mux))) |
                               (((uint32_t)((value) << CCM_TUPLE_SHIFT(mux))) & CCM_TUPLE_MASK(mux));
 
@@ -1241,6 +1237,7 @@ static inline void CLOCK_SetMux(clock_mux_t mux, uint32_t value)
  */
 static inline uint32_t CLOCK_GetMux(clock_mux_t mux)
 {
+    /* coverity[cert_int31_c_violation] -- clock_mux_t values are SoC-defined non-negative bit patterns. */
     return (CCM_TUPLE_REG(CCM, mux) & CCM_TUPLE_MASK(mux)) >> CCM_TUPLE_SHIFT(mux);
 }
 
@@ -1269,7 +1266,9 @@ static inline void CLOCK_SetDiv(clock_div_t divider, uint32_t value)
 {
     uint32_t busyShift;
 
+    /* coverity[cert_int31_c_violation] -- clock_div_t values are SoC-defined non-negative bit patterns. */
     busyShift                   = CCM_TUPLE_BUSY_SHIFT((uint32_t)divider);
+    /* coverity[cert_int31_c_violation] -- clock_div_t values are SoC-defined non-negative bit patterns. */
     CCM_TUPLE_REG(CCM, divider) = (CCM_TUPLE_REG(CCM, divider) & (~CCM_TUPLE_MASK(divider))) |
                                   (((uint32_t)((value) << CCM_TUPLE_SHIFT(divider))) & CCM_TUPLE_MASK(divider));
 
@@ -1292,6 +1291,7 @@ static inline void CLOCK_SetDiv(clock_div_t divider, uint32_t value)
  */
 static inline uint32_t CLOCK_GetDiv(clock_div_t divider)
 {
+    /* coverity[cert_int31_c_violation] -- clock_div_t values are SoC-defined non-negative bit patterns. */
     return ((CCM_TUPLE_REG(CCM, divider) & CCM_TUPLE_MASK(divider)) >> CCM_TUPLE_SHIFT(divider));
 }
 
@@ -1303,7 +1303,9 @@ static inline uint32_t CLOCK_GetDiv(clock_div_t divider)
  */
 static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value)
 {
+    /* coverity[cert_int31_c_violation] -- clock_ip_name_t values are SoC-defined non-negative bit patterns. */
     uint32_t index = ((uint32_t)name) >> 8U;
+    /* coverity[cert_int31_c_violation] -- clock_ip_name_t values are SoC-defined non-negative bit patterns. */
     uint32_t shift = ((uint32_t)name) & 0x1FU;
     volatile uint32_t *reg;
 

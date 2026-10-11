@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2023, 2025 NXP
+ * Copyright 2019-2023, 2025-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -40,7 +40,7 @@
 /*! @name Driver version */
 /*@{*/
 /*! @brief CLOCK driver version. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 0))
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 2, 4))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -2009,7 +2009,7 @@ static inline void CLOCK_SetRootClockDiv(clock_root_t root, uint32_t div)
 {
     assert(div);
     CCM->CLOCK_ROOT[root].CONTROL = (CCM->CLOCK_ROOT[root].CONTROL & ~CCM_CLOCK_ROOT_CONTROL_DIV_MASK) |
-                                    CCM_CLOCK_ROOT_CONTROL_DIV((uint32_t)div - 1UL);
+                                    CCM_CLOCK_ROOT_CONTROL_DIV((div > 0U) ? ((uint32_t)div - 1UL) : 0UL);
     __DSB();
     __ISB();
 #if __CORTEX_M == 4
@@ -2072,7 +2072,7 @@ static inline void CLOCK_SetRootClock(clock_root_t root, const clock_root_config
 {
     assert(config);
     CCM->CLOCK_ROOT[root].CONTROL = CCM_CLOCK_ROOT_CONTROL_MUX(config->mux) |
-                                    CCM_CLOCK_ROOT_CONTROL_DIV((uint32_t)config->div - 1UL) |
+                                    CCM_CLOCK_ROOT_CONTROL_DIV((config->div > 0U) ? ((uint32_t)config->div - 1UL) : 0UL) |
                                     (config->clockOff ? CCM_CLOCK_ROOT_CONTROL_OFF(config->clockOff) : 0UL);
     __DSB();
     __ISB();
@@ -2091,13 +2091,15 @@ static inline void CLOCK_SetRootClock(clock_root_t root, const clock_root_config
  */
 static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value)
 {
-    if (((uint32_t)value & CCM_LPCG_DIRECT_ON_MASK) != (CCM->LPCG[name].DIRECT & CCM_LPCG_DIRECT_ON_MASK))
+    uint32_t lpcgVal = (value == kCLOCK_On) ? (uint32_t)CCM_LPCG_DIRECT_ON_MASK : 0UL;
+
+    if (lpcgVal != (CCM->LPCG[name].DIRECT & CCM_LPCG_DIRECT_ON_MASK))
     {
-        CCM->LPCG[name].DIRECT = ((uint32_t)value & CCM_LPCG_DIRECT_ON_MASK);
+        CCM->LPCG[name].DIRECT = lpcgVal;
         __DSB();
         __ISB();
 
-        while ((CCM->LPCG[name].STATUS0 & CCM_LPCG_STATUS0_ON_MASK) != ((uint32_t)value & CCM_LPCG_STATUS0_ON_MASK))
+        while ((CCM->LPCG[name].STATUS0 & CCM_LPCG_STATUS0_ON_MASK) != (lpcgVal & CCM_LPCG_STATUS0_ON_MASK))
         {
         }
     }
@@ -2396,25 +2398,6 @@ static inline void CLOCK_OSC_SetOscRc400MControlMode(clock_control_mode_t contro
  * This function enables OSC RC 400Mhz.
  */
 void CLOCK_OSC_EnableOscRc400M(void);
-
-/*!
- * @brief Gate/ungate 400MHz RC oscillator.
- *
- * @param enableGate Used to gate/ungate 400MHz RC oscillator.
- *          - \b true Gate the 400MHz RC oscillator.
- *          - \b false Ungate the 400MHz RC oscillator.
- */
-static inline void CLOCK_OSC_GateOscRc400M(bool enableGate)
-{
-    if (enableGate)
-    {
-        ANADIG_OSC->OSC_400M_CTRL1 |= ANADIG_OSC_OSC_400M_CTRL1_CLKGATE_400MEG_MASK;
-    }
-    else
-    {
-        ANADIG_OSC->OSC_400M_CTRL1 &= ~ANADIG_OSC_OSC_400M_CTRL1_CLKGATE_400MEG_MASK;
-    }
-}
 
 /*!
  * @brief Trims OSC RC 400MHz.
@@ -3080,8 +3063,8 @@ static inline void CLOCK_ROOT_ConfigSetPoint(clock_root_t name,
     CCM->CLOCK_ROOT[name].SETPOINT[spIndex] =
         CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_GRADE(config->grade) |
         CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_MUX(config->mux) |
-        CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_DIV((uint32_t)config->div - 1UL) |
-        CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_OFF(config->clockOff);
+        CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_DIV((config->div > 0U) ? ((uint32_t)config->div - 1UL) : 0UL) |
+        CCM_CLOCK_ROOT_CLOCK_ROOT_SETPOINT_SETPOINT_OFF((uint32_t)(config->clockOff ? 1U : 0U));
 }
 
 /*!
@@ -3259,11 +3242,18 @@ static inline void CLOCK_LPCG_ControlByDomainMode(clock_lpcg_t name, uint8_t dom
  */
 static inline void CLOCK_SetClockOutput1(clock_output1_selection_t selection, uint32_t divider)
 {
-    clock_root_config_t rootCfg = {0, 0, 0};
+    /* divider is the actual clock divider (1..256); the CCM DIV field holds
+     * divider-1. Program MUX+DIV in one write. Using the 32-bit divider avoids
+     * the old truncation of 256 in the uint8_t clock_root_config_t.div field. */
+    assert((divider >= 1U) && (divider <= 256U));
 
-    rootCfg.mux = selection;
-    rootCfg.div = divider;
-    CLOCK_SetRootClock(kCLOCK_Root_Cko1, &rootCfg);
+    CCM->CLOCK_ROOT[kCLOCK_Root_Cko1].CONTROL = CCM_CLOCK_ROOT_CONTROL_MUX((uint32_t)selection) |
+                                                CCM_CLOCK_ROOT_CONTROL_DIV(divider - 1UL);
+    __DSB();
+    __ISB();
+#if __CORTEX_M == 4
+    (void)CCM->CLOCK_ROOT[kCLOCK_Root_Cko1].CONTROL;
+#endif
 }
 
 /*!
@@ -3274,11 +3264,18 @@ static inline void CLOCK_SetClockOutput1(clock_output1_selection_t selection, ui
  */
 static inline void CLOCK_SetClockOutput2(clock_output2_selection_t selection, uint32_t divider)
 {
-    clock_root_config_t rootCfg = {0, 0, 0};
+    /* divider is the actual clock divider (1..256); the CCM DIV field holds
+     * divider-1. Program MUX+DIV in one write. Using the 32-bit divider avoids
+     * the old truncation of 256 in the uint8_t clock_root_config_t.div field. */
+    assert((divider >= 1U) && (divider <= 256U));
 
-    rootCfg.mux = selection;
-    rootCfg.div = divider;
-    CLOCK_SetRootClock(kCLOCK_Root_Cko2, &rootCfg);
+    CCM->CLOCK_ROOT[kCLOCK_Root_Cko2].CONTROL = CCM_CLOCK_ROOT_CONTROL_MUX((uint32_t)selection) |
+                                                CCM_CLOCK_ROOT_CONTROL_DIV(divider - 1UL);
+    __DSB();
+    __ISB();
+#if __CORTEX_M == 4
+    (void)CCM->CLOCK_ROOT[kCLOCK_Root_Cko2].CONTROL;
+#endif
 }
 
 /*!

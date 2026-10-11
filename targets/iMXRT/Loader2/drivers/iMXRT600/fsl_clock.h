@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
- * Copyright 2016 - 2022 , NXP
- * All rights reserved.
+ * Copyright 2016 - 2022, 2025 NXP
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
@@ -27,13 +26,13 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.7.2. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 7, 2))
+/*! @brief CLOCK driver version 2.7.4. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 7, 4))
 /*@}*/
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
-#ifdef __XCC__
+#ifdef __XTENSA__
 #define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (600000000UL)
 #else
 #define SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY (300000000UL)
@@ -423,6 +422,7 @@ typedef enum _clock_pfd
 #define USBHSFCLKSEL_OFFSET    0x660
 #define SDIO0FCLKSEL_OFFSET    0x680
 #define SDIO1FCLKSEL_OFFSET    0x690
+#define ESPICLKSEL_OFFSET      0x6A0
 #define ADC0FCLKSEL0_OFFSET    0x6D0
 #define ADC0FCLKSEL1_OFFSET    0x6D4
 #define UTICKFCLKSEL_OFFSET    0x700
@@ -628,6 +628,9 @@ typedef enum _clock_attach_id
     kFFRO_to_SDIO1_CLK     = CLKCTL0_TUPLE_MUXA(SDIO1FCLKSEL_OFFSET, 3), /*!< Attach FFRO to SDIO1_CLK. */
     kAUX1_PLL_to_SDIO1_CLK = CLKCTL0_TUPLE_MUXA(SDIO1FCLKSEL_OFFSET, 4), /*!< Attach AUX1_PLL to SDIO1_CLK. */
     kNONE_to_SDIO1_CLK     = CLKCTL0_TUPLE_MUXA(SDIO1FCLKSEL_OFFSET, 7), /*!< Attach NONE to SDIO1_CLK. */
+
+    kFFRO_to_ESPI_CLK      = CLKCTL0_TUPLE_MUXA(ESPICLKSEL_OFFSET, 0), /*!< Attach FFRO to ESPI_CLK. */
+    kNONE_to_ESPI_CLK      = CLKCTL0_TUPLE_MUXA(ESPICLKSEL_OFFSET, 7), /*!< Attach NONE to ESPI_CLK. */
 
     kXTALIN_CLK_to_USB_CLK = CLKCTL0_TUPLE_MUXA(USBHSFCLKSEL_OFFSET, 0), /*!< Attach XTALIN_CLK to USB_CLK. */
     kMAIN_CLK_to_USB_CLK   = CLKCTL0_TUPLE_MUXA(USBHSFCLKSEL_OFFSET, 1), /*!< Attach MAIN_CLK to USB_CLK. */
@@ -1153,7 +1156,7 @@ uint32_t CLOCK_GetAdcClkFreq(void);
  *  @return Frequency of Flexspi.
  */
 uint32_t CLOCK_GetFlexspiClkFreq(void);
-#ifndef __XCC__
+#ifndef __XTENSA__
 /**
  * brief   Enable FFRO 48M/60M clock.
  * param   ffroFreq : target fro frequency.
@@ -1169,7 +1172,7 @@ void CLOCK_EnableSfroClk(void);
 /*! @brief  Initialize the System PLL.
  *  @param  config    : Configuration to set to PLL.
  */
-#endif /* __XCC__ */
+#endif /* __XTENSA__ */
 
 void CLOCK_InitSysPll(const clock_sys_pll_config_t *config);
 /*! brief  Deinit the System PLL.
@@ -1185,9 +1188,10 @@ static inline void CLOCK_DeinitSysPll(void)
 /*! @brief Initialize the System PLL PFD.
  *  @param pfd    : Which PFD clock to enable.
  *  @param divider    : The PFD divider value.
+ *  @return kStatus_Success if successfully, kStatus_Timeout if timeout happen.
  *  @note It is recommended that PFD settings are kept between 12-35.
  */
-void CLOCK_InitSysPfd(clock_pfd_t pfd, uint8_t divider);
+status_t CLOCK_InitSysPfd(clock_pfd_t pfd, uint8_t divider);
 /*! brief Disable the audio PLL PFD.
  *  param pfd    : Which PFD clock to disable.
  */
@@ -1212,9 +1216,10 @@ static inline void CLOCK_DeinitAudioPll(void)
 /*! @brief Initialize the audio PLL PFD.
  *  @param pfd    : Which PFD clock to enable.
  *  @param divider    : The PFD divider value.
+ *  @return kStatus_Success if successfully, kStatus_Timeout if timeout happen.
  *  @note It is recommended that PFD settings are kept between 12-35.
  */
-void CLOCK_InitAudioPfd(clock_pfd_t pfd, uint8_t divider);
+status_t CLOCK_InitAudioPfd(clock_pfd_t pfd, uint8_t divider);
 /*! brief Disable the audio PLL PFD.
  *  param pfd    : Which PFD clock to disable.
  */

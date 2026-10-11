@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 - 2021, 2024 NXP
+ * Copyright 2018 -2021, 2024 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -39,8 +39,8 @@
 
 /*! @name Driver version */
 /*@{*/
-/*! @brief CLOCK driver version 2.5.3. */
-#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 3))
+/*! @brief CLOCK driver version 2.5.4. */
+#define FSL_CLOCK_DRIVER_VERSION (MAKE_VERSION(2, 5, 4))
 
 /* Definition for delay API in clock driver, users can redefine it to the real application. */
 #ifndef SDK_DEVICE_MAXIMUM_CPU_CLOCK_FREQUENCY
@@ -100,7 +100,7 @@
     (*((volatile uint32_t *)((uint32_t)(base) + (((uint32_t)(tuple) >> 16U) & 0xFFFU) + (off))))
 #define CCM_ANALOG_TUPLE_REG(base, tuple) CCM_ANALOG_TUPLE_REG_OFF(base, tuple, 0U)
 
-/* Definition for ERRATA 50235 check */
+/* Definition for ERRATA 50235 check  */
 #if (defined(FSL_FEATURE_CCM_HAS_ERRATA_50235) && FSL_FEATURE_CCM_HAS_ERRATA_50235)
 #define CAN_CLOCK_CHECK_NO_AFFECTS                                                  \
     ((CCM_CSCMR2_CAN_CLK_SEL(2U) != (CCM->CSCMR2 & CCM_CSCMR2_CAN_CLK_SEL_MASK)) || \
@@ -402,7 +402,7 @@ extern volatile uint32_t g_rtcXtalFreq;
 
 #define CLOCK_SOURCE_NONE (0xFFU)
 
-#define CLOCK_ROOT_SOURCE                                                                                 \
+#define CLOCK_ROOT_SOUCE                                                                                 \
     {                                                                                                    \
         {kCLOCK_SysPllPfd2Clk, kCLOCK_SysPllPfd0Clk, kCLOCK_NoneName,                                    \
          kCLOCK_NoneName,      kCLOCK_NoneName,      kCLOCK_NoneName}, /* USDHC1 Clock Root. */          \
@@ -993,16 +993,16 @@ typedef enum _clock_div_value
     /* Only kCLOCK_PerClk, kCLOCK_Lpi2cDiv, kCLOCK_CanDiv, kCLOCK_UartDiv, kCLOCK_Sai1Div,
      * kCLOCK_Sai2Div, kCLOCK_Sai3Div can use these.
      */
-    kCLOCK_MiscDivBy1  = 0,  /*!< Misc divider like LPI2C set to divided by 1 . */
-    kCLOCK_MiscDivBy2  = 1,  /*!< Misc divider like LPI2C set to divided by 2 . */
-    kCLOCK_MiscDivBy3  = 2,  /*!< Misc divider like LPI2C set to divided by 3 . */
-    kCLOCK_MiscDivBy4  = 3,  /*!< Misc divider like LPI2C set to divided by 4 . */
-    kCLOCK_MiscDivBy5  = 4,  /*!< Misc divider like LPI2C set to divided by 5 . */
-    kCLOCK_MiscDivBy6  = 5,  /*!< Misc divider like LPI2C set to divided by 6 . */
-    kCLOCK_MiscDivBy7  = 6,  /*!< Misc divider like LPI2C set to divided by 7 . */
-    kCLOCK_MiscDivBy8  = 7,  /*!< Misc divider like LPI2C set to divided by 8 . */
-    kCLOCK_MiscDivBy9  = 8,  /*!< Misc divider like LPI2C set to divided by 9 . */
-    kCLOCK_MiscDivBy10 = 9,  /*!< Misc divider like LPI2C set to divided by 10. */
+    kCLOCK_MiscDivBy1  = 0 , /*!< Misc divider like LPI2C set to divided by 1 . */
+    kCLOCK_MiscDivBy2  = 1 , /*!< Misc divider like LPI2C set to divided by 2 . */
+    kCLOCK_MiscDivBy3  = 2 , /*!< Misc divider like LPI2C set to divided by 3 . */
+    kCLOCK_MiscDivBy4  = 3 , /*!< Misc divider like LPI2C set to divided by 4 . */
+    kCLOCK_MiscDivBy5  = 4 , /*!< Misc divider like LPI2C set to divided by 5 . */
+    kCLOCK_MiscDivBy6  = 5 , /*!< Misc divider like LPI2C set to divided by 6 . */
+    kCLOCK_MiscDivBy7  = 6 , /*!< Misc divider like LPI2C set to divided by 7 . */
+    kCLOCK_MiscDivBy8  = 7 , /*!< Misc divider like LPI2C set to divided by 8 . */
+    kCLOCK_MiscDivBy9  = 8 , /*!< Misc divider like LPI2C set to divided by 9 . */
+    kCLOCK_MiscDivBy10 = 9 , /*!< Misc divider like LPI2C set to divided by 10. */
     kCLOCK_MiscDivBy11 = 10, /*!< Misc divider like LPI2C set to divided by 11. */
     kCLOCK_MiscDivBy12 = 11, /*!< Misc divider like LPI2C set to divided by 12. */
     kCLOCK_MiscDivBy13 = 12, /*!< Misc divider like LPI2C set to divided by 13. */
@@ -1409,7 +1409,9 @@ static inline void CLOCK_SetMux(clock_mux_t mux, uint32_t value)
 {
     uint32_t busyShift;
 
+    /* coverity[cert_int31_c_violation] -- clock_mux_t values are SoC-defined non-negative bit patterns. */
     busyShift               = (uint32_t)CCM_TUPLE_BUSY_SHIFT(mux);
+    /* coverity[cert_int31_c_violation] -- clock_mux_t values are SoC-defined non-negative bit patterns. */
     CCM_TUPLE_REG(CCM, mux) = (CCM_TUPLE_REG(CCM, mux) & (~CCM_TUPLE_MASK(mux))) |
                               (((uint32_t)((value) << CCM_TUPLE_SHIFT(mux))) & CCM_TUPLE_MASK(mux));
 
@@ -1433,6 +1435,7 @@ static inline void CLOCK_SetMux(clock_mux_t mux, uint32_t value)
  */
 static inline uint32_t CLOCK_GetMux(clock_mux_t mux)
 {
+    /* coverity[cert_int31_c_violation] -- clock_mux_t values are SoC-defined non-negative bit patterns. */
     return (((uint32_t)(CCM_TUPLE_REG(CCM, mux) & CCM_TUPLE_MASK(mux))) >> CCM_TUPLE_SHIFT(mux));
 }
 
@@ -1453,6 +1456,7 @@ static inline uint32_t CLOCK_GetMux(clock_mux_t mux)
  * @ref kCLOCK_Sai2Div, @ref kCLOCK_Sai3Div can use the divider kCLOCK_MiscDivByxxx.
  *
  * @param divider Which divider node to set.
+ * @param value   Clock divider value to set.
  * @param value   Clock div value to set, different divider has different value range. See @ref clock_div_value_t
  *                for details.
  *                Divided clock frequency = Undivided clock frequency / (value + 1)
@@ -1461,7 +1465,9 @@ static inline void CLOCK_SetDiv(clock_div_t divider, uint32_t value)
 {
     uint32_t busyShift;
 
+    /* coverity[cert_int31_c_violation] -- clock_div_t values are SoC-defined non-negative bit patterns. */
     busyShift                   = CCM_TUPLE_BUSY_SHIFT(divider);
+    /* coverity[cert_int31_c_violation] -- clock_div_t values are SoC-defined non-negative bit patterns. */
     CCM_TUPLE_REG(CCM, divider) = (CCM_TUPLE_REG(CCM, divider) & (~CCM_TUPLE_MASK(divider))) |
                                   (((uint32_t)((value) << CCM_TUPLE_SHIFT(divider))) & CCM_TUPLE_MASK(divider));
 
@@ -1484,6 +1490,7 @@ static inline void CLOCK_SetDiv(clock_div_t divider, uint32_t value)
  */
 static inline uint32_t CLOCK_GetDiv(clock_div_t divider)
 {
+    /* coverity[cert_int31_c_violation] -- clock_div_t values are SoC-defined non-negative bit patterns. */
     return ((uint32_t)(CCM_TUPLE_REG(CCM, divider) & CCM_TUPLE_MASK(divider)) >> CCM_TUPLE_SHIFT(divider));
 }
 
@@ -1495,14 +1502,17 @@ static inline uint32_t CLOCK_GetDiv(clock_div_t divider)
  */
 static inline void CLOCK_ControlGate(clock_ip_name_t name, clock_gate_value_t value)
 {
+    /* coverity[cert_int31_c_violation] -- clock_ip_name_t values are SoC-defined non-negative bit patterns. */
     uint32_t index = ((uint32_t)name) >> 8UL;
+    /* coverity[cert_int31_c_violation] -- clock_ip_name_t values are SoC-defined non-negative bit patterns. */
     uint32_t shift = ((uint32_t)name) & 0x1FUL;
     volatile uint32_t *reg;
 
     assert(index <= 7UL);
 
     reg = (volatile uint32_t *)(&(((volatile uint32_t *)&CCM->CCGR0)[index]));
-    SDK_ATOMIC_LOCAL_CLEAR_AND_SET(reg, (3UL << shift), (uint32_t)(((uint32_t)value) << (uint32_t)shift));
+    /* coverity[cert_int31_c_violation] -- clock_gate_value_t values are SoC-defined non-negative. */
+    SDK_ATOMIC_LOCAL_CLEAR_AND_SET(reg, (3UL << shift), (((uint32_t)value) << (uint32_t)shift));
 }
 
 /*!

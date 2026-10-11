@@ -25,14 +25,14 @@
 **                          MIMXRT106LDVL6A
 **                          MIMXRT106SDVL6A
 **
-**     Version:             rev. 2.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 3.0, 2025-11-13
+**     Build:               b260205
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for USDHC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -54,14 +54,16 @@
 **     - rev. 2.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 3.0 (2025-11-13)
+**         Move enet compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_USDHC.h
- * @version 2.0
- * @date 2024-10-29
+ * @version 3.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for USDHC
  *
  * CMSIS Peripheral Access Layer for USDHC
@@ -442,6 +444,22 @@ typedef struct {
  */
 #define USDHC_PRES_STATE_CINST(x)                (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_CINST_SHIFT)) & USDHC_PRES_STATE_CINST_MASK)
 
+#define USDHC_PRES_STATE_CDPL_MASK               (0x40000U)
+#define USDHC_PRES_STATE_CDPL_SHIFT              (18U)
+/*! CDPL - Card detect pin level
+ *  0b0..No card present (CD_B = 1)
+ *  0b1..Card present (CD_B = 0)
+ */
+#define USDHC_PRES_STATE_CDPL(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_CDPL_SHIFT)) & USDHC_PRES_STATE_CDPL_MASK)
+
+#define USDHC_PRES_STATE_WPSPL_MASK              (0x80000U)
+#define USDHC_PRES_STATE_WPSPL_SHIFT             (19U)
+/*! WPSPL - Write protect switch pin level
+ *  0b0..Write protected (WP = 1)
+ *  0b1..Write enabled (WP = 0)
+ */
+#define USDHC_PRES_STATE_WPSPL(x)                (((uint32_t)(((uint32_t)(x)) << USDHC_PRES_STATE_WPSPL_SHIFT)) & USDHC_PRES_STATE_WPSPL_MASK)
+
 #define USDHC_PRES_STATE_CLSL_MASK               (0x800000U)
 #define USDHC_PRES_STATE_CLSL_SHIFT              (23U)
 /*! CLSL - CMD line signal level */
@@ -492,6 +510,22 @@ typedef struct {
  *  0b11..Reserved
  */
 #define USDHC_PROT_CTRL_EMODE(x)                 (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_EMODE_SHIFT)) & USDHC_PROT_CTRL_EMODE_MASK)
+
+#define USDHC_PROT_CTRL_CDTL_MASK                (0x40U)
+#define USDHC_PROT_CTRL_CDTL_SHIFT               (6U)
+/*! CDTL - Card detect test level
+ *  0b0..Card detect test level is 0, no card inserted
+ *  0b1..Card detect test level is 1, card inserted
+ */
+#define USDHC_PROT_CTRL_CDTL(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_CDTL_SHIFT)) & USDHC_PROT_CTRL_CDTL_MASK)
+
+#define USDHC_PROT_CTRL_CDSS_MASK                (0x80U)
+#define USDHC_PROT_CTRL_CDSS_SHIFT               (7U)
+/*! CDSS - Card detect signal selection
+ *  0b0..Card detection level is selected (for normal purpose).
+ *  0b1..Card detection test level is selected (for test purpose).
+ */
+#define USDHC_PROT_CTRL_CDSS(x)                  (((uint32_t)(((uint32_t)(x)) << USDHC_PROT_CTRL_CDSS_SHIFT)) & USDHC_PROT_CTRL_CDSS_MASK)
 
 #define USDHC_PROT_CTRL_DMASEL_MASK              (0x300U)
 #define USDHC_PROT_CTRL_DMASEL_SHIFT             (8U)

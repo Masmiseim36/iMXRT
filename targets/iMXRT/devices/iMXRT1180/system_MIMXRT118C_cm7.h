@@ -10,7 +10,7 @@
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b260206
+**     Build:               b260513
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -39,7 +39,7 @@
 /*!
  * @file MIMXRT118C_cm7
  * @version 1.0
- * @date 2026-02-06
+ * @date 2026-05-13
  * @brief Device specific configuration file for MIMXRT118C_cm7 (header file)
  *
  * Provides a system configuration function and a global variable that contains
@@ -105,12 +105,29 @@ void SystemCoreClockUpdate(void);
  *
  * This weak function allows to call specific initialization code during the
  * SystemInit() execution.This can be used when an application specific code needs
- * to be called as close to the reset entry as possible (for example the Multicore
- * Manager MCMGR_EarlyInit() function call).
+ * to be called as close to the reset entry as possible.
  * NOTE: No global r/w variables can be used in this hook function because the
  * initialization of these variables happens after this function.
  */
 void SystemInitHook(void);
+
+/**
+ * @brief BOARD_EarlyInit function.
+ *
+ * This weak function allows board to initialize MPU or memory at early stage before .data,
+ * .bss initialization.
+ * It minimizes the risk of speculative access to uninitialized memory allowed by default
+ * MPU attributes. Meanwhile it also make it possible to enable I/D caches to boost boot up
+ * speed.
+ * NOTE: No global/static data access is allowed in this function since they have not been
+ * initialized yet.
+ */
+void BOARD_EarlyInit(void);
+
+/* Ensure "core_cm7.h" is included before overriding NVIC_SystemReset below, so the
+ * override below always wins regardless of caller include order (the header's
+ * own include guards make this a no-op when "core_cm7.h" is already included). */
+#include "core_cm7.h"
 
 /**
  * @brief Override NVIC_SystemReset

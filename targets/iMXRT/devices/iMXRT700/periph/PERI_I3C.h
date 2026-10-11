@@ -8,6 +8,10 @@
 **                          MIMXRT735SGFOB_cm33_core1
 **                          MIMXRT735SGFOB_ezhv
 **                          MIMXRT735SGFOB_hifi1
+**                          MIMXRT735SGVKB_cm33_core0
+**                          MIMXRT735SGVKB_cm33_core1
+**                          MIMXRT735SGVKB_ezhv
+**                          MIMXRT735SGVKB_hifi1
 **                          MIMXRT758SGAWBR_cm33_core0
 **                          MIMXRT758SGAWBR_cm33_core1
 **                          MIMXRT758SGAWBR_ezhv
@@ -16,6 +20,10 @@
 **                          MIMXRT758SGFOB_cm33_core1
 **                          MIMXRT758SGFOB_ezhv
 **                          MIMXRT758SGFOB_hifi1
+**                          MIMXRT758SGVKB_cm33_core0
+**                          MIMXRT758SGVKB_cm33_core1
+**                          MIMXRT758SGVKB_ezhv
+**                          MIMXRT758SGVKB_hifi1
 **                          MIMXRT798SGAWBR_cm33_core0
 **                          MIMXRT798SGAWBR_cm33_core1
 **                          MIMXRT798SGAWBR_ezhv
@@ -26,15 +34,20 @@
 **                          MIMXRT798SGFOB_ezhv
 **                          MIMXRT798SGFOB_hifi1
 **                          MIMXRT798SGFOB_hifi4
+**                          MIMXRT798SGVKB_cm33_core0
+**                          MIMXRT798SGVKB_cm33_core1
+**                          MIMXRT798SGVKB_ezhv
+**                          MIMXRT798SGVKB_hifi1
+**                          MIMXRT798SGVKB_hifi4
 **
-**     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Version:             rev. 6.0, 2025-12-29
+**     Build:               b260429
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for I3C
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -50,14 +63,20 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 4.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 5.0 (2025-11-13)
+**         Add puf/sdadc irq and cache64 compatibility macros to common header.
+**     - rev. 5.1 (2025-12-08)
+**         Update RM version and add pdm irq for hifi1/hifi4.
+**     - rev. 6.0 (2025-12-29)
+**         Add new part number.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_I3C.h
- * @version 4.0
- * @date 2025-06-06
+ * @version 6.0
+ * @date 2025-12-29
  * @brief CMSIS Peripheral Access Layer for I3C
  *
  * CMSIS Peripheral Access Layer for I3C
@@ -66,32 +85,32 @@
 #if !defined(PERI_I3C_H_)
 #define PERI_I3C_H_                              /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT735SGAWBR_cm33_core0) || defined(CPU_MIMXRT735SGFOB_cm33_core0))
-#include "MIMXRT735S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWBR_cm33_core1) || defined(CPU_MIMXRT735SGFOB_cm33_core1))
-#include "MIMXRT735S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWBR_ezhv) || defined(CPU_MIMXRT735SGFOB_ezhv))
-#include "MIMXRT735S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWBR_hifi1) || defined(CPU_MIMXRT735SGFOB_hifi1))
-#include "MIMXRT735S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core0) || defined(CPU_MIMXRT758SGFOB_cm33_core0))
-#include "MIMXRT758S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core1) || defined(CPU_MIMXRT758SGFOB_cm33_core1))
-#include "MIMXRT758S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_ezhv) || defined(CPU_MIMXRT758SGFOB_ezhv))
-#include "MIMXRT758S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_hifi1) || defined(CPU_MIMXRT758SGFOB_hifi1))
-#include "MIMXRT758S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core0) || defined(CPU_MIMXRT798SGFOB_cm33_core0))
-#include "MIMXRT798S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core1) || defined(CPU_MIMXRT798SGFOB_cm33_core1))
-#include "MIMXRT798S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_ezhv) || defined(CPU_MIMXRT798SGFOB_ezhv))
-#include "MIMXRT798S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_hifi1) || defined(CPU_MIMXRT798SGFOB_hifi1))
-#include "MIMXRT798S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_hifi4) || defined(CPU_MIMXRT798SGFOB_hifi4))
-#include "MIMXRT798S_hifi4_COMMON.h"
+#if (defined(CPU_MIMXRT735SGAWBR_cm33_core0) || defined(CPU_MIMXRT735SGFOB_cm33_core0) || defined(CPU_MIMXRT735SGVKB_cm33_core0))
+#include "../MIMXRT735S_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMXRT735SGAWBR_cm33_core1) || defined(CPU_MIMXRT735SGFOB_cm33_core1) || defined(CPU_MIMXRT735SGVKB_cm33_core1))
+#include "../MIMXRT735S_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMXRT735SGAWBR_ezhv) || defined(CPU_MIMXRT735SGFOB_ezhv) || defined(CPU_MIMXRT735SGVKB_ezhv))
+#include "../MIMXRT735S_ezhv_COMMON.h"
+#elif (defined(CPU_MIMXRT735SGAWBR_hifi1) || defined(CPU_MIMXRT735SGFOB_hifi1) || defined(CPU_MIMXRT735SGVKB_hifi1))
+#include "../MIMXRT735S_hifi1_COMMON.h"
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core0) || defined(CPU_MIMXRT758SGFOB_cm33_core0) || defined(CPU_MIMXRT758SGVKB_cm33_core0))
+#include "../MIMXRT758S_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core1) || defined(CPU_MIMXRT758SGFOB_cm33_core1) || defined(CPU_MIMXRT758SGVKB_cm33_core1))
+#include "../MIMXRT758S_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMXRT758SGAWBR_ezhv) || defined(CPU_MIMXRT758SGFOB_ezhv) || defined(CPU_MIMXRT758SGVKB_ezhv))
+#include "../MIMXRT758S_ezhv_COMMON.h"
+#elif (defined(CPU_MIMXRT758SGAWBR_hifi1) || defined(CPU_MIMXRT758SGFOB_hifi1) || defined(CPU_MIMXRT758SGVKB_hifi1))
+#include "../MIMXRT758S_hifi1_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core0) || defined(CPU_MIMXRT798SGFOB_cm33_core0) || defined(CPU_MIMXRT798SGVKB_cm33_core0))
+#include "../MIMXRT798S_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core1) || defined(CPU_MIMXRT798SGFOB_cm33_core1) || defined(CPU_MIMXRT798SGVKB_cm33_core1))
+#include "../MIMXRT798S_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_ezhv) || defined(CPU_MIMXRT798SGFOB_ezhv) || defined(CPU_MIMXRT798SGVKB_ezhv))
+#include "../MIMXRT798S_ezhv_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_hifi1) || defined(CPU_MIMXRT798SGFOB_hifi1) || defined(CPU_MIMXRT798SGVKB_hifi1))
+#include "../MIMXRT798S_hifi1_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_hifi4) || defined(CPU_MIMXRT798SGFOB_hifi4) || defined(CPU_MIMXRT798SGVKB_hifi4))
+#include "../MIMXRT798S_hifi4_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -149,17 +168,17 @@ typedef struct {
   __IO uint32_t SDMACTRL;                          /**< Target DMA Control, offset: 0x20 */
        uint8_t RESERVED_0[8];
   __IO uint32_t SDATACTRL;                         /**< Target Data Control, offset: 0x2C */
-  __IO uint32_t SWDATAB;                           /**< Target Write Data Byte, offset: 0x30 */
-  __IO uint32_t SWDATABE;                          /**< Target Write Data Byte End, offset: 0x34 */
-  __IO uint32_t SWDATAH;                           /**< Target Write Data Halfword, offset: 0x38 */
-  __IO uint32_t SWDATAHE;                          /**< Target Write Data Halfword End, offset: 0x3C */
+  __O  uint32_t SWDATAB;                           /**< Target Write Data Byte, offset: 0x30 */
+  __O  uint32_t SWDATABE;                          /**< Target Write Data Byte End, offset: 0x34 */
+  __O  uint32_t SWDATAH;                           /**< Target Write Data Halfword, offset: 0x38 */
+  __O  uint32_t SWDATAHE;                          /**< Target Write Data Halfword End, offset: 0x3C */
   __I  uint32_t SRDATAB;                           /**< Target Read Data Byte, offset: 0x40 */
        uint8_t RESERVED_1[4];
   __I  uint32_t SRDATAH;                           /**< Target Read Data Halfword, offset: 0x48 */
        uint8_t RESERVED_2[8];
   union {                                          /* offset: 0x54 */
-    __IO uint32_t SWDATAB1;                          /**< Target Write Data Byte, offset: 0x54 */
-    __IO uint32_t SWDATAH1;                          /**< Target Write Data Halfword, offset: 0x54 */
+    __O  uint32_t SWDATAB1;                          /**< Target Write Data Byte, offset: 0x54 */
+    __O  uint32_t SWDATAH1;                          /**< Target Write Data Halfword, offset: 0x54 */
   };
        uint8_t RESERVED_3[4];
   __I  uint32_t SCAPABILITIES2;                    /**< Target Capabilities 2, offset: 0x5C */
@@ -182,26 +201,26 @@ typedef struct {
   __IO uint32_t MDMACTRL;                          /**< Controller DMA Control, offset: 0xA0 */
        uint8_t RESERVED_4[8];
   __IO uint32_t MDATACTRL;                         /**< Controller Data Control, offset: 0xAC */
-  __IO uint32_t MWDATAB;                           /**< Controller Write Data Byte, offset: 0xB0 */
-  __IO uint32_t MWDATABE;                          /**< Controller Write Data Byte End, offset: 0xB4 */
-  __IO uint32_t MWDATAH;                           /**< Controller Write Data Halfword, offset: 0xB8 */
-  __IO uint32_t MWDATAHE;                          /**< Controller Write Data Halfword End, offset: 0xBC */
+  __O  uint32_t MWDATAB;                           /**< Controller Write Data Byte, offset: 0xB0 */
+  __O  uint32_t MWDATABE;                          /**< Controller Write Data Byte End, offset: 0xB4 */
+  __O  uint32_t MWDATAH;                           /**< Controller Write Data Halfword, offset: 0xB8 */
+  __O  uint32_t MWDATAHE;                          /**< Controller Write Data Halfword End, offset: 0xBC */
   __I  uint32_t MRDATAB;                           /**< Controller Read Data Byte, offset: 0xC0 */
        uint8_t RESERVED_5[4];
   __I  uint32_t MRDATAH;                           /**< Controller Read Data Halfword, offset: 0xC8 */
   union {                                          /* offset: 0xCC */
-    __IO uint32_t MWDATAB1;                          /**< Controller Write Byte Data 1 (to Bus), offset: 0xCC */
-    __IO uint32_t MWDATAH1;                          /**< Controller Write Halfword Data (to Bus), offset: 0xCC */
+    __O  uint32_t MWDATAB1;                          /**< Controller Write Byte Data 1 (to Bus), offset: 0xCC */
+    __O  uint32_t MWDATAH1;                          /**< Controller Write Halfword Data (to Bus), offset: 0xCC */
   };
   union {                                          /* offset: 0xD0 */
-    __IO uint32_t MWMSG_SDR_CONTROL;                 /**< Controller Write Message Control in SDR mode, offset: 0xD0 */
-    __IO uint32_t MWMSG_SDR_DATA;                    /**< Controller Write Message Data in SDR mode, offset: 0xD0 */
+    __O  uint32_t MWMSG_SDR_CONTROL;                 /**< Controller Write Message Control in SDR mode, offset: 0xD0 */
+    __O  uint32_t MWMSG_SDR_DATA;                    /**< Controller Write Message Data in SDR mode, offset: 0xD0 */
   };
   __I  uint32_t MRMSG_SDR;                         /**< Controller Read Message in SDR mode, offset: 0xD4 */
   union {                                          /* offset: 0xD8 */
-    __IO uint32_t MWMSG_DDR_CONTROL;                 /**< Controller Write Message in DDR mode: First Control Word, offset: 0xD8 */
-    __IO uint32_t MWMSG_DDR_CONTROL2;                /**< Controller Write Message in DDR Mode Control 2, offset: 0xD8 */
-    __IO uint32_t MWMSG_DDR_DATA;                    /**< Controller Write Message Data in DDR mode, offset: 0xD8 */
+    __O  uint32_t MWMSG_DDR_CONTROL;                 /**< Controller Write Message in DDR mode: First Control Word, offset: 0xD8 */
+    __O  uint32_t MWMSG_DDR_CONTROL2;                /**< Controller Write Message in DDR Mode Control 2, offset: 0xD8 */
+    __O  uint32_t MWMSG_DDR_DATA;                    /**< Controller Write Message Data in DDR mode, offset: 0xD8 */
   };
   __I  uint32_t MRMSG_DDR;                         /**< Controller Read Message in DDR mode, offset: 0xDC */
        uint8_t RESERVED_6[4];

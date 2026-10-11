@@ -10,14 +10,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MIMXRT685 User manual Rev. 1.8 21 November 2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 4.0, 2025-11-13
+**     Build:               b260509
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT633S
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -31,14 +31,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-11-13)
+**         Add puf irq and move some trng compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT633S_COMMON.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for MIMXRT633S
  *
  * CMSIS Peripheral Access Layer for MIMXRT633S
@@ -49,7 +51,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0300U
+#define MCU_MEM_MAP_VERSION 0x0400U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -822,24 +824,24 @@ typedef enum IRQn {
 /** FlexSPI AMBA memory base alias count */
 #define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (1)
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-/** FlexSPI AMBA base address array. */
-#define FlexSPI_AMBA_BASE_ARRAY                  { {0x18000000u} }
-/** FlexSPI AMBA end address array. */
-#define FlexSPI_AMBA_END_ARRAY                   { {0x1FFFFFFFu} }
-/** FlexSPI AMBA base address array */
-#define FlexSPI_AMBA_BASE_ARRAY_NS               { {0x08000000u} }
-/** FlexSPI AMBA end address array */
-#define FlexSPI_AMBA_END_ARRAY_NS                { {0x0FFFFFFFu} }
-/* FlexSPI AMBA address. */
-#define FlexSPI_AMBA_BASE                        (0x18000000u)
-#define FlexSPI_AMBA_BASE_NS                      (0x08000000u)
+  /** FlexSPI AMBA base address array. */
+  #define FlexSPI_AMBA_BASE_ARRAY                   { {0x18000000u} }
+  /** FlexSPI AMBA end address array. */
+  #define FlexSPI_AMBA_END_ARRAY                    { {0x1FFFFFFFu} }
+  /** FlexSPI AMBA base address array */
+  #define FlexSPI_AMBA_BASE_ARRAY_NS                { {0x08000000u} }
+  /** FlexSPI AMBA end address array */
+  #define FlexSPI_AMBA_END_ARRAY_NS                 { {0x0FFFFFFFu} }
+  /* FlexSPI AMBA address. */
+  #define FlexSPI_AMBA_BASE                         (0x18000000u)
+  #define FlexSPI_AMBA_BASE_NS                      (0x08000000u)
 #else
-/** FlexSPI AMBA base address array. */
-#define FlexSPI_AMBA_BASE_ARRAY                  { {0x08000000u} }
-/** FlexSPI AMBA end address array. */
-#define FlexSPI_AMBA_END_ARRAY                   { {0x0FFFFFFFu} }
-/* FlexSPI AMBA address. */
-#define FlexSPI_AMBA_BASE                        (0x08000000u)
+  /** FlexSPI AMBA base address array. */
+  #define FlexSPI_AMBA_BASE_ARRAY                   { {0x08000000u} }
+  /** FlexSPI AMBA end address array. */
+  #define FlexSPI_AMBA_END_ARRAY                    { {0x0FFFFFFFu} }
+  /* FlexSPI AMBA address. */
+  #define FlexSPI_AMBA_BASE                         (0x08000000u)
 #endif
 
 
@@ -1547,6 +1549,8 @@ typedef enum IRQn {
   /** Array initializer of PUF peripheral base pointers */
   #define PUF_BASE_PTRS                            { PUF }
 #endif
+/** Interrupt vectors for the PUF peripheral type */
+#define PUF_IRQS                                 { PUF_IRQn }
 
 /* RSTCTL0 - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1912,6 +1916,9 @@ typedef enum IRQn {
 #endif
 /** Interrupt vectors for the TRNG peripheral type */
 #define TRNG_IRQS                                { RNG_IRQn }
+/* Backward compatibility */
+#define TRNG0                                    TRNG
+
 
 /* USART - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

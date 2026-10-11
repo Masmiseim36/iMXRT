@@ -11,14 +11,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    IMXRT1160RM, Rev 0, 03/2021
-**     Version:             rev. 1.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 2.0, 2025-11-13
+**     Build:               b260512
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT1166_cm4
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -30,14 +30,16 @@
 **     - rev. 1.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 2.0 (2025-11-13)
+**         Consolidate asrc/xbar and enet macros into common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT1166_cm4.h
- * @version 1.0
- * @date 2024-10-29
+ * @version 2.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for MIMXRT1166_cm4
  *
  * CMSIS Peripheral Access Layer for MIMXRT1166_cm4

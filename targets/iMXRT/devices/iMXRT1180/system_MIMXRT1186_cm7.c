@@ -10,7 +10,7 @@
 **
 **     Reference manual:    IMXRT1180RM, Rev 5, 01/2024
 **     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Build:               b260206
 **
 **     Abstract:
 **         Provides a system configuration function and a global variable that
@@ -18,7 +18,7 @@
 **         the oscillator (PLL) that is part of the microcontroller device.
 **
 **     Copyright 2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -39,7 +39,7 @@
 /*!
  * @file MIMXRT1186_cm7
  * @version 1.0
- * @date 2025-05-20
+ * @date 2026-02-06
  * @brief Device specific configuration file for MIMXRT1186_cm7 (implementation
  *        file)
  *
@@ -143,11 +143,7 @@ void SystemInit(void)
         SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
     }
 
-    /* Enable instruction cache */
-    if (SCB_CCR_IC_Msk != (SCB_CCR_IC_Msk & SCB->CCR))
-    {
-        SCB_EnableICache();
-    }
+    BOARD_EarlyInit();
 
     /* Enable entry to thread mode when divide by zero */
     SCB->CCR |= SCB_CCR_DIV_0_TRP_Msk;
@@ -183,6 +179,25 @@ void SystemCoreClockUpdate(void)
    ---------------------------------------------------------------------------- */
 
 __attribute__((weak)) void SystemInitHook(void)
+{
+    /* Void implementation of the weak function. */
+}
+
+/* ----------------------------------------------------------------------------
+   -- BOARD_EarlyInit()
+   ---------------------------------------------------------------------------- */
+/**
+ * @brief BOARD_EarlyInit function.
+ *
+ * This weak function allows board to initialize MPU or memory at early stage before .data,
+ * .bss initialization.
+ * It minimizes the risk of speculative access to uninitialized memory allowed by default
+ * MPU attributes. Meanwhile it also make it possible to enable I/D caches to boost boot up
+ * speed.
+ * NOTE: No global/static data access is allowed in this function since they have not been
+ * initialized yet.
+ */
+__attribute__((weak)) void BOARD_EarlyInit(void)
 {
     /* Void implementation of the weak function. */
 }

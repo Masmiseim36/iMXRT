@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2025 NXP
+ * Copyright 2021-2026 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
@@ -237,8 +237,8 @@ void CLOCK_CalcPllSpreadSpectrum(uint32_t factor, uint32_t range, uint32_t mod, 
 {
     assert(ss != NULL);
 
-    ss->stop = (uint16_t)(factor * range / XTAL_FREQ);
-    ss->step = (uint16_t)((mod << 1UL) * (uint32_t)(ss->stop) / XTAL_FREQ);
+    ss->stop = (uint16_t)((((uint64_t)factor * range) / XTAL_FREQ) & 0xFFFFU);
+    ss->step = (uint16_t)(((((uint64_t)mod << 1U) * (uint64_t)ss->stop) / XTAL_FREQ) & 0xFFFFU);
 }
 
 /* 528PLL */
@@ -250,7 +250,8 @@ void CLOCK_InitSysPll2(const clock_sys_pll2_config_t *config)
     {
         if ((config == NULL) ||
             ((0UL == (ANADIG_PLL->SYS_PLL2_SS & ANADIG_PLL_SYS_PLL2_SS_ENABLE_MASK)) && (!config->ssEnable)) ||
-            ((ANADIG_PLL_SYS_PLL2_SS_ENABLE(config->ssEnable) | ANADIG_PLL_SYS_PLL2_SS_STOP(config->ss->stop) |
+            ((ANADIG_PLL_SYS_PLL2_SS_ENABLE((uint32_t)(config->ssEnable ? 1U : 0U)) |
+              ANADIG_PLL_SYS_PLL2_SS_STOP(config->ss->stop) |
               ANADIG_PLL_SYS_PLL2_SS_STEP(config->ss->step)) == ANADIG_PLL->SYS_PLL2_SS))
         {
             /* no need to reconfigure the PLL if all the configuration is the same */
@@ -355,7 +356,9 @@ bool CLOCK_IsSysPll2PfdEnabled(clock_pfd_t pfd)
 void CLOCK_InitPfd(clock_pll_t pll, clock_pfd_t pfd, uint8_t frac)
 {
     volatile uint32_t *pfdCtrl = NULL, *pfdUpdate = NULL, stable;
+    uint32_t shift = 8UL * (uint32_t)pfd;
     uint32_t regFracVal;
+    uint32_t val;
     bool pfdGated;
 
     assert(frac <= (uint8_t)PFD_FRAC_MAX);
@@ -376,28 +379,31 @@ void CLOCK_InitPfd(clock_pll_t pll, clock_pfd_t pfd, uint8_t frac)
             assert(false);
             break;
     }
-    regFracVal = ((*pfdCtrl) & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC_MASK << (8UL * (uint32_t)pfd))) >>
-                 (8UL * (uint32_t)pfd);
-    pfdGated =
-        (bool)(((*pfdCtrl) & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << (8UL * (uint32_t)pfd))) >>
-               (8UL >> (uint32_t)pfd));
+
+    val = *pfdCtrl;
+    regFracVal = (val >> shift) & (uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC_MASK;
+    pfdGated = ((val >> shift) & (uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK) != 0U;
     if ((regFracVal == (uint32_t)frac) && (!pfdGated))
     {
         return;
     }
 
-    stable = *pfdCtrl & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << (8UL * (uint32_t)pfd));
-    *pfdCtrl |= ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << (8UL * (uint32_t)pfd));
+    stable = val & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << shift);
+    *pfdCtrl |= ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << shift);
 
     /* all pfds support to be updated on-the-fly after corresponding PLL is stable */
-    *pfdCtrl &= ~((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC_MASK << (8UL * (uint32_t)pfd));
-    *pfdCtrl |= (ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC(frac) << (8UL * (uint32_t)pfd));
+    val = *pfdCtrl;
+    val &= ~((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC_MASK << shift);
+    val |= (ANADIG_PLL_SYS_PLL2_PFD_PFD0_FRAC(frac) << shift);
+    *pfdCtrl = val;
+    /* Ensure pfdCtrl write completes before triggering pfdUpdate. */
+    __DSB();
 
     *pfdUpdate ^= ((uint32_t)ANADIG_PLL_SYS_PLL2_UPDATE_PFD0_UPDATE_MASK << (uint32_t)pfd);
-    *pfdCtrl &= ~((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << (8UL * (uint32_t)pfd));
+    *pfdCtrl &= ~((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_DIV1_CLKGATE_MASK << shift);
 
     /* Wait for stablizing */
-    while (stable == (*pfdCtrl & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << (8UL * (uint32_t)pfd))))
+    while (stable == (*pfdCtrl & ((uint32_t)ANADIG_PLL_SYS_PLL2_PFD_PFD0_STABLE_MASK << shift)))
     {
     }
 }
@@ -1230,15 +1236,15 @@ void CLOCK_OSC_SetLocked1MHzCount(uint16_t count)
     uint32_t tmp32;
     uint16_t targetCount;
     uint16_t hystMinus;
-    uint16_t diffCount;
+    int32_t  diffCount;
 
     tmp32       = OSC_RC_400M->CTRL1.RW;
     targetCount = (uint16_t)((tmp32 & OSC_RC_400M_CTRL1_TARGET_COUNT_MASK) >> OSC_RC_400M_CTRL1_TARGET_COUNT_SHIFT);
     hystMinus   = (uint16_t)((tmp32 & OSC_RC_400M_CTRL1_HYST_MINUS_MASK) >> OSC_RC_400M_CTRL1_HYST_MINUS_SHIFT);
-    diffCount   = targetCount - hystMinus - count;
+    diffCount   = (int32_t)targetCount - (int32_t)hystMinus - (int32_t)count;
 
     /* The count for the locked 1MHz clock should be 4 to 8 counts less than CTRL[TARGET_COUNT] - CTRL1[HYST_MINUS]. */
-    if ((diffCount >= 4U) && (diffCount <= 8U))
+    if ((diffCount >= 4) && (diffCount <= 8))
     {
         tmp32                 = (tmp32 & ~OSC_RC_400M_CTRL3_COUNT_1M_CLK_MASK) | OSC_RC_400M_CTRL3_COUNT_1M_CLK(count);
         OSC_RC_400M->CTRL3.RW = tmp32;
@@ -1324,9 +1330,9 @@ uint32_t CLOCK_GetPllFreq(clock_pll_t pll)
                         ANADIG_PLL_ARM_PLL_CTRL_DIV_SELECT_SHIFT;
             postDiv = (ANADIG_PLL->ARM_PLL_CTRL & ANADIG_PLL_ARM_PLL_CTRL_POST_DIV_SEL_MASK) >>
                       ANADIG_PLL_ARM_PLL_CTRL_POST_DIV_SEL_SHIFT;
-            postDiv = (1UL << (postDiv + 1UL));
-            freq    = XTAL_FREQ / (2UL * postDiv);
-            freq *= divSelect;
+            postDiv = (postDiv == 3UL) ? 1UL : (1UL << (postDiv + 1UL));
+            freq    = (uint32_t)(((uint64_t)XTAL_FREQ / ((uint64_t)2UL * postDiv)) & 0xFFFFFFFFUL);
+            freq    = (uint32_t)(((uint64_t)freq * divSelect) & 0xFFFFFFFFUL);
 #else
             freq = CLOCK_GetFreqFromObs(0, CCM_OBS_PLL_ARM_OUT);
 #endif
@@ -1661,7 +1667,8 @@ void CLOCK_OSC_TrimOscRc400M(bool enable, bool bypass, uint16_t trim)
     if (enable)
     {
         OSC_RC_400M->CTRL2.CLR = OSC_RC_400M_CTRL2_OSC_TUNE_VAL_MASK | OSC_RC_400M_CTRL2_TUNE_BYP_MASK;
-        OSC_RC_400M->CTRL2.SET = OSC_RC_400M_CTRL2_OSC_TUNE_VAL(trim) | OSC_RC_400M_CTRL2_TUNE_BYP(bypass);
+        OSC_RC_400M->CTRL2.SET =
+            OSC_RC_400M_CTRL2_OSC_TUNE_VAL(trim) | OSC_RC_400M_CTRL2_TUNE_BYP((uint32_t)(bypass ? 1U : 0U));
     }
 }
 
@@ -1720,7 +1727,6 @@ bool CLOCK_EnableUsbhs0Clock(clock_usb_src_t src, uint32_t freq)
 bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
 {
     (void)src;
-
     uint32_t phyPllDiv  = 0U;
     uint16_t multiplier = 0U;
     bool err            = false;
@@ -1735,7 +1741,7 @@ bool CLOCK_EnableUsbhs0PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
     {
         return false;
     }
-    multiplier = (uint16_t)(480000000UL / freq);
+    multiplier = (uint16_t)((480000000UL / freq) & 0xFFFFU);
 
     switch (multiplier)
     {
@@ -1812,7 +1818,7 @@ void CLOCK_DisableUsbhs0PhyPllClock(void)
     USBPHY1->PLL_SIC_CLR = (USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK);
     USBPHY1->CTRL |= USBPHY_CTRL_CLKGATE_MASK; /* Set to 1U to gate clocks */
 }
-#if !(defined(MIMXRT1186_cm33_SERIES) || defined(MIMXRT1186_cm7_SERIES))
+#if !(defined(MIMXRT1186_cm33_SERIES) || defined(MIMXRT1186_cm7_SERIES) || defined(MIMXRT1185_cm33_SERIES) || defined(MIMXRT1185_cm7_SERIES) || defined(MIMXRT118C_cm33_SERIES) || defined(MIMXRT118C_cm7_SERIES))
 bool CLOCK_EnableUsbhs1Clock(clock_usb_src_t src, uint32_t freq)
 {
     (void)src;
@@ -1822,7 +1828,7 @@ bool CLOCK_EnableUsbhs1Clock(clock_usb_src_t src, uint32_t freq)
 bool CLOCK_EnableUsbhs1PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
 {
     (void)src;
-
+    (void)freq;
     uint32_t phyPllDiv  = 0U;
     uint16_t multiplier = 0U;
     bool err            = false;
@@ -1837,7 +1843,7 @@ bool CLOCK_EnableUsbhs1PhyPllClock(clock_usb_phy_src_t src, uint32_t freq)
     {
         return false;
     }
-    multiplier = (uint16_t)(uint32_t)(480000000UL / freq);
+    multiplier = (uint16_t)((480000000UL / freq) & 0xFFFFU);
 
     switch (multiplier)
     {

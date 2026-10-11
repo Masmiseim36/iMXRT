@@ -8,6 +8,10 @@
 **                          MIMXRT735SGFOB_cm33_core1
 **                          MIMXRT735SGFOB_ezhv
 **                          MIMXRT735SGFOB_hifi1
+**                          MIMXRT735SGVKB_cm33_core0
+**                          MIMXRT735SGVKB_cm33_core1
+**                          MIMXRT735SGVKB_ezhv
+**                          MIMXRT735SGVKB_hifi1
 **                          MIMXRT758SGAWBR_cm33_core0
 **                          MIMXRT758SGAWBR_cm33_core1
 **                          MIMXRT758SGAWBR_ezhv
@@ -16,6 +20,10 @@
 **                          MIMXRT758SGFOB_cm33_core1
 **                          MIMXRT758SGFOB_ezhv
 **                          MIMXRT758SGFOB_hifi1
+**                          MIMXRT758SGVKB_cm33_core0
+**                          MIMXRT758SGVKB_cm33_core1
+**                          MIMXRT758SGVKB_ezhv
+**                          MIMXRT758SGVKB_hifi1
 **                          MIMXRT798SGAWBR_cm33_core0
 **                          MIMXRT798SGAWBR_cm33_core1
 **                          MIMXRT798SGAWBR_ezhv
@@ -26,15 +34,20 @@
 **                          MIMXRT798SGFOB_ezhv
 **                          MIMXRT798SGFOB_hifi1
 **                          MIMXRT798SGFOB_hifi4
+**                          MIMXRT798SGVKB_cm33_core0
+**                          MIMXRT798SGVKB_cm33_core1
+**                          MIMXRT798SGVKB_ezhv
+**                          MIMXRT798SGVKB_hifi1
+**                          MIMXRT798SGVKB_hifi4
 **
-**     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Version:             rev. 6.0, 2025-12-29
+**     Build:               b260330
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for XSPI
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -50,14 +63,20 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 4.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 5.0 (2025-11-13)
+**         Add puf/sdadc irq and cache64 compatibility macros to common header.
+**     - rev. 5.1 (2025-12-08)
+**         Update RM version and add pdm irq for hifi1/hifi4.
+**     - rev. 6.0 (2025-12-29)
+**         Add new part number.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_XSPI.h
- * @version 4.0
- * @date 2025-06-06
+ * @version 6.0
+ * @date 2025-12-29
  * @brief CMSIS Peripheral Access Layer for XSPI
  *
  * CMSIS Peripheral Access Layer for XSPI
@@ -66,32 +85,32 @@
 #if !defined(PERI_XSPI_H_)
 #define PERI_XSPI_H_                             /**< Symbol preventing repeated inclusion */
 
-#if (defined(CPU_MIMXRT735SGAWBR_cm33_core0) || defined(CPU_MIMXRT735SGFOB_cm33_core0))
-#include "MIMXRT735S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWBR_cm33_core1) || defined(CPU_MIMXRT735SGFOB_cm33_core1))
-#include "MIMXRT735S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWBR_ezhv) || defined(CPU_MIMXRT735SGFOB_ezhv))
-#include "MIMXRT735S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT735SGAWBR_hifi1) || defined(CPU_MIMXRT735SGFOB_hifi1))
-#include "MIMXRT735S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core0) || defined(CPU_MIMXRT758SGFOB_cm33_core0))
-#include "MIMXRT758S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core1) || defined(CPU_MIMXRT758SGFOB_cm33_core1))
-#include "MIMXRT758S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_ezhv) || defined(CPU_MIMXRT758SGFOB_ezhv))
-#include "MIMXRT758S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT758SGAWBR_hifi1) || defined(CPU_MIMXRT758SGFOB_hifi1))
-#include "MIMXRT758S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core0) || defined(CPU_MIMXRT798SGFOB_cm33_core0))
-#include "MIMXRT798S_cm33_core0_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core1) || defined(CPU_MIMXRT798SGFOB_cm33_core1))
-#include "MIMXRT798S_cm33_core1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_ezhv) || defined(CPU_MIMXRT798SGFOB_ezhv))
-#include "MIMXRT798S_ezhv_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_hifi1) || defined(CPU_MIMXRT798SGFOB_hifi1))
-#include "MIMXRT798S_hifi1_COMMON.h"
-#elif (defined(CPU_MIMXRT798SGAWBR_hifi4) || defined(CPU_MIMXRT798SGFOB_hifi4))
-#include "MIMXRT798S_hifi4_COMMON.h"
+#if (defined(CPU_MIMXRT735SGAWBR_cm33_core0) || defined(CPU_MIMXRT735SGFOB_cm33_core0) || defined(CPU_MIMXRT735SGVKB_cm33_core0))
+#include "../MIMXRT735S_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMXRT735SGAWBR_cm33_core1) || defined(CPU_MIMXRT735SGFOB_cm33_core1) || defined(CPU_MIMXRT735SGVKB_cm33_core1))
+#include "../MIMXRT735S_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMXRT735SGAWBR_ezhv) || defined(CPU_MIMXRT735SGFOB_ezhv) || defined(CPU_MIMXRT735SGVKB_ezhv))
+#include "../MIMXRT735S_ezhv_COMMON.h"
+#elif (defined(CPU_MIMXRT735SGAWBR_hifi1) || defined(CPU_MIMXRT735SGFOB_hifi1) || defined(CPU_MIMXRT735SGVKB_hifi1))
+#include "../MIMXRT735S_hifi1_COMMON.h"
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core0) || defined(CPU_MIMXRT758SGFOB_cm33_core0) || defined(CPU_MIMXRT758SGVKB_cm33_core0))
+#include "../MIMXRT758S_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMXRT758SGAWBR_cm33_core1) || defined(CPU_MIMXRT758SGFOB_cm33_core1) || defined(CPU_MIMXRT758SGVKB_cm33_core1))
+#include "../MIMXRT758S_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMXRT758SGAWBR_ezhv) || defined(CPU_MIMXRT758SGFOB_ezhv) || defined(CPU_MIMXRT758SGVKB_ezhv))
+#include "../MIMXRT758S_ezhv_COMMON.h"
+#elif (defined(CPU_MIMXRT758SGAWBR_hifi1) || defined(CPU_MIMXRT758SGFOB_hifi1) || defined(CPU_MIMXRT758SGVKB_hifi1))
+#include "../MIMXRT758S_hifi1_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core0) || defined(CPU_MIMXRT798SGFOB_cm33_core0) || defined(CPU_MIMXRT798SGVKB_cm33_core0))
+#include "../MIMXRT798S_cm33_core0_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_cm33_core1) || defined(CPU_MIMXRT798SGFOB_cm33_core1) || defined(CPU_MIMXRT798SGVKB_cm33_core1))
+#include "../MIMXRT798S_cm33_core1_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_ezhv) || defined(CPU_MIMXRT798SGFOB_ezhv) || defined(CPU_MIMXRT798SGVKB_ezhv))
+#include "../MIMXRT798S_ezhv_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_hifi1) || defined(CPU_MIMXRT798SGFOB_hifi1) || defined(CPU_MIMXRT798SGVKB_hifi1))
+#include "../MIMXRT798S_hifi1_COMMON.h"
+#elif (defined(CPU_MIMXRT798SGAWBR_hifi4) || defined(CPU_MIMXRT798SGFOB_hifi4) || defined(CPU_MIMXRT798SGVKB_hifi4))
+#include "../MIMXRT798S_hifi4_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif
@@ -605,6 +624,14 @@ typedef struct {
 #define XSPI_BFGENCR_SEQID_RDSR_SHIFT            (0U)
 /*! SEQID_RDSR - Read Status Register Sequence ID in LUT */
 #define XSPI_BFGENCR_SEQID_RDSR(x)               (((uint32_t)(((uint32_t)(x)) << XSPI_BFGENCR_SEQID_RDSR_SHIFT)) & XSPI_BFGENCR_SEQID_RDSR_MASK)
+
+#define XSPI_BFGENCR_WRTER_EN_MASK               (0x10U)
+#define XSPI_BFGENCR_WRTER_EN_SHIFT              (4U)
+/*! WRTER_EN - Write Terminate Enable
+ *  0b0..Disables
+ *  0b1..Enables
+ */
+#define XSPI_BFGENCR_WRTER_EN(x)                 (((uint32_t)(((uint32_t)(x)) << XSPI_BFGENCR_WRTER_EN_SHIFT)) & XSPI_BFGENCR_WRTER_EN_MASK)
 
 #define XSPI_BFGENCR_SPLITEN_MASK                (0x100U)
 #define XSPI_BFGENCR_SPLITEN_SHIFT               (8U)
@@ -2426,7 +2453,7 @@ typedef struct {
 #define XSPI_IPEDCTRL_IPED_XEX_EN_MASK           (0x800U)
 #define XSPI_IPEDCTRL_IPED_XEX_EN_SHIFT          (11U)
 /*! IPED_XEX_EN - IPED XEX Interface Enable
- *  0b0..Bypasses IPED logic and writes unencrypted or undecrypted data
+ *  0b0..Bypasses IPED logic and writes data without encryption or decryption
  *  0b1..Enables
  */
 #define XSPI_IPEDCTRL_IPED_XEX_EN(x)             (((uint32_t)(((uint32_t)(x)) << XSPI_IPEDCTRL_IPED_XEX_EN_SHIFT)) & XSPI_IPEDCTRL_IPED_XEX_EN_MASK)

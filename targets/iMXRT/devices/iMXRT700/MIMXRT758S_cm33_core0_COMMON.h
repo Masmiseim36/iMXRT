@@ -2,6 +2,7 @@
 ** ###################################################################
 **     Processors:          MIMXRT758SGAWBR_cm33_core0
 **                          MIMXRT758SGFOB_cm33_core0
+**                          MIMXRT758SGVKB_cm33_core0
 **
 **     Compilers:
 **                          GNU C Compiler
@@ -9,15 +10,15 @@
 **                          Keil ARM C/C++ Compiler
 **                          MCUXpresso Compiler
 **
-**     Reference manual:    iMXRT700RM Rev.3, 05/2025
-**     Version:             rev. 4.0, 2025-06-06
-**     Build:               b250722
+**     Reference manual:    iMXRT700RM Rev.5, 10/2025
+**     Version:             rev. 6.0, 2025-12-29
+**     Build:               b260429
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core0
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,14 +34,20 @@
 **         each peripheral with dedicated header file located in periphN folder.
 **     - rev. 4.0 (2025-06-06)
 **         B0 initial version
+**     - rev. 5.0 (2025-11-13)
+**         Add puf/sdadc irq and cache64 compatibility macros to common header.
+**     - rev. 5.1 (2025-12-08)
+**         Update RM version and add pdm irq for hifi1/hifi4.
+**     - rev. 6.0 (2025-12-29)
+**         Add new part number.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT758S_cm33_core0_COMMON.h
- * @version 4.0
- * @date 2025-06-06
+ * @version 6.0
+ * @date 2025-12-29
  * @brief CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core0
  *
  * CMSIS Peripheral Access Layer for MIMXRT758S_cm33_core0
@@ -51,7 +58,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0400U
+#define MCU_MEM_MAP_VERSION 0x0600U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -704,6 +711,10 @@ typedef enum _dma_request_source
 #endif
 /* Backward compatibility */
 #define CACHE64_CTRL_CSAR_PHYADDR_MASK (CACHE64_CTRL_CSAR_PHYADDR27_1_MASK | CACHE64_CTRL_CSAR_PHYADDR31_29_MASK)
+#ifdef FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE
+#undef FSL_FEATURE_CACHE64_LINESIZE_BYTE
+#define FSL_FEATURE_CACHE64_LINESIZE_BYTE FSL_FEATURE_CACHE64_CTRL_LINESIZE_BYTE
+#endif
 
 
 /* CACHE64_POLSEL - Peripheral instance base addresses */
@@ -3332,6 +3343,8 @@ typedef enum _dma_request_source
   /** Array initializer of PUF peripheral base pointers */
   #define PUF_BASE_PTRS                            { PUF, PUF_ALIAS1, PUF_ALIAS2, PUF_ALIAS3 }
 #endif
+/** Interrupt vectors for the PUF peripheral type */
+#define PUF_IRQS                                 { PUF_IRQn, NotAvail_IRQn, NotAvail_IRQn, NotAvail_IRQn }
 
 /* PVTS - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -3360,35 +3373,6 @@ typedef enum _dma_request_source
   #define PVTS_BASE_ADDRS                          { PVTS0_BASE }
   /** Array initializer of PVTS peripheral base pointers */
   #define PVTS_BASE_PTRS                           { PVTS0 }
-#endif
-
-/* ROMCP - Peripheral instance base addresses */
-#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-  /** Peripheral ROMCP base address */
-  #define ROMCP_BASE                               (0x50182000u)
-  /** Peripheral ROMCP base address */
-  #define ROMCP_BASE_NS                            (0x40182000u)
-  /** Peripheral ROMCP base pointer */
-  #define ROMCP                                    ((ROMCP_Type *)ROMCP_BASE)
-  /** Peripheral ROMCP base pointer */
-  #define ROMCP_NS                                 ((ROMCP_Type *)ROMCP_BASE_NS)
-  /** Array initializer of ROMCP peripheral base addresses */
-  #define ROMCP_BASE_ADDRS                         { ROMCP_BASE }
-  /** Array initializer of ROMCP peripheral base pointers */
-  #define ROMCP_BASE_PTRS                          { ROMCP }
-  /** Array initializer of ROMCP peripheral base addresses */
-  #define ROMCP_BASE_ADDRS_NS                      { ROMCP_BASE_NS }
-  /** Array initializer of ROMCP peripheral base pointers */
-  #define ROMCP_BASE_PTRS_NS                       { ROMCP_NS }
-#else
-  /** Peripheral ROMCP base address */
-  #define ROMCP_BASE                               (0x40182000u)
-  /** Peripheral ROMCP base pointer */
-  #define ROMCP                                    ((ROMCP_Type *)ROMCP_BASE)
-  /** Array initializer of ROMCP peripheral base addresses */
-  #define ROMCP_BASE_ADDRS                         { ROMCP_BASE }
-  /** Array initializer of ROMCP peripheral base pointers */
-  #define ROMCP_BASE_PTRS                          { ROMCP }
 #endif
 
 /* RSTCTL0 - Peripheral instance base addresses */
@@ -3598,6 +3582,8 @@ typedef enum _dma_request_source
   /** Array initializer of SDADC peripheral base pointers */
   #define SDADC_BASE_PTRS                          { SDADC }
 #endif
+/** Interrupt vectors for the SDADC peripheral type */
+#define SDADC_IRQS                               { SDADC_IRQn }
 
 /* SEMA42 - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -4803,10 +4789,21 @@ typedef enum _dma_request_source
   /** Array initializer of XCACHE peripheral base pointers */
   #define XCACHE_BASE_PTRS                         { XCACHE0, XCACHE1 }
 #endif
+#if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
+/** XCACHE physical memory base address */
+ #define XCACHE_PHYMEM_BASES                       { 0x30000000u, 0x10000000u }
+/** XCACHE physical memory size */
+ #define XCACHE_PHYMEM_SIZES                       { 0x780000u, 0x780000u }
+/** XCACHE physical memory base address */
+ #define XCACHE_PHYMEM_BASES_NS                    { 0x20000000u, 0x00000000u }
+/** XCACHE physical memory size */
+ #define XCACHE_PHYMEM_SIZES_NS                    { 0x780000u, 0x780000u }
+#else
 /** XCACHE physical memory base address */
  #define XCACHE_PHYMEM_BASES                       { 0x20000000u, 0x00000000u }
 /** XCACHE physical memory size */
  #define XCACHE_PHYMEM_SIZES                       { 0x780000u, 0x780000u }
+#endif
 /* Backward compatibility */
 #define XCACHE_CSAR_PHYADDR_MASK (XCACHE_CSAR_PHYADDR27_1_MASK | XCACHE_CSAR_PHYADDR31_29_MASK)
 

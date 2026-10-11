@@ -67,31 +67,31 @@
 #define PERI_ROMCP_H_                            /**< Symbol preventing repeated inclusion */
 
 #if (defined(CPU_MIMXRT735SGAWBR_cm33_core0) || defined(CPU_MIMXRT735SGFOB_cm33_core0))
-#include "MIMXRT735S_cm33_core0_COMMON.h"
+#include "../MIMXRT735S_cm33_core0_COMMON.h"
 #elif (defined(CPU_MIMXRT735SGAWBR_cm33_core1) || defined(CPU_MIMXRT735SGFOB_cm33_core1))
-#include "MIMXRT735S_cm33_core1_COMMON.h"
+#include "../MIMXRT735S_cm33_core1_COMMON.h"
 #elif (defined(CPU_MIMXRT735SGAWBR_ezhv) || defined(CPU_MIMXRT735SGFOB_ezhv))
-#include "MIMXRT735S_ezhv_COMMON.h"
+#include "../MIMXRT735S_ezhv_COMMON.h"
 #elif (defined(CPU_MIMXRT735SGAWBR_hifi1) || defined(CPU_MIMXRT735SGFOB_hifi1))
-#include "MIMXRT735S_hifi1_COMMON.h"
+#include "../MIMXRT735S_hifi1_COMMON.h"
 #elif (defined(CPU_MIMXRT758SGAWBR_cm33_core0) || defined(CPU_MIMXRT758SGFOB_cm33_core0))
-#include "MIMXRT758S_cm33_core0_COMMON.h"
+#include "../MIMXRT758S_cm33_core0_COMMON.h"
 #elif (defined(CPU_MIMXRT758SGAWBR_cm33_core1) || defined(CPU_MIMXRT758SGFOB_cm33_core1))
-#include "MIMXRT758S_cm33_core1_COMMON.h"
+#include "../MIMXRT758S_cm33_core1_COMMON.h"
 #elif (defined(CPU_MIMXRT758SGAWBR_ezhv) || defined(CPU_MIMXRT758SGFOB_ezhv))
-#include "MIMXRT758S_ezhv_COMMON.h"
+#include "../MIMXRT758S_ezhv_COMMON.h"
 #elif (defined(CPU_MIMXRT758SGAWBR_hifi1) || defined(CPU_MIMXRT758SGFOB_hifi1))
-#include "MIMXRT758S_hifi1_COMMON.h"
+#include "../MIMXRT758S_hifi1_COMMON.h"
 #elif (defined(CPU_MIMXRT798SGAWBR_cm33_core0) || defined(CPU_MIMXRT798SGFOB_cm33_core0))
-#include "MIMXRT798S_cm33_core0_COMMON.h"
+#include "../MIMXRT798S_cm33_core0_COMMON.h"
 #elif (defined(CPU_MIMXRT798SGAWBR_cm33_core1) || defined(CPU_MIMXRT798SGFOB_cm33_core1))
-#include "MIMXRT798S_cm33_core1_COMMON.h"
+#include "../MIMXRT798S_cm33_core1_COMMON.h"
 #elif (defined(CPU_MIMXRT798SGAWBR_ezhv) || defined(CPU_MIMXRT798SGFOB_ezhv))
-#include "MIMXRT798S_ezhv_COMMON.h"
+#include "../MIMXRT798S_ezhv_COMMON.h"
 #elif (defined(CPU_MIMXRT798SGAWBR_hifi1) || defined(CPU_MIMXRT798SGFOB_hifi1))
-#include "MIMXRT798S_hifi1_COMMON.h"
+#include "../MIMXRT798S_hifi1_COMMON.h"
 #elif (defined(CPU_MIMXRT798SGAWBR_hifi4) || defined(CPU_MIMXRT798SGFOB_hifi4))
-#include "MIMXRT798S_hifi4_COMMON.h"
+#include "../MIMXRT798S_hifi4_COMMON.h"
 #else
   #error "No valid CPU defined!"
 #endif

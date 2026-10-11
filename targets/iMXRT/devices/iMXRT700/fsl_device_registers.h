@@ -40,7 +40,7 @@
 #elif (defined(CPU_MIMXRT798SGAWBR_hifi4) || defined(CPU_MIMXRT798SGFOB_hifi4))
 	#include "MIMXRT798S_hifi4.h"
 #else
-  #error "No valid CPU defined!"
+	#error "No valid CPU defined!"
 #endif
 
 #endif /* __FSL_DEVICE_REGISTERS_H__ */

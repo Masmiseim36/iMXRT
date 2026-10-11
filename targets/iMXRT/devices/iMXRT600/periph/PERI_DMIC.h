@@ -12,14 +12,14 @@
 **                          MIMXRT685SVFVKB_cm33
 **                          MIMXRT685SVFVKB_dsp
 **
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 4.0, 2025-11-13
+**     Build:               b260509
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for DMIC
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -33,14 +33,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-11-13)
+**         Add puf irq and move some trng compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file PERI_DMIC.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for DMIC
  *
  * CMSIS Peripheral Access Layer for DMIC
@@ -123,8 +125,8 @@ typedef struct {
        uint8_t RESERVED_1[12];
   __IO uint32_t USE2FS;                            /**< Use 2FS register, offset: 0xF10 */
   __IO uint32_t GLOBAL_SYNC_EN;                    /**< global sync enable, offset: 0xF14 */
-  __IO uint32_t GLOBAL_COUNT_VAL;                  /**< offset: 0xF18 */
-  __IO uint32_t DECRESET;                          /**< offset: 0xF1C */
+  __IO uint32_t GLOBAL_COUNT_VAL;                  /**< Global channel synchronization counter value, offset: 0xF18 */
+  __IO uint32_t DECRESET;                          /**< DMIC decimator reset, offset: 0xF1C */
        uint8_t RESERVED_2[96];
   __IO uint32_t HWVADGAIN;                         /**< HWVAD input gain register, offset: 0xF80 */
   __IO uint32_t HWVADHPFS;                         /**< HWVAD filter control register, offset: 0xF84 */
@@ -409,7 +411,7 @@ typedef struct {
 #define DMIC_GLOBAL_SYNC_EN_CH_SYNC_EN(x)        (((uint32_t)(((uint32_t)(x)) << DMIC_GLOBAL_SYNC_EN_CH_SYNC_EN_SHIFT)) & DMIC_GLOBAL_SYNC_EN_CH_SYNC_EN_MASK)
 /*! @} */
 
-/*! @name GLOBAL_COUNT_VAL -  */
+/*! @name GLOBAL_COUNT_VAL - Global channel synchronization counter value */
 /*! @{ */
 
 #define DMIC_GLOBAL_COUNT_VAL_CCOUNTVAL_MASK     (0xFFFFFFFFU)
@@ -417,7 +419,7 @@ typedef struct {
 #define DMIC_GLOBAL_COUNT_VAL_CCOUNTVAL(x)       (((uint32_t)(((uint32_t)(x)) << DMIC_GLOBAL_COUNT_VAL_CCOUNTVAL_SHIFT)) & DMIC_GLOBAL_COUNT_VAL_CCOUNTVAL_MASK)
 /*! @} */
 
-/*! @name DECRESET -  */
+/*! @name DECRESET - DMIC decimator reset */
 /*! @{ */
 
 #define DMIC_DECRESET_DECRESET_MASK              (0xFFU)

@@ -9,14 +9,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    iMXRT500RM Rev.1, 07/2022
-**     Version:             rev. 6.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 7.0, 2025-11-13
+**     Build:               b260509
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT555S
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -36,14 +36,16 @@
 **     - rev. 6.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 7.0 (2025-11-13)
+**         Add puf irq and move some trng compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT555S_COMMON.h
- * @version 6.0
- * @date 2024-10-29
+ * @version 7.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for MIMXRT555S
  *
  * CMSIS Peripheral Access Layer for MIMXRT555S
@@ -54,7 +56,7 @@
 
 /** Memory map major version (memory maps with equal major version number are
  * compatible) */
-#define MCU_MEM_MAP_VERSION 0x0600U
+#define MCU_MEM_MAP_VERSION 0x0700U
 /** Memory map minor version */
 #define MCU_MEM_MAP_VERSION_MINOR 0x0000U
 
@@ -1047,29 +1049,27 @@ typedef enum IRQn {
 /** FlexSPI AMBA memory base alias count */
 #define FLEXSPI_AMBA_BASE_ALIAS_COUNT     (1)
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
-/** FlexSPI AMBA base address array */
-#define FlexSPI_AMBA_BASE_ARRAY                   { {0x18000000u}, {0x38000000u} }
-/** FlexSPI AMBA end address array */
-#define FlexSPI_AMBA_END_ARRAY                    { {0x1FFFFFFFu}, {0x3FFFFFFFu} }
-/** FlexSPI AMBA base address array */
-#define FlexSPI_AMBA_BASE_ARRAY_NS                { {0x08000000u}, {0x28000000u} }
-/** FlexSPI AMBA end address array */
-#define FlexSPI_AMBA_END_ARRAY_NS                 { {0x0FFFFFFFu}, {0x2FFFFFFFu} }
-/* FlexSPI0 AMBA address. */
-#define FlexSPI0_AMBA_BASE                       (0x18000000u)
-#define FlexSPI0_AMBA_BASE_NS                    (0x08000000u)
-/* FlexSPI1 AMBA address. */
-#define FlexSPI1_AMBA_BASE                       (0x38000000u)
-#define FlexSPI1_AMBA_BASE_NS                    (0x28000000u)
+  /** FlexSPI AMBA base address array */
+  #define FlexSPI_AMBA_BASE_ARRAY                  { {0x18000000u}, {0x38000000u} }
+  #define FlexSPI_AMBA_BASE_ARRAY_NS               { {0x08000000u}, {0x28000000u} }
+  /** FlexSPI AMBA end address array */
+  #define FlexSPI_AMBA_END_ARRAY                   { {0x1FFFFFFFu}, {0x3FFFFFFFu} }
+  #define FlexSPI_AMBA_END_ARRAY_NS                { {0x0FFFFFFFu}, {0x2FFFFFFFu} }
+  /* FlexSPI0 AMBA address. */
+  #define FlexSPI0_AMBA_BASE                       (0x18000000u)
+  #define FlexSPI0_AMBA_BASE_NS                    (0x08000000u)
+  /* FlexSPI1 AMBA address. */
+  #define FlexSPI1_AMBA_BASE                       (0x38000000u)
+  #define FlexSPI1_AMBA_BASE_NS                    (0x28000000u)
 #else
-/** FlexSPI AMBA base address array */
-#define FlexSPI_AMBA_BASE_ARRAY                   { {0x08000000u}, {0x28000000u} }
-/** FlexSPI AMBA end address array */
-#define FlexSPI_AMBA_END_ARRAY                    { {0x0FFFFFFFu}, {0x2FFFFFFFu} }
-/* FlexSPI0 AMBA address. */
-#define FlexSPI0_AMBA_BASE                       (0x08000000u)
-/* FlexSPI1 AMBA address. */
-#define FlexSPI1_AMBA_BASE                       (0x28000000u)
+  /** FlexSPI AMBA base address array */
+  #define FlexSPI_AMBA_BASE_ARRAY                  { {0x08000000u}, {0x28000000u} }
+  /** FlexSPI AMBA end address array */
+  #define FlexSPI_AMBA_END_ARRAY                   { {0x0FFFFFFFu}, {0x2FFFFFFFu} }
+  /* FlexSPI0 AMBA address. */
+  #define FlexSPI0_AMBA_BASE                       (0x08000000u)
+  /* FlexSPI1 AMBA address. */
+  #define FlexSPI1_AMBA_BASE                       (0x28000000u)
 #endif
 
 
@@ -1690,7 +1690,7 @@ typedef enum IRQn {
   #define LCDIF_BASE_PTRS                          { LCDIF }
 #endif
 /** Interrupt vectors for the LCDIF peripheral type */
-#define LCDIF_IRQ0_IRQS                          { LCDIF_IRQn }
+#define LCDIF_IRQS                               { LCDIF_IRQn }
 
 /* MIPI_DSI_HOST - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1933,6 +1933,8 @@ typedef enum IRQn {
   /** Array initializer of PMC peripheral base pointers */
   #define PMC_BASE_PTRS                            { PMC }
 #endif
+/** Interrupt vectors for the PMC peripheral type */
+#define PMC_IRQS                                 { PMU_PMIC_IRQn }
 
 /* POWERQUAD - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -1993,6 +1995,8 @@ typedef enum IRQn {
   /** Array initializer of PUF peripheral base pointers */
   #define PUF_BASE_PTRS                            { PUF }
 #endif
+/** Interrupt vectors for the PUF peripheral type */
+#define PUF_IRQS                                 { PUF_IRQn }
 
 /* RSTCTL0 - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))
@@ -2442,6 +2446,9 @@ typedef enum IRQn {
 #endif
 /** Interrupt vectors for the TRNG peripheral type */
 #define TRNG_IRQS                                { RNG_IRQn }
+/* Backward compatibility */
+#define TRNG0                                    TRNG
+
 
 /* USART - Peripheral instance base addresses */
 #if (defined(__ARM_FEATURE_CMSE) && (__ARM_FEATURE_CMSE & 0x2))

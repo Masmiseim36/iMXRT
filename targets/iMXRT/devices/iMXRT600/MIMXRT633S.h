@@ -10,14 +10,14 @@
 **                          MCUXpresso Compiler
 **
 **     Reference manual:    MIMXRT685 User manual Rev. 1.8 21 November 2024
-**     Version:             rev. 3.0, 2024-10-29
-**     Build:               b250520
+**     Version:             rev. 4.0, 2025-11-13
+**     Build:               b260509
 **
 **     Abstract:
 **         CMSIS Peripheral Access Layer for MIMXRT633S
 **
 **     Copyright 1997-2016 Freescale Semiconductor, Inc.
-**     Copyright 2016-2025 NXP
+**     Copyright 2016-2026 NXP
 **     SPDX-License-Identifier: BSD-3-Clause
 **
 **     http:                 www.nxp.com
@@ -31,14 +31,16 @@
 **     - rev. 3.0 (2024-10-29)
 **         Change the device header file from single flat file to multiple files based on peripherals,
 **         each peripheral with dedicated header file located in periphN folder.
+**     - rev. 4.0 (2025-11-13)
+**         Add puf irq and move some trng compatibility macros to common header.
 **
 ** ###################################################################
 */
 
 /*!
  * @file MIMXRT633S.h
- * @version 3.0
- * @date 2024-10-29
+ * @version 4.0
+ * @date 2025-11-13
  * @brief CMSIS Peripheral Access Layer for MIMXRT633S
  *
  * CMSIS Peripheral Access Layer for MIMXRT633S
@@ -48,54 +50,54 @@
 #define MIMXRT633S_H_
 
 /* IP Header Files List */
-#include "PERI_ADC.h"
-#include "PERI_AHB_SECURE_CTRL.h"
-#include "PERI_CACHE64_CTRL.h"
-#include "PERI_CACHE64_POLSEL.h"
-#include "PERI_CASPER.h"
-#include "PERI_CLKCTL0.h"
-#include "PERI_CLKCTL1.h"
-#include "PERI_CMP.h"
-#include "PERI_CRC.h"
-#include "PERI_CTIMER.h"
-#include "PERI_DMA.h"
-#include "PERI_DMIC.h"
-#include "PERI_ESPI.h"
-#include "PERI_FLEXCOMM.h"
-#include "PERI_FLEXSPI.h"
-#include "PERI_FREQME.h"
-#include "PERI_GPIO.h"
-#include "PERI_HASHCRYPT.h"
-#include "PERI_I2C.h"
-#include "PERI_I2S.h"
-#include "PERI_I3C.h"
-#include "PERI_INPUTMUX.h"
-#include "PERI_IOPCTL.h"
-#include "PERI_MRT.h"
-#include "PERI_MU.h"
-#include "PERI_OCOTP.h"
-#include "PERI_OSTIMER.h"
-#include "PERI_OTFAD.h"
-#include "PERI_PINT.h"
-#include "PERI_PMC.h"
-#include "PERI_POWERQUAD.h"
-#include "PERI_PUF.h"
-#include "PERI_RSTCTL0.h"
-#include "PERI_RSTCTL1.h"
-#include "PERI_RTC.h"
-#include "PERI_SCT.h"
-#include "PERI_SEMA42.h"
-#include "PERI_SPI.h"
-#include "PERI_SYSCTL0.h"
-#include "PERI_SYSCTL1.h"
-#include "PERI_TRNG.h"
-#include "PERI_USART.h"
-#include "PERI_USBHSD.h"
-#include "PERI_USBHSDCD.h"
-#include "PERI_USBHSH.h"
-#include "PERI_USBPHY.h"
-#include "PERI_USDHC.h"
-#include "PERI_UTICK.h"
-#include "PERI_WWDT.h"
+#include "./periph/PERI_ADC.h"
+#include "./periph/PERI_AHB_SECURE_CTRL.h"
+#include "./periph/PERI_CACHE64_CTRL.h"
+#include "./periph/PERI_CACHE64_POLSEL.h"
+#include "./periph/PERI_CASPER.h"
+#include "./periph/PERI_CLKCTL0.h"
+#include "./periph/PERI_CLKCTL1.h"
+#include "./periph/PERI_CMP.h"
+#include "./periph/PERI_CRC.h"
+#include "./periph/PERI_CTIMER.h"
+#include "./periph/PERI_DMA.h"
+#include "./periph/PERI_DMIC.h"
+#include "./periph/PERI_ESPI.h"
+#include "./periph/PERI_FLEXCOMM.h"
+#include "./periph/PERI_FLEXSPI.h"
+#include "./periph/PERI_FREQME.h"
+#include "./periph/PERI_GPIO.h"
+#include "./periph/PERI_HASHCRYPT.h"
+#include "./periph/PERI_I2C.h"
+#include "./periph/PERI_I2S.h"
+#include "./periph/PERI_I3C.h"
+#include "./periph/PERI_INPUTMUX.h"
+#include "./periph/PERI_IOPCTL.h"
+#include "./periph/PERI_MRT.h"
+#include "./periph/PERI_MU.h"
+#include "./periph/PERI_OCOTP.h"
+#include "./periph/PERI_OSTIMER.h"
+#include "./periph/PERI_OTFAD.h"
+#include "./periph/PERI_PINT.h"
+#include "./periph/PERI_PMC.h"
+#include "./periph/PERI_POWERQUAD.h"
+#include "./periph/PERI_PUF.h"
+#include "./periph/PERI_RSTCTL0.h"
+#include "./periph/PERI_RSTCTL1.h"
+#include "./periph/PERI_RTC.h"
+#include "./periph/PERI_SCT.h"
+#include "./periph/PERI_SEMA42.h"
+#include "./periph/PERI_SPI.h"
+#include "./periph/PERI_SYSCTL0.h"
+#include "./periph/PERI_SYSCTL1.h"
+#include "./periph/PERI_TRNG.h"
+#include "./periph/PERI_USART.h"
+#include "./periph/PERI_USBHSD.h"
+#include "./periph/PERI_USBHSDCD.h"
+#include "./periph/PERI_USBHSH.h"
+#include "./periph/PERI_USBPHY.h"
+#include "./periph/PERI_USDHC.h"
+#include "./periph/PERI_UTICK.h"
+#include "./periph/PERI_WWDT.h"
 
 #endif  /* #if !defined(MIMXRT633S_H_) */
