@@ -23,4 +23,10 @@
 	<MemorySegment name="SDRAM"             start="$(SDRAMSTART:0x90000000)"            size="$(SDRAMSIZE:0x02000000)"/>     <!-- Secure -->
 	<MemorySegment name="SDRAMAlias_NS"     start="$(SDRAMAliasSTART_NS:0x0C000000)"    size="$(SDRAMSIZE:0x02000000)"/>     <!-- Not Secure -->
 	<MemorySegment name="SDRAMAlias"        start="$(SDRAMAliasSTART:0x1C000000)"       size="$(SDRAMSIZE:0x02000000)"/>     <!-- Secure -->
+
+
+	<MemorySegment name="M7_DTCM_NS"        start="$(M7_DTCMSTART_NS:0x20400000)"       size="$(M7_DTCMSIZE_NSA:0x00040000)"/><!-- Not Secure -->
+	<MemorySegment name="M7_DTCM"           start="$(M7_DTCMSTART:0x30400000)"          size="$(M7_DTCMSIZE:0x00040000)"/>    <!-- Secure -->
+	<MemorySegment name="M7_ITCM_NS"        start="$(M7_ITCMSTART_NS:0x203C0000)"       size="$(M7_ITCMSIZE_NS:0x00040000)"/> <!-- Not Secure -->
+	<MemorySegment name="M7_ITCM"           start="$(M7_ITCMSTART:0x303C0000)"          size="$(M7_ITCMSIZE:0x00040000)"/>    <!-- Secure -->
 </Root>

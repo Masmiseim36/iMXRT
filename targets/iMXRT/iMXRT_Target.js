@@ -198,38 +198,28 @@ function Connect ()
 	var DeviceName = GetProjectPartName ();
 	TargetInterface.message ("## Connect to " + DeviceName);
 
-	switch (DeviceName)
+	if (DeviceName.indexOf ("MIMXRT6") == 0)
 	{
-		case "MIMXRT633":
-		case "MIMXRT685_cm33":
-			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0, 0x40000000, 0x00000000); // LPC Solution
-			break;
-		case "MIMXRT1181":
-		case "MIMXRT1182":
-		case "MIMXRT118C_cm33":
-		case "MIMXRT1185_cm33":
-		case "MIMXRT1186_cm33":
-		case "MIMXRT1187_cm33":
-		case "MIMXRT1189_cm33":
-			TargetInterface.setDebugInterfaceProperty ("max_ap_num", 5); // MIMXRT118 doesn't like attempt to access AP5
-			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // LPC Solution
-			break;
-		case "MIMXRT118C_cm7":
-		case "MIMXRT1185_cm7":
-		case "MIMXRT1186_cm7":
-		case "MIMXRT1187_cm7":
-		case "MIMXRT1189_cm7":
-			TargetInterface.setDebugInterfaceProperty ("max_ap_num", 5); // MIMXRT118 doesn't like attempt to access AP5
-			if (TargetInterface.implementation() == "j-link")
-				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2);
-			else
-				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // LPC Solution
-			break;
-		default:
-			// The other member of the family work with the default.
+		TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0, 0x40000000, 0x00000000); // M33 Clear bit 30 of csw for secure access
 	}
-
-
+	else if (DeviceName.indexOf ("MIMXRT118") == 0)
+	{
+		// MIMXRT118x doesn't like attempt to access AP5
+		TargetInterface.setDebugInterfaceProperty ("valid_ap_num", (1<<0)|(1<<1)|(1<<2)|(1<<3)|(1<<4)|(1<<6));
+		TargetInterface.setDebugInterfaceProperty ("component_base", 0xe000e000); // SCS
+		TargetInterface.setDebugInterfaceProperty ("component_base", 0xe0001000); // DWT
+		TargetInterface.setDebugInterfaceProperty ("component_base", 0xe0002000); // FPB
+		TargetInterface.setDebugInterfaceProperty ("component_base", 0xe0000000); // ITM
+		TargetInterface.setDebugInterfaceProperty ("component_base", 0xe0041000); // ETM
+		//TargetInterface.setDebugInterfaceProperty ("component_base", 0xe0042000); // CTI
+		TargetInterface.setDebugInterfaceProperty ("component_base", 0xe0043000); // CSTF
+		TargetInterface.setDebugInterfaceProperty ("use_adiv5_APB",  0x51020000, 0x50000); // APB access
+		TargetInterface.setDebugInterfaceProperty ("component_base", 0x51020000); // CS_SWO
+		TargetInterface.setDebugInterfaceProperty ("component_base", 0x51030000); // CS_ETF
+		//TargetInterface.setDebugInterfaceProperty ("component_base", 0x51040000); // CS_ETR
+		//TargetInterface.setDebugInterfaceProperty ("component_base", 0x51050000); // CS_CT0
+		//TargetInterface.setDebugInterfaceProperty ("component_base", 0x51060000); // CS_CT1
+	}
 	TargetInterface.message ("## Connect to " + DeviceName + " - done");
 }
 
@@ -259,35 +249,22 @@ function GetPartName ()
 			Release_11xx_M4 ();	// Enable M4 core
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
 		}
-
-		switch (DeviceName)
+		else if (DeviceName.indexOf ("MIMXRT118") == 0)
 		{
-			case "MIMXRT1181":
-			case "MIMXRT1182":
-			case "MIMXRT118C_cm33":
-			case "MIMXRT1185_cm33":
-			case "MIMXRT1186_cm33":
-			case "MIMXRT1187_cm33":
-			case "MIMXRT1189_cm33":
-				// Invalidate and disable XCACHEs
-//				TargetInterface.pokeUint32 (0x44400000, 0x85000000);
-//				TargetInterface.pokeUint32 (0x44400800, 0x85000000);
-
-				TargetInterface.resetDebugInterface ();
-				break;
-			case "MIMXRT118C_cm7":
-			case "MIMXRT1185_cm7":
-			case "MIMXRT118&_cm7":
-			case "MIMXRT1187_cm7":
-			case "MIMXRT1189_cm7":
-				TargetInterface.resetDebugInterface ();
-				Release_118x_M7 (); // Enable M7 core
+			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // M33 Clear bit 30 of csw for secure access
+			TargetInterface.resetDebugInterface ();
+			if (DeviceName.indexOf ("_cm7") != -1)
+			{
+				if (TargetInterface.peekWord(0x54460010) == 0) // SRC->SCR.BT_RELEASE_M7
+				{
+					Release_118x_M7 (); // Enable M7 core
+				}
 				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2);
-			break;
+			}
 		}
 	}
 
-	if (TargetInterface.getProjectProperty ("Target").indexOf ("MIMXRT11") != -1)
+	if (DeviceName.indexOf ("MIMXRT11") != -1)
 	{
 		// Read the chip silicon version
 //		var ANADIG_MISC_DIFPROG = 0x40C84000 + 0x800;
@@ -378,62 +355,67 @@ function Release_11xx_M7 ()
 
 function Release_118x_M7 ()
 {
+	var ItcmBase  = 0x00000000 // M7 ITCM
+	var ItcmAlias = 0x303c0000 // M7 ITCM Aliased to M33
+
 	TargetInterface.message ("************* Begin Operations to Enable CM7 ***********************");
 
 	// Clock Preparation
 	TargetInterface.message ("******** Prepare Clock *********");
 	TargetInterface.pokeUint32 (0x54484310, 0x007901F2);	// ANADIG_OSC->OSC_RC24M_CTRL
 	TargetInterface.pokeUint32 (0x54484320, 0x40000014);	// ANADIG_OSC->OSC_24M_CTRL
-	TargetInterface.pokeUint32 (0x54450080, 0x0);			// CCM->CLOCK_ROOT1_CONTROL
+	TargetInterface.pokeUint32 (0x54450080, 0x0);			// CCM->CLOCK_ROOT[1].CONTROL
 	TargetInterface.delay (50);
-	TargetInterface.pokeUint32 (0x54484680, 0x105);
+	TargetInterface.pokeUint32 (0x54484680, 0x105);			// PHY_LDO->CTRL0.RW - LinReg 1V
 	TargetInterface.delay (50);
-	TargetInterface.pokeUint32 (0x54484710, 0x70);
-	TargetInterface.pokeUint32 (0x54484000, 0x400020a6);
+	TargetInterface.pokeUint32 (0x54484710, 0x70);			// ANADIG_PMU->PMU_REF_CTRL
+	TargetInterface.pokeUint32 (0x54484000, 0x400020a6);	// ANADIG_PLL->ARM_PLL_CTRL - ARM_PLL_GATE, POWER_UP
 	TargetInterface.delay (50);
 	// check 54484000
-	TargetInterface.pokeUint32 (0x54484000, 0x000060a6);
+	TargetInterface.pokeUint32 (0x54484000, 0x000060a6);	// ANADIG_PLL->ARM_PLL_CTRL - ARM_PLL_GATE, POWER_UP, ENABLE
 
 	// DCDC_SetVDD1P0BuckModeTargetVoltage(DCDC, kDCDC_1P0Target1P1V);
-	TargetInterface.pokeUint32 (0x5452000C, 0x980000);
-	TargetInterface.pokeUint32 (0x54520024, 0x100C14);
+	TargetInterface.pokeUint32 (0x5452000C, 0x980000);		// DCDC->REG3
+	TargetInterface.pokeUint32 (0x54520024, 0x100C14);		// DCDC->TRG_SW_0
 
 	// M7 Clk
-	TargetInterface.pokeUint32 (0x54450000, 0x201);      // CCM->CLOCK_ROOT0_CONTROL
+	TargetInterface.pokeUint32 (0x54450000, 0x201);			// CCM->CLOCK_ROOT0_CONTROL
 
+	TargetInterface.pokeUint32 (0x54458000, 0x1);			// CCM->LPCG[0].DIRECT - ON
+	TargetInterface.delay (50);
+  
 	// VTOR
-	TargetInterface.pokeUint32 (0x544F0080, 0x10);
+	TargetInterface.pokeUint32 (0x544F0080, ((ItcmBase >> 7) << 7) | 0x10); // BLK_CTRL_S_AON->M7_CFG = VTOR | WAIT
 
 	// Release CM7
-	TargetInterface.pokeUint32 (0x54460010, 0x1);
+	TargetInterface.pokeUint32 (0x54460010, 0x1);			// SRC_GENERAL_REG->SCR - Release CM7
 
 	// DMA initialization
 	TargetInterface.message ("******** DMA operation *********");
-	InitCM7DMA (0x303C0000);
+	InitCM7DMA (0x303C0000);	// M7 ITCM
 	InitCM7DMA (0x303E0000);
-	InitCM7DMA (0x30400000);
+	InitCM7DMA (0x30400000);	// M7 DTCM
 	InitCM7DMA (0x30420000);
 
 	// Making Landing Zone
-	TargetInterface.message ("******** Creating Landing Zone *********");
-	TargetInterface.pokeUint32 (0x303C0000, 0x20020000);
-	TargetInterface.pokeUint32 (0x303C0004, 0x00000009);
-	TargetInterface.pokeUint32 (0x303C0008, 0xE7FEE7FE);
-	TargetInterface.peekUint32 (0x303C0000);
-	TargetInterface.peekUint32 (0x303C0004);
-	TargetInterface.peekUint32 (0x303C0008);
+	TargetInterface.pokeUint32 (ItcmAlias + 0x0, ItcmBase + 0x2000);
+	TargetInterface.pokeUint32 (ItcmAlias + 0x4, ItcmBase + 0x9);
+	TargetInterface.pokeUint32 (ItcmAlias + 0x8, 0xE7FEE7FE);
+	TargetInterface.pokeUint32 (ItcmAlias + 0xC, 0xE7FEE7FE);
+
+	TargetInterface.delay (200);
 
 	// Trigger S401 - EdgeLock APC Request
 	TargetInterface.message ("******** S401 Trigger *********");
 	TargetInterface.pokeUint32 (0x57540200, 0x17d20106); // MU_RT_S3MUA->TR[0]
+	TargetInterface.delay (200);
 	var resp1 = TargetInterface.peekUint32 (0x57540280); // MU_RT_S3MUA->RR[0]
 	var resp2 = TargetInterface.peekUint32 (0x57540284); // MU_RT_S3MUA->RR[1]
-	TargetInterface.message ("RESP1 : " + resp1);  
-	TargetInterface.message ("RESP2 : " + resp2);  
 
 	// Deassert CM7 Wait
 	TargetInterface.message ("******** Kickoff CM7 *********");
-	TargetInterface.pokeUint32 (0x544F0080, 0x0);
+	TargetInterface.pokeUint32 (0x544F0080, (ItcmBase >> 7) << 7); // BLK_CTRL_S_AON->M7_CFG = VTOR
+	TargetInterface.delay (200);
 }
 
 function InitCM7DMA (targetAddr)
@@ -599,8 +581,12 @@ function Reset ()
 		case "MIMXRT1187_cm33":
 		case "MIMXRT1189_cm33":
 			TargetInterface.resetAndStop (1000);
-			FillMemory (0x1FFE0000, 0x20000, 0); // ITCM
-			FillMemory (0x20000000, 0x20000, 0); // DTCM
+			Release_118x_M7 ();
+			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2, 0x0, 0x0);
+			TargetInterface.stop (1000);
+			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // M33 Clear bit 30 of csw for secure access
+			FillMemory (0x1FFE0000, 0x20000, 0);          // ITCM
+			FillMemory (0x20000000, 0x20000, 0);          // DTCM
 			FillMemory (0xE000E180, 0x40,    0xFFFFFFFF); // NVIC_ICER
 			FillMemory (0xE000E280, 0x40,    0xFFFFFFFF); // NVIC_ICPR
 			break;
@@ -609,7 +595,7 @@ function Reset ()
 		case "MIMXRT1186_cm7":
 		case "MIMXRT1187_cm7":
 		case "MIMXRT1189_cm7":
-			TargetInterface.stop ();
+			TargetInterface.stop (1000);
 			// Disable pending interrupts
 			FillMemory (0xE000E180, 0x40,    0xFFFFFFFF); // NVIC_ICER
 			FillMemory (0xE000E280, 0x40,    0xFFFFFFFF); // NVIC_ICPR

@@ -40,10 +40,6 @@
  *
  *   If defined then the exception vectors are copied from Flash to RAM
  *
- * DISABLE_ECC_ON_STARTUP
- *
- *   If defined then the ECC functionality is disabled on start-up
- *
  * __NO_FPU
  *
  *   If defined do NOT turn on the FPU
@@ -367,10 +363,15 @@ _vectors_ram:
 #endif
 
   .section .init, "ax"
-  .thumb_func
 
-reset_handler:
+  .thumb_func
 Reset_Handler:
+#ifndef STARTUP_FROM_RESET
+  b .
+#endif
+
+  .thumb_func
+reset_handler:
   ldr r0, =__stack_start__
   msr msplim, r0
 #ifndef __NO_SYSTEM_INIT

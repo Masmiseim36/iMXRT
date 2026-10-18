@@ -601,8 +601,6 @@
         </folder>
         <file file_name="targets/iMXRT/Loader/libmem_imxrt_flm_driver.c" />
         <file file_name="targets/iMXRT/Loader/loader.c" />
-        <file file_name="targets/iMXRT/Loader/Loader.hzp" />
-        <file file_name="targets/iMXRT/Loader/Loader.hzs" />
         <file file_name="targets/iMXRT/Loader/loader_startup.s" />
         <file file_name="targets/iMXRT/Loader/MIMXRT1011_QuadSPI_4KB_SEC_Loader.elf" />
         <file file_name="targets/iMXRT/Loader/MIMXRT1015_QuadSPI_4KB_SEC_Loader.elf" />

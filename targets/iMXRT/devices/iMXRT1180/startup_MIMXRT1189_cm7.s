@@ -40,10 +40,6 @@
  *
  *   If defined then the exception vectors are copied from Flash to RAM
  *
- * DISABLE_ECC_ON_STARTUP
- *
- *   If defined then the ECC functionality is disabled on start-up
- *
  * __NO_FPU
  *
  *   If defined do NOT turn on the FPU

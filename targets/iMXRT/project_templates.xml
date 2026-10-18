@@ -52,7 +52,7 @@
 		</folder>
 	</project>
 
-	<project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT External GCC Built Executable" description="An external GCC built executable for NXP iMXRT processor." type="Executable" template_name="iMXRT_GCC_EXE">
+	<project cpu_manufacturer="NXP" cpu_name="iMXRT" name="iMXRT external GCC Built Executable" description="An external GCC built executable for NXP iMXRT processor." type="Executable" template_name="iMXRT_GCC_EXE">
 		<property name="property_groups_file_path" value="$(TargetsDir)/iMXRT/propertyGroups.xml" />
 		<propertygroup name="Target" value="MIMXRT1052DVL6B" choose="Yes" />
 		<propertygroup name="Placement" value="TCM" choose="Yes" />
