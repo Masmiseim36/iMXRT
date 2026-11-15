@@ -10,6 +10,9 @@
  *                                                                           *
  *****************************************************************************/
 
+load ("targets/iMXRT/iMXRT_Helper.js");
+load ("targets/iMXRT/iMXRT600_Target.js");
+
 
 // Register description of the iMXRT1170
 var SRC              = 0x40C04000;
@@ -191,8 +194,14 @@ function PokeInstruction (address, instruction, size)
 }
 
 
-// Don't do any register access in this function.
-// Use GetPartName() for this.
+// Don't do any register access to the target (core, memory, peripherals) in
+// this function. Use GetPartName() for this.
+//
+// This function is called before the engine identifies the core. Only the
+// debug interface itself may be configured and accessed here: debug interface
+// properties (AP selection, valid APs, component bases) and debug-port-side
+// access like a debug mailbox, which is needed to enable the debug access of
+// the core at all if it is blocked (e.g. by a boot ROM).
 function Connect ()
 {
 	var DeviceName = GetProjectPartName ();
@@ -200,7 +209,7 @@ function Connect ()
 
 	if (DeviceName.indexOf ("MIMXRT6") == 0)
 	{
-		TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 0, 0x40000000, 0x00000000); // M33 Clear bit 30 of csw for secure access
+		Connect_RT600 ();
 	}
 	else if (DeviceName.indexOf ("MIMXRT118") == 0)
 	{
@@ -496,90 +505,26 @@ function Reset ()
 
 	var DeviceName = GetProjectPartName ();
 	TargetInterface.message ("## Reset " + DeviceName);
-	switch (DeviceName)
+	if (DeviceName.indexOf ("MIMXRT6") == 0)
 	{
-		case "MIMXRT633":
-		case "MIMXRT685_cm33":
-/*			TargetInterface.message ("Reset external flash");
-			TargetInterface.pokeUint32 (0x40004130, 0x130);
-			TargetInterface.pokeUint32 (0x40021044, 0x4);
-			TargetInterface.pokeUint32 (0x40020074, 0x4);
-			TargetInterface.pokeUint32 (0x40102008, 0x1000);
-			TargetInterface.pokeUint32 (0x40102288, 0x1000);
-			TargetInterface.delay (10);
-			TargetInterface.pokeUint32 (0x40102208, 0x1000);
-
-			TargetInterface.message ("Set watch point");
-			TargetInterface.pokeUint32 (0xE0001020, 0x50002034);
-			TargetInterface.pokeUint32 (0xE0001028, 0x00000814);
-
-			TargetInterface.message ("Execute SYSRESETREQ via AIRCR");
-			TargetInterface.pokeUint32 (0xE000ED0C, 0x05FA0004);
-
-			TargetInterface.delay (100);
-
-			if (TargetInterface.isStopped ())
-			{
-				TargetInterface.message ("Clear watch point");
-				TargetInterface.pokeUint32 (0xE0001020, 0x00000000);
-				TargetInterface.pokeUint32 (0xE0001028, 0x00000000);
-			}
-			else */
-				TargetInterface.resetAndStop (1000);
-			break;
-		case "MIMXRT1011":
-		case "MIMXRT1015":
-		case "MIMXRT1021":
-		case "MIMXRT1024":
-		case "MIMXRT1041":
-		case "MIMXRT1042":
-		case "MIMXRT1043":
-		case "MIMXRT1046":
-		case "MIMXRT1051":
-		case "MIMXRT1052":
-		case "MIMXRT1061":
-		case "MIMXRT1062":
-		case "MIMXRT1064":
-			TargetInterface.resetAndStop (1000);
-			DcDc_Init_10xx ();
-			break;
-		case "MIMXRT1151":
-		case "MIMXRT1152":
-		case "MIMXRT1171":
-		case "MIMXRT1172":
-			TargetInterface.resetAndStop (1000);
-			Reset_11xx_M7 ();
-			if (!TargetInterface.isStopped ())
-				TargetInterface.stop ();
-			break;
-		case "MIMXRT1165_cm7":
-		case "MIMXRT1166_cm7":
-		case "MIMXRT1173_cm7":
-		case "MIMXRT1175_cm7":
-		case "MIMXRT1176_cm7":
-			TargetInterface.resetAndStop (1000);
-			Reset_11xx_M7 ();
-			Release_11xx_M4 ();	// Enable the M4 Core
-			if (!TargetInterface.isStopped ())
-				TargetInterface.stop ();
-			break;
-		case "MIMXRT1165_cm4":
-		case "MIMXRT1166_cm4":
-		case "MIMXRT1173_cm4":
-		case "MIMXRT1175_cm4":
-		case "MIMXRT1176_cm4":
-			Reset_11xx_M4 ();
-			TargetInterface.stop ();
-			if (!TargetInterface.isStopped ())
-				TargetInterface.stop ();
-			break;
-		case "MIMXRT1181":
-		case "MIMXRT1182":
-		case "MIMXRT118C_cm33":
-		case "MIMXRT1185_cm33":
-		case "MIMXRT1186_cm33":
-		case "MIMXRT1187_cm33":
-		case "MIMXRT1189_cm33":
+		Reset_RT600 ();
+	}
+	else if (DeviceName.indexOf ("MIMXRT10") == 0)
+	{
+		TargetInterface.resetAndStop (1000);
+		DcDc_Init_10xx ();
+	}
+	else if (DeviceName.indexOf ("MIMXRT118") == 0)
+	{
+		if (DeviceName.indexOf ("_cm7") != -1)
+		{
+			TargetInterface.stop (1000);
+			// Disable pending interrupts
+			FillMemory (0xE000E180, 0x40,    0xFFFFFFFF); // NVIC_ICER
+			FillMemory (0xE000E280, 0x40,    0xFFFFFFFF); // NVIC_ICPR
+		}
+		else
+		{
 			TargetInterface.resetAndStop (1000);
 			Release_118x_M7 ();
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2, 0x0, 0x0);
@@ -589,20 +534,40 @@ function Reset ()
 			FillMemory (0x20000000, 0x20000, 0);          // DTCM
 			FillMemory (0xE000E180, 0x40,    0xFFFFFFFF); // NVIC_ICER
 			FillMemory (0xE000E280, 0x40,    0xFFFFFFFF); // NVIC_ICPR
-			break;
-		case "MIMXRT118C_cm7":
-		case "MIMXRT1185_cm7":
-		case "MIMXRT1186_cm7":
-		case "MIMXRT1187_cm7":
-		case "MIMXRT1189_cm7":
-			TargetInterface.stop (1000);
-			// Disable pending interrupts
-			FillMemory (0xE000E180, 0x40,    0xFFFFFFFF); // NVIC_ICER
-			FillMemory (0xE000E280, 0x40,    0xFFFFFFFF); // NVIC_ICPR
-			break;
-		default:
-			TargetInterface.message ("## Reset - unknown Device: " + DeviceName);
-			break;
+		}
+	}
+	else if (DeviceName.indexOf ("MIMXRT11") == 0)
+	{
+		if (DeviceName.indexOf ("_cm4") != -1)
+		{
+			Reset_11xx_M4 ();
+			TargetInterface.stop ();
+			if (!TargetInterface.isStopped ())
+				TargetInterface.stop ();
+		}
+		else
+		{
+			if (DeviceName.indexOf ("_cm7") != -1)
+			{
+				// Only devices with a second core have the core extension in the name
+				TargetInterface.resetAndStop (1000);
+				Reset_11xx_M7 ();
+				Release_11xx_M4 ();	// Enable the M4 Core
+				if (!TargetInterface.isStopped ())
+					TargetInterface.stop ();
+			}
+			else
+			{
+				TargetInterface.resetAndStop (1000);
+				Reset_11xx_M7 ();
+				if (!TargetInterface.isStopped ())
+					TargetInterface.stop ();
+			}
+		}
+	}
+	else
+	{
+		TargetInterface.message ("## Reset - unknown Device: " + DeviceName);
 	}
 
 	FlexRAM_Restore ();
@@ -751,11 +716,11 @@ function EnableTrace (traceInterfaceType)
 			var CCM_CSCDR1 = CCM + 0x24;
 			var CCM_CCGR0  = CCM + 0x68;
 			// Use PLL2 as clock Source for the trace clock
-			AlterRegister (CCM_CBCMR, 0xC000, 0);
+			ModifyRegister (CCM_CBCMR, 0xC000, 0);
 			// Set the divider to four (which is the default) to get the maximum frequency of 132 MHz
-			AlterRegister (CCM_CSCDR1, 0x1E000000, 0x6000000);
+			ModifyRegister (CCM_CSCDR1, 0x1E000000, 0x6000000);
 			// Clock Gate the trace-clock
-			AlterRegister (CCM_CCGR0, 0, 0xC00000);
+			ModifyRegister (CCM_CCGR0, 0, 0xC00000);
 		}
 		else if (TargetInterface.getProjectProperty ("Target").indexOf ("MIMXRT11") != -1)
 		{
@@ -789,39 +754,6 @@ function EnableTrace (traceInterfaceType)
 	}
 	else
 		TargetInterface.message ("## Unknown Trace type '" + traceInterfaceType + "'");
-}
-
-function GetProjectPartName ()
-{
-	var TargetFullName = TargetInterface.getProjectProperty ("Target");
-	var TargetShort;
-	if (TargetFullName.charAt(9) > '9')
-		TargetShort = TargetFullName.substring (0, 9);	// Three digits number in the target name
-	else
-		TargetShort = TargetFullName.substring (0, 10);	// Four digits number in the target name
-
-	switch (TargetFullName.slice(-4))
-	{
-		case "_cm7":
-			TargetShort += '_cm7';
-			break;
-		case "_cm4":
-			TargetShort += '_cm4';
-			break;
-		case "cm33":
-			TargetShort += '_cm33';
-			break;
-		case "ore0":
-			TargetShort += '_core0';
-			break;
-		case "ore1":
-			TargetShort += '_core1';
-			break;
-		default:
-			// Do nothing
-	}
-
-	return TargetShort;
 }
 
 function FlexRAM_Restore ()
@@ -894,7 +826,7 @@ function FlexRAM_Restore ()
 			// * 01 = DOUBLE_CODE_TCM. 256kB Code TCM and 0 Sys TCM
 			// * 10 = DOUBLE_SYS_TCM. 256kB Sys TCM and 0 Code TCM
 			// * 11 = Reserved
-//			AlterRegister (BLK_CTRL_S_AONMIX_M33_CFG, 0x3 << 3, 0);
+//			ModifyRegister (BLK_CTRL_S_AONMIX_M33_CFG, 0x3 << 3, 0);
 			break;
 		case "MIMXRT118C_cm7":
 		case "MIMXRT1185_cm7":
@@ -912,7 +844,7 @@ function FlexRAM_Restore ()
 			// * 011b - Reserved
 			// * 110b - Reserved
 			// * 111b - Reserved
-//			AlterRegister (BLK_CTRL_S_AONMIX_M7_CFG, 0x7, 0);
+//			ModifyRegister (BLK_CTRL_S_AONMIX_M7_CFG, 0x7, 0);
 			break;
 		default:
 			TargetInterface.message ("FlexRAM_Restore - unknown Device: " + DeviceName);
@@ -1080,8 +1012,8 @@ function Clock_Init_117x ()
 		return;
 	}
 
-	AlterRegister (0x40C84270, 0, 0x80808080);				// ANADIG_PLL->PLL_528_PFD
-	AlterRegister (0x40C84240, 0x802000, 0x40000000);		// ANADIG_PLL->PPLL_528_CTRL
+	ModifyRegister (0x40C84270, 0, 0x80808080);				// ANADIG_PLL->PLL_528_PFD
+	ModifyRegister (0x40C84240, 0x802000, 0x40000000);		// ANADIG_PLL->PPLL_528_CTRL
 	TargetInterface.pokeUint32 (0x40C84280, 0);				// ANADIG_PLL->PLL_528_MFN
 	TargetInterface.pokeUint32 (0x40C84290, 22);			// ANADIG_PLL->PLL_528_MFI
 	TargetInterface.pokeUint32 (0x40C842A0, 0x0FFFFFFF);	// ANADIG_PLL->PLL_528_MFD
@@ -1089,10 +1021,10 @@ function Clock_Init_117x ()
 	TargetInterface.pokeUint32 (0x40C84240, 0x8 | 0x40000000); // ANADIG_PLL->PLL_528_CTRL
 	TargetInterface.delay (30);
 
-	AlterRegister (0x40C84240, 0, 0x800000 | 0x800);		// ANADIG_PLL_PLL_528_CTRL
+	ModifyRegister (0x40C84240, 0, 0x800000 | 0x800);		// ANADIG_PLL_PLL_528_CTRL
 	TargetInterface.delay (250);
 
-	AlterRegister (0x40C84240, 0x800, 0);					// ANADIG_PLL->PLL_528_CTRL
+	ModifyRegister (0x40C84240, 0x800, 0);					// ANADIG_PLL->PLL_528_CTRL
 	do
 	{
 		val = TargetInterface.peekUint32 (0x40C84240);		// ANADIG_PLL->PLL_528_CTRL
@@ -1114,13 +1046,13 @@ function Clock_Init_117x ()
 		val |= 0x8000;
 		TargetInterface.pokeUint32 (0x40C84270, val);		// ANADIG_PLL->PLL_528_PFD
 
-		AlterRegister (0x40C84270, 0x3F00, 16 << 8);		// ANADIG_PLL->PLL_528_PFD
+		ModifyRegister (0x40C84270, 0x3F00, 16 << 8);		// ANADIG_PLL->PLL_528_PFD
 
 		val = TargetInterface.peekUint32 (0x40C84250);		// ANADIG_PLL->PLL_528_UPDATE
 		val ^= 0x4;
 		TargetInterface.pokeUint32 (0x40C84250, val);		// ANADIG_PLL->PLL_528_UPDATE
 
-		AlterRegister (0x40C84270, 0x8000, 0);				// ANADIG_PLL->PLL_528_PFD
+		ModifyRegister (0x40C84270, 0x8000, 0);				// ANADIG_PLL->PLL_528_PFD
 		do
 		{
 			val = TargetInterface.peekUint32 (0x40C84270) & 0x4000;	  // ANADIG_PLL->PLL_528_PFD
@@ -1144,20 +1076,20 @@ function Clock_Init_117x ()
 function Clock_Init_118x () 
 {
 	////////// Initialize System PLL1 //////////
-	AlterRegister (0x44484180, 0, 0x10000); // ANATOP_PllBypass ETHERNET_PLL true
-	AlterRegister (0x44484100, 0, 0x2000);  // ANATOP_SysPll1SwEnClk
+	ModifyRegister (0x44484180, 0, 0x10000); // ANATOP_PllBypass ETHERNET_PLL true
+	ModifyRegister (0x44484100, 0, 0x2000);  // ANATOP_SysPll1SwEnClk
 
 	// ANATOP_PllConfigure
 	TargetInterface.pokeUint32 (0x444841a0, 0x0aaaaaaa);
 	TargetInterface.pokeUint32 (0x444841b0, 0x0fffffff);
-	AlterRegister (0x44484180, 0x7F, (0x29 & 0x7F) | 0x400000);
+	ModifyRegister (0x44484180, 0x7F, (0x29 & 0x7F) | 0x400000);
 	TargetInterface.delay (100);
-	AlterRegister (0x44484180, 0, 0x4000 | 0x2000);
+	ModifyRegister (0x44484180, 0, 0x4000 | 0x2000);
 
 	// ANATOP_PllToggleHoldRingOff
-	AlterRegister (0x44484180, 0, 0x2000);
+	ModifyRegister (0x44484180, 0, 0x2000);
 	TargetInterface.delay (225);
-	AlterRegister (0x44484180, 0x2000, 0);
+	ModifyRegister (0x44484180, 0x2000, 0);
 
 	// ANATOP_SysPll1WaitStable
 	var val = 0;
@@ -1166,11 +1098,11 @@ function Clock_Init_118x ()
 		val = TargetInterface.peekUint32 (0x44484100);
 	} while ((val & 0x20000000) != 0x20000000);
 
-	AlterRegister (0x44484180, 0, 0x8000);    // ANATOP_PllEnableClk
-	AlterRegister (0x44484100, 0x4000, 0);    // ANATOP_SysPll1Gate
-	AlterRegister (0x44484100, 0, 0x2000000); // ANATOP_SysPll1Div2En
-	AlterRegister (0x44484100, 0, 0x4000000); // ANATOP_SysPll1Div5En
-	AlterRegister (0x44484180, 0x10000, 0);   // ANATOP_PllBypass ETHERNET_PLL false
+	ModifyRegister (0x44484180, 0, 0x8000);    // ANATOP_PllEnableClk
+	ModifyRegister (0x44484100, 0x4000, 0);    // ANATOP_SysPll1Gate
+	ModifyRegister (0x44484100, 0, 0x2000000); // ANATOP_SysPll1Div2En
+	ModifyRegister (0x44484100, 0, 0x4000000); // ANATOP_SysPll1Div5En
+	ModifyRegister (0x44484180, 0x10000, 0);   // ANATOP_PllBypass ETHERNET_PLL false
 
 	// Set SEMC root clock
 	TargetInterface.pokeUint32 (0x44451580, 0x204); // Use sys pll1 divided by 5: 200Mhz
@@ -1640,15 +1572,6 @@ function SDRAM_Init_11xx (IOMUXC_SW_MUX_CTL_PAD, IOMUXC_SW_PAD_CTL_PAD, SEMC, bi
 }
 
 
-
-function AlterRegister (Addr, Clear, Set)
-{
-	var temp = TargetInterface.peekUint32 (Addr);
-	temp &= ~Clear;
-	temp |= Set;
-	TargetInterface.pokeUint32 (Addr, temp);
-}
-
 // Index of the FlexSPI. Depending on the device, can be one or two.
 function FlexSPI_GetBaseAddress (FlexSPI)
 {
@@ -1780,11 +1703,11 @@ function FlexSPI_Init (FlexSPI)
 	var base = FlexSPI_GetBaseAddress (FlexSPI);
 
 	// Set flexSPI root clock to 166MHZ.
-	AlterRegister (CCM_ANALOG_PFD480, 0xBF, 0x80);	// Disable the clock output first.
-	AlterRegister (CCM_ANALOG_PFD480, 0xBF, 26);	// Set the new value and enable output.
+	ModifyRegister (CCM_ANALOG_PFD480, 0xBF, 0x80);	// Disable the clock output first.
+	ModifyRegister (CCM_ANALOG_PFD480, 0xBF, 26);	// Set the new value and enable output.
 
 	// Choose PLL3 PFD0 clock as flexSPI source clock and set internal clock 83 megahertz
-	AlterRegister (CCM_CSCMR1, 0x60000000 | 0x3800000, (3 << 29) | (3 << 23));
+	ModifyRegister (CCM_CSCMR1, 0x60000000 | 0x3800000, (3 << 29) | (3 << 23));
 
 	var FlexSPI_MCR0        = base + 0x00;
 	var FlexSPI_MCR1        = base + 0x04;
@@ -1794,7 +1717,7 @@ function FlexSPI_Init (FlexSPI)
 	var FlexSPI_IPRXFCR     = base + 0xB8;
 	var FlexSPI_IPTXFCR     = base + 0xBC;
 	var FlexSPI_FLSHCR0     = base + 0x60;
-	AlterRegister (FlexSPI_MCR0, 2, 0);	// Enable flexSPI
+	ModifyRegister (FlexSPI_MCR0, 2, 0);	// Enable flexSPI
 
 	TargetInterface.pokeUint32     (FlexSPI_MCR0,  0xffff3032);
 	TargetInterface.pokeUint32     (FlexSPI_MCR1,  0xffffffff);
@@ -1805,7 +1728,7 @@ function FlexSPI_Init (FlexSPI)
 	TargetInterface.pokeUint32     (FlexSPI_IPTXFCR, 0);
 	TargetInterface.pokeMultUint32 (FlexSPI_FLSHCR0, [0x0, 0x0, 0x0, 0x0]);
 
-	AlterRegister                  (FlexSPI_MCR0,  0, 1);	// Perform a SW-Reset
+	ModifyRegister                 (FlexSPI_MCR0,  0, 1);	// Perform a SW-Reset
 }
 
 

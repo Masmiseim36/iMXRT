@@ -155,7 +155,7 @@
     linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
     linker_section_placement_macros="RAM_NAME=SRAM_data"
     macros="DeviceName=MIMXRT595S_cm33;Family=iMXRT500"
-    property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml" />
+    property_groups_file_path="$(ProjectDir)/../propertyGroups.xml" />
   <configuration
     Name="600"
     Placement="SRAM"
@@ -167,7 +167,7 @@
     linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
     linker_section_placement_macros="RAM_NAME=SRAM_data"
     macros="DeviceName=MIMXRT685S_cm33;Family=iMXRT600"
-    property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml" />
+    property_groups_file_path="$(ProjectDir)/../propertyGroups.xml" />
   <configuration
     Name="700"
     Placement="SRAM"
@@ -179,7 +179,7 @@
     linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml"
     linker_section_placement_macros="RAM_NAME=SRAM"
     macros="DeviceName=MIMXRT798S_cm33_core0;Family=iMXRT700"
-    property_groups_file_path="$(ProjectDir)/../propertyGroups_cm33.xml" />
+    property_groups_file_path="$(ProjectDir)/../propertyGroups.xml" />
   <configuration
     Name="CM33"
     arm_architecture="v8M_Mainline"
@@ -402,7 +402,7 @@
       arm_library_optimization="Small"
       arm_linker_heap_size="1024"
       arm_linker_stack_size="2048"
-      arm_target_interface_type="JTAG"
+      arm_target_interface_type="SWD"
       arm_target_loader_applicable_loaders=""
       arm_target_loader_default_loader=""
       arm_target_loader_reset_after_download="No"
@@ -913,6 +913,8 @@
       <file file_name="../devices/$(Family)/$(DeviceName).h" />
       <file file_name="../devices/$(Family)/$(DeviceName)_features.h" />
       <file file_name="../devices/$(Family)/fsl_device_registers.h" />
+      <file file_name="../iMXRT600_Target.js" />
+      <file file_name="../iMXRT_Helper.js" />
       <file file_name="$(ProjectDir)/../iMXRT_Target.js">
         <configuration Name="Common" file_type="Target Script" />
       </file>

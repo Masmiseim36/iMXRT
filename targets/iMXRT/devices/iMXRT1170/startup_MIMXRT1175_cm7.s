@@ -378,6 +378,17 @@ Reset_Handler:
   ldr r0, =0x40028000+0x108
   ldr r1, =0
   str r1, [r0]
+
+  // disable also MECC-ECC (enabled by fuse or ROM)
+  // MECC1->PIPE_ECC_EN = MECC_PIPE_ECC_EN_ECC_EN(0);
+  ldr r0, =0x40014000
+  movs r1, #0
+  str.w r1, [r0, #0x0100]
+
+  // MECC2->PIPE_ECC_EN = MECC_PIPE_ECC_EN_ECC_EN(0);
+  ldr r0, =0x40018000
+  movs r1, #0
+  str.w r1, [r0, #0x0100]
 #endif
 #ifndef __NO_SYSTEM_INIT
   ldr r0, =__stack_end__
