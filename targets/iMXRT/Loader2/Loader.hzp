@@ -913,6 +913,7 @@
       <file file_name="../devices/$(Family)/$(DeviceName).h" />
       <file file_name="../devices/$(Family)/$(DeviceName)_features.h" />
       <file file_name="../devices/$(Family)/fsl_device_registers.h" />
+      <file file_name="../iMXRT1180_Target.js" />
       <file file_name="../iMXRT600_Target.js" />
       <file file_name="../iMXRT_Helper.js" />
       <file file_name="$(ProjectDir)/../iMXRT_Target.js">

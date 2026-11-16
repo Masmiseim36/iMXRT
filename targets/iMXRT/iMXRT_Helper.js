@@ -31,6 +31,15 @@ function Hex (value)
    return "0x" + (value >>> 0).toString (16);
 }
 
+// Fill a memory area with a 32 bit value
+function FillMemory (address, size, value)
+{
+	var fillData = new Array (size/4);
+	for (var i=0; i<size/4; i++)
+		fillData[i] = value;
+	TargetInterface.pokeMultUint32 (address, fillData);
+}
+
 // Read-modify-write of a 32 bit register: (old & ~clearMask) | setMask.
 function ModifyRegister (address, clearMask, setMask)
 {

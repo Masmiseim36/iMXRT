@@ -12,6 +12,7 @@
 
 load ("targets/iMXRT/iMXRT_Helper.js");
 load ("targets/iMXRT/iMXRT600_Target.js");
+load ("targets/iMXRT/iMXRT1180_Target.js");
 
 
 // Register description of the iMXRT1170
@@ -213,33 +214,10 @@ function Connect ()
 	}
 	else if (DeviceName.indexOf ("MIMXRT118") == 0)
 	{
-		// MIMXRT118x doesn't like attempt to access AP5
-		TargetInterface.setDebugInterfaceProperty ("valid_ap_num", (1<<0)|(1<<1)|(1<<2)|(1<<3)|(1<<4)|(1<<6));
-		TargetInterface.setDebugInterfaceProperty ("component_base", 0xe000e000); // SCS
-		TargetInterface.setDebugInterfaceProperty ("component_base", 0xe0001000); // DWT
-		TargetInterface.setDebugInterfaceProperty ("component_base", 0xe0002000); // FPB
-		TargetInterface.setDebugInterfaceProperty ("component_base", 0xe0000000); // ITM
-		TargetInterface.setDebugInterfaceProperty ("component_base", 0xe0041000); // ETM
-		//TargetInterface.setDebugInterfaceProperty ("component_base", 0xe0042000); // CTI
-		TargetInterface.setDebugInterfaceProperty ("component_base", 0xe0043000); // CSTF
-		TargetInterface.setDebugInterfaceProperty ("use_adiv5_APB",  0x51020000, 0x50000); // APB access
-		TargetInterface.setDebugInterfaceProperty ("component_base", 0x51020000); // CS_SWO
-		TargetInterface.setDebugInterfaceProperty ("component_base", 0x51030000); // CS_ETF
-		//TargetInterface.setDebugInterfaceProperty ("component_base", 0x51040000); // CS_ETR
-		//TargetInterface.setDebugInterfaceProperty ("component_base", 0x51050000); // CS_CT0
-		//TargetInterface.setDebugInterfaceProperty ("component_base", 0x51060000); // CS_CT1
+		Connect_RT1180 ();
 	}
 	TargetInterface.message ("## Connect to " + DeviceName + " - done");
 }
-
-function FillMemory (address, size, value)
-{
-	var fillData = new Array (size/4);
-	for (var i=0; i<size/4; i++)
-		fillData[i] = value;
-	TargetInterface.pokeMultUint32 (address, fillData);
-}
-
 
 // This function is used to return the controller type as a string
 // we use it also to do some initializations as this function is called right before
@@ -260,16 +238,7 @@ function GetPartName ()
 		}
 		else if (DeviceName.indexOf ("MIMXRT118") == 0)
 		{
-			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // M33 Clear bit 30 of csw for secure access
-			TargetInterface.resetDebugInterface ();
-			if (DeviceName.indexOf ("_cm7") != -1)
-			{
-				if (TargetInterface.peekWord(0x54460010) == 0) // SRC->SCR.BT_RELEASE_M7
-				{
-					Release_118x_M7 (); // Enable M7 core
-				}
-				TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2);
-			}
+			GetPartName_RT1180 (DeviceName);
 		}
 	}
 
@@ -362,88 +331,6 @@ function Release_11xx_M7 ()
 }
 
 
-function Release_118x_M7 ()
-{
-	var ItcmBase  = 0x00000000 // M7 ITCM
-	var ItcmAlias = 0x303c0000 // M7 ITCM Aliased to M33
-
-	TargetInterface.message ("************* Begin Operations to Enable CM7 ***********************");
-
-	// Clock Preparation
-	TargetInterface.message ("******** Prepare Clock *********");
-	TargetInterface.pokeUint32 (0x54484310, 0x007901F2);	// ANADIG_OSC->OSC_RC24M_CTRL
-	TargetInterface.pokeUint32 (0x54484320, 0x40000014);	// ANADIG_OSC->OSC_24M_CTRL
-	TargetInterface.pokeUint32 (0x54450080, 0x0);			// CCM->CLOCK_ROOT[1].CONTROL
-	TargetInterface.delay (50);
-	TargetInterface.pokeUint32 (0x54484680, 0x105);			// PHY_LDO->CTRL0.RW - LinReg 1V
-	TargetInterface.delay (50);
-	TargetInterface.pokeUint32 (0x54484710, 0x70);			// ANADIG_PMU->PMU_REF_CTRL
-	TargetInterface.pokeUint32 (0x54484000, 0x400020a6);	// ANADIG_PLL->ARM_PLL_CTRL - ARM_PLL_GATE, POWER_UP
-	TargetInterface.delay (50);
-	// check 54484000
-	TargetInterface.pokeUint32 (0x54484000, 0x000060a6);	// ANADIG_PLL->ARM_PLL_CTRL - ARM_PLL_GATE, POWER_UP, ENABLE
-
-	// DCDC_SetVDD1P0BuckModeTargetVoltage(DCDC, kDCDC_1P0Target1P1V);
-	TargetInterface.pokeUint32 (0x5452000C, 0x980000);		// DCDC->REG3
-	TargetInterface.pokeUint32 (0x54520024, 0x100C14);		// DCDC->TRG_SW_0
-
-	// M7 Clk
-	TargetInterface.pokeUint32 (0x54450000, 0x201);			// CCM->CLOCK_ROOT0_CONTROL
-
-	TargetInterface.pokeUint32 (0x54458000, 0x1);			// CCM->LPCG[0].DIRECT - ON
-	TargetInterface.delay (50);
-  
-	// VTOR
-	TargetInterface.pokeUint32 (0x544F0080, ((ItcmBase >> 7) << 7) | 0x10); // BLK_CTRL_S_AON->M7_CFG = VTOR | WAIT
-
-	// Release CM7
-	TargetInterface.pokeUint32 (0x54460010, 0x1);			// SRC_GENERAL_REG->SCR - Release CM7
-
-	// DMA initialization
-	TargetInterface.message ("******** DMA operation *********");
-	InitCM7DMA (0x303C0000);	// M7 ITCM
-	InitCM7DMA (0x303E0000);
-	InitCM7DMA (0x30400000);	// M7 DTCM
-	InitCM7DMA (0x30420000);
-
-	// Making Landing Zone
-	TargetInterface.pokeUint32 (ItcmAlias + 0x0, ItcmBase + 0x2000);
-	TargetInterface.pokeUint32 (ItcmAlias + 0x4, ItcmBase + 0x9);
-	TargetInterface.pokeUint32 (ItcmAlias + 0x8, 0xE7FEE7FE);
-	TargetInterface.pokeUint32 (ItcmAlias + 0xC, 0xE7FEE7FE);
-
-	TargetInterface.delay (200);
-
-	// Trigger S401 - EdgeLock APC Request
-	TargetInterface.message ("******** S401 Trigger *********");
-	TargetInterface.pokeUint32 (0x57540200, 0x17d20106); // MU_RT_S3MUA->TR[0]
-	TargetInterface.delay (200);
-	var resp1 = TargetInterface.peekUint32 (0x57540280); // MU_RT_S3MUA->RR[0]
-	var resp2 = TargetInterface.peekUint32 (0x57540284); // MU_RT_S3MUA->RR[1]
-
-	// Deassert CM7 Wait
-	TargetInterface.message ("******** Kickoff CM7 *********");
-	TargetInterface.pokeUint32 (0x544F0080, (ItcmBase >> 7) << 7); // BLK_CTRL_S_AON->M7_CFG = VTOR
-	TargetInterface.delay (200);
-}
-
-function InitCM7DMA (targetAddr)
-{
-	TargetInterface.pokeUint32 (0x52010020, 0x20200000);	// DMA4->TCD[0].SADDR
-	TargetInterface.pokeUint32 (0x52010030, targetAddr);	// DMA4->TCD[0].DADDR
-	TargetInterface.pokeUint32 (0x52010028, 0x00020000);	// DMA4->TCD[0].NBYTES_MLOFFNO
-	TargetInterface.pokeUint16 (0x52010036, 0x1);			// DMA4->TCD[0].ELINKNO
-	TargetInterface.pokeUint16 (0x5201003E, 0x1);			// DMA4->TCD[0].BITER_ELINKNO
-	TargetInterface.pokeUint16 (0x52010026, 0x0303);		// DMA4->TCD[0].ATTR
-	TargetInterface.pokeUint16 (0x52010024, 0x0);			// DMA4->TCD[0].SOFF
-	TargetInterface.pokeUint16 (0x52010034, 0x8);			// DMA4->TCD[0].DOFF
-	TargetInterface.pokeUint32 (0x52010000, 0x7);			// DMA4->TDC[0].CH_CSR
-	TargetInterface.pokeUint16 (0x5201003C, 0x8);			// DMA4->TCD[0].CSR
-	TargetInterface.pokeUint32 (0x5201003C, 0x9);			// DMA4->TCD[0].CSR
-	TargetInterface.delay (50);
-	TargetInterface.pokeUint32 (0x52010000, 0x40000006);
-}
-
 function Reset_11xx_M4 ()
 {
 	// Issue M4 reset
@@ -507,7 +394,10 @@ function Reset ()
 	TargetInterface.message ("## Reset " + DeviceName);
 	if (DeviceName.indexOf ("MIMXRT6") == 0)
 	{
+		// No FlexRAM on the RT600: nothing to restore afterwards
 		Reset_RT600 ();
+		TargetInterface.message ("## Reset " + DeviceName + " - done");
+		return;
 	}
 	else if (DeviceName.indexOf ("MIMXRT10") == 0)
 	{
@@ -516,25 +406,7 @@ function Reset ()
 	}
 	else if (DeviceName.indexOf ("MIMXRT118") == 0)
 	{
-		if (DeviceName.indexOf ("_cm7") != -1)
-		{
-			TargetInterface.stop (1000);
-			// Disable pending interrupts
-			FillMemory (0xE000E180, 0x40,    0xFFFFFFFF); // NVIC_ICER
-			FillMemory (0xE000E280, 0x40,    0xFFFFFFFF); // NVIC_ICPR
-		}
-		else
-		{
-			TargetInterface.resetAndStop (1000);
-			Release_118x_M7 ();
-			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 2, 0x0, 0x0);
-			TargetInterface.stop (1000);
-			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 3, 0x40000000, 0x00000000); // M33 Clear bit 30 of csw for secure access
-			FillMemory (0x1FFE0000, 0x20000, 0);          // ITCM
-			FillMemory (0x20000000, 0x20000, 0);          // DTCM
-			FillMemory (0xE000E180, 0x40,    0xFFFFFFFF); // NVIC_ICER
-			FillMemory (0xE000E280, 0x40,    0xFFFFFFFF); // NVIC_ICPR
-		}
+		Reset_RT1180 (DeviceName);
 	}
 	else if (DeviceName.indexOf ("MIMXRT11") == 0)
 	{
@@ -1073,41 +945,6 @@ function Clock_Init_117x ()
 	TargetInterface.pokeUint32 (reg, val);
 }
 
-function Clock_Init_118x () 
-{
-	////////// Initialize System PLL1 //////////
-	ModifyRegister (0x44484180, 0, 0x10000); // ANATOP_PllBypass ETHERNET_PLL true
-	ModifyRegister (0x44484100, 0, 0x2000);  // ANATOP_SysPll1SwEnClk
-
-	// ANATOP_PllConfigure
-	TargetInterface.pokeUint32 (0x444841a0, 0x0aaaaaaa);
-	TargetInterface.pokeUint32 (0x444841b0, 0x0fffffff);
-	ModifyRegister (0x44484180, 0x7F, (0x29 & 0x7F) | 0x400000);
-	TargetInterface.delay (100);
-	ModifyRegister (0x44484180, 0, 0x4000 | 0x2000);
-
-	// ANATOP_PllToggleHoldRingOff
-	ModifyRegister (0x44484180, 0, 0x2000);
-	TargetInterface.delay (225);
-	ModifyRegister (0x44484180, 0x2000, 0);
-
-	// ANATOP_SysPll1WaitStable
-	var val = 0;
-	do
-	{
-		val = TargetInterface.peekUint32 (0x44484100);
-	} while ((val & 0x20000000) != 0x20000000);
-
-	ModifyRegister (0x44484180, 0, 0x8000);    // ANATOP_PllEnableClk
-	ModifyRegister (0x44484100, 0x4000, 0);    // ANATOP_SysPll1Gate
-	ModifyRegister (0x44484100, 0, 0x2000000); // ANATOP_SysPll1Div2En
-	ModifyRegister (0x44484100, 0, 0x4000000); // ANATOP_SysPll1Div5En
-	ModifyRegister (0x44484180, 0x10000, 0);   // ANATOP_PllBypass ETHERNET_PLL false
-
-	// Set SEMC root clock
-	TargetInterface.pokeUint32 (0x44451580, 0x204); // Use sys pll1 divided by 5: 200Mhz
-}
-
 function Clock_Restore_117x () 
 {
 	var reg = CCM_CLOCK_ROOT_M7_CONTROL;	// CCM
@@ -1362,16 +1199,6 @@ function SDRAM_Init_1170 ()
 	var SEMC                  = 0x400D4000;
 
 	SDRAM_Init_11xx (IOMUXC_SW_MUX_CTL_PAD, IOMUXC_SW_PAD_CTL_PAD, SEMC, 32, 64);
-}
-
-function SDRAM_Init_1180 ()
-{
-	var IOMUXC                = 0x42A10000;
-	var IOMUXC_SW_MUX_CTL_PAD = IOMUXC + 0x10;
-	var IOMUXC_SW_PAD_CTL_PAD = IOMUXC + 0x258;
-	var SEMC                  = 0x42910000;
-
-	SDRAM_Init_11xx (IOMUXC_SW_MUX_CTL_PAD, IOMUXC_SW_PAD_CTL_PAD, SEMC, 16, 32);
 }
 
 function SDRAM_Init_11xx (IOMUXC_SW_MUX_CTL_PAD, IOMUXC_SW_PAD_CTL_PAD, SEMC, bits, sizeInMbytes)

@@ -223,7 +223,7 @@ function StartDebugSession ()
 	{
 		id = TargetInterface.getDebugRegister (DM_ID);
 		if (id == 0x002A0000)
-		break;
+			break;
 		if (attempt == 2)
 		{
 			// Still nothing: the debug port may be powered down.
@@ -388,19 +388,19 @@ function Reset_RT600 ()
 	{
 		if (accessible == 0)
 		{
-			// Debug access stays blocked by the ROM (erased flash, invalid
-			// image, ISP mode). The only way to get control of the core again is
-			// the debug mailbox: it resets the chip, the ROM then enables debug
-			// access and waits with the core halted (RM 49.6.1).
-			if (USE_DEBUG_MAILBOX == 0)
-			{
-				TargetInterface.error ("RT600: the boot ROM blocks debug access after the reset (no valid image in flash?). Set USE_DEBUG_MAILBOX = 1 in the target script.");
-			}
-			TargetInterface.message ("## RT600: WARNING - ROM blocks debug access (no valid boot image?), falling back to the debug mailbox");
-			if (StartDebugSession () == 0)
-			{
-				TargetInterface.error ("RT600: debug mailbox start debug session failed");
-			}
+		// Debug access stays blocked by the ROM (erased flash, invalid
+		// image, ISP mode). The only way to get control of the core again is
+		// the debug mailbox: it resets the chip, the ROM then enables debug
+		// access and waits with the core halted (RM 49.6.1).
+		if (USE_DEBUG_MAILBOX == 0)
+		{
+			TargetInterface.error ("RT600: the boot ROM blocks debug access after the reset (no valid image in flash?). Set USE_DEBUG_MAILBOX = 1 in the target script.");
+		}
+		TargetInterface.message ("## RT600: WARNING - ROM blocks debug access (no valid boot image?), falling back to the debug mailbox");
+		if (StartDebugSession () == 0)
+		{
+			TargetInterface.error ("RT600: debug mailbox start debug session failed");
+		}
 		}
 		else
 		{
