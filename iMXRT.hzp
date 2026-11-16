@@ -632,6 +632,7 @@
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT1180_CM7.elf" />
         <file file_name="targets/iMXRT/Loader2/Loader_iMXRT600_CM33.elf" />
       </folder>
+      <file file_name="targets/iMXRT/iMXRT1180_Target.js" />
       <file file_name="targets/iMXRT/iMXRT600_Target.js" />
       <file file_name="targets/iMXRT/iMXRT_Helper.js" />
       <file file_name="targets/iMXRT/iMXRT_Target.js" />
