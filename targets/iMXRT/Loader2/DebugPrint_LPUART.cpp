@@ -46,11 +46,31 @@ OF SUCH DAMAGE. */
 		#if (defined(MIMXRT735S_cm33_core0_SERIES) || defined(MIMXRT735S_cm33_core1_SERIES) || \
 			 defined(MIMXRT758S_cm33_core0_SERIES) || defined(MIMXRT758S_cm33_core1_SERIES) || \
 			 defined(MIMXRT798S_cm33_core0_SERIES) || defined(MIMXRT798S_cm33_core1_SERIES))
-			CLOCK_AttachClk (kOSC_CLK_to_FCCLK0);
-			CLOCK_SetClkDiv (kCLOCK_DivFcclk0Clk, 1U);
-			CLOCK_AttachClk (kFCCLK0_to_FLEXCOMM0);	// attach FC0 clock to LP_FLEXCOMM (debug console)
+			// Functional clock of the LP_FLEXCOMM
+			#if (defined(MIMXRT735S_cm33_core0_SERIES) || defined(MIMXRT758S_cm33_core0_SERIES) || defined(MIMXRT798S_cm33_core0_SERIES))
+				// Compute domain: LP_FLEXCOMM0 (debug console) is clocked via FCCLK0
+				CLOCK_AttachClk (kOSC_CLK_to_FCCLK0);
+				CLOCK_SetClkDiv (kCLOCK_DivFcclk0Clk, 1U);
+				CLOCK_AttachClk (kFCCLK0_to_FLEXCOMM0);
+			#else
+				// Sense domain: LP_FLEXCOMM19 (debug console)
+				CLOCK_AttachClk (kSENSE_BASE_to_FLEXCOMM19);
+				CLOCK_SetClkDiv (kCLOCK_DivLPFlexComm19Clk, 1U);
+			#endif
 
-			const uint32_t clockFrequency = CLOCK_GetLPFlexCommClkFreq (0U);
+			// The LPUART is only one of the functions of a LP_FLEXCOMM (LPUART/LPSPI/LPI2C). The generic fsl_lpuart-driver
+			// does not know about this, so we have to do what LP_FLEXCOMM_Init() does before accessing the LPUART registers:
+			// enable the clock, release the reset and select the LPUART function in PSELID.
+			// Without this the LPUART registers are not accessible (STAT[TDRE] never gets set -> endless loop in the transmit routine)
+			static constexpr clock_ip_name_t FlexcommClocks [] = LP_FLEXCOMM_CLOCKS;
+			static constexpr reset_ip_name_t FlexcommResets [] = LP_FLEXCOMM_RSTS;
+			static LP_FLEXCOMM_Type * const  FlexcommBases  [] = LP_FLEXCOMM_BASE_PTRS;
+
+			CLOCK_EnableClock (FlexcommClocks[BOARD_DEBUG_UART_INSTANCE]);
+			RESET_ClearPeripheralReset (FlexcommResets[BOARD_DEBUG_UART_INSTANCE]);
+			FlexcommBases[BOARD_DEBUG_UART_INSTANCE]->PSELID = LP_FLEXCOMM_PSELID_PERSEL(1U);	// 1 = LPUART
+
+			const uint32_t clockFrequency = CLOCK_GetLPFlexCommClkFreq (BOARD_DEBUG_UART_INSTANCE);
 		#elif (defined(MIMXRT1011_SERIES) || defined(MIMXRT1015_SERIES) || defined(MIMXRT1021_SERIES) || defined(MIMXRT1024_SERIES) || \
 			   defined(MIMXRT1041_SERIES) || defined(MIMXRT1042_SERIES) || defined(MIMXRT1051_SERIES) || defined(MIMXRT1052_SERIES) || \
 			   defined(MIMXRT1061_SERIES) || defined(MIMXRT1062_SERIES) || defined(MIMXRT1064_SERIES))

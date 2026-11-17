@@ -634,11 +634,13 @@
       </folder>
       <file file_name="targets/iMXRT/iMXRT1180_Target.js" />
       <file file_name="targets/iMXRT/iMXRT600_Target.js" />
+      <file file_name="targets/iMXRT/iMXRT700_Target.js" />
       <file file_name="targets/iMXRT/iMXRT_Helper.js" />
       <file file_name="targets/iMXRT/iMXRT_Target.js" />
       <file file_name="targets/iMXRT/placement_flexspi.xml" />
       <file file_name="targets/iMXRT/placement_ocram.xml" />
       <file file_name="targets/iMXRT/placement_tcm.xml" />
+      <file file_name="targets/iMXRT/placement_xspi.xml" />
       <file file_name="targets/iMXRT/project_templates.xml" />
       <file file_name="targets/iMXRT/propertyGroups.xml" />
     </folder>
