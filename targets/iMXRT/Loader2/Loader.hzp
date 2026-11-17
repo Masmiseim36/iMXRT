@@ -356,11 +356,11 @@
     inherited_configurations="CM7;1180_CM7;Release" />
   <configuration
     Name="MIMXRT2660_Debug"
-    build_output_file_name="Loader_iMXRT2660_Debug.elf"
+    build_output_file_name="Loader_iMXRT2660_CM85_Debug.elf"
     inherited_configurations="CM85;2660;Debug" />
   <configuration
     Name="MIMXRT2660_Release"
-    build_output_file_name="Loader_iMXRT2660.elf"
+    build_output_file_name="Loader_iMXRT2660_CM85.elf"
     inherited_configurations="CM85;2660;Release" />
   <configuration
     Name="MIMXRT500_Debug"
@@ -916,6 +916,7 @@
       <file file_name="../devices/$(Family)/$(DeviceName)_features.h" />
       <file file_name="../devices/$(Family)/fsl_device_registers.h" />
       <file file_name="../iMXRT1180_Target.js" />
+      <file file_name="../iMXRT2660_Target.js" />
       <file file_name="../iMXRT600_Target.js" />
       <file file_name="../iMXRT700_Target.js" />
       <file file_name="../iMXRT_Helper.js" />
