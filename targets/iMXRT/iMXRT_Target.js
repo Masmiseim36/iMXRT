@@ -29,6 +29,9 @@ var SRC_STAT_M7CORE  = SRC + 0x2B0;
 var SRC_CTRL_M4CORE  = SRC + 0x284;
 var SRC_STAT_M4CORE  = SRC + 0x290;
 
+// Maximum time to wait until a SRC slice has finished its reset (ms)
+var SRC_RESET_TIMEOUT_MS = 100;
+
 var CCM           = 0x40CC0000;
 var CCM_CLOCK_ROOT_M7_CONTROL    = CCM + (0 * 0x80) + 0;
 var CCM_CLOCK_ROOT_M4_CONTROL    = CCM + (1 * 0x80) + 0;
@@ -340,17 +343,30 @@ function Release_11xx_M7 ()
 }
 
 
+// Waits until bit 0 (reset in progress) of a SRC slice status register is
+// cleared. Without a timeout the script would hang forever if the slice never
+// finishes its reset (e.g. slice not available on this device).
+// Returns 1 if the reset finished, 0 on timeout.
+function WaitSrcSliceReset (statAddress, sliceName)
+{
+	var waited = 0;
+	while (waited < SRC_RESET_TIMEOUT_MS)
+	{
+		if ((TargetInterface.peekUint32 (statAddress) & 0x1) == 0)
+			return 1;
+		TargetInterface.delay (1);
+		waited += 1;
+	}
+	TargetInterface.message ("## WARNING - " + sliceName + " reset did not finish within " + SRC_RESET_TIMEOUT_MS + " ms");
+	return 0;
+}
+
 function Reset_11xx_M4 ()
 {
 	// Issue M4 reset
 	TargetInterface.pokeUint32 (SRC_CTRL_M4CORE, 0x1);
-	
-	var reg = 0;
-	do
-	{
-		reg = TargetInterface.peekUint32 (SRC_STAT_M4CORE);
-	}
-	while (reg & 0x1);
+
+	WaitSrcSliceReset (SRC_STAT_M4CORE, "M4");
 	TargetInterface.delay (10);
 
 	// Vector reset
@@ -361,6 +377,10 @@ function Reset_11xx_M4 ()
 function Reset_11xx_M7 ()
 {
 	// ARM Sys Reset
+	// Save the current reset mode: it is only needed while the reset is
+	// issued and must not stay changed for the application (e.g. a software
+	// reset of the application would behave different while debugging).
+	var srmr = TargetInterface.peekUint32 (SRC_SRMR);
 	TargetInterface.pokeUint32 (SRC_SRMR, 0x1400);
 
 	// ResetTarget
@@ -368,13 +388,7 @@ function Reset_11xx_M7 ()
 	TargetInterface.pokeUint32 (SRC_CTRL_DISPLAY, 1);
 
 	// Check DISPLAYMIX reset status
-	var reg = TargetInterface.peekUint32 (SRC_STAT_DISPLAY);
-	reg &= 0x1;
-	while (reg)
-	{
-		reg = TargetInterface.peekUint32 (SRC_STAT_DISPLAY);
-		reg &= 0x1;
-	}
+	WaitSrcSliceReset (SRC_STAT_DISPLAY, "DISPLAYMIX");
 	TargetInterface.delay (10);
 
 	//// Issue M7 reset ////
@@ -384,6 +398,9 @@ function Reset_11xx_M7 ()
 	TargetInterface.delay (10);
 	TargetInterface.resetDebugInterface ();
 	TargetInterface.stop (1000);
+
+	// Restore the reset mode
+	TargetInterface.pokeUint32 (SRC_SRMR, srmr);
 }
 
 function Reset ()
