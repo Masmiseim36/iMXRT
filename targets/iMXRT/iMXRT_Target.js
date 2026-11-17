@@ -14,6 +14,7 @@ load ("targets/iMXRT/iMXRT_Helper.js");
 load ("targets/iMXRT/iMXRT600_Target.js");
 load ("targets/iMXRT/iMXRT700_Target.js");
 load ("targets/iMXRT/iMXRT1180_Target.js");
+load ("targets/iMXRT/iMXRT2660_Target.js");
 
 
 // Register description of the iMXRT1170
@@ -224,6 +225,10 @@ function Connect ()
 	{
 		Connect_RT1180 ();
 	}
+	else if (DeviceName.indexOf ("MIMXRT26") == 0)
+	{
+		Connect_RT2660 ();
+	}
 	TargetInterface.message ("## Connect to " + DeviceName + " - done");
 }
 
@@ -429,6 +434,13 @@ function Reset ()
 	{
 		// No FlexRAM on the RT700: nothing to restore afterwards
 		Reset_RT700 (DeviceName);
+		TargetInterface.message ("## Reset " + DeviceName + " - done");
+		return;
+	}
+	else if (DeviceName.indexOf ("MIMXRT26") == 0)
+	{
+		// No FlexRAM on the RT2660: nothing to restore afterwards
+		Reset_RT2660 ();
 		TargetInterface.message ("## Reset " + DeviceName + " - done");
 		return;
 	}
