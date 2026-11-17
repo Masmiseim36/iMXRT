@@ -12,6 +12,7 @@
 
 load ("targets/iMXRT/iMXRT_Helper.js");
 load ("targets/iMXRT/iMXRT600_Target.js");
+load ("targets/iMXRT/iMXRT700_Target.js");
 load ("targets/iMXRT/iMXRT1180_Target.js");
 
 
@@ -212,6 +213,10 @@ function Connect ()
 	{
 		Connect_RT600 ();
 	}
+	else if (DeviceName.indexOf ("MIMXRT7") == 0)
+	{
+		Connect_RT700 ();
+	}
 	else if (DeviceName.indexOf ("MIMXRT118") == 0)
 	{
 		Connect_RT1180 ();
@@ -235,6 +240,10 @@ function GetPartName ()
 		{
 			Release_11xx_M4 ();	// Enable M4 core
 			TargetInterface.setDebugInterfaceProperty ("set_adiv5_AHB_ap_num", 1);
+		}
+		else if (DeviceName.indexOf ("MIMXRT7") == 0)
+		{
+			GetPartName_RT700 (DeviceName);
 		}
 		else if (DeviceName.indexOf ("MIMXRT118") == 0)
 		{
@@ -396,6 +405,13 @@ function Reset ()
 	{
 		// No FlexRAM on the RT600: nothing to restore afterwards
 		Reset_RT600 ();
+		TargetInterface.message ("## Reset " + DeviceName + " - done");
+		return;
+	}
+	else if (DeviceName.indexOf ("MIMXRT7") == 0)
+	{
+		// No FlexRAM on the RT700: nothing to restore afterwards
+		Reset_RT700 (DeviceName);
 		TargetInterface.message ("## Reset " + DeviceName + " - done");
 		return;
 	}
