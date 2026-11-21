@@ -379,13 +379,15 @@ OF SUCH DAMAGE. */
 			XSPI_SetDeviceConfig (base, &Xspi::DeviceConfig); // changing the clock requires reinitialization
 		}
 
-		static uint8_t writeBuffer[HYPERFLASH_PAGE_SIZE];
+		// ProgramPage hands the page buffer to the xSPI driver as an array of words
+		alignas(uint32_t) static uint8_t writeBuffer[HYPERFLASH_PAGE_SIZE];
 		LibmemDriver *FlashHandle = LibmemDriver::GetDriver ();
 		// No use of the extended driver callbacks as the external Flash is memorry mapped. We use direct access for reading
 //		libmem_register_driver (FlashHandle, GetBaseAddress(base), flashSize, &geometry[0], nullptr, &DriverFunctions, &DriverFunctions_Extended);
 		libmem_register_driver (FlashHandle, base->GetAmbaAddress (), flashSize, &geometry[0], nullptr, &Xspi::DriverFunctions, nullptr);
 		int err = libmem_driver_paged_write_init (&FlashHandle->PageWriteControlBlock, &writeBuffer[0], GetPageSize (memType), Xspi::ProgramPage, 4, 0);
 		FlashHandle->user_data = reinterpret_cast<uint32_t>(base);
+		DebugPrintf ("Driver: 0x%08X + 0x%X, %d sectors of %d bytes, page %d\r\n", FlashHandle->start, flashSize, geometry[0].count, geometry[0].size, GetPageSize (memType));
 
 		uint8_t *AliasAddress = base->GetAmbaAliasAddress ();
 		if (AliasAddress != nullptr && err == LIBMEM_STATUS_SUCCESS)

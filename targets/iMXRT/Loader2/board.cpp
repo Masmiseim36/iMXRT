@@ -250,6 +250,12 @@
 			// Disable code & system cache
 			XCACHE_DisableCache (XCACHE_PC);
 			XCACHE_DisableCache (XCACHE_PS);
+		#elif defined XCACHE0 && defined XCACHE1
+			// Same intent, but these parts name the two caches differently. They front the SRAM
+			// the loader runs in, and the host fills the RPC buffer there through the debug port,
+			// which bypasses them. Left enabled, every chunk after the first reads stale lines.
+			XCACHE_DisableCache (XCACHE0);
+			XCACHE_DisableCache (XCACHE1);
 		#endif
 
 		// Disable MPU

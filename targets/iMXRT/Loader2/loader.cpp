@@ -57,9 +57,26 @@ uint32_t Compare (const uint32_t *memPointer, const uint32_t *pComp, size_t size
 	return errorCounter;
 }
 
+/*! FirstMismatch:
+\brief Byte offset of the first deviating word, or size when everything matches. The offset tells
+in which page the deviation starts, which is what distinguishes a broken write from a broken
+read-modify-write */
+size_t FirstMismatch (const uint32_t *memPointer, const uint32_t *pComp, size_t size)
+{
+	for (size_t i=0; i<size/sizeof(uint32_t); i++)
+	{
+		if (memPointer[i] != pComp[i])
+			return i * sizeof(uint32_t);
+	}
+	return size;
+}
+
+// Shared by both tests, which run one after the other. Four sectors worth of data, so a write
+// spans more than a single sector
+static std::array<uint32_t, 4096> buffer;
+
 void ExecuteTest (uint32_t *memPointer)
 {
-	static std::array<uint32_t, 4096> buffer;
 	const size_t testSize = buffer.size () * sizeof(uint32_t);
 
 	uint8_t *erase_start = nullptr;
@@ -72,9 +89,10 @@ void ExecuteTest (uint32_t *memPointer)
 	}
 	res = static_cast<LibmemStatus_t>(libmem_flush ());
 
-	// Check if everything is erased
+	// Check if everything is erased. Check the requested range and not erase_size, as a reported
+	// erase_size of zero would make this check pass without looking at a single word
 	libmem_read (reinterpret_cast<uint8_t *>(buffer.data()), reinterpret_cast<const uint8_t *>(memPointer), testSize);
-	uint32_t errorCounter = Compare (memPointer, 0xFFFFFFFF, erase_size);
+	uint32_t errorCounter = Compare (memPointer, 0xFFFFFFFF, testSize);
 	if (errorCounter > 0)
 	{
 		DebugPrintf ("Invalid memory-chunks on erase: %d\r\n", errorCounter);
@@ -105,6 +123,66 @@ void ExecuteTest (uint32_t *memPointer)
 	}
 }
 
+// ExecuteTest writes one page aligned block of whole pages. For such a write libmem bypasses its
+// page buffer and hands our source pointer straight to ProgramPage, so the read-modify-write path
+// is never taken. The RPC loader gets the image in chunks sized by the free SRAM, which is not a
+// multiple of the page size, so from the second chunk on every page goes through the page buffer
+// and gets preloaded from the flash first. ExecuteChunkedTest reproduces that access pattern at
+// the same address, which leaves the access pattern as the only difference between the two tests.
+static constexpr size_t RpcChunkSize = 1000;
+
+void ExecuteChunkedTest (uint32_t *memPointer)
+{
+	const size_t testSize = buffer.size () * sizeof(uint32_t);
+	uint8_t *const flash  = reinterpret_cast<uint8_t *>(memPointer);
+
+	uint8_t *erase_start = nullptr;
+	size_t erase_size    = 0;
+	LibmemStatus_t res   = static_cast<LibmemStatus_t>(libmem_erase (flash, testSize, &erase_start, &erase_size));
+	if (res != LIBMEM_STATUS_SUCCESS)
+	{
+		DebugPrintf ("Chunked: erase error '%s'\r\n", Libmem_GetErrorString (res));
+		__BKPT(6);
+	}
+	res = static_cast<LibmemStatus_t>(libmem_flush ());
+
+	uint32_t errorCounter = Compare (memPointer, 0xFFFFFFFF, testSize);
+	if (errorCounter > 0)
+	{
+		DebugPrintf ("Chunked: %d words not erased\r\n", errorCounter);
+		__BKPT(7);
+	}
+
+	// Encode the word index in every value, so a memory dump shows where a deviating word came from
+	for (size_t i=0; i<buffer.size (); i++)
+		buffer[i] = 0xA5A50000U | static_cast<uint32_t>(i);
+
+	const uint8_t *const source = reinterpret_cast<const uint8_t *>(buffer.data ());
+	for (size_t offset=0; offset<testSize; offset+=RpcChunkSize)
+	{
+		const size_t chunk = (testSize - offset) < RpcChunkSize ? (testSize - offset) : RpcChunkSize;
+		res = static_cast<LibmemStatus_t>(libmem_write (flash + offset, source + offset, chunk));
+		if (res != LIBMEM_STATUS_SUCCESS)
+		{
+			DebugPrintf ("Chunked: write error '%s' at offset 0x%X\r\n", Libmem_GetErrorString (res), offset);
+			__BKPT(8);
+		}
+	}
+	res = static_cast<LibmemStatus_t>(libmem_flush ());
+	if (res != LIBMEM_STATUS_SUCCESS)
+	{
+		DebugPrintf ("Chunked: flush error '%s'\r\n", Libmem_GetErrorString (res));
+		__BKPT(9);
+	}
+
+	errorCounter = Compare (memPointer, &buffer[0], testSize);
+	if (errorCounter > 0)
+	{
+		DebugPrintf ("Chunked: %d wrong words, first at offset 0x%X\r\n", errorCounter, FirstMismatch (memPointer, &buffer[0], testSize));
+		__BKPT(10);
+	}
+}
+
 //static constexpr uint32_t FourMegabyteOffset = 4 * 1024 * 1024;
 static constexpr uint32_t TwoMegabyteOffset = 2 * 1024 * 1024;
 
@@ -112,7 +190,10 @@ void InitializeAndTest (FlexSPI_Helper *base, MemoryType memoryType)
 {
 	const LibmemStatus res = Init_Libmem (base, memoryType);
 	if (res == LibmemStaus_Success)
-		ExecuteTest ((uint32_t *)(base->GetAmbaAddress () + TwoMegabyteOffset));
+	{
+		ExecuteTest        ((uint32_t *)(base->GetAmbaAddress () + TwoMegabyteOffset));
+		ExecuteChunkedTest ((uint32_t *)(base->GetAmbaAddress () + TwoMegabyteOffset));
+	}
 }
 
 #pragma GCC diagnostic push

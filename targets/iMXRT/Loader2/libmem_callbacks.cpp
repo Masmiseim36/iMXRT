@@ -122,13 +122,9 @@ namespace Xspi
 		if (status != kStatus_Success)
 			return LibmemStaus_Error;
 
-		// Do software reset or clear AHB buffer directly depending on the device capabilities
-		#if defined(FSL_FEATURE_SOC_OTFAD_COUNT) && defined(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK) && defined(FLEXSPI_AHBCR_CLRAHBTXBUF_MASK)
-			base->AHBCR |= FLEXSPI_AHBCR_CLRAHBRXBUF_MASK | FLEXSPI_AHBCR_CLRAHBTXBUF_MASK;
-			base->AHBCR &= ~(FLEXSPI_AHBCR_CLRAHBRXBUF_MASK | FLEXSPI_AHBCR_CLRAHBTXBUF_MASK);
-		#else
-			base->SoftwareReset ();
-		#endif
+		// Drop the AHB buffers, so the next memory mapped read sees the data just written. Libmem
+		// issues such a read right here when it preloads the next page for a read-modify-write
+		base->ClearAhbBuffer ();
 		return LibmemStaus_Success;
 	}
 

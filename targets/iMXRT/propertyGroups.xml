@@ -1331,7 +1331,7 @@
 
 
 		<groupEntry name="MIMXRT735SGAWBR_cm33_core0" aka="MIMXRT735SGxxxR_cm33_core0" family="iMXRT700">
-			<property name="macros" value="DeviceName=MIMXRT735_cm33_core0;Family=iMXRT700;Core=CM33;Loader=iMXRT700" />
+			<property name="macros" value="DeviceName=MIMXRT735S_cm33_core0;Family=iMXRT700;Core=CM33;Loader=iMXRT700" />
 			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT700.xml" />
 			<property name="arm_architecture" value="v8M_Mainline" />
 			<property name="arm_core_type" value="Cortex-M33" />
@@ -1341,7 +1341,7 @@
 			<cdefine name="CPU_MIMXRT735SGAWBR_cm33_core0" />
 		</groupEntry>
 		<groupEntry name="MIMXRT735SGAWBR_cm33_core1" aka="MIMXRT735SGxxxR_cm33_core1" family="iMXRT700">
-			<property name="macros" value="DeviceName=MIMXRT735_cm33_core1;Family=iMXRT700;Core=CM33;Loader=iMXRT700" />
+			<property name="macros" value="DeviceName=MIMXRT735S_cm33_core1;Family=iMXRT700;Core=CM33;Loader=iMXRT700" />
 			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT700.xml" />
 			<property name="arm_architecture" value="v8M_Mainline" />
 			<property name="arm_core_type" value="Cortex-M33" />
@@ -1352,7 +1352,7 @@
 		</groupEntry>
 
 		<groupEntry name="MIMXRT758SGAWBR_cm33_core0" aka="MIMXRT758SGxxxR_cm33_core0" family="iMXRT700">
-			<property name="macros" value="DeviceName=MIMXRT758_cm33_core0;Family=iMXRT700;Core=CM33;Loader=iMXRT700" />
+			<property name="macros" value="DeviceName=MIMXRT758S_cm33_core0;Family=iMXRT700;Core=CM33;Loader=iMXRT700" />
 			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT700.xml" />
 			<property name="arm_architecture" value="v8M_Mainline" />
 			<property name="arm_core_type" value="Cortex-M33" />
@@ -1362,7 +1362,7 @@
 			<cdefine name="CPU_MIMXRT758SGAWBR_cm33_core0" />
 		</groupEntry>
 		<groupEntry name="MIMXRT758SGAWBR_cm33_core1" aka="MIMXRT758SGxxxR_cm33_core1" family="iMXRT700">
-			<property name="macros" value="DeviceName=MIMXRT758_cm33_core1;Family=iMXRT700;Core=CM33;Loader=iMXRT700" />
+			<property name="macros" value="DeviceName=MIMXRT758S_cm33_core1;Family=iMXRT700;Core=CM33;Loader=iMXRT700" />
 			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT700.xml" />
 			<property name="arm_architecture" value="v8M_Mainline" />
 			<property name="arm_core_type" value="Cortex-M33" />
@@ -1373,7 +1373,7 @@
 		</groupEntry>
 
 		<groupEntry name="MIMXRT798SGAWBR_cm33_core0" aka="MIMXRT798SGxxxR_cm33_core0" family="iMXRT700">
-			<property name="macros" value="DeviceName=MIMXRT798_cm33_core0;Family=iMXRT700;Core=CM33;Loader=iMXRT700" />
+			<property name="macros" value="DeviceName=MIMXRT798S_cm33_core0;Family=iMXRT700;Core=CM33;Loader=iMXRT700" />
 			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT700.xml" />
 			<property name="arm_architecture" value="v8M_Mainline" />
 			<property name="arm_core_type" value="Cortex-M33" />
@@ -1383,7 +1383,7 @@
 			<cdefine name="CPU_MIMXRT798SGAWBR_cm33_core0" />
 		</groupEntry>
 		<groupEntry name="MIMXRT798SGAWBR_cm33_core1" aka="MIMXRT798SGxxxR_cm33_core1" family="iMXRT700">
-			<property name="macros" value="DeviceName=MIMXRT798_cm33_core1;Family=iMXRT700;Core=CM33;Loader=iMXRT700" />
+			<property name="macros" value="DeviceName=MIMXRT798S_cm33_core1;Family=iMXRT700;Core=CM33;Loader=iMXRT700" />
 			<property name="linker_memory_map_file" value="$(TargetsDir)/iMXRT/devices/$(Family)/MemoryMap_MIMXRT700.xml" />
 			<property name="arm_architecture" value="v8M_Mainline" />
 			<property name="arm_core_type" value="Cortex-M33" />
@@ -1507,6 +1507,35 @@
 			<cdefine name="XIP_BOOT_HEADER_ENABLE" value="1" />
 			<cdefine name="XIP_BOOT_QSPI" value="1" />
 			<cdefine name="XIP_BOOT_FLEXSPI2" value="1" />
+			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
+		</groupEntry>
+
+		<groupEntry name="XSPI0 (QuadSPI)">
+			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
+			<property name="linker_section_placement_macros" value="FLASH_NAME=XSPI0" />
+			<property name="arm_target_loader_applicable_loaders" value="Flash" />
+			<property name="arm_target_loader_default_loader" value="Flash" />
+			<property name="arm_target_loader_parameter" value="5" configuration="Flash" />
+			<property name="target_reset_script"    value="Reset()" />
+			<cdefine name="BOOT_HEADER_ENABLE"      value="1" />
+			<cdefine name="XIP_EXTERNAL_FLASH"      value="1" />
+			<cdefine name="XIP_BOOT_HEADER_ENABLE"  value="1" />
+			<cdefine name="XIP_BOOT_QSPI"           value="1" />
+			<cdefine name="XIP_BOOT_XSPI0"          value="1" />
+			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
+		</groupEntry>
+		<groupEntry name="XSPI0 (OctaSPI)">
+			<property name="linker_section_placement_file" value="$(TargetsDir)/iMXRT/placement_flexspi.xml" />
+			<property name="linker_section_placement_macros" value="FLASH_NAME=XSPI0" />
+			<property name="arm_target_loader_applicable_loaders" value="Flash" />
+			<property name="arm_target_loader_default_loader" value="Flash" />
+			<property name="arm_target_loader_parameter" value="2" configuration="Flash" />
+			<property name="target_reset_script"    value="Reset()" />
+			<cdefine name="BOOT_HEADER_ENABLE"      value="1" />
+			<cdefine name="XIP_EXTERNAL_FLASH"      value="1" />
+			<cdefine name="XIP_BOOT_HEADER_ENABLE"  value="1" />
+			<cdefine name="XIP_BOOT_OCTASPI"        value="1" />
+			<cdefine name="XIP_BOOT_XSPI0"          value="1" />
 			<cdefine name="INITIALIZE_TCM_SECTIONS" value="1" />
 		</groupEntry>
 	</group>

@@ -824,6 +824,8 @@
       <folder Name="iMXRT700">
         <configuration Name="700" build_exclude_from_build="No" />
         <configuration Name="Common" build_exclude_from_build="Yes" />
+        <file file_name="drivers/cache/xcache/fsl_cache.c" />
+        <file file_name="drivers/cache/xcache/fsl_cache.h" />
         <file file_name="drivers/iMXRT700/board.h" />
         <file file_name="drivers/iMXRT700/clock_config.c" />
         <file file_name="drivers/iMXRT700/clock_config.h" />
@@ -915,6 +917,7 @@
       <file file_name="../devices/$(Family)/fsl_device_registers.h" />
       <file file_name="../iMXRT1180_Target.js" />
       <file file_name="../iMXRT600_Target.js" />
+      <file file_name="../iMXRT700_Target.js" />
       <file file_name="../iMXRT_Helper.js" />
       <file file_name="$(ProjectDir)/../iMXRT_Target.js">
         <configuration Name="Common" file_type="Target Script" />
