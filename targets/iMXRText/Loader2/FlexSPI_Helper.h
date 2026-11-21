@@ -87,6 +87,7 @@ enum LUT_CommandOffsets
 	const auto UpdateLUT        = FLEXSPI_UpdateLUT;
 	const auto SoftwareReset    = FLEXSPI_SoftwareReset;
 	const auto TransferBlocking = FLEXSPI_TransferBlocking;
+	inline constexpr size_t MinimumReadSize {1};
 	enum class CommandType
 	{
 		Command = kFLEXSPI_Command,
@@ -102,6 +103,9 @@ enum LUT_CommandOffsets
 	const auto UpdateLUT        = XSPI_UpdateLUT;
 	const auto SoftwareReset    = XSPI_SoftwareReset;
 	const auto TransferBlocking = XSPI_TransferBlocking;
+	// Erratum ERR052528: a read command - the read-status-register command included - does
+	// not work when the transfer size is below eight bytes.
+	inline constexpr size_t MinimumReadSize {8};
 	enum class CommandType
 	{
 		Command = kXSPI_Command,
@@ -111,6 +115,10 @@ enum LUT_CommandOffsets
 	};
 #endif
 
+// Transfer sizes used to read flash registers. Both honour MinimumReadSize; RegisterReadSize is
+// additionally never smaller than the 32-bit value being read.
+inline constexpr size_t RegisterReadSize {MinimumReadSize < sizeof (uint32_t) ? sizeof (uint32_t) : MinimumReadSize};
+inline constexpr size_t StatusReadSize   {MinimumReadSize};
 
 
 class Transfer : public TrasferConfig
@@ -268,10 +276,16 @@ public:
 	status_t TransferBlocking (Transfer *flashXfer)
 	{
 		#if defined XSPI0 || defined XSPI1 || defined XSPI2
-			// XSPI uses the AMBA Base address, while FlexSPI uses just the offset
-			flashXfer-> deviceAddress += reinterpret_cast<uintptr_t>(this->GetAmbaAddress ());
+			// XSPI uses the AMBA Base address, while FlexSPI uses just the offset. Restore the
+			// caller's address afterwards, so the same transfer can be issued more than once.
+			const uint32_t devAddrBackup = flashXfer->deviceAddress;
+			flashXfer->deviceAddress += reinterpret_cast<uintptr_t>(this->GetAmbaAddress ());
+			const status_t status = ::TransferBlocking (this, flashXfer);
+			flashXfer->deviceAddress = devAddrBackup;
+			return status;
+		#else
+			return ::TransferBlocking (this, flashXfer);
 		#endif
-		return ::TransferBlocking (this, flashXfer);
 	}
 
 
@@ -305,16 +319,19 @@ public:
 
 	status_t ReadRegister (uint32_t Address, uint32_t &value, LUT_CommandOffsets cmd)
 	{
+		uint32_t readValue [RegisterReadSize / sizeof (uint32_t)] {};
 		Transfer flashXfer
 		{
 			Address,					// deviceAddress	- Operation device address.
 			CommandType::Read,			// cmdType			- Execution command type.
 			static_cast<uint8_t>(cmd),	// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
-			&value,						// data				- Data buffer.
-			4							// dataSize			- Data size in bytes.
+			readValue,					// data				- Data buffer.
+			RegisterReadSize			// dataSize			- Data size in bytes.
 		};
-		return this->TransferBlocking (&flashXfer);
+		const status_t status = this->TransferBlocking (&flashXfer);
+		value = readValue[0];
+		return status;
 	}
 
 	status_t Read (uint32_t Address, uint32_t *value, size_t size, LUT_CommandOffsets cmd)
@@ -333,16 +350,19 @@ public:
 
 	status_t ReadStatusRegister (uint32_t Address, uint32_t &value)
 	{
+		uint32_t readValue [RegisterReadSize / sizeof (uint32_t)] {};
 		Transfer flashXfer
 		{
 			Address,					// deviceAddress	- Operation device address.
 			CommandType::Read,			// cmdType			- Execution command type.
 			LUT_ReadStatus,				// seqIndex			- Sequence ID for command.
 			1,							// SeqNumber		- Sequence number for command.
-			&value,						// data				- Data buffer.
-			1							// dataSize			- Data size in bytes.
+			readValue,					// data				- Data buffer.
+			StatusReadSize				// dataSize			- Data size in bytes.
 		};
-		return this->TransferBlocking (&flashXfer);
+		const status_t status = this->TransferBlocking (&flashXfer);
+		value = readValue[0] & 0xFFU;
+		return status;
 	}
 
 	status_t SendCommand (uint32_t Address, LUT_CommandOffsets cmd, uint8_t sequenceSize = 1)
